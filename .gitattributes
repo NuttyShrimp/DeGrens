@@ -1,0 +1,7 @@
+* text=auto
+
+*.ts text
+*.js text
+*.lua text
+
+*.json text eol=crlf

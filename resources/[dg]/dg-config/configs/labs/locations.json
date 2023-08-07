@@ -5,7 +5,8 @@
       "y": -1354.715,
       "z": 23.32654
     },
-    "doorId": "druglab-door-1"
+    "doorId": "druglab-door-1",
+    "allowedTypes": ["weed", "meth", "coke"]
   },
   {
     "coords": {
@@ -13,7 +14,8 @@
       "y": -1711.339,
       "z": 21.22452
     },
-    "doorId": "druglab-door-2"
+    "doorId": "druglab-door-2",
+    "allowedTypes": ["weed", "meth", "coke"]
   },
   {
     "coords": {
@@ -21,7 +23,8 @@
       "y": -1117.367,
       "z": -0.193
     },
-    "doorId": "druglab-door-3"
+    "doorId": "druglab-door-3",
+    "allowedTypes": ["weed", "meth", "coke"]
   },
   {
     "coords": {
@@ -29,7 +32,8 @@
       "y": -424.0846,
       "z": 16.64067
     },
-    "doorId": "druglab-door-4"
+    "doorId": "druglab-door-4",
+    "allowedTypes": ["weed", "meth", "coke"]
   },
   {
     "coords": {
@@ -37,7 +41,8 @@
       "y": -1474.244,
       "z": 22.06398
     },
-    "doorId": "druglab-door-5"
+    "doorId": "druglab-door-5",
+    "allowedTypes": ["weed", "meth", "coke"]
   },
   {
     "coords": {
@@ -45,7 +50,8 @@
       "y": -227.6927,
       "z": 26.88121
     },
-    "doorId": "druglab-door-6"
+    "doorId": "druglab-door-6",
+    "allowedTypes": ["weed", "meth", "coke"]
   },
   {
     "coords": {
@@ -53,7 +59,8 @@
       "y": -1291.528,
       "z": 22.80891
     },
-    "doorId": "druglab-door-7"
+    "doorId": "druglab-door-7",
+    "allowedTypes": ["weed", "meth", "coke"]
   },
   {
     "coords": {
@@ -61,7 +68,8 @@
       "y": -88.12389,
       "z": 73.93684
     },
-    "doorId": "druglab-door-8"
+    "doorId": "druglab-door-8",
+    "allowedTypes": ["weed", "meth", "coke"]
   },
   {
     "coords": {
@@ -70,7 +78,7 @@
       "z": 23.58811
     },
     "doorId": "druglab-door-9",
-    "disabled": true
+    "allowedTypes": []
   },
   {
     "coords": {
@@ -78,7 +86,8 @@
       "y": 6456.221,
       "z": 23.35282
     },
-    "doorId": "druglab-door-10"
+    "doorId": "druglab-door-10",
+    "allowedTypes": ["weed", "coke"]
   },
   {
     "coords": {
@@ -86,7 +95,8 @@
       "y": -2091.32,
       "z": 44.51621
     },
-    "doorId": "druglab-door-11"
+    "doorId": "druglab-door-11",
+    "allowedTypes": ["weed", "meth", "coke"]
   },
   {
     "coords": {
@@ -94,7 +104,8 @@
       "y": 4456.72,
       "z": 40.33921
     },
-    "doorId": "druglab-door-12"
+    "doorId": "druglab-door-12",
+    "allowedTypes": ["weed", "coke"]
   },
   {
     "coords": {
@@ -102,7 +113,8 @@
       "y": 2681.549,
       "z": 34.0619
     },
-    "doorId": "druglab-door-13"
+    "doorId": "druglab-door-13",
+    "allowedTypes": ["weed", "coke"]
   },
   {
     "coords": {
@@ -111,7 +123,7 @@
       "z": 24.77716
     },
     "doorId": "druglab-door-14",
-    "disabled": true
+    "allowedTypes": []
   },
   {
     "coords": {
@@ -119,7 +131,8 @@
       "y": 4118.594,
       "z": 30.48421
     },
-    "doorId": "druglab-door-15"
+    "doorId": "druglab-door-15",
+    "allowedTypes": ["weed", "coke"]
   },
   {
     "coords": {
@@ -127,6 +140,7 @@
       "y": -1971.171,
       "z": 16.30181
     },
-    "doorId": "druglab-door-16"
+    "doorId": "druglab-door-16",
+    "allowedTypes": ["weed", "meth", "coke"]
   }
 ]

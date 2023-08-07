@@ -134,12 +134,9 @@ class Financials {
     fine: number,
     reason: string,
     origin_name: string,
-    given_by?: number,
-    cbEvt?: string,
-    // This will prevent overdue being accounted on the fine and will set the exact date of expiration
-    payTerm?: number
+    metadata?: Financials.Debts.DebtMetadata
   ): void {
-    fexp.giveFine(cid, target_account, fine, reason, origin_name, given_by, cbEvt, payTerm);
+    fexp.giveFine(cid, target_account, fine, reason, origin_name, metadata);
   }
 
   removeMaintenanceFees(src: number) {

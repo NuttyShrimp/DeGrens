@@ -1,4 +1,4 @@
-import { BaseEvents, BlipManager, Events, RPC, UI, Util } from '@dgx/client';
+import { BaseEvents, BlipManager, Events, RPC, UI, Util, Vehicles } from '@dgx/client';
 import { getNearestColorFromHex } from '@dgx/shared/helpers/colorNames';
 import { getDataOfGTAColorById } from '@dgx/shared/helpers/gtacolors';
 import { areBlipsEnabled, clearBlips, syncBlips, updateSprite } from 'services/blips';
@@ -89,12 +89,17 @@ Events.onNet('dispatch:updateSprite', (plyId: number, sprite: number) => {
 Events.onNet('dispatch:toggleNotifications', toggleDispatchNotifications);
 
 RPC.register('dispatch:getVehicleInfo', (vehNetId: number) => {
-  const veh = NetworkGetEntityFromNetworkId(vehNetId);
-  const vehCosmetic = global.exports['dg-vehicles'].getCosmeticUpgrades(veh);
   const colorInfo = {
-    primary: '',
-    secondary: '',
+    primary: 'Unknown Color',
+    secondary: 'Unknown Color',
   };
+
+  const veh = NetworkGetEntityFromNetworkId(vehNetId);
+  if (!veh || !DoesEntityExist(veh)) return colorInfo;
+
+  const vehCosmetic = Vehicles.getCosmeticUpgrades(veh);
+  if (!vehCosmetic) return colorInfo;
+
   if (typeof vehCosmetic.primaryColor === 'number') {
     const gtaColor = getDataOfGTAColorById(vehCosmetic.primaryColor)!;
     colorInfo.primary = gtaColor.name;

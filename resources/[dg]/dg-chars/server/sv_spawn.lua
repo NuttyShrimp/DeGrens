@@ -29,8 +29,9 @@ getPlySpawns = function(src)
   -- is developer
   -- has recently dropped
   -- is dead
+  -- TODO: Prevent this option when in a house or in a appartment
   if isDevEnv or isDev or recentlyDropped or isDown then
-    if ply ~= nil and vector3(ply.position.x, ply.position.y, ply.position.z) ~= vector3(0,0,0) then
+    if ply ~= nil and vector3(ply.position.x, ply.position.y, ply.position.z) ~= vector3(0, 0, 0) then
       table.insert(Spawns, {
         label = "Laatste locatie",
         spawnType = 'world',
@@ -70,15 +71,16 @@ getPlySpawns = function(src)
       end
     end
   end
-  -- local houses = exports['qb-houses']:getOwnedHouses(src)
-  -- for _, v in pairs(houses) do
-  -- 	table.insert(Spawns, {
-  -- 		label = v.label,
-  -- 		spawnType = 'house',
-  -- 		position = v.coords,
-  -- 		houseIdx = v.house
-  -- 	})
-  -- end
+
+  local houses = ply ~= nil and exports['dg-real-estate']:getHousesForPly(src) or {}
+  for _, v in pairs(houses) do
+    table.insert(Spawns, {
+      label = v.name,
+      spawnType = "house",
+      position = vector4(v.enter.x, v.enter.y, v.enter.z, 0),
+      houseIdx = v.name,
+    })
+  end
   return Spawns
 end
 
@@ -112,7 +114,10 @@ DGX.RPC.register('dg-chars:server:spawn', function(src, idx)
       fade = true,
     }
   elseif spawn.spawnType == 'house' then
-    TriggerClientEvent('qb-houses:client:enterOwnedHouse', src, spawn.houseIdx)
+    setPosition(spawn.position)
+    SetTimeout(500, function()
+      exports['dg-real-estate']:enterProperty(src, spawn.houseIdx)
+    end)
     returnOptions = {
       resetPed = true,
     }
@@ -120,10 +125,10 @@ DGX.RPC.register('dg-chars:server:spawn', function(src, idx)
     exports['dg-apartments']:enterApartment(src)
     returnOptions = {
       resetPed = true,
-      resetInside = true,
     }
   end
-  DGX.Util.Log("chars:spawn", { spawn = spawn }, ("%s(%d) has spawned at %s"):format(DGX.Util.getName(src), Player.citizenid, spawn.label), src)
+  DGX.Util.Log("chars:spawn", { spawn = spawn },
+    ("%s(%d) has spawned at %s"):format(DGX.Util.getName(src), Player.citizenid, spawn.label), src)
   TriggerClientEvent('dg-chars:client:finishSpawn', src, false)
   return returnOptions
 end)

@@ -7,7 +7,6 @@ import './modules/trackers';
 import './modules/radar';
 import './modules/speedzones';
 import './modules/spikestrips';
-import './modules/badges';
 import './modules/evidence';
 import './modules/interactions';
 import './modules/prison';

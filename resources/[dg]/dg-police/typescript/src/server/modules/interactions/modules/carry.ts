@@ -28,7 +28,12 @@ Chat.registerCommand('carry', 'Neem een persoon op je schouder', [], 'user', src
     Events.emitNet('police:interactions:carryPlayer', src);
     Events.emitNet('police:interactions:getCarried', closestPlayer, src);
 
-    Util.Log('police:interactions:carry', { target: closestPlayer }, `${Util.getName(src)} has carried a player`, src);
+    Util.Log(
+      'police:interactions:carry',
+      { target: closestPlayer, distance: Util.getDistanceToPlayer(src, closestPlayer) },
+      `${Util.getName(src)} has carried a player`,
+      src
+    );
   }, timeout);
 });
 

@@ -269,12 +269,6 @@ export const UPGRADES: UpgradesObj<Vehicles.Upgrades.Key> = {
     },
     getAmount: vehicle => [...Array(14)].reduce((amount, _, i) => amount + (DoesExtraExist(vehicle, i + 1) ? 1 : 0), 0),
   },
-  bulletProofTires: {
-    type: 'performance',
-    get: vehicle => !GetVehicleTyresCanBurst(vehicle),
-    set: (vehicle, value) => SetVehicleTyresCanBurst(vehicle, !value),
-    getAmount: () => true,
-  },
   // we generate all the data for performance keys which use normal Get/Set-VehicleMod functions
   ...(Object.keys(NORMAL_PERFORMANCE_KEYS_TO_ID) as Vehicles.Upgrades.Performance.NormalKey[]).reduce((acc, key) => {
     acc[key] = {
@@ -302,3 +296,5 @@ export const KEYS_BY_TYPE: Vehicles.Upgrades.TypeToKeys = {
 };
 
 export const AMOUNT_KEYS = KEYS.filter(k => 'getAmount' in UPGRADES[k]) as Vehicles.Upgrades.AmountKey[];
+
+export const STANDARD_EXTRA_UPGRADES: number[] = [10, 11, 14, 15, 16, 17, 20, 21, 22];

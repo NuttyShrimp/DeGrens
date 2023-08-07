@@ -1,8 +1,8 @@
 import { PolyZone, RPC, Util } from '@dgx/client';
 
-const garages: Map<string, Garage.Garage> = new Map();
+const garages: Map<string, Vehicles.Garages.Garage> = new Map();
 
-const createGarageZone = (garage: Garage.Garage) => {
+export const createGarageZone = (garage: Vehicles.Garages.Garage) => {
   if (Array.isArray(garage.location.vector)) {
     PolyZone.addPolyZone(
       'garage',
@@ -16,7 +16,7 @@ const createGarageZone = (garage: Garage.Garage) => {
       true
     );
   } else {
-    garage.location = garage.location as Garage.BoxLocation;
+    garage.location = garage.location as Vehicles.Garages.BoxLocation;
     PolyZone.addBoxZone(
       'garage',
       garage.location.vector,
@@ -33,7 +33,7 @@ const createGarageZone = (garage: Garage.Garage) => {
   }
 };
 
-export const registerGarages = async (pGarages: Garage.Garage[]) => {
+export const registerGarages = async (pGarages: Vehicles.Garages.Garage[]) => {
   for (const g of pGarages) {
     garages.set(g.garage_id, g);
     createGarageZone(g);
@@ -47,4 +47,9 @@ export const isOnParkingSpot = async (entity?: number): Promise<boolean> => {
   const netId = entity !== undefined ? NetworkGetNetworkIdFromEntity(entity) : null;
   const onSpot = await RPC.execute<boolean>('vehicles:garage:isOnParkingSpot', netId);
   return onSpot ?? false;
+};
+
+export const removeGarage = (garageId: string) => {
+  garages.delete(garageId);
+  PolyZone.removeZone('garage', garageId);
 };

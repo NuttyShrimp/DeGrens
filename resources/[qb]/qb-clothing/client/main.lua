@@ -530,7 +530,9 @@ local clothingCategorys = {
 
 RegisterNetEvent('qb-clothing:client:openMenu')
 AddEventHandler('qb-clothing:client:openMenu', function()
+  local result = DGX.RPC.execute('qb-clothing:server:getOutfits')
   openMenu({
+    { menu = "myOutfits", label = "My Outfits", selected = false, outfits = result },
     { menu = "character",   label = "Character",   selected = true },
     { menu = "clothing",    label = "Features",    selected = false },
     { menu = "accessoires", label = "Accessories", selected = false }

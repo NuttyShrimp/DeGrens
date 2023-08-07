@@ -1,5 +1,5 @@
 {
-  "towingTicketPrice": 250,
+  "towingTicketPrice": 350,
   "reputationPerClass": 25,
   "towVehicles": {
     "flatbed": {
@@ -11,18 +11,18 @@
   "reward": {
     "repair": {
       "parts": {
-        "axle": 60,
-        "brakes": 55,
-        "engine": 65,
+        "axle": 70,
+        "brakes": 65,
+        "engine": 75,
         "suspension": 60
       }
     },
     "tune": {
       "parts": {
-        "brakes": 120,
-        "engine": 140,
-        "suspension": 130,
-        "transmission": 125
+        "brakes": 130,
+        "engine": 150,
+        "suspension": 140,
+        "transmission": 135
       },
       "stageModifier": {
         "1": 0.8,

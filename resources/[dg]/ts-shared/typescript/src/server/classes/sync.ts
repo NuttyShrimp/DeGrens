@@ -33,6 +33,15 @@ class Sync {
       Events.emitNet('misc:synced3dtext:add', player, origin, msg);
     });
   };
+
+  // Can be used to check if a routingbucket is in use
+  getRoutingBucketName = (bucket: number): string | null => {
+    return global.exports['dg-lib'].getInstanceName(bucket);
+  };
+
+  getFreeInstanceId = (bucket: number): number => {
+    return global.exports['dg-lib'].getFreeInstanceId(bucket);
+  };
 }
 
 export default {

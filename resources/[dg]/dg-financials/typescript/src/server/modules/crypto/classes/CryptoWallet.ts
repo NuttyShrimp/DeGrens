@@ -88,13 +88,9 @@ export class CryptoWallet {
   }
 
   public async add(amount: number, comment: string): Promise<boolean> {
-    const plyId = charModule.getServerIdFromCitizenId(this.cid);
-    if (!plyId) {
-      this.logger.debug(`Add: Player not found | cid: ${this.cid}`);
-      return false;
-    }
     if (!comment) {
       this.logger.warn(`Add: Comment is empty | cid: ${this.cid}`);
+      return false;
     }
     this.amount += amount;
     await this.saveWallet();
@@ -129,7 +125,7 @@ export class CryptoWallet {
       Notifications.add(src, `Je hebt niet genoeg ${this.cname} om ${amount}x over te maken!`, 'error');
       return false;
     }
-    this.amount -= amount;
+    await this.remove(amount);
     await targetWallet.add(amount, `${src} transfer ${amount}x ${this.cname}`);
     Util.Log(
       'financials:crypto:transfer',

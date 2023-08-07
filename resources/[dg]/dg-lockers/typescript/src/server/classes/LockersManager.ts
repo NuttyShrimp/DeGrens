@@ -63,8 +63,8 @@ class LockersManager extends Util.Singleton<LockersManager>() {
   };
 
   @DGXLocalEvent('lockers:server:lockerDefaulted')
-  private _removeLocker = (debt: IFinancials.Debt) => {
-    const locker = [...this.lockers.values()].find(l => l.data.owner === debt.cid);
+  private _removeLocker = (debt: Financials.Debts.Debt<{ lockerId: string }>) => {
+    const locker = [...this.lockers.values()].find(l => l.id === debt.metadata.lockerId);
     if (!locker) return;
     locker.removeOwnership();
   };
@@ -104,9 +104,13 @@ class LockersManager extends Util.Singleton<LockersManager>() {
     locker.view(src);
   };
 
-  public doesPlayerOwnLocker = (plyId: number) => {
-    const cid = Util.getCID(plyId);
-    return [...this.lockers.values()].some(l => l.data.owner === cid);
+  public doesPlayerOwnLocker = (cid: number, includeFreeLockers = false) => {
+    for (const [_, l] of this.lockers) {
+      if (l.data.owner !== cid) continue;
+      if (l.data.price <= 0 && !includeFreeLockers) continue;
+      return true;
+    }
+    return false;
   };
 
   @DGXEvent('lockers:server:open')

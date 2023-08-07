@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CMapData>
+  <name>franklin</name>
+  <parent />
+  <flags value="0" />
+  <contentFlags value="1" />
+  <streamingExtentsMin x="-218.148163" y="-210.180984" z="-204.414963" />
+  <streamingExtentsMax x="218.208755" y="210.125153" z="204.413452" />
+  <entitiesExtentsMin x="-18.14817" y="-10.18099" z="-4.41497" />
+  <entitiesExtentsMax x="18.20876" y="10.12516" z="4.413459" />
+  <entities>
+    <Item type="CEntityDef">
+      <archetypeName>franklin</archetypeName>
+      <flags value="32" />
+      <guid value="0" />
+      <position x="0" y="0" z="0" />
+      <rotation x="0" y="0" z="0" w="1" />
+      <scaleXY value="1" />
+      <scaleZ value="1" />
+      <parentIndex value="-1" />
+      <lodDist value="200" />
+      <childLodDist value="0" />
+      <lodLevel>LODTYPES_DEPTH_ORPHANHD</lodLevel>
+      <numChildren value="0" />
+      <priorityLevel>PRI_REQUIRED</priorityLevel>
+      <extensions />
+      <ambientOcclusionMultiplier value="255" />
+      <artificialAmbientOcclusion value="255" />
+      <tintValue value="0" />
+    </Item>
+  </entities>
+</CMapData>

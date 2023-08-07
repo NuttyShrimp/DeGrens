@@ -25,6 +25,7 @@ Keys.onPressDown('GeneralUse', () => {
 });
 
 const canHoldBMX = (vehicle: number): boolean => {
+  if (IsPedInAnyVehicle(PlayerPedId(), true)) return false;
   if (holdingBMXVehicle) return false;
   if (!DoesEntityExist(vehicle)) return false;
   if (!NetworkGetEntityIsNetworked(vehicle)) return false;
@@ -56,7 +57,7 @@ const holdBMX = async (vehicle: number) => {
     },
     weight: 10,
     disableFiring: true,
-    disabledControls: [25], // 23: enter veh, 25: aim, 44: take cover
+    disabledControls: [23, 25, 44],
   });
 
   holdingBMXVehicle = vehicle;

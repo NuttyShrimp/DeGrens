@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 import { Paper } from '../../../../../components/paper';
 import { devData } from '../../../../../lib/devdata';
@@ -21,7 +21,6 @@ declare interface ListEntry {
 
 export const List: FC<{}> = () => {
   const classes = styles();
-  const [list, setList] = useState<ListEntry[]>([]);
   const [filteredList, setFilteredList] = useState<ListEntry[]>([]);
   const [setMessages, msgs] = useMessageStoreApp(s => [s.setMessages, s.messages]);
 
@@ -44,20 +43,29 @@ export const List: FC<{}> = () => {
     fetchMessages();
   }, []);
 
-  useEffect(() => {
-    const newList: any = [];
-    Object.entries(msgs).forEach(([nr, value]) => {
-      const contact = getContact(nr);
-      newList.push({
-        nr,
-        label: contact?.label ?? nr,
-        messages: value,
-        hasUnread: (value ?? []).some(m => !m.isread),
-      });
-    });
-    setList(newList);
-    setFilteredList(newList);
+  const list = useMemo(() => {
+    return Object.entries(msgs)
+      .map(([nr, value]) => {
+        const contact = getContact(nr);
+        return {
+          nr,
+          label: contact?.label ?? nr,
+          messages: value,
+          hasUnread: (value ?? []).some(m => !m.isread),
+        };
+      })
+      .reduce<ListEntry[]>((acc, cur) => {
+        if (acc.find(e => e.nr === cur.nr)) {
+          return acc;
+        }
+        return [...acc, cur];
+      }, [])
+      .sort((a, b) => (a.messages.at(-1)?.date ?? 0) - (b.messages.at(-1)?.date ?? 0));
   }, [msgs]);
+
+  useEffect(() => {
+    setFilteredList(list);
+  }, [list]);
 
   return (
     <AppContainer

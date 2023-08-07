@@ -518,4 +518,22 @@ export const cmds: {
       event: 'gamebg',
     },
   },
+  {
+    cmd: 'phone tweet add',
+    app: 'phone',
+    data: {
+      appName: 'twitter',
+      action: 'newTweet',
+      data: {
+        id: 1000,
+        tweet: "I'm the main character",
+        date: 1691160077000,
+        sender_name: 'Nutty_Shrimp',
+        like_count: 10,
+        retweet_count: 2,
+        liked: true,
+        retweeted: false,
+      },
+    },
+  },
 ];

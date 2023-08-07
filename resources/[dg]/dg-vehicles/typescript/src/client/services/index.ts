@@ -13,3 +13,4 @@ import './itemupgrades';
 import './fakeplate';
 import './enginesounds';
 import './holdbmx';
+import './bulletprooftires';

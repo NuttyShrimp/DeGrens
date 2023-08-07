@@ -19,7 +19,7 @@ global.asyncExports('setPlayerInvincible', setPlayerInvincible);
 global.asyncExports('setPlayerVisible', setPlayerVisible);
 global.asyncExports('toggleAllowedMod', toggleAllowedMod);
 
-onNet('playerJoining', () => {
+onNet('playerJoined', () => {
   registerHeartBeat(source, true);
 });
 

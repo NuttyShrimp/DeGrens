@@ -121,7 +121,7 @@ declare namespace Phone {
     visible: boolean;
     element: React.ReactElement<any> | null;
     checkmark: boolean;
-    warning: boolean;
+    warning: boolean | string;
   }
 
   //endregion
@@ -437,6 +437,49 @@ declare namespace Phone {
       list: Vehicle[];
       setList: (l: Vehicle[]) => void;
     }
+  }
+  namespace RealEstate {
+    type AccessEntry = {
+      cid: number;
+      name: string;
+    };
+
+    type BuyableProperty = {
+      name: string;
+      price: number;
+      owned: boolean;
+    };
+
+    type Property = OwnedProperty | AccessibleProperty;
+
+    type AccessibleProperty = {
+      name: string;
+      locked: boolean;
+      owned?: false;
+    };
+
+    type OwnedProperty = {
+      name: string;
+      locked: boolean;
+      owned: true;
+      accessList: AccessEntry[];
+      // Will allow to set these locations
+      flags: {
+        garage?: boolean;
+        locations?: boolean;
+      };
+      metadata: {
+        maxKeys: number;
+      };
+    };
+
+    type State = {
+      properties: Property[];
+      setProperties: (list: Property[]) => void;
+      fetchProperties: () => void;
+      toggleLock: (name: string, isLocked: boolean) => void;
+      removeCidAccess: (name: string, cid: number) => void;
+    };
   }
   // endregion
 }

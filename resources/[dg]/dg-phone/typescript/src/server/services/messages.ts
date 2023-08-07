@@ -12,12 +12,28 @@ const fetchMessages = async (phone: string, offset: number, target: string): Pro
 			ORDER BY id ASC LIMIT ? OFFSET ?;
 		`
     : `
-		SELECT *
-		FROM phone_messages
-		WHERE sender = ? OR receiver = ?
-		ORDER BY id ASC LIMIT ? OFFSET ?;
-	`;
-  const params = target ? [phone, target, target, phone, 20, offset] : [phone, phone, 20, offset];
+      WITH contacts AS (SELECT contact
+                  FROM (SELECT receiver AS contact
+                        FROM phone_messages
+                        WHERE sender = ?
+                        UNION
+                        SELECT sender AS contact
+                        FROM phone_messages
+                        WHERE receiver = ?) AS combined_contacts),
+     max_message_ids AS (SELECT MAX(id) AS max_id
+                         FROM phone_messages pm
+                         WHERE EXISTS (SELECT 1
+                                       FROM contacts c
+                                       WHERE (c.contact = pm.sender OR c.contact = pm.receiver))
+                         GROUP BY LEAST(sender, receiver), GREATEST(sender, receiver))
+      SELECT pm.*
+      FROM phone_messages pm
+              INNER JOIN contacts c ON (c.contact = pm.sender OR c.contact = pm.receiver)
+      WHERE (receiver = ? OR sender = ?)
+        AND pm.id IN (SELECT max_id FROM max_message_ids)
+      ORDER BY date DESC
+    `;
+  const params = target ? [phone, target, target, phone, 20, offset] : [phone, phone, phone, phone];
   return await SQL.query(query, params);
 };
 

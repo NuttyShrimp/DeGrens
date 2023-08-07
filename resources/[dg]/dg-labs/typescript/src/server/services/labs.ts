@@ -25,29 +25,33 @@ export const initiateLabs = async () => {
 
   // Check if any need to be refreshed
   const currentTime = Date.now() / 1000;
-  for (const key in activeLabs) {
-    const type = key as Labs.Type;
+  for (const type of Object.keys(activeLabs) as Labs.Type[]) {
     const refreshTime = refreshTimesPerType[type] ?? 0;
     if (refreshTime > currentTime) continue;
 
-    // to find random id, we generate based on arr length and check if not active yet
     let newId: number | null = null;
-    while (newId === null) {
-      const generatedId = Math.floor(Math.random() * config.locations.length);
-      if (!config.locations[generatedId]?.disabled && !getLabTypeFromId(generatedId)) {
-        newId = generatedId;
-      }
+    const idsToTry = Util.shuffleArray([...new Array(config.locations.length)].map((_, i) => i));
+    while (newId === null && idsToTry.length > 0) {
+      const id = idsToTry.pop();
+      if (getLabTypeFromId(id)) continue; // check if generated id isnt already an active lab
+      if (!config.locations[id].allowedTypes.includes(type)) continue; // check if location allows this interior type
+      newId = id;
+    }
+
+    if (newId === null) {
+      mainLogger.error(`Could not find a new id for ${type}lab`);
+      continue;
     }
 
     activeLabs[type] = buildActiveLabData(type, newId);
-    const refreshTimeout = config.interiors[type as Labs.Type].refreshTimeout;
-    repository.updateActiveLab(type as Labs.Type, newId, currentTime + refreshTimeout * 24 * 60 * 60);
+    const refreshTimeout = config.interiors[type].refreshTimeout;
+    repository.updateActiveLab(type, newId, currentTime + refreshTimeout * 24 * 60 * 60);
     mainLogger.info(`Refreshed ${type}lab to labId ${newId}`);
   }
 
   // Open doors of active
-  for (const type in activeLabs) {
-    const data = activeLabs[type as Labs.Type];
+  for (const type of Object.keys(activeLabs) as Labs.Type[]) {
+    const data = activeLabs[type];
     DoorLock.changeDoorState(config.locations[data.id].doorId, false);
   }
 
@@ -55,14 +59,14 @@ export const initiateLabs = async () => {
 };
 
 export const getLabTypeFromId = (id: number) => {
-  for (const type in activeLabs) {
-    if (activeLabs[type as Labs.Type].id === id) {
-      return type as Labs.Type;
+  for (const type of Object.keys(activeLabs) as Labs.Type[]) {
+    if (activeLabs[type].id === id) {
+      return type;
     }
   }
 };
 
-const buildActiveLabData = (type: Labs.Type, id: number) => {
+const buildActiveLabData = (type: Labs.Type, id: number): Labs.ActiveLab => {
   return {
     id: id,
     ...config.locations[id],

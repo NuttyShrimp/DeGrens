@@ -1,0 +1,209 @@
+{
+  "HARMO": {
+    "basePrice": 80000,
+    "house": 90,
+    "caravan": 0
+  },
+  "PALETO": {
+    "basePrice": 130000,
+    "small_appartment": 40,
+    "house": 0
+  },
+  "STRAW": {
+    "basePrice": 110000,
+    "small_appartment": 0,
+    "house": 100
+  },
+  "ROCKF": {
+    "basePrice": 1200000,
+    "house": -87,
+    "big_appartment": 0,
+    "luxury_appartment": 9
+  },
+  "HAWICK": {
+    "basePrice": 320000,
+    "house": -20,
+    "ghost_stash_houses_01": 0
+  },
+  "PBLUFF": {
+    "basePrice": 1200000,
+    "luxury_appartment": 0
+  },
+  "EAST_V": {
+    "basePrice": 480000,
+    "house": -52
+  },
+  "LEGSQU": {
+    "basePrice": 320000
+  },
+  "DESRT": {
+    "basePrice": 80000,
+    "caravan": 0,
+    "house": 220
+  },
+  "DAVIS": {
+    "basePrice": 110000,
+    "house": 100,
+    "shop": 300
+  },
+  "VCANA": {
+    "basePrice": 350000,
+    "house": 0
+  },
+  "SANCHIA": {
+    "basePrice": 80000,
+    "house": 0
+  },
+  "VESP": {
+    "basePrice": 490000
+  },
+  "CHU": {
+    "basePrice": 80000,
+    "house": 30,
+    "big_appartment": 130
+  },
+  "SLAB": {
+    "basePrice": 80000,
+    "caravan": 0
+  },
+  "SANDY": {
+    "basePrice": 80000,
+    "caravan": 0,
+    "house": 130
+  },
+  "CYPRE": {
+    "basePrice": 450000
+  },
+  "EBURO": {
+    "basePrice": 450000,
+    "house": -52
+  },
+  "MTGORDO": {
+    "basePrice": 2200000,
+    "luxury_appartment": 0
+  },
+  "ELYSIAN": {
+    "basePrice": 100000
+  },
+  "CHIL": {
+    "basePrice": 1200000,
+    "big_appartment": -20,
+    "luxury_appartment": 0
+  },
+  "GREATC": {
+    "basePrice": 100000,
+    "house": 0
+  },
+  "SanAnd": {
+    "basePrice": 850000,
+    "luxury_appartment": 0
+  },
+  "TERMINA": {
+    "basePrice": 320000
+  },
+  "RICHM": {
+    "basePrice": 1200000,
+    "big_appartment": -20,
+    "luxury_appartment": 0
+  },
+  "MIRR": {
+    "basePrice": 480000,
+    "house": 0,
+    "v_int_61": -38,
+    "luxury_appartment": 70
+  },
+  "RGLEN": {
+    "basePrice": 1200000
+  },
+  "GRAPES": {
+    "basePrice": 110000,
+    "caravan": -40,
+    "house": 100
+  },
+  "DELPE": {
+    "basePrice": 300000,
+    "house": -40,
+    "luxury_appartment": 90
+  },
+  "TEXTI": {
+    "basePrice": 450000
+  },
+  "BEACH": {
+    "basePrice": 350000
+  },
+  "LMESA": {
+    "basePrice": 450000
+  },
+  "WINDF": {
+    "basePrice": 80000,
+    "house": 0
+  },
+  "BHAMCA": {
+    "basePrice": 350000,
+    "luxury_appartment": 120
+  },
+  "DTVINE": {
+    "basePrice": 1200000,
+    "house": -87,
+    "big_appartment": 0
+  },
+  "MURRI": {
+    "basePrice": 450000
+  },
+  "OCEANA": {
+    "basePrice": 80000
+  },
+  "CHAMH": {
+    "basePrice": 110000,
+    "house": 100,
+    "shop": 230
+  },
+  "ALTA": {
+    "basePrice": 320000
+  },
+  "WVINE": {
+    "basePrice": 1200000,
+    "big_appartment": -10
+  },
+  "TONGVAH": {
+    "basePrice": 900000
+  },
+  "MTCHIL": {
+    "basePrice": 300000
+  },
+  "KOREAT": {
+    "basePrice": 350000,
+    "small_appartment": 0,
+    "luxury_appartment": 40
+  },
+  "golf": {
+    "basePrice": 1200000,
+    "ownedInZonePercent": 4,
+    "big_appartment": -10,
+    "luxury_appartment": 0
+  },
+  "SKID": {
+    "basePrice": 320000
+  },
+  "DELSOL": {
+    "basePrice": 490000,
+    "house": -22
+  },
+  "RANCHO": {
+    "basePrice": 110000,
+    "house": 100
+  },
+  "PBOX": {
+    "basePrice": 320000
+  },
+  "DOWNT": {
+    "basePrice": 1200000
+  },
+  "BURTON": {
+    "basePrice": 320000
+  },
+  "MORN": {
+    "basePrice": 1200000,
+    "luxury_appartment": 0
+  }
+}

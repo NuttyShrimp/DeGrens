@@ -1,6 +1,6 @@
 import { RPC, SQL } from '@dgx/server';
-import { STANDARD_EXTRA_UPGRADES } from '@shared/upgrades/constants.upgrades';
-import { generateBaseCosmeticUpgrades } from '@shared/upgrades/service.upgrades';
+import { generateBaseCosmeticUpgrades, mergeUpgrades } from '@shared/upgrades/service.upgrades';
+import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 
 // We stringify the different vehicle_status columns when inserting them,
 // When we get them we put all table columns in json obj and parse
@@ -246,19 +246,11 @@ export const insertNewVehicle = async (
 
   insertVehicleTransferLog(vin, 0, cid);
 
-  let modelType = 'automobile';
-  if (!upgrades) {
-    const modelCheckPlayer = +GetPlayerFromIndex(0);
-    if (modelCheckPlayer) {
-      modelType =
-        (await RPC.execute<string | undefined>('vehicles:getModelType', modelCheckPlayer, model)) ?? 'automobile';
-    }
-  }
-
-  updateVehicleCosmeticUpgrades(
-    vin,
-    upgrades ?? generateBaseCosmeticUpgrades(true, STANDARD_EXTRA_UPGRADES.includes(modelType))
+  const fullUpgrades = mergeUpgrades<Vehicles.Upgrades.Cosmetic.Upgrades>(
+    generateBaseCosmeticUpgrades(true, upgradesManager.doesModelHaveDefaultExtras(model)),
+    upgrades ?? {}
   );
+  updateVehicleCosmeticUpgrades(vin, fullUpgrades);
 };
 
 export const insertVehicleStatus = (vin: string, status: Vehicle.VehicleStatus): Promise<any> => {

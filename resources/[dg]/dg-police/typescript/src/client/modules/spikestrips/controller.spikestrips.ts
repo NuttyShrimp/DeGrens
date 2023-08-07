@@ -51,7 +51,10 @@ Statebags.addEntityStateBagChangeHandler('entity', 'spikestrip', (netId, entity)
 const startSpikeThread = (vehicle: number) => {
   if (spikeThread) return;
 
+  const hasBulletProofTires = Vehicles.getVehicleHasBulletProofTires(vehicle);
+
   spikeThread = setInterval(() => {
+    if (hasBulletProofTires) return;
     if (!DoesEntityExist(vehicle)) return;
     if (Vehicles.getVehicleSpeed(vehicle) < 1) return;
 

@@ -4050,7 +4050,8 @@
     "thermiteable": {
       "grid": 6,
       "amount": 4
-    }
+    },
+    "name": "jewelry_office"
   },
   {
     "description": "kingsmen door beach",

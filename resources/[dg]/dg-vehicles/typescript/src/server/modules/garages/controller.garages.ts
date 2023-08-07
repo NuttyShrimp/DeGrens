@@ -6,7 +6,8 @@ import { isSchemaValid } from './schema.garages';
 import {
   doesCidHasAccess,
   isOnParkingSpot,
-  recoverNonExistentVehicle,
+  openThreadedGarage,
+  recoverVehicle,
   registerGarage,
   setGaragesLoaded,
   showPlayerGarage,
@@ -14,9 +15,17 @@ import {
   stopThread,
   storeVehicleInGarage,
   takeVehicleOutGarage,
+  unregisterGarage,
 } from './service.garages';
 
 const root = GetResourcePath(GetCurrentResourceName());
+
+global.exports('registerGarage', (g: Vehicles.Garages.Garage) => {
+  g.runtime = true;
+  registerGarage(g);
+});
+global.exports('unregisterGarage', unregisterGarage);
+asyncExports('openGarage', showPlayerGarage);
 
 setImmediate(async () => {
   setAllVehiclesInGarage();
@@ -31,7 +40,8 @@ setImmediate(async () => {
               garageLogger.error(`Garage file(${fileName}) is not valid`);
               return;
             }
-            registerGarage(JSON.parse(data));
+            const garageInfo: Vehicles.Garages.Garage = JSON.parse(data);
+            registerGarage(garageInfo);
             res(true);
           } catch (e) {
             garageLogger.error(`Error while reading a garage file(${fileName}): ${e}`);
@@ -49,11 +59,11 @@ setImmediate(async () => {
 });
 
 Events.onNet('dg-vehicles:garages:open', (src: number) => {
-  showPlayerGarage(src);
+  openThreadedGarage(src);
 });
 
-Events.onNet('vehicles:garage:takeVehicle', (src, vin: string) => {
-  takeVehicleOutGarage(src, vin);
+Events.onNet('vehicles:garage:takeVehicle', (src, vin: string, garageId: string) => {
+  takeVehicleOutGarage(src, vin, garageId);
 });
 
 Events.onNet('vehicles:garage:park', (src, vehNetId: number) => {
@@ -83,5 +93,5 @@ RPC.register('vehicles:garage:isOnParkingSpot', (src, netId: number | null) => {
 });
 
 Events.onNet('vehicles:garage:recoverVehicle', async (plyId, vin: string) => {
-  recoverNonExistentVehicle(plyId, vin);
+  recoverVehicle(plyId, vin);
 });

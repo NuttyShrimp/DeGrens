@@ -1,0 +1,49 @@
+{
+  "types": {
+    "house": {
+      "interior": "playerhouse_tier1",
+      "label": "",
+      "options": {
+        "garage": true,
+        "furniture": true,
+        "shareable_keys": 3
+      }
+    },
+    "caravan": {
+      "interior": "caravan_shell",
+      "label": "",
+      "options": {
+        "garage": false,
+        "furniture": true,
+        "shareable_keys": 2
+      }
+    },
+    "small_appartment": {
+      "interior": "appartment",
+      "label": "",
+      "options": {
+        "garage": false,
+        "furniture": true,
+        "shareable_keys": 3
+      }
+    },
+    "big_appartment": {
+      "interior": "franklin",
+      "label": "",
+      "options": {
+        "garage": true,
+        "furniture": true,
+        "shareable_keys": 4
+      }
+    },
+    "luxury_appartment": {
+      "interior": "playerhouse_tier3",
+      "label": "",
+      "options": {
+        "garage": true,
+        "furniture": true,
+        "shareable_keys": 4
+      }
+    }
+  }
+}

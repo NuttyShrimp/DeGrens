@@ -14,8 +14,11 @@ import { mainLogger } from '../sv_logger';
 import { assignModelConfig } from 'modules/info/service.info';
 import { Vector4 } from '@dgx/shared';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
-import { generateBaseCosmeticUpgrades, generateBasePerformanceUpgrades } from '@shared/upgrades/service.upgrades';
-import { STANDARD_EXTRA_UPGRADES } from '@shared/upgrades/constants.upgrades';
+import {
+  generateBaseCosmeticUpgrades,
+  generateBasePerformanceUpgrades,
+  mergeUpgrades,
+} from '@shared/upgrades/service.upgrades';
 import { setVehicleEngineSound } from 'services/enginesounds';
 
 /**
@@ -43,6 +46,8 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     mainLogger.error(`No players available to check model for 'spawnVehicle'`);
     return;
   }
+
+  // We keep this RPC to check if model is valid even tho we dont really need to modeltype anymore if not using CREATE_VEHICLE_SERVER_SETTER
   const modelType = await RPC.execute<string | undefined>('vehicles:getModelType', modelCheckPlayer, data.model);
   if (!modelType) {
     mainLogger.error(`Spawn vehicle: invalid model ${data.model}`);
@@ -59,11 +64,20 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   // force to be floats
   const position = Vector4.create({ w: 0, ...data.position }).add(0.001);
   const modelHash = GetHashKey(data.model);
-  const vehicle = CreateVehicleServerSetter(modelHash, modelType, position.x, position.y, position.z + 0.5, position.w); // 0.5 offset to avoid ground clipping
+
+  // const vehicle = CreateVehicleServerSetter(modelHash, modelType, position.x, position.y, position.z + 0.5, position.w); // 0.5 offset to avoid ground clipping
+  const vehicle = CreateVehicle(modelHash, position.x, position.y, position.z + 0.5, position.w, true, true);
+  await Util.awaitEntityExistence(vehicle);
 
   if (!vehicle || !DoesEntityExist(vehicle)) {
     mainLogger.error(`Spawn vehicle: vehicle didn't spawn | model: ${data.model}`);
     return;
+  }
+
+  // CREATE_VEHICLE is an RPC native, first owner will ALWAYS be a player. If that owning ply is far away (450m) we wait a max of 500ms for the owner to change back to server
+  const owner = NetworkGetEntityOwner(vehicle);
+  if (Util.getPlyCoords(owner).distance(position) > 450) {
+    await Util.awaitCondition(() => NetworkGetEntityOwner(vehicle) !== owner, 500);
   }
 
   // setting vin
@@ -100,11 +114,11 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     startNPCDriverDeletionThread(vehicle);
 
     // upgrades
-    const mergedUpgrades = {
-      ...generateBaseCosmeticUpgrades(true, STANDARD_EXTRA_UPGRADES.includes(modelType)),
-      ...generateBasePerformanceUpgrades(),
-      ...data.upgrades,
-    };
+    const mergedUpgrades = mergeUpgrades(
+      generateBaseCosmeticUpgrades(true, upgradesManager.doesModelHaveDefaultExtras(modelHash)),
+      generateBasePerformanceUpgrades(),
+      data.upgrades ?? {}
+    );
     upgradesManager.apply(vehicle, mergedUpgrades);
 
     // engine state

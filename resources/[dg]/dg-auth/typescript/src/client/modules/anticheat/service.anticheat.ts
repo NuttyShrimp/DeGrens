@@ -26,7 +26,7 @@ export const scheduleHeartBeat = () => {
   Events.emitNet('auth:heartbeat');
   heartbeat = setTimeout(() => {
     scheduleHeartBeat();
-  }, 1.5 * 60 * 1000);
+  }, 0.5 * 60 * 1000);
 };
 
 export const stopHeartBeat = () => {
@@ -202,8 +202,9 @@ export const startAFKThread = () => {
     const closeToOldHeading = Math.abs(AFKInfo.camHeading - plyHeading) < 1;
     const isDown = Hospital.isDown();
     const isCuffed = Police.isCuffed();
+    const inCharMenu = LocalPlayer.state.char_menu;
 
-    if (closeToOldCoord && closeToOldHeading && !isDown && !isCuffed) {
+    if (closeToOldCoord && closeToOldHeading && !isDown && !isCuffed && !inCharMenu) {
       AFKInfo.tick++;
     } else {
       AFKInfo.tick = 0;

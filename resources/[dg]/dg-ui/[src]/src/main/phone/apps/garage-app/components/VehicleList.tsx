@@ -88,7 +88,7 @@ export const VehicleList: FC<{ fetchVehicles: () => void }> = ({ fetchVehicles }
                       backgroundColor: baseStyle.tertiary.normal,
                     }}
                   >
-                    RECORVER
+                    RECOVER
                   </MuiButton>
                 )}
                 <Button.Secondary size={'small'} onClick={() => sellVehicle(v)}>

@@ -14,17 +14,15 @@ global.exports(
     fine: number,
     reason: string,
     origin_name: string,
-    given_by?: number,
-    cbEvt?: string,
-    payTerm?: number
+    metadata?: Financials.Debts.DebtMetadata
   ) => {
-    debtManager.addDebt(cid, target_account, fine, reason, origin_name, given_by, cbEvt, payTerm);
+    debtManager.addDebt(cid, target_account, fine, reason, origin_name, metadata);
   }
 );
 global.exports(
   'addMaintentenanceFee',
   (cid: number, target_account: string, fine: number, reason: string, origin_name: string) => {
-    debtManager.addDebt(cid, target_account, fine, reason, origin_name, undefined, undefined, undefined, 'maintenance');
+    debtManager.addDebt(cid, target_account, fine, reason, origin_name, undefined, 'maintenance');
   }
 );
 global.exports('removeMaintenanceFees', (src: number) => removeMaintenanceFees(src));

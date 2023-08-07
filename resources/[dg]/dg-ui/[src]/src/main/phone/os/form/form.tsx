@@ -40,6 +40,7 @@ export const Form: FC<React.PropsWithChildren<unknown>> = () => {
             <span className={classes.warningDot}></span>
           </div>
           <div>Oops, er is iets misgegaan!</div>
+          {typeof warning === 'string' && <div>{warning}</div>}
         </div>
       )}
     </div>

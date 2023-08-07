@@ -1,10 +1,11 @@
 import { Util } from '@dgx/server';
-import { getVehicleCosmeticUpgrades, updateVehicleCosmeticUpgrades } from 'db/repository';
+import { updateVehicleCosmeticUpgrades } from 'db/repository';
 import vinManager from 'modules/identification/classes/vinmanager';
+import upgradesManager from './classes/manager.upgrades';
 
 export const saveCosmeticUpgrades = async (vin: string, newUpgrades: Partial<Vehicles.Upgrades.Cosmetic.Upgrades>) => {
   if (!vinManager.isVinFromPlayerVeh(vin)) return;
-  const currentUpgrades = await getVehicleCosmeticUpgrades(vin);
+  const currentUpgrades = await upgradesManager.getCosmetic(vin);
   if (!currentUpgrades) return;
   await updateVehicleCosmeticUpgrades(vin, { ...currentUpgrades, ...newUpgrades });
   Util.Log(

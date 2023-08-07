@@ -38,3 +38,9 @@ function splitStr(str, delimiter)
   result[#result + 1] = string.sub(str, from)
   return result
 end
+
+function tblSize(T)
+    local count = 0
+    for _ in pairs(T) do count = count + 1 end
+    return count
+end

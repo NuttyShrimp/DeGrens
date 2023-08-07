@@ -7,8 +7,7 @@ import { carwashLogger } from './logger.carwash';
 const vehiclesWithWax: Map<string, { expirationDate: number; vehicle: number }> = new Map();
 
 export const cleanVehicle = (vehicle: number) => {
-  SetVehicleDirtLevel(vehicle, 0.0);
-  Sync.executeAction('vehicles:carwash:cleanDecals', vehicle);
+  Sync.executeAction('vehicles:carwash:clean', vehicle);
 };
 
 export const addWaxedVehicle = (vin: string, expirationDate: number) => {

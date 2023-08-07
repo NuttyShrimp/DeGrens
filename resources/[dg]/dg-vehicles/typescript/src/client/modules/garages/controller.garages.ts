@@ -1,8 +1,8 @@
 import { Events, PolyZone, RayCast, UI } from '@dgx/client';
 
-import { isOnParkingSpot, registerGarages } from './service.garages';
+import { createGarageZone, isOnParkingSpot, registerGarages, removeGarage } from './service.garages';
 
-onNet('vehicles:garages:load', (garages: Garage.Garage[]) => {
+onNet('vehicles:garages:load', (garages: Vehicles.Garages.Garage[]) => {
   registerGarages(garages);
 });
 
@@ -12,8 +12,16 @@ on('dg-vehicles:garages:park', () => {
   Events.emitNet('vehicles:garage:park', NetworkGetNetworkIdFromEntity(targetVeh));
 });
 
-UI.RegisterUICallback('vehicles:garage:takeVehicle', (data: { vin: string }, cb) => {
-  Events.emitNet('vehicles:garage:takeVehicle', data.vin);
+Events.onNet('vehicles:garage:load', (garage: Vehicles.Garages.Garage) => {
+  createGarageZone(garage);
+});
+
+Events.onNet("vehicles:garage:remove", (garageId: string) => {
+  removeGarage(garageId);
+});
+
+UI.RegisterUICallback('vehicles:garage:takeVehicle', (data: { vin: string; garageId: string }, cb) => {
+  Events.emitNet('vehicles:garage:takeVehicle', data.vin, data.garageId);
   cb({
     data: {},
     meta: {

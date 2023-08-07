@@ -60,11 +60,13 @@ Events.onNet('vehicles:enginesounds:reset', (plyId, netId: number) => {
   const vin = getVinForNetId(netId);
   if (!vin) return;
 
+  setVehicleEngineSound(vehicle, 'DEFAULT'); // Invalid modelhash always reverts to default, doesnt matter what we input here
+
   if (vinManager.isVinFromPlayerVeh(vin)) {
     updateVehicleEngineSound(vin, null);
   }
 
-  Notifications.add(plyId, 'Engine swap verwijderd. Zet voertuig in je garage om uit te voeren');
+  Notifications.add(plyId, 'Engine swap verwijderd.');
 
   const logMsg = `${Util.getName(plyId)}(${plyId}) has reset enginesound of ${vin}`;
   engineSoundLogger.info(logMsg);

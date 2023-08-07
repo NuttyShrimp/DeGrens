@@ -29,12 +29,11 @@ class ItemManager extends Util.Singleton<ItemManager>() {
       this.logger.error(logMsg);
       Util.Log(
         'inventory:item:duplicateId',
-        { itemId: state.id, newItem: state, existingItem: this.items.get(state.id!)! },
+        { itemId: state.id, newItem: state, existingItem: this.items.get(state.id!)!.state },
         logMsg,
         undefined,
         true
       );
-      return;
     }
 
     // Check if name is a known item name, if not remove from db and return

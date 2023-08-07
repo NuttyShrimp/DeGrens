@@ -5,8 +5,8 @@ import { getGarageById } from '../service.garages';
 
 export class GarageThread {
   private thread: NodeJS.Timer | null;
-  private currentGarage: Garage.Garage | null;
-  private currentSpot: Garage.ParkingSpot | null;
+  private currentGarage: Vehicles.Garages.Garage | null;
+  private currentSpot: Vehicles.Garages.ParkingSpot | null;
   private nearGarageSpot = false;
   private source: string;
   private garageId: string;
@@ -19,8 +19,8 @@ export class GarageThread {
     this.garageId = garageId;
   }
 
-  getNearestSpot(coords: Vector3): Garage.ParkingSpot | null {
-    let nearestSpot: Garage.ParkingSpot | null = null;
+  getNearestSpot(coords: Vector3): Vehicles.Garages.ParkingSpot | null {
+    let nearestSpot: Vehicles.Garages.ParkingSpot | null = null;
     let nearestDist: number | null = null;
     this.currentGarage?.parking_spots.forEach(spot => {
       const spotVector = new Vector3(spot.coords.x, spot.coords.y, spot.coords.z);

@@ -28,4 +28,25 @@
     margin: 0;
     padding: 0;
   }
+
+  @media screen and (max-height: 720px) {
+    html,
+    body {
+      font-size: 12px;
+    }
+  }
+
+  @media screen and (min-height: 1400px) {
+    html,
+    body {
+      font-size: 24px;
+    }
+  }
+
+  @media screen and (min-height: 2120px) {
+    html,
+    body {
+      font-size: 48px;
+    }
+  }
 </style>

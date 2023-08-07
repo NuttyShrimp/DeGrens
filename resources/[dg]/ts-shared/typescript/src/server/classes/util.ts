@@ -247,11 +247,7 @@ class Util extends UtilShared {
   };
 
   public awaitEntityExistence = async (entity: number, isNetId = false): Promise<boolean> => {
-    const exists = await this.awaitCondition(() => {
-      const ent = isNetId ? NetworkGetEntityFromNetworkId(entity) : entity;
-      return DoesEntityExist(ent);
-    });
-    return exists;
+    return await this.awaitCondition(() => DoesEntityExist(isNetId ? NetworkGetEntityFromNetworkId(entity) : entity));
   };
 
   public awaitOwnership = async (entity: number) => {
@@ -266,6 +262,12 @@ class Util extends UtilShared {
     onNet('dg-chars:server:finishSpawn', (isNewCharacter: boolean) => {
       handler(source, isNewCharacter);
     });
+  };
+
+  getDistanceToPlayer = (src: number, targetSrvId: number) => {
+    const srcCoords = this.getPlyCoords(src);
+    const targetCoords = this.getPlyCoords(targetSrvId);
+    return srcCoords.distance(targetCoords);
   };
 }
 

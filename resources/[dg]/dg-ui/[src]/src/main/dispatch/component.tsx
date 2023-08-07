@@ -21,10 +21,10 @@ const Component: AppFunction = props => {
   ]);
 
   const onShow = useCallback((data: { onlyNew?: boolean; showCamera?: boolean; hasCursor: boolean }) => {
-    props.showApp();
     setOnlyNew(data?.onlyNew ?? false);
     setShowCamera(data?.showCamera ?? false);
     setHasCursor(data.hasCursor);
+    props.showApp();
   }, []);
 
   const onHide = useCallback(() => {

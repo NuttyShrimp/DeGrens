@@ -8,23 +8,85 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Dev command toegevoegd om voertuig despawnen te kunnen debuggen
 
 ### Changed
+
+### Fixed
+
+## [1.3.0]
+
+### Added
+
+- Dev command toegevoegd om voertuig despawnen te kunnen debuggen
+- Mogelijkheid om voor elk drugslabs de toegestane interieren te bepalen
+- Kofi vehicles toegevoegd
+- Outfit tab toegevoegd aan "give clothing menu"
+- Mogelijkheid tot het printen van flyers aan de printers
+- Extra intern event gecaptured waarmee we meer errors kunnen zien
+- Locker naam toegevoegd aan lockers/debts om makkelijker de correcte locker te vinden
+- Mogelijkheid om stashes toe te voegen aan ganggebeiden
+- Metadata aan een debt
+- Add nuttys tailscale API as an allowed domain for the internal API
+- `voice-r` command to reconnect to the mumble/voice server
+- DSU zomer training camp
+- Cobra studios livery voor burrito
+- King pills polo texture
+- Politie arm band voor vrouwen
+- Politie M5 heeft nu ook de battenburg livery
+- Add real estate (currently no decoration yet)
+
+### Changed
+
 - Meth cornersell reputatie vereiste verlaagd
 - Inventory Itemlabel grootte verminderd
 - Meerdere handlingen getweaked
+- Vehicle status effects gerebalanced
+- Je kan nu je voertuig recoveren als het in een garage staat waar je niet aankan (Bv na ontslag, ...)
+- Alle wapens herbalanced
+- Minder kans dat een heartbeat event gedropped wordt
+- Native class van bmw m5 e39 aangepast
+- Je kan nu sneller opnieuw respawnen indien ambulance je niet komt halen in het ziekenhuis
+- Ambulance die alleen in dienst is, respawned nu meteen naar een bed
+- PDM medewerker krijgt meer van een verkoop
+- Scuff impound optie weggehaald voor burgers door abuse...
+- Text size van chat is nu "responsive" gebasseerd op de aantal pixels in de hoogte van je game
+- Distance toegevoegd aan carry + escort logs
+- Enkele textures binnen MRPD zijn opgefrist
+- SRT livery van Politie V90 aangepast
+- Handling van enkele (politie) wagens getweaked
 
 ### Fixed
+
 - Werking van spikestrips verbeterd op schuine ondergronden
-- Juwelier hack is weer mogelijk als er een andere overval begonnen is 
+- Juwelier hack is weer mogelijk als er een andere overval begonnen is
 - Je kan niet langer starten met escorteren terwijl je in een voertuig stapt
 - Probleem opgelost waardoor je geen voertuigen uit depot kon als de prijs 0 is
 - Lampen evo9 gefixt
+- Juwelier office deur gaat terug vast wanneer heist reset
+- Seatbelt icoontje wordt nu ook geupdate wanneer je stil staat
+- Typo in voertuigapp gefixt
+- Je kan niet meer in een voertuig wanneer je een BMX vast hebt
+- Ontvanger krijgt nu wel effectief crypto bij transfer
+- Je kan geen locker meer transferen naar een speler die al een locker in bezit heeft
+- Niet joinen in queue + boost van queue
+- Probleem opgelost waardoor server crashete door refreshen van inaccessible drugslab
+- RS7 ABT gaat minder snel visueel kapot
+- Probleem opgelost waardoor dispatchmeldingen met voertuig soms niet doorkwamen
+- Standaardwaarde van voertuigextras worden nu wel correct gezet
+- Extras op industriele/commerciele voertuigen worden nu wel standaard geenabled
+- Error opgelost wanneer je een verwijderd voertuig probeert van een flatbed te halen
+- Keybinds die enkel een event moeten emitten zullen geen command meer executen, dit lost de event overflow op bij het spammen van o.a. `e`
+- Mogelijke fix dat enginesounds van voertuigen die in je buurt zijn wanneer je inlaad, niet geapplied worden
+- Tweets die je binnenkrijgt als de app niet openstaat krijg je niet meer dubbel te zien
+- De lijst van de message app werkt terug
+- Politie A6 en M5E39 hun zitplaatsen zijn gecorigeerd
+- Je wordt niet meer gekicked door AFK timer tijdens char creation
+- Dispatch flicker bij nieuwe melding opgelost
 
 ## [1.2.12]
 
 ### Added
+
 - Confirmatie menu toegevoegd bij aankopen van laptops
 - Triple click item om itemId te kopieren (enkel als admin)
 - Ambulance personeel kan nu een medbag op de grond plaatsen
@@ -34,6 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuwe kofi voertuigen toegevoegd
 
 ### Changed
+
 - Je kan niet langer een bord vastnemen als je in een voertuig zit
 - Politie requirements check bij juwelier aangepast om vitrines open te breken
 - Zand past nu in een materiaaldoos
@@ -42,6 +105,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Streamfest reclame toegevoegd aan ingame bussen
 
 ### Fixed
+
 - Probleem opgelost waardoor sommige inventory containers niet geopened konden worden
 - Je kan geen BMXen uit PDM meer vastnemen
 - Je kan terug dumpster inventories openen
@@ -55,6 +119,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.11]
 
 ### Added
+
 - Zones toegevoegd waar niks op de grond gelegd kan worden
 - Tijd toegevoegd aan gangfeed bericht
 - Er kan geen nieuwe overval meer gestart worden als er net een andere is gestart
@@ -71,6 +136,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parking en kledingkast toegevoegd aan SandyPD
 
 ### Changed
+
 - Loot changes van dumpsters getweaked
 - Durability handboeien verhoogd
 - Dispatch blip grootte aangepast
@@ -83,8 +149,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Aantal server calls om player items te cachen verminderd
 - Amerikaanse politielogos op kleding vervangen door belgische
 
-
 ### Fixed
+
 - Fix engine sound hash of mazrx7fd
 - Foute notificatie dat je geen lockpick hebt opgelost bij parkeermeters
 - Je kan weer mensen opbellen via je telefoon
@@ -113,6 +179,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.10]
 
 ### Added
+
 - Default stance toegevoegd voor evo9, rcf
 - Nieuwe kleine criminele activiteit toegevoegd
 - Extra loot toegevoegd aan vuilbakken doorzoeken
@@ -133,6 +200,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nieuwe ped toegevoegd
 
 ### Changed
+
 - Override CID entry toegevoegd om kofi vehicles te kunnen assignen aan offline vehicles
 - Bennys repair prijs berekening aangepast
 - PostOP payout getweaked
@@ -150,6 +218,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - KingPills job kan nu meerdere locaties na elkaar doen
 
 ### Fixed
+
 - Motor gaat nu uit tijdens noclip om engine sounds te voorkomen
 - Fuel wordt nu terug correct gezet wanneer je een persoonlijk voertuig uithaalt
 - Hopelijk probleem opgelost ivm mensen kicken
@@ -163,15 +232,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.9]
 
 ### Added
+
 - Ingame kofi voertuig shop toegevoegd
 - Nieuwe kleding toegevoegd
 
 ### Changed
+
 - Tijd voor paleto hack hoger gezet
 - Je laat mensen nu los wanneer je dood gaat
 - Mechanic crafting recipes aangepast
 
 ### Fixed
+
 - Probleem opgelost waarbij containers visueel leeg zijn nadat je reloggen met een container opzak
 - Grote Repairkit is nu wel zichtbaar in mechanic crafting bench
 - Probleem opgelost waardoor de uren hetzelfde waren als minuten bij de indienst tijd

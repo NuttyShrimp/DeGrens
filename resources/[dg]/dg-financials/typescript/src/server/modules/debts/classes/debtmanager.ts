@@ -26,7 +26,12 @@ class DebtManager extends Util.Singleton<DebtManager>() {
 			FROM debts d
       ORDER BY id
 		`;
-    this.debts = await SQL.query(query);
+    this.debts = await SQL.query<(Omit<Debts.Debt, 'metadata'> & { metadata: string })[]>(query).then(ds =>
+      ds.map(d => {
+        d.metadata = d.metadata !== '' ? JSON.parse(d.metadata) : {};
+        return d as unknown as Debts.Debt;
+      })
+    );
     this.debts.forEach(debt => scheduleOverDueDebt(debt.id));
   }
 
@@ -80,9 +85,7 @@ class DebtManager extends Util.Singleton<DebtManager>() {
     fine: number,
     reason: string,
     origin: string,
-    given_by?: number,
-    cbEvt?: string,
-    payTerm?: number,
+    metadata?: Financials.Debts.DebtMetadata,
     type: Debts.Type = 'debt'
   ) {
     const debt: Debts.Debt = {
@@ -92,16 +95,20 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       debt: fine,
       payed: 0,
       type,
-      given_by: given_by ?? 1000,
+      given_by: metadata?.given_by ?? 1000,
       origin_name: origin,
       reason: reason,
-      event: cbEvt,
+      event: metadata?.cbEvt,
       date: Math.floor(Date.now() / 1000),
-      pay_term: payTerm,
+      pay_term: metadata?.payTerm,
     };
+    if (metadata?.payTerm) delete metadata.payTerm;
+    if (metadata?.cbEvt) delete metadata.cbEvt;
+    if (metadata?.givenBy) delete metadata.givenBy;
+    debt.metadata = metadata ?? {};
     const query = `
-			INSERT INTO debts (cid, debt, target_account, type, given_by, origin_name, reason, date, event, pay_term)
-			VALUES (?, ?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), ?, ?)
+			INSERT INTO debts (cid, debt, target_account, type, given_by, origin_name, reason, date, event, pay_term, metadata)
+			VALUES (?, ?, ?, ?, ?, ?, ?, FROM_UNIXTIME(?), ?, ?, ?)
 			RETURNING id
 		`;
     const result = await SQL.query(query, [
@@ -116,17 +123,18 @@ class DebtManager extends Util.Singleton<DebtManager>() {
       // mysql2 being mysql2
       debt.event ?? null,
       debt.pay_term ?? null,
+      debt.metadata ? JSON.stringify(debt.metadata) : null,
     ]);
     if (!result || !result[0]) {
       debtLogger.error(
-        `Failed to add debt for ${cid} | cid: ${cid} | target: ${target_account} | fine: ${fine} | reason: ${reason} | given_by: ${given_by} | type: ${type}`
+        `Failed to add debt for ${cid} | cid: ${cid} | target: ${target_account} | fine: ${fine} | reason: ${reason} | given_by: ${debt.given_by} | type: ${type}`
       );
       Util.Log('financials:debt:add:failed', debt, `Failed to add debt for ${cid}`, undefined, true);
       return;
     }
     debt.id = result[0].id;
     debtLogger.info(
-      `Added debt for ${cid} | cid: ${cid} | target: ${target_account} | fine: ${fine} | reason: ${reason} | given_by: ${given_by} | type: ${type}`
+      `Added debt for ${cid} | cid: ${cid} | target: ${target_account} | fine: ${fine} | reason: ${reason} | given_by: ${debt.given_by} | type: ${type}`
     );
     Util.Log('financials:debt:add', debt, `Added debt of ${fine} for ${cid}`);
     this.debts.push(debt);

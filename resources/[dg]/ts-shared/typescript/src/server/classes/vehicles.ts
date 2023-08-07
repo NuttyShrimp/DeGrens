@@ -121,6 +121,26 @@ class Vehicles {
   openEngineSoundMenu = (plyId: number) => {
     global.exports['dg-vehicles'].openEngineSoundMenu(plyId);
   };
+
+  setVehicleHasBulletProofTires = (vehicle: number, toggled: boolean) => {
+    global.exports['dg-vehicles'].setVehicleHasBulletProofTires(vehicle, toggled);
+  };
+
+  getVehicleHasBulletProofTires = (vehicle: number): boolean => {
+    return global.exports['dg-vehicles'].getVehicleHasBulletProofTires(vehicle);
+  };
+
+  registerGarage = (garage: Omit<Vehicles.Garages.Garage, 'runtime'>) => {
+    global.exports['dg-vehicles'].registerGarage(garage);
+  };
+
+  unregisterGarage = (garageId: string) => {
+    global.exports['dg-vehicles'].unregisterGarage(garageId);
+  };
+
+  openGarage = (plyId: number, garageId: string, shared = false): Promise<void> => {
+    return global.exports['dg-vehicles'].openGarage(plyId, garageId, shared);
+  };
 }
 
 export default {

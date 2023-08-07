@@ -89,16 +89,16 @@ export const startStatusThread = async (vehicle: number) => {
         if (avgBrakePressure <= 0) {
           multipliers.brake = 1;
         } else {
-          const brakeDecrease = (avgBrakePressure * multipliers.brake) / 50;
+          const brakeDecrease = (avgBrakePressure * multipliers.brake) / 35;
           vehicleService.info.brakes = Math.max(vehicleService.info.brakes - brakeDecrease, 0);
-          multipliers.brake = Math.max(multipliers.brake - 0.05, 0);
+          multipliers.brake = Math.max(multipliers.brake - 0.03, 0);
         }
       }
 
       // Suspension
       const avgSuspCompress = Util.average(suspCompress);
-      if (avgSuspCompress > 0.09) {
-        const suspDecrease = avgSuspCompress / (avgSuspCompress > 0.18 ? 45 : 90);
+      if (avgSuspCompress > 0.1) {
+        const suspDecrease = avgSuspCompress / 75;
         vehicleService.info.suspension = Math.max(vehicleService.info.suspension - suspDecrease, 0);
       }
 
@@ -112,11 +112,11 @@ export const startStatusThread = async (vehicle: number) => {
       vehicleService.state.engine = newEngine;
 
       if (bodyDelta > 0) {
-        const axleDecrease = (bodyDelta * poppedTireModifier) / 25;
+        const axleDecrease = (bodyDelta * poppedTireModifier) / 20;
         vehicleService.info.axle = Math.max(vehicleService.info.axle - axleDecrease, 0);
       }
       if (engineDelta > 0) {
-        const engineDecrease = engineDelta / 15;
+        const engineDecrease = engineDelta / 10;
         vehicleService.info.engine = Math.max(vehicleService.info.engine - engineDecrease, 0);
       }
     }, 100),

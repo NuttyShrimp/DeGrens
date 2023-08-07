@@ -76,6 +76,7 @@ declare namespace Debts {
     event?: string;
     reason?: string;
     pay_term?: number;
+    metadata?: Record<string, any>;
   }
 }
 

@@ -96,7 +96,7 @@ declare interface RootState {
   gridgame: Gridgame.State;
   dispatch: Dispatch.State;
   policeradar: null;
-  badge: Badge.State;
+  flyer: Badge.State;
   idlist: null;
   reports: Reports.State;
   'reports-indicator': ReportIndicator.State;

@@ -7,7 +7,7 @@ import {
   setVehicleOwner,
   setVehicleState,
 } from '../db/repository';
-import { getGarageById } from '../modules/garages/service.garages';
+import { getFirstGarageSpot, getGarageById } from '../modules/garages/service.garages';
 import vinManager from '../modules/identification/classes/vinmanager';
 import { getConfigByModel } from '../modules/info/service.info';
 import { charModule } from 'helpers/core';
@@ -33,8 +33,9 @@ Events.onNet('vehicles:server:app:trackVehicle', async (src, vin: string) => {
     Events.emitNet('vehicles:server:app:setTrackedBlip', src, vehCoords);
     return;
   }
-  const vehGarage = getGarageById(vehicle.garageId);
-  Events.emitNet('vehicles:server:app:setTrackedBlip', src, vehGarage.parking_spots[0].coords);
+  const parkingSpot = getFirstGarageSpot(vehicle.garageId);
+  if (!parkingSpot) return;
+  Events.emitNet('vehicles:server:app:setTrackedBlip', src, parkingSpot);
 });
 
 Events.onNet('vehicles:server:app:sellVehicle', async (src, targetCID: number, vin: string, price: number) => {
@@ -110,7 +111,7 @@ RPC.register('vehicles:server:app:getVehicles', async src => {
       engine: veh.status.engine,
       body: veh.status.body,
       plate: veh.plate,
-      parking: vehicleGarage.name,
+      parking: vehicleGarage?.name ?? 'Unknown Garage',
     });
   });
   return vehicles;

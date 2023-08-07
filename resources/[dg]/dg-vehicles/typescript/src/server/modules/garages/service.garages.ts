@@ -1,4 +1,4 @@
-import { Business, Gangs, Jobs, Notifications, UI, Util } from '@dgx/server';
+import { Business, Events, Gangs, Jobs, Notifications, UI, Util } from '@dgx/server';
 import { VehicleStateTranslation } from 'helpers/enums';
 import { getConfigByModel, getVehicleType } from 'modules/info/service.info';
 import {
@@ -20,16 +20,29 @@ import vinManager from '../identification/classes/vinmanager';
 import { fuelManager } from 'modules/fuel/classes/fuelManager';
 import { getServiceStatus } from 'modules/status/services/store';
 
-const garages: Map<string, Garage.Garage> = new Map();
+const garages: Map<string, Vehicles.Garages.Garage> = new Map();
 const parkingSpotThreads: Map<number, GarageThread> = new Map();
 let isLoaded = false;
 
 // region Garage info
-export const registerGarage = (garage: Garage.Garage) => {
+export const registerGarage = (garage: Vehicles.Garages.Garage) => {
   if (garages.has(garage.garage_id)) {
     garageLogger.error(`Garage ${garage.garage_id} already registered, overwriting`);
   }
   garages.set(garage.garage_id, garage);
+  if (areGaragesLoaded()) {
+    Events.emitNet('vehicles:garage:load', -1, garage);
+  }
+};
+
+export const unregisterGarage = (garageId: string) => {
+  if (!garages.has(garageId)) return;
+  if (!garages.get(garageId)!.runtime) {
+    garageLogger.error(`Failed to unregister garage ${garageId}, it is not a runtime garage`);
+    return;
+  }
+  garages.delete(garageId);
+  Events.emitNet("vehicles:garage:remove", -1, garageId);
 };
 
 export const setGaragesLoaded = () => {
@@ -44,8 +57,13 @@ export const GetGarages = () => {
   return [...garages.values()];
 };
 
-export const getGarageById = (garageId: string) => {
-  return garages.get(garageId)!;
+export const getGarageById = (garageId: string): Vehicles.Garages.Garage | null => {
+  return garages.get(garageId) || null;
+};
+export const getFirstGarageSpot = (garageId: string) => {
+  const garage = garages.get(garageId);
+  if (!garage) return null;
+  return garage.parking_spots[0];
 };
 // endregion
 // region: ParkingSpotThread
@@ -130,6 +148,14 @@ const validateAccessToGarage = (src: number) => {
   return garageInfo;
 };
 
+export const openThreadedGarage = async (src: number) => {
+  const garageInfo = validateAccessToGarage(src);
+  if (!garageInfo) return;
+
+  const { garage_id, shared } = garageInfo;
+  showPlayerGarage(src, garage_id, shared);
+};
+
 /**
  *  An exampleTree for the menu
  *  Private
@@ -149,11 +175,7 @@ const validateAccessToGarage = (src: number) => {
  *      - Status: (body, engine, fuel)
  *      - Neem voertuig
  */
-export const showPlayerGarage = async (src: number) => {
-  const garageInfo = validateAccessToGarage(src);
-  if (!garageInfo) return;
-
-  const { garage_id, shared } = garageInfo;
+export const showPlayerGarage = async (src: number, garage_id: string, shared = false) => {
   const cid = Util.getCID(src);
 
   const personalSubmenu: ContextMenu.Entry[] = [];
@@ -221,34 +243,37 @@ export const showPlayerGarage = async (src: number) => {
   UI.openContextMenu(src, menu);
 };
 
-export const takeVehicleOutGarage = async (src: number, vin: string): Promise<number | undefined> => {
+export const takeVehicleOutGarage = async (src: number, vin: string, garageId: string): Promise<number | undefined> => {
+  if (!garages.has(garageId)) return;
+
   const garageInfo = validateAccessToGarage(src);
   if (!garageInfo) return;
-  const parkingSpot = parkingSpotThreads.get(src)?.getCurrentParkingSpot();
+  const parkingSpot = parkingSpotThreads.get(src)?.getCurrentParkingSpot() ?? null;
   if (!parkingSpot) return;
-  const cid = Util.getCID(src);
+  const garageDetails = garages.get(garageId)!;
 
   // Things to check
   // - Is vehicle in same garaga Id
   //   - If not and garage is shared, check if player has access to this garage
   // - Is vehicle is parked
+  const cid = Util.getCID(src);
   const vehicleInfo = await getPlayerVehicleInfo(vin, {
     cid,
-    garageId: garageInfo.garage_id,
-    isSharedGarage: garageInfo.shared,
+    garageId: garageDetails.garage_id,
+    isSharedGarage: garageDetails.shared,
   });
   if (!vehicleInfo) {
     garageLogger.info(
-      `${cid} tried to take vehicle ${vin} out of garage ${garageInfo.garage_id} but didn't met the requirements`
+      `${cid} tried to take vehicle ${vin} out of garage ${garageDetails.garage_id} but didn't met the requirements`
     );
     Util.Log(
       `vehicle:garage:retrieve:failed`,
       {
         vin,
-        garageId: garageInfo.garage_id,
-        isShared: garageInfo.shared,
+        garageId: garageDetails.garage_id,
+        isShared: garageDetails.shared,
       },
-      `${cid} tried to retrieve vehicle ${vin} from garage ${garageInfo.name} but didn't met the requirements`,
+      `${cid} tried to retrieve vehicle ${vin} from garage ${garageDetails.name} but didn't met the requirements`,
       src
     );
     Notifications.add(src, 'Dat is precies niet mogelijk!', 'error');
@@ -280,10 +305,10 @@ export const takeVehicleOutGarage = async (src: number, vin: string): Promise<nu
     {
       vin,
       netId: NetworkGetNetworkIdFromEntity(veh),
-      garageId: garageInfo.garage_id,
-      isShared: garageInfo.shared,
+      garageId: garageDetails.garage_id,
+      isShared: garageDetails.shared,
     },
-    `${cid} has successfully retrieved vehicle with vin ${vin} from the garage with id ${garageInfo.garage_id}`,
+    `${cid} has successfully retrieved vehicle with vin ${vin} from the garage with id ${garageDetails.garage_id}`,
     src
   );
 
@@ -367,7 +392,7 @@ export const storeVehicleInGarage = async (src: number, entity: number) => {
 
 // endregion
 export const doesCidHasAccess = (cid: number, garageId: string) => {
-  const garage = garages.get(garageId);
+  const garage = getGarageById(garageId);
   if (!garage) return false;
 
   switch (garage.type) {
@@ -381,6 +406,8 @@ export const doesCidHasAccess = (cid: number, garageId: string) => {
       return Business.hasPlyPermission(garage.garage_id, cid, 'garage_access');
     case 'gang':
       return Gangs.getPlayerGangName(cid) === garage.garage_id;
+    case 'house':
+      return global.exports['dg-real-estate'].playerHasAccess(cid, garage.garage_id);
     default:
       return false;
   }
@@ -393,6 +420,7 @@ const buildBaseGarageVehicleMenuEntry = (veh: Vehicle.Vehicle): ContextMenu.Entr
       callbackURL: veh.state === 'parked' ? 'vehicles:garage:takeVehicle' : 'vehicles:garage:tryToRecover',
       data: {
         vin: veh.vin,
+        garageId: veh.garageId,
       },
     },
     {
@@ -412,27 +440,46 @@ const buildVehicleGarageLogMenuEntries = async (vin: string): Promise<ContextMen
   }));
 };
 
-export const recoverNonExistentVehicle = async (plyId: number, vin: string) => {
+// This function puts back a vehicle into a garage when it is currently out but not existing OR in a garage the player has no access to
+export const recoverVehicle = async (plyId: number, vin: string) => {
   if (!vinManager.doesVinExist(vin) || !vinManager.isVinFromPlayerVeh(vin)) return;
 
   const vehicleInfo = await getPlayerVehicleInfo(vin);
-  if (!vehicleInfo || vehicleInfo.state !== 'out') return;
+  if (!vehicleInfo) return;
 
-  const netId = vinManager.getNetId(vin);
-  if (netId) {
-    Notifications.add(plyId, 'Je voertuig staat nog ergens uit. Probeer het te tracken', 'error');
-    return;
+  const cid = Util.getCID(plyId);
+  if (vehicleInfo.state === 'parked' && !doesCidHasAccess(cid, vehicleInfo.garageId)) {
+    // vehicle is in inaccessible (invalid) garage so move to alta
+    setVehicleGarage(vin, 'alta_apartments');
+    Notifications.add(plyId, 'Het voertuig is teruggezet aan Alta Apartments', 'success');
+
+    Util.Log(
+      'vehicles:garage:recover',
+      {
+        vin,
+        garageId: vehicleInfo.garageId,
+      },
+      `${Util.getName(plyId)}(${plyId}) has recovered inaccessible vehicle (${vin})`,
+      plyId
+    );
+  } else if (vehicleInfo.state === 'out') {
+    // vehicle is out but entity does not exist so mark as parked
+    const netId = vinManager.getNetId(vin);
+    if (netId) {
+      Notifications.add(plyId, 'Je voertuig staat nog ergens uit. Probeer het te tracken', 'error');
+      return;
+    }
+
+    setVehicleState(vin, 'parked');
+    Notifications.add(plyId, 'Je voertuig staat terug in de garage', 'success');
+
+    Util.Log(
+      'vehicles:garage:recover',
+      {
+        vin,
+      },
+      `${Util.getName(plyId)}(${plyId}) has recovered nonexistent vehicle (${vin})`,
+      plyId
+    );
   }
-
-  setVehicleState(vin, 'parked');
-  Notifications.add(plyId, 'Je voertuig staat terug in de garage', 'success');
-
-  Util.Log(
-    'vehicles:garage:recover',
-    {
-      vin,
-    },
-    `${Util.getName(plyId)}(${plyId}) has recovered nonexistent vehicle (${vin})`,
-    plyId
-  );
 };
