@@ -28,6 +28,7 @@ setupCharMenu = function()
     end
     TriggerEvent("loadscreen:disableScreen")
     DoScreenFadeIn(1)
+    LocalPlayer.state:set("char_menu", true, false)
     openCharUI()
   end)
 end

@@ -67,6 +67,7 @@ Spawn.choose = function(idx)
   if result.fade then
     DoScreenFadeIn(250)
   end
+  LocalPlayer.state:set("char_menu", false, false)
 end
 
 
@@ -156,5 +157,6 @@ end
 RegisterNetEvent('dg-chars:client:finishSpawn', function(isNew)
   TriggerServerEvent('dg-chars:server:finishSpawn', isNew)
   TriggerEvent('dg-chars:finishSpawn', isNew)
+  LocalPlayer.state:set("char_menu", false, false)
 end)
 --endregion

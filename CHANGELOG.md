@@ -72,6 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tweets die je binnenkrijgt als de app niet openstaat krijg je niet meer dubbel te zien
 - De lijst van de message app werkt terug
 - Politie A6 en M5E39 hun zitplaatsen zijn gecorigeerd
+- Je wordt niet meer gekicked door AFK timer tijdens char creation
 
 ## [1.2.12]
 
