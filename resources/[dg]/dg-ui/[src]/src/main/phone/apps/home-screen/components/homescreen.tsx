@@ -26,7 +26,9 @@ const AppIcon: FC<React.PropsWithChildren<ConfigObject>> = props => {
             onClick={() => changeApp(props.name)}
             style={{
               color: props.icon?.color ?? 'white',
-              background: `linear-gradient(transparent, ${props.icon.backgroundGradient ?? 'rgba(0, 0, 0, 0)'})`,
+              background: props.icon.backgroundGradient
+                ? `linear-gradient(transparent, ${props.icon.backgroundGradient})`
+                : props.icon.background ?? '#000',
               backgroundColor: props.icon.background ?? '#000',
             }}
           >
