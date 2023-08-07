@@ -111,4 +111,12 @@ export const police: RadialMenu.Entry[] = [
       return global.exports['dg-police'].canToggleSiren(currentVehicle);
     },
   },
+  {
+    title: 'Plaats Barrier',
+    icon: 'road-barrier',
+    type: 'dgxServer',
+    event: 'police:barriers:create',
+    shouldClose: true,
+    isEnabled: ({ currentVehicle }) => !currentVehicle,
+  },
 ];

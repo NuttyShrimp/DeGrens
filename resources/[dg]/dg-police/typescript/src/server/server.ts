@@ -6,6 +6,7 @@ import './controllers';
 import './services/plateflags';
 import './services/requirements';
 import './services/camera';
+import './services/barriers';
 import './modules/trackers';
 import './modules/spikestrips';
 import './modules/evidence';

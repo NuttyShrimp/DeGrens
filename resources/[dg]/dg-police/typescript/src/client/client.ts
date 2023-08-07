@@ -15,4 +15,5 @@ import './services/requirements';
 import './services/ang';
 import './services/camera';
 import './services/sirenToggle';
+import './services/barriers';
 import '@shared/services/vehicles';
