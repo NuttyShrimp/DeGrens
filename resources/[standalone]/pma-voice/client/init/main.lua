@@ -230,10 +230,7 @@ function playMicClicks(clickType, origin)
     return
   end
   -- TODO: Add customizable radio click volumes
-  sendUIMessage({
-    sound = (clickType and "audio_on" or "audio_off"),
-    volume = (clickType and 0.3 or 0.13)
-  })
+  DGX.Sounds.playLocalSound(clickType and 'mic_click_on' or 'mic_click_off', clickType and 0.3 or 0.13)
 end
 
 exports('playMicClicks', playMicClicks)

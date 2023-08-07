@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Toon badge optie bij politie menu verwijderd (vervangen door item)
+- Radio clicks teruggebracht
 
 ## [1.3.0]
 
