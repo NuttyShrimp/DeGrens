@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Wat metadata van de flyer gehide
+
 ### Fixed
 
 - Toon badge optie bij politie menu verwijderd (vervangen door item)

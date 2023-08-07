@@ -82,6 +82,7 @@ Events.onNet('misc:flyers:createItem', async (src, id: number) => {
     {
       type: 'generic',
       link: flyers[0].link,
+      hiddenKeys: ['type', 'link'],
     },
     `${Util.getName(src)}(${cid}) has created a new flyer`,
     src
@@ -98,6 +99,7 @@ Events.onNet('misc:flyers:createPoliceBadge', async src => {
   await Inventory.addItemToPlayer(src, 'flyer', 1, {
     type: 'police',
     name: `${char.charinfo.firstname} ${char.charinfo.lastname}`,
+    hiddenKeys: ['type'],
   });
 
   // TODO: Delete the old one (if possible)
