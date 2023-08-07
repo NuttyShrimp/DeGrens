@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Wat metadata van de flyer gehide
+- Flyer links worden nu treffelijk gecontroleerd of ze wel naar een image wijzen
 
 ### Fixed
 

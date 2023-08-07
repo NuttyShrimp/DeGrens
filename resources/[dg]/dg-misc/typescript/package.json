@@ -21,6 +21,7 @@
     "tsconfig": "workspace:*"
   },
   "dependencies": {
+    "image-type": "^5.2.0",
     "three": "^0.152.2"
   }
 }

@@ -1,5 +1,7 @@
 import { Events, Inventory, Jobs, Notifications, SQL, UI, Util } from '@dgx/server';
 import { charModule } from 'helpers/core';
+import imageType, { minimumBytes } from 'image-type';
+import https from 'node:https';
 
 const blocked_cids: number[] = [];
 
@@ -20,8 +22,34 @@ Events.onNet('misc:flyers:requestFlyer', async (src, link: string) => {
     Notifications.add(src, 'De printer werkt niet meer voor jou!', 'error');
     return;
   }
-  await SQL.query('INSERT INTO flyer_request (cid, link) VALUES (?,?)', [cid, link]);
-  Notifications.add(src, 'Flyer requested!');
+
+  try {
+    https
+      .get(link, res => {
+        setImmediate(() => {
+          res.on('readable', () => {
+            (async () => {
+              const chunk = res.read(minimumBytes);
+              res.destroy();
+              const type = await imageType(chunk);
+              if (!type) {
+                Notifications.add(src, 'Deze link wijst niet naar een afbeelding!', 'error');
+                return;
+              }
+              await SQL.query('INSERT INTO flyer_request (cid, link) VALUES (?,?)', [cid, link]);
+              Notifications.add(src, 'Flyer requested!');
+            })();
+          });
+        });
+      })
+      .on('error', err => {
+        Notifications.add(src, 'Deze link is niet bereikbaar voor ons!', 'error');
+        return;
+      });
+  } catch (e) {
+    Notifications.add(src, 'Deze link is niet bereikbaar voor ons!', 'error');
+    return;
+  }
 });
 
 Events.onNet('misc:flyers:openRequestMenu', async src => {
