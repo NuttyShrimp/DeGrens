@@ -6,7 +6,8 @@
       "options": {
         "garage": true,
         "furniture": true,
-        "shareable_keys": 3
+        "shareable_keys": 3,
+        "stashSize": 70
       }
     },
     "caravan": {
@@ -15,7 +16,8 @@
       "options": {
         "garage": false,
         "furniture": true,
-        "shareable_keys": 2
+        "shareable_keys": 2,
+        "stashSize": 50
       }
     },
     "small_appartment": {
@@ -24,7 +26,8 @@
       "options": {
         "garage": false,
         "furniture": true,
-        "shareable_keys": 3
+        "shareable_keys": 3,
+        "stashSize": 50
       }
     },
     "big_appartment": {
@@ -33,7 +36,8 @@
       "options": {
         "garage": true,
         "furniture": true,
-        "shareable_keys": 4
+        "shareable_keys": 4,
+        "stashSize": 90
       }
     },
     "luxury_appartment": {
@@ -42,7 +46,8 @@
       "options": {
         "garage": true,
         "furniture": true,
-        "shareable_keys": 4
+        "shareable_keys": 4,
+        "stashSize": 110
       }
     }
   }

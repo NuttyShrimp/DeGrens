@@ -22,6 +22,7 @@ declare namespace Config {
       garage: boolean;
       furniture: boolean;
       shareable_keys: number;
+      stashSize: number;
     }>;
   };
 
