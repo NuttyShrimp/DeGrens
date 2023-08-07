@@ -60,7 +60,7 @@ const canTackle = () => {
     !IsPedRagdoll(ped) &&
     !Police.isCuffed() &&
     !Police.isEscorting() &&
-    !IsPedJumping(ped) &&
+    IsPedJumping(ped) &&
     Weapons.getCurrentWeaponData() === null &&
     !IsPedClimbing(ped) &&
     !IsPedSwimming(ped) &&
