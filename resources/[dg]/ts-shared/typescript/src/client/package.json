@@ -2,5 +2,5 @@
   "name": "@dgx/client",
   "main": "./index.ts",
   "types": "index.ts",
-  "version": "1.2.12"
+  "version": "1.3.0"
 }

@@ -38,16 +38,20 @@ def updateVersions(version):
         if "node_modules" in str(path):
             continue
         updateVersionInFile(version, path)
-    except:
-      print("An exception occurred") 
+    except Exception as e:
+      print("An exception occurred", path, e)
+      if "node_modules" not in str(path):
+        return
 
     try:
       for path in Path("packages").rglob('package.json'):
         if "node_modules" in str(path):
             continue
         updateVersionInFile(version, path)
-    except:
-      print("An exception occurred") 
+    except Exception as e:
+      print("An exception occurred", path, e)
+      if "node_modules" not in str(path):
+        return
 
     updateVersionInFile(version, "./package.json")
     # updateVersionInFile(version, "./resources/[dg]/dg-config/configs/main.json")
