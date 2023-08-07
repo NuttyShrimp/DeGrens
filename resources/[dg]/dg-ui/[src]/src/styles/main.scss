@@ -218,29 +218,29 @@ body > .MuiPopover-root > .MuiPaper-root, body > .MuiPopperUnstyled-root > .MuiP
   background-color: rgb(18, 18, 18)!important;
 }
 
-@media screen and (max-height: 720px) {
+// @media screen and (max-height: 720px) {
 
-  html,
-  body {
-    font-size: 12px;
-  }
-}
+//   html,
+//   body {
+//     font-size: 12px;
+//   }
+// }
 
-@media screen and (min-height: 1440px) {
+// @media screen and (min-height: 1440px) {
 
-  html,
-  body {
-    font-size: 24px;
-  }
-}
+//   html,
+//   body {
+//     font-size: 24px;
+//   }
+// }
 
-@media screen and (min-height: 2160px) {
+// @media screen and (min-height: 2160px) {
 
-  html,
-  body {
-    font-size: 48px;
-  }
-}
+//   html,
+//   body {
+//     font-size: 48px;
+//   }
+// }
 
 .center {
   display: flex;

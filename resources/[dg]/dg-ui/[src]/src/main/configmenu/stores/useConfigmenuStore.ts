@@ -4,6 +4,9 @@ import deepmerge from 'deepmerge';
 
 export const useConfigmenuStore = create<ConfigMenu.State & ConfigMenu.StateActions>('configmenu')((set, get) => ({
   currentMenu: 'hud',
+  ui: {
+    fontSize: 16,
+  },
   hud: {
     keyboard: 'qwerty',
     size: 1,
@@ -58,6 +61,7 @@ export const useConfigmenuStore = create<ConfigMenu.State & ConfigMenu.StateActi
         phone: get().phone,
         radio: get().radio,
         sounds: get().sounds,
+        ui: get().ui,
       },
       conf
     );
@@ -72,6 +76,7 @@ export const useConfigmenuStore = create<ConfigMenu.State & ConfigMenu.StateActi
         radio: get().radio,
         phone: get().phone,
         sounds: get().sounds,
+        ui: get().ui,
       },
     });
   },
