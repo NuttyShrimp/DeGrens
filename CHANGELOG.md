@@ -73,6 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - De lijst van de message app werkt terug
 - Politie A6 en M5E39 hun zitplaatsen zijn gecorigeerd
 - Je wordt niet meer gekicked door AFK timer tijdens char creation
+- Dispatch flicker bij nieuwe melding opgelost
 
 ## [1.2.12]
 
