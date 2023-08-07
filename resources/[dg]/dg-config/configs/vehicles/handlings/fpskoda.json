@@ -3,6 +3,6 @@
     "fInitialDragCoeff": -1.0,
     "fInitialDriveMaxFlatVel": 10.0,
     "fSteeringLock": 2.0,
-    "fTractionCurveMax": -0.2
+    "fTractionCurveMin": -1.0
   }
 }

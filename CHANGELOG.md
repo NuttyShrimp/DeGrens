@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Distance toegevoegd aan carry + escort logs
 - Enkele textures binnen MRPD zijn opgefrist
 - SRT livery van Politie V90 aangepast
+- Handling van enkele (politie) wagens getweaked
 
 ### Fixed
 
