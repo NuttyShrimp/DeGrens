@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Dynamische inventory icons (o.a. flyers)
+
 ### Changed
 
 - Wat metadata van de flyer gehide

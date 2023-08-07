@@ -292,8 +292,8 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     return this.doesInventoryHaveItemWithId('player', cid, itemId);
   };
 
-  public showItemBox = (plyId: number, itemName: string, label: string) => {
-    global.exports['dg-inventory'].showItemBox(plyId, itemName, label);
+  public showItemBox = (plyId: number, itemName: string, label: string, isLink = false) => {
+    global.exports['dg-inventory'].showItemBox(plyId, itemName, label, isLink);
   };
 
   public openStash = (plyId: number, stashId: string, size?: number): void => {

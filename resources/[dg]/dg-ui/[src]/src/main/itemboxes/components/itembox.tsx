@@ -8,7 +8,10 @@ export const Itembox: FC<Itemboxes.Itembox> = props => {
       <p>{props.action}</p>
       {
         <div className='image'>
-          <img src={getImg(props.image)} onError={() => console.log(`No image found with filename '${props.image}'`)} />
+          <img
+            src={props.isLink ? props.image : getImg(props.image)}
+            onError={() => console.log(`No image found with filename '${props.image}'`)}
+          />
         </div>
       }
     </div>

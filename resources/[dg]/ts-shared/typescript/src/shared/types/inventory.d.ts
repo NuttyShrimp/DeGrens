@@ -9,7 +9,7 @@ declare namespace Inventory {
     position: Vec2;
     rotated: boolean;
     hotkey: Hotkey | null;
-    metadata: { hiddenKeys: string[] } & Partial<T>;
+    metadata: { hiddenKeys: string[]; _icon?: string } & Partial<T>;
     // the unix timestamp when an item is going to break (sec)
     destroyDate: number | null;
     requirements?: Requirements;

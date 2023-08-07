@@ -9,8 +9,8 @@ export const ItemImage: FC<{ width: number; height: number; itemState: Inventory
   return (
     <div className='image'>
       <img
-        src={getImg(itemState.image)}
-        onError={() => console.log(`No image found with filename '${itemState.image}'`)}
+        src={itemState.metadata?._icon ?? getImg(itemState.image)}
+        onError={() => console.log(`No image found with filename '${itemState.metadata?._icon ?? itemState.image}'`)}
         style={itemState.rotated ? { transform: `rotate(90deg)`, width: height, height: width } : { width, height }}
       />
     </div>

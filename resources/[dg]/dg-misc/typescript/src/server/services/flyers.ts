@@ -73,6 +73,8 @@ Events.onNet('misc:flyers:createItem', async (src, id: number) => {
 
   await Inventory.addItemToPlayer(src, 'flyer', 1, {
     link: flyers[0].link,
+    _icon: flyers[0].link,
+    hiddenKeys: ['type', 'link'],
   });
 
   await SQL.query('DELETE FROM flyer_request WHERE id = ?', [id]);
@@ -82,7 +84,6 @@ Events.onNet('misc:flyers:createItem', async (src, id: number) => {
     {
       type: 'generic',
       link: flyers[0].link,
-      hiddenKeys: ['type', 'link'],
     },
     `${Util.getName(src)}(${cid}) has created a new flyer`,
     src

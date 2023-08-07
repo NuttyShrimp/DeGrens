@@ -153,7 +153,8 @@ export class Item {
     if (!this.canUse(src)) return;
     this.logger.debug(`Item ${this.id} has been used`);
     const itemImage = itemDataManager.get(this.name).image;
-    if (hotkey) emitNet('inventory:addItemBox', src, 'Gebruikt', itemImage);
+    if (hotkey)
+      emitNet('inventory:addItemBox', src, 'Gebruikt', this.metadata._icon ?? itemImage, !!this.metadata._icon);
     Util.Log(
       'inventory:item:used',
       {
@@ -253,7 +254,7 @@ export class Item {
       const image = itemDataManager.get(this.name).image;
       const plyId = charModule.getServerIdFromCitizenId(Number(originalInvIdentifier));
       if (plyId) {
-        emitNet('inventory:addItemBox', plyId, 'Verwijderd', image);
+        emitNet('inventory:addItemBox', plyId, 'Verwijderd', this.metadata?._icon ?? image, !!this.metadata._icon);
       }
     }
   };

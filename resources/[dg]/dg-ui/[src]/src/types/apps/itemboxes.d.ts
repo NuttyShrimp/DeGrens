@@ -6,5 +6,6 @@ declare namespace Itemboxes {
   interface Itembox {
     image: string;
     action: string;
+    isLink?: boolean;
   }
 }
