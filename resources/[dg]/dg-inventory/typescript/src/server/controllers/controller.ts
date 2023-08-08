@@ -119,7 +119,11 @@ const removeItemsByNamesFromInventory = async (
 
   if (itemNamesLeft.length !== 0) return false;
 
+  const itemIcons: Record<string, string> = {};
   for (const item of itemsToRemove) {
+    if (itemIcons[item.state.name] && item.getMetadata()._icon) {
+      itemIcons[item.state.name] = item.getMetadata()._icon!;
+    }
     item.destroy(true);
   }
 
@@ -128,22 +132,14 @@ const removeItemsByNamesFromInventory = async (
     if (plyId) {
       // group same names for itemboxes
       const counts: Record<string, number> = {};
-      let playerInv = await inventoryManager.get(Inventory.concatId('player', identifier));
       for (const name of names) {
         const count = counts[name] ?? 0;
         counts[name] = count + 1;
       }
 
       for (const [n, c] of Object.entries(counts)) {
-        const image = itemDataManager.get(n).image;
-        const item = playerInv.getItemStatesForName(n)[0];
-        emitNet(
-          'inventory:addItemBox',
-          plyId,
-          `${c}x Verwijderd`,
-          item.metadata?._icon ?? image,
-          !!item.metadata?._icon
-        );
+        const image = itemIcons[n] ?? itemDataManager.get(n).image;
+        emitNet('inventory:addItemBox', plyId, `${c}x Verwijderd`, image, !!itemIcons[n]);
       }
     }
   }
@@ -170,8 +166,12 @@ const removeItemsByIdsFromInventory = async (
 
   // at this point we are sure ply has all items
   const removeCounts: Record<string, number> = {};
+  const itemIcons: Record<string, string> = {};
   for (const item of itemsToRemove) {
     item.destroy(true);
+    if (!itemIcons[item.state.name] && item.getMetadata()._icon) {
+      itemIcons[item.state.name] = item.getMetadata()._icon!;
+    }
 
     const itemName = item.state.name;
     const count = removeCounts[itemName] ?? 0;
@@ -181,11 +181,9 @@ const removeItemsByIdsFromInventory = async (
   if (type === 'player') {
     const plyId = charModule.getServerIdFromCitizenId(Number(identifier));
     if (plyId) {
-      let plyInv = await inventoryManager.get(Inventory.concatId('player', identifier));
       for (const [n, c] of Object.entries(removeCounts)) {
         const image = itemDataManager.get(n).image;
-        const icon = plyInv.getItemStatesForName(n)[0].metadata?._icon;
-        emitNet('inventory:addItemBox', plyId, `${c}x Verwijderd`, icon ?? image, !!icon);
+        emitNet('inventory:addItemBox', plyId, `${c}x Verwijderd`, itemIcons[n] ?? image, !!itemIcons[n]);
       }
     }
   }
