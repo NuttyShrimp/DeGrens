@@ -11,7 +11,7 @@ export const isItemAContainer = (name: string) => !!containers[name];
 export const registerContainers = () => {
   containers = getConfig().containers;
 
-  Inventory.registerUseable(Object.keys(containers), (plyId, state) => {
+  Inventory.registerUseable<{ label: string; isContainer: boolean }>(Object.keys(containers), (plyId, state) => {
     const item = itemManager.get(state.id);
     if (!item) return;
 
@@ -34,6 +34,7 @@ export const registerContainers = () => {
         callbackURL: 'inventory/containers/label',
         data: {
           containerId: state.id,
+          label: state.metadata?.label ?? '',
         },
       },
     ]);
