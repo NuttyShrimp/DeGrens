@@ -51,7 +51,12 @@ declare namespace ConfigMenu {
     interactionSoundVolume: number;
   };
 
+  type UiConfig = {
+    fontSize: number;
+  };
+
   interface Categories {
+    ui: UiConfig;
     hud: HudConfig;
     phone: PhoneConfig;
     radio: RadioConfig;

@@ -64,7 +64,13 @@ const addItemToInventory = async (
 
   if (plyId) {
     const itemData = itemDataManager.get(name);
-    emitNet('inventory:addItemBox', plyId, `${amount}x Ontvangen`, itemData.image);
+    emitNet(
+      'inventory:addItemBox',
+      plyId,
+      `${amount}x Ontvangen`,
+      fullMetadata?._icon ?? itemData.image,
+      !!fullMetadata?._icon
+    );
   }
 
   Util.Log(
@@ -122,6 +128,7 @@ const removeItemsByNamesFromInventory = async (
     if (plyId) {
       // group same names for itemboxes
       const counts: Record<string, number> = {};
+      let playerInv = await inventoryManager.get(Inventory.concatId('player', identifier));
       for (const name of names) {
         const count = counts[name] ?? 0;
         counts[name] = count + 1;
@@ -129,7 +136,14 @@ const removeItemsByNamesFromInventory = async (
 
       for (const [n, c] of Object.entries(counts)) {
         const image = itemDataManager.get(n).image;
-        emitNet('inventory:addItemBox', plyId, `${c}x Verwijderd`, image);
+        const item = playerInv.getItemStatesForName(n)[0];
+        emitNet(
+          'inventory:addItemBox',
+          plyId,
+          `${c}x Verwijderd`,
+          item.metadata?._icon ?? image,
+          !!item.metadata?._icon
+        );
       }
     }
   }
@@ -167,9 +181,11 @@ const removeItemsByIdsFromInventory = async (
   if (type === 'player') {
     const plyId = charModule.getServerIdFromCitizenId(Number(identifier));
     if (plyId) {
+      let plyInv = await inventoryManager.get(Inventory.concatId('player', identifier));
       for (const [n, c] of Object.entries(removeCounts)) {
         const image = itemDataManager.get(n).image;
-        emitNet('inventory:addItemBox', plyId, `${c}x Verwijderd`, image);
+        const icon = plyInv.getItemStatesForName(n)[0].metadata?._icon;
+        emitNet('inventory:addItemBox', plyId, `${c}x Verwijderd`, icon ?? image, !!icon);
       }
     }
   }
@@ -254,9 +270,9 @@ const doesInventoryHaveItemWithId = async (type: Inventory.Type, identifier: str
   return inventory.hasItemId(itemId);
 };
 
-const showItemBox = (plyId: number, itemName: string, label: string) => {
+const showItemBox = (plyId: number, itemName: string, label: string, isLink = false) => {
   const itemData = itemDataManager.get(itemName);
-  emitNet('inventory:addItemBox', plyId, label, itemData.image);
+  emitNet('inventory:addItemBox', plyId, label, itemData.image, isLink);
 };
 
 // Exports

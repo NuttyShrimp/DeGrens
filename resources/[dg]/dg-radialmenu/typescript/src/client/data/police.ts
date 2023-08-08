@@ -13,12 +13,6 @@ export const police: RadialMenu.Entry[] = [
     },
   },
   {
-    title: 'Toon Badge',
-    icon: 'id-badge',
-    type: 'dgxServer',
-    event: 'police:badges:showPoliceBadge',
-  },
-  {
     title: 'Open Locker',
     icon: 'box-archive',
     type: 'client',
@@ -116,5 +110,13 @@ export const police: RadialMenu.Entry[] = [
     isEnabled: ({ currentVehicle }) => {
       return global.exports['dg-police'].canToggleSiren(currentVehicle);
     },
+  },
+  {
+    title: 'Plaats Barrier',
+    icon: 'road-barrier',
+    type: 'dgxServer',
+    event: 'police:barriers:create',
+    shouldClose: true,
+    isEnabled: ({ currentVehicle }) => !currentVehicle,
   },
 ];

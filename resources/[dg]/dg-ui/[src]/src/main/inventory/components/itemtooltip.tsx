@@ -29,7 +29,7 @@ export const ItemTooltip: FC<Inventory.Item> = ({
     const hiddenKeys: string[] = metadata.hiddenKeys ?? [];
     const formatted: JSX.Element[] = [];
     for (const [key, value] of Object.entries(metadata)) {
-      if (hiddenKeys.some(hidden => key === hidden) || key === 'hiddenKeys') continue;
+      if (hiddenKeys.some(hidden => key === hidden) || key === 'hiddenKeys' || key === '_icon') continue;
       let formattedValue = value.toString();
       if (typeof value === 'boolean') {
         formattedValue = value ? 'Ja' : 'Nee';

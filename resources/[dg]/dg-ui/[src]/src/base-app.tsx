@@ -3,9 +3,11 @@ import { useEffect } from 'react';
 import { AppContainer } from './components/appcontainer';
 import { isDevel, isGameDevel } from './lib/env';
 import { useMainStore } from './lib/stores/useMainStore';
+import { useConfigmenuStore } from './main/configmenu/stores/useConfigmenuStore';
 
 export function App() {
   const apps = useMainStore(s => s.apps);
+  const [uiConfig] = useConfigmenuStore(s => [s.ui]);
 
   useEffect(() => {
     const devMode = isDevel();
@@ -19,6 +21,11 @@ export function App() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    document.getElementsByTagName('body')[0].style.fontSize = `${uiConfig.fontSize}px`;
+    document.getElementsByTagName('html')[0].style.fontSize = `${uiConfig.fontSize}px`;
+  }, [uiConfig.fontSize]);
 
   return (
     <div className='ui-wrapper'>

@@ -13,6 +13,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.3.1]
+
+### Added
+
+- Dynamische inventory icons (o.a. flyers)
+- Politie kan nu barriers plaatsen die het NPC verkeer tegenhouden (F1 -> Politie -> Plaats Barrier)
+- UI fontsize is aanpasbaar in config menu
+
+### Changed
+
+- Wat metadata van de flyer gehide
+- Flyer links worden nu treffelijk gecontroleerd of ze wel naar een image wijzen
+- Stash grootte van house wordt nu bepaald door house type
+
+### Fixed
+
+- Toon badge optie bij politie menu verwijderd (vervangen door item)
+- Radio clicks teruggebracht
+
 ## [1.3.0]
 
 ### Added

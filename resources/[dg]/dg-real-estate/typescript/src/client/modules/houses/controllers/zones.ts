@@ -1,6 +1,6 @@
 import { Events, Inventory, Keys, PolyZone, Sounds, Sync, UI } from '@dgx/client';
 import { getCurrentHouse, getCurrentHouseCenter, leaveProperty } from '../services/instance';
-import { getHouseInfo } from '../services/store';
+import { getHouseInfo, getTypeInfo } from '../services/store';
 import { Vector3 } from '@dgx/shared';
 
 let activeZone: keyof Properties.PropertyLocations | null = null;
@@ -41,7 +41,10 @@ Keys.onPressDown('GeneralUse', () => {
 const openStash = () => {
   const houseName = getCurrentHouse();
   if (!houseName) return;
-  Inventory.openStash(houseName);
+  const houseInfo = getHouseInfo(houseName);
+  if (!houseInfo) return;
+  const typeInfo = getTypeInfo(houseInfo.type);
+  Inventory.openStash(houseName, typeInfo?.options?.stashSize ?? 60);
   Sounds.playLocalSound('StashOpen', 1);
 };
 

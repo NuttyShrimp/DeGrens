@@ -2597,7 +2597,7 @@
     "label": "Infokaartje",
     "image": "flyer.png",
     "size": {
-      "x": 1,
+      "x": 2,
       "y": 2
     },
     "useable": true,

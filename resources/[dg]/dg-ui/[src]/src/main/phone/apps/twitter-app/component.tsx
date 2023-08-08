@@ -51,7 +51,7 @@ const Component = () => {
     );
     if (!newTweets || newTweets.length === 0) return;
     updateStore({
-      tweets: [...tweets, ...newTweets.reverse()],
+      tweets: requestAmount === 0 ? [...newTweets.reverse()] : [...tweets, ...newTweets.reverse()],
       requestAmount: requestAmount + 1,
     });
   };

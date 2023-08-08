@@ -5,8 +5,6 @@ import { eulerAnglesToRotMatrix, rotMatrixToEulerAngles } from '../../../shared/
 import { CHUNK_SIZE, neighbourMods } from './helper.objectmanager';
 
 const objectStore: Record<string, Objects.ActiveState> = {};
-// Set of all ids that are registered on client
-const localObjects: Set<string> = new Set();
 // Chunk to ObjectId
 const chunkMap: Record<number, string[]> = {};
 let checkThread: NodeJS.Timer | null = null;
@@ -70,7 +68,16 @@ const createObject = async (id: string) => {
   Entity(entity).state.set('objId', id, false);
   if (data.flags) {
     for (const [key, value] of Object.entries(data.flags)) {
-      Entity(entity).state.set(key, value, false);
+      switch (key) {
+        case 'onFloor': {
+          PlaceObjectOnGroundProperly(entity);
+          break;
+        }
+        default: {
+          Entity(entity).state.set(key, value, false);
+          break;
+        }
+      }
     }
   }
   objectStore[data.id].entity = entity;
@@ -126,6 +133,9 @@ export const addLocalObject = (data: Objects.CreateData | Objects.CreateData[]) 
       if (!obj.rotation) {
         obj.rotation = new Vector3(0, 0, 0);
       }
+      if (!(obj.coords instanceof Vector3)) {
+        obj.coords = new Vector3(obj.coords.x, obj.coords.y, obj.coords.z);
+      }
       const matrix = new Float32Array(eulerAnglesToRotMatrix(obj.rotation, obj.coords));
       delete obj.rotation;
       registerObject({ ...obj, id, matrix });
@@ -136,6 +146,9 @@ export const addLocalObject = (data: Objects.CreateData | Objects.CreateData[]) 
     if (!data.rotation) {
       data.rotation = new Vector3(0, 0, 0);
     }
+    if (!(data.coords instanceof Vector3)) {
+      data.coords = new Vector3(data.coords.x, data.coords.y, data.coords.z);
+    }
     const matrix = new Float32Array(eulerAnglesToRotMatrix(data.rotation, data.coords));
     delete data.rotation;
     registerObject({ ...data, id, matrix });
@@ -143,7 +156,6 @@ export const addLocalObject = (data: Objects.CreateData | Objects.CreateData[]) 
   if (checkThread) {
     checkThread.refresh();
   }
-  createdIds.forEach(localObjects.add);
   return createdIds;
 };
 

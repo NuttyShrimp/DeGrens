@@ -1,5 +1,5 @@
 import { UI } from '@dgx/client';
 
-onNet('inventory:addItemBox', (action: string, image: string) => {
-  UI.SendAppEvent('itemboxes', { action, image });
+onNet('inventory:addItemBox', (action: string, image: string, isLink = false) => {
+  UI.SendAppEvent('itemboxes', { action, image, isLink });
 });

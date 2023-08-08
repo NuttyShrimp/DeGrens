@@ -6,10 +6,10 @@ import { useConfigmenuStore } from '../stores/useConfigmenuStore';
 import { Section } from './Utils';
 
 export const Hud = () => {
-  const [state, updateConfig] = useConfigmenuStore(s => [s.hud, s.updateConfig]);
+  const [state, uiState, updateConfig] = useConfigmenuStore(s => [s.hud, s.ui, s.updateConfig]);
   return (
     <div>
-      <Section title={'Input'}>
+      <Section title={'UI'}>
         <Input.AutoComplete
           name={'kbdlayout'}
           value={state?.keyboard || 'qwerty'}
@@ -24,6 +24,29 @@ export const Hud = () => {
             { label: 'Azerty', value: 'azerty' },
           ]}
         />
+        <div style={{ marginTop: '1vh' }}>
+          <Typography id='input-slider' gutterBottom>
+            UI font size
+          </Typography>
+          <Slider
+            size='small'
+            min={12}
+            max={48}
+            step={1}
+            value={Math.round(uiState.fontSize)}
+            onChange={(_, value) => {
+              if (Array.isArray(value)) return;
+              updateConfig('ui', {
+                fontSize: value,
+              });
+            }}
+            aria-label='Small'
+            valueLabelDisplay='auto'
+            color={'secondary'}
+            getAriaValueText={v => `${v}px`}
+            valueLabelFormat={v => `${v}px`}
+          />
+        </div>
       </Section>
       <Section title='Icons'>
         <div>
