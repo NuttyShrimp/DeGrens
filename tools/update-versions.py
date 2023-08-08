@@ -54,7 +54,7 @@ def updateVersions(version):
         return
 
     updateVersionInFile(version, "./package.json")
-    # updateVersionInFile(version, "./resources/[dg]/dg-config/configs/main.json")
+    updateVersionInFile(version, "./resources/[dg]/dg-config/configs/main.json")
 
     with open("./CHANGELOG.md", "r+") as f:
       changelog = f.readlines();

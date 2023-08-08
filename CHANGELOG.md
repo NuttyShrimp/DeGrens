@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.3.1]
+
+### Added
+
 - Dynamische inventory icons (o.a. flyers)
 - Politie kan nu barriers plaatsen die het NPC verkeer tegenhouden (F1 -> Politie -> Plaats Barrier)
 - UI fontsize is aanpasbaar in config menu
