@@ -1,5 +1,5 @@
 import { Financials, SQL } from '@dgx/server';
-import { registerRoute } from 'sv_routes';
+import { FastifyPluginAsync } from 'fastify';
 
 const infoEndpoints = [
   {
@@ -42,54 +42,52 @@ const infoEndpoints = [
   },
 ];
 
-// Returns a list with all cids
-registerRoute('GET', '/info/characters', async (req, res) => {
-  try {
-    const info = await SQL.query(`
+export const characterRouter: FastifyPluginAsync = async server => {
+  // Returns a list with all cids
+  server.get('/', async (req, res) => {
+    try {
+      const info = await SQL.query(`
       SELECT steamid as steamId, citizenid as cid, firstname, lastname
       FROM characters
       LEFT JOIN character_info ci USING(citizenid)
       ORDER BY citizenid
     `);
-    res(200, info);
-  } catch (e) {
-    res(500, {
-      message: 'Failed to retrieve all players information',
-    });
-  }
-});
+      return res.code(200).send(info);
+    } catch (e) {
+      return res.code(500).send({
+        message: 'Failed to retrieve all players information',
+      });
+    }
+  });
 
-setImmediate(() => {
   infoEndpoints.forEach(e => {
-    registerRoute('GET', `/info/characters/${e.name}/:cid`, async (req, res) => {
+    server.get<{ Params: { cid: string } }>(`/${e.name}/:cid`, async (req, res) => {
       const cid = req.params.cid;
       if (!cid) {
-        res(400, {
+        return res.code(400).send({
           message: 'No citizenid given',
         });
-        return;
       }
       if (Number.isNaN(parseInt(cid))) {
-        res(400, {
+        return res.code(400).send({
           message: 'Invalid citizenid given',
         });
-        return;
       }
       try {
         let info = await SQL.query(e.query, [parseInt(cid)]);
         if (!info) {
-          res(500, null);
+          return res.code(500).send(null);
         }
         if (e.transformer) {
           info = e.transformer(info);
         }
-        res(200, info);
+        return res.code(200).send(info);
       } catch (e: any) {
         console.error(e);
-        res(500, {
+        return res.code(500).send({
           message: `Failed to retrieve all characters ${e.name} information`,
         });
       }
     });
   });
-});
+};

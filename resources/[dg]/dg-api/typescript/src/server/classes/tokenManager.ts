@@ -1,4 +1,5 @@
 import { SQL, Util } from '@dgx/server/classes';
+import { FastifyRequest } from 'fastify';
 import { mainLogger } from 'sv_logger';
 
 class TokenManager extends Util.Singleton<TokenManager>() {
@@ -27,8 +28,9 @@ class TokenManager extends Util.Singleton<TokenManager>() {
     return tokenInfo;
   };
 
-  getTokenId = (req: any) => {
-    const token = req.headers.Authorization.replace(/Bearer /, '');
+  getTokenId = (req: FastifyRequest) => {
+    const token = req.headers.authorization?.replace(/Bearer /, '');
+    if (!token) return;
     this.tokens.forEach(info => {
       if (info.token === token) {
         return `${info.token.substring(0, 6)} (${info.comment})`;

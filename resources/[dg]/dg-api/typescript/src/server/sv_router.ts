@@ -1,81 +1,91 @@
+import fastify, { FastifyLoggerOptions, FastifyReply, FastifyRequest, RawServerDefault } from 'fastify';
 import { Config, Util } from '@dgx/server';
+import { setHttpCallback } from '@citizenfx/http-wrapper';
 import { tokenManager } from 'classes/tokenManager';
 import { mainLogger } from 'sv_logger';
-import { handleRoute } from 'sv_routes';
+import cors from '@fastify/cors';
+import sensible from '@fastify/sensible';
+import pino, { Logger } from 'pino';
+import pretty from 'pino-pretty';
 
 import { banManager } from './classes/banManager';
+import { infoRouter } from 'routes/info';
+import { tokenRouter } from 'routes/token';
+import { adminRouter } from 'routes/admin';
+import { businessRouter } from 'routes/business';
+import { financialsRouter } from 'routes/financials';
+import { PassThrough } from 'stream';
+import { PinoLoggerOptions } from 'fastify/types/logger';
 
 const apiConfig = Config.getModuleConfig('api');
 
-setImmediate(() => {
-  SetHttpHandler((req: any, res: any) => {
-    req.path = req.path.slice(1);
-    // Preflight check
-    if (req.method === 'OPTIONS')
-      return doRequestResponse(res, '', 200, {
-        'Access-Control-Allow-Origin': apiConfig.allowedDomains,
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      });
-    // TODO: Check if rate limiting is needed
-    try {
-      if (req.method !== 'GET' && req.method !== 'HEAD') {
-        req.setDataHandler((body: string) => {
-          try {
-            req.body = JSON.parse(body);
-            handleRequest(req, res);
-          } catch (e: any) {
-            mainLogger.error(`An error occurred while trying to process an incoming API request:`);
-            console.error(e);
-            doRequestResponse(res, { message: 'An error occurred while processing the request' }, 500);
-          }
-        });
-      } else {
-        handleRequest(req, res);
-      }
-    } catch (e: any) {
-      mainLogger.error(`An error occurred while trying to process an incoming API request:`);
-      console.error(e);
-      doRequestResponse(res, { message: 'An error occurred while processing the request' }, 500);
+const prodLogger = (): (FastifyLoggerOptions<RawServerDefault> & PinoLoggerOptions) | Logger => {
+  return {};
+};
+
+const devLogger = (): Logger => {
+  const stream = pretty({
+    colorize: true,
+    translateTime: 'HH:MM:ss Z',
+    ignore: 'pid,hostname',
+  });
+
+  return pino(
+    {
+      name: 'API',
+      timestamp: true,
+      level: 'debug',
+    },
+    stream
+  );
+};
+
+export const server = fastify({
+  logger: Util.isDevEnv() ? devLogger() : undefined, //prodLogger(),
+});
+
+setImmediate(async () => {
+  await server.register(cors, {
+    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: apiConfig.allowedDomains.map((d: string) => `http://${d}`),
+  });
+
+  await server.register(sensible);
+
+  server.addHook('preValidation', async (req: FastifyRequest, res) => {
+    validateRequest(req, res);
+  });
+
+  server.register(infoRouter, { prefix: '/info' });
+  server.register(tokenRouter, { prefix: '/tokens' });
+  server.register(adminRouter, { prefix: '/admin' });
+  server.register(businessRouter, { prefix: '/business' });
+  server.register(financialsRouter, { prefix: '/financials' });
+
+  server.ready(err => {
+    if (err) {
+      console.error(err);
+      return;
     }
+    setHttpCallback((req: any, res: any) => {
+      server.routing(req, res);
+    });
   });
 });
 
-export const handleIncomingRequest = (req: any, res: any, body: string) => {
-  try {
-    handleRequest(req, res);
-  } catch (e: any) {
-    mainLogger.error(`An error occurred while trying to process an incoming API request:`);
-    console.error(e);
-    doRequestResponse(res, { message: 'An error occurred while processing the request' }, 500);
-  }
-};
-global.exports('handleIncomingRequest', handleIncomingRequest);
-
-const handleRequest = (req: any, res: any) => {
-  if (!checkDomain(req, res)) {
-    Util.Log(
-      'api:request:failed',
-      {
-        req,
-      },
-      `${req.ip} tried to make a request on ${req.path}, but came from an invalid domain`,
-      undefined,
-      true
-    );
-    return;
-  }
+const validateRequest = (req: FastifyRequest, res: FastifyReply) => {
   if (!checkBan(req, res)) {
     Util.Log(
       'api:request:failed',
       {
         req,
       },
-      `${req.ip} tried to make a request on ${req.path}, but the IP is banned`,
+      `${req.ip} tried to make a request on ${req.url}, but the IP is banned`,
       undefined,
       true
     );
-    return;
+    throw res.forbidden('Banned due mis-use');
   }
   if (!authorizationMiddleware(req, res)) {
     Util.Log(
@@ -83,67 +93,41 @@ const handleRequest = (req: any, res: any) => {
       {
         req,
       },
-      `${req.ip} tried to make a request on ${req.path}, but used an invalid token`,
+      `${req.ip} tried to make a request on ${req.url}, but used an invalid token`,
       undefined,
       true
     );
-    return;
+    throw res.unauthorized('Invalid token');
   }
-  return handleRoute(req.path, req, res);
 };
 
-const authorizationMiddleware = (req: any, res: any): boolean => {
-  if (!req?.headers?.Authorization) {
-    doRequestResponse(res, { message: 'No authentication token' }, 401);
+const authorizationMiddleware = (req: FastifyRequest, res: FastifyReply): boolean => {
+  const bearerToken = req.headers.authorization;
+  if (!bearerToken) {
+    res.code(401).send({ message: 'No authentication token' });
     banManager.ban(req.ip);
     return false;
   }
-  const bearerToken = req.headers.Authorization;
   if (!bearerToken.match(/^Bearer .*$/)) {
-    doRequestResponse(res, { message: 'Invalid authentication token' }, 401);
+    res.code(401).send({ message: 'Invalid authentication token' });
     banManager.ban(req.ip);
     return false;
   }
   const token = bearerToken.replace(/Bearer /, '');
   if (!tokenManager.isTokenValid(token)) {
-    doRequestResponse(res, { message: 'Invalid authentication token' }, 401);
+    res.code(401).send({ message: 'Invalid authentication token' });
     banManager.ban(req.ip);
     return false;
   }
-  req._api_token = token;
   return true;
 };
 
-const checkBan = (req: any, res: any): boolean => {
+const checkBan = (req: FastifyRequest, res: FastifyReply): boolean => {
   if (banManager.isBanned(req.ip)) {
-    doRequestResponse(res, { message: 'Your access to this API has been revoked due to infringement' }, 403);
+    res.code(403).send({ message: 'Your access to this API has been revoked due to infringement' });
     return false;
   }
   return true;
-};
-
-const checkDomain = (req: any, res: any): boolean => {
-  if (!req.headers?.Host) {
-    doRequestResponse(res, { message: 'Host header is not defined' }, 403);
-    return false;
-  }
-  // Remove port from domain
-  const domain = req.headers.Host.replace(/:\d+$/, '');
-  if (!apiConfig.allowedDomains.includes(domain)) {
-    doRequestResponse(res, { message: 'Your domain is not allowed to access this API' }, 403);
-    return false;
-  }
-  return true;
-};
-
-export const doRequestResponse = (response: any, resBody: any, code = 200, header = {}) => {
-  if (typeof resBody === 'string') {
-    response.writeHead(code, header);
-    response.send(resBody);
-    return;
-  }
-  response.writeHead(code, { 'Content-Type': 'application/json', ...header });
-  response.send(JSON.stringify(resBody));
 };
 
 RegisterCommand(
