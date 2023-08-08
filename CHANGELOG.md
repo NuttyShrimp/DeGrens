@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Sourcemaps voor onze code is nu werkend, we kunnen nu gemakkelijker errors debuggen
 - Extras van emergency voertuigen worden staan nu standaard aan
+- Custom enginesounds worden nu wel geapplied voor vehicles die in je buurt staan voordat je een character hebt geselecteerd
 
 ## [1.3.1]
 
