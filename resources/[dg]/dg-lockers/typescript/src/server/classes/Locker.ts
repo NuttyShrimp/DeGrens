@@ -188,7 +188,7 @@ export class Locker {
       this.activePlayers.add(plyId);
       setTimeout(() => {
         this.activePlayers.delete(plyId);
-      }, 5 * 60 * 1000);
+      }, 10 * 60 * 1000);
 
       Notifications.add(plyId, 'Je hebt toegang voor 5 minuten', 'success');
       if (this.doAnimation) {
