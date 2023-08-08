@@ -1,4 +1,4 @@
-import { Animations, Events, Hospital, Keys, Police, Util } from '@dgx/client';
+import { Animations, Events, Hospital, Keys, Police, RPC, Util, Notifications } from '@dgx/client';
 import { DISABLED_KEYS_WHILE_ESCORTING, VOICECHAT_KEYS } from '../constants.interactions';
 
 let gettingCarried = false;
@@ -13,6 +13,21 @@ Keys.onPressDown(
   },
   true
 );
+
+RPC.register('police:interactions:getCarryTarget', async (timeout: number) => {
+  const closestPlayerAtStart = Util.getClosestPlayerInDistanceAndOutsideVehicle(1.5);
+  if (!closestPlayerAtStart) {
+    Notifications.add('Er is niemand in de buurt', 'error');
+    return;
+  }
+
+  await Util.Delay(timeout);
+
+  const closestPlayer = Util.getClosestPlayerInDistanceAndOutsideVehicle(2);
+  if (!closestPlayer) return;
+
+  return GetPlayerServerId(closestPlayer);
+});
 
 Events.onNet('police:interactions:carryPlayer', async () => {
   const ped = PlayerPedId();

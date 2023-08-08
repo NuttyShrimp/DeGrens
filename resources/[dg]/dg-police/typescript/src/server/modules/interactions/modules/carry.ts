@@ -1,40 +1,38 @@
-import { Hospital, Notifications, Events, Chat, Util } from '@dgx/server';
+import { Hospital, Notifications, Events, Chat, Util, RPC } from '@dgx/server';
 import { isPlayerInActiveInteraction } from '../service.interactions';
 import { getPoliceConfig } from 'services/config';
 import { isPlayerCuffed } from './cuffs';
 
 const carryDuos: { carrier: number; target: number }[] = [];
 
-Chat.registerCommand('carry', 'Neem een persoon op je schouder', [], 'user', src => {
+Chat.registerCommand('carry', 'Neem een persoon op je schouder', [], 'user', async src => {
   if (isPlayerCuffed(src) || Hospital.isDown(src)) {
     Notifications.add(src, 'Je kan dit momenteel niet', 'error');
     return;
   }
 
-  const closestPlayerAtStart = Util.getClosestPlayerOutsideVehicle(src, 1.5);
-  if (!closestPlayerAtStart) {
-    Notifications.add(src, 'Er is niemand in de buurt', 'error');
-    return;
-  }
-
   const timeout = getPoliceConfig().config.carryTimeout;
-  setTimeout(() => {
-    const closestPlayer = Util.getClosestPlayerOutsideVehicle(src, 2);
-    if (closestPlayer !== closestPlayerAtStart) return;
+  const closestPlayer = await RPC.execute<number>('police:interactions:getCarryTarget', src, timeout);
+  if (!closestPlayer) return;
 
-    if (isPlayerInActiveInteraction(src) || isPlayerInActiveInteraction(closestPlayer)) return;
+  if (
+    isPlayerInActiveInteraction(src) ||
+    isPlayerInActiveInteraction(closestPlayer) ||
+    isPlayerCuffed(src) ||
+    Hospital.isDown(src)
+  )
+    return;
 
-    carryDuos.push({ carrier: src, target: closestPlayer });
-    Events.emitNet('police:interactions:carryPlayer', src);
-    Events.emitNet('police:interactions:getCarried', closestPlayer, src);
+  carryDuos.push({ carrier: src, target: closestPlayer });
+  Events.emitNet('police:interactions:carryPlayer', src);
+  Events.emitNet('police:interactions:getCarried', closestPlayer, src);
 
-    Util.Log(
-      'police:interactions:carry',
-      { target: closestPlayer, distance: Util.getDistanceToPlayer(src, closestPlayer) },
-      `${Util.getName(src)} has carried a player`,
-      src
-    );
-  }, timeout);
+  Util.Log(
+    'police:interactions:carry',
+    { target: closestPlayer, distance: Util.getDistanceToPlayer(src, closestPlayer) },
+    `${Util.getName(src)}(${src}) started carrying ${Util.getName(closestPlayer)}(${closestPlayer})}`,
+    src
+  );
 });
 
 Events.onNet('police:interactions:stopCarryDuo', (src: number) => {
