@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Sourcemaps voor onze code is nu werkend, we kunnen nu gemakkelijker errors debuggen
+- Extras van emergency voertuigen worden staan nu standaard aan
 
 ## [1.3.1]
 
