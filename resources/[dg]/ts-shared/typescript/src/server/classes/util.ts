@@ -108,7 +108,9 @@ class Util extends UtilShared {
 
     for (const plyId of players) {
       if (plyId === src) continue;
-      const playerCoords = this.getPlyCoords(plyId);
+      const ped = GetPlayerPed(String(plyId));
+      if (!DoesEntityExist(ped)) continue;
+      const playerCoords = this.getEntityCoords(ped);
       const distance = originCoords.distance(playerCoords);
       if (distance > closestDistance) continue;
       closestPlayer = plyId;
@@ -124,7 +126,9 @@ class Util extends UtilShared {
     const playerIds: number[] = [];
     for (const plyId of players) {
       if (plyId === src) continue;
-      const playerCoords = this.getPlyCoords(plyId);
+      const ped = GetPlayerPed(String(plyId));
+      if (!DoesEntityExist(ped)) continue;
+      const playerCoords = this.getEntityCoords(ped);
       if (originCoords.distance(playerCoords) > maxDistance) continue;
       playerIds.push(plyId);
     }
@@ -207,6 +211,7 @@ class Util extends UtilShared {
     for (const plyId of players) {
       if (plyId === src) continue;
       const ped = GetPlayerPed(String(plyId));
+      if (!DoesEntityExist(ped)) continue;
       if (GetVehiclePedIsIn(ped, false) !== 0) continue;
       const playerCoords = this.getEntityCoords(ped);
       const distance = originCoords.distance(playerCoords);

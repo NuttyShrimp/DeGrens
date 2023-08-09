@@ -55,7 +55,11 @@ export class Vector3 implements Vec3 {
     return v1.x === v2.x && v1.y === v2.y && v1.z === v2.z;
   }
 
-  constructor(public x: number, public y: number, public z: number) {}
+  constructor(public x: number, public y: number, public z: number) {
+    this.x = x ?? 0;
+    this.y = y ?? 0;
+    this.z = z ?? 0;
+  }
 
   public clone(): Vector3 {
     return new Vector3(this.x, this.y, this.z);

@@ -188,8 +188,11 @@ class Police {
   isAnyPoliceInRange = (coords: Vec3, range: number): boolean => {
     const players = Util.getAllPlayers();
     for (const plyId of players) {
-      const playerCoords = Util.getPlyCoords(plyId);
-      if (playerCoords.distance(coords) <= range && JobsInstance.getCurrentJob(plyId) === 'police') {
+      const ped = GetPlayerPed(String(plyId));
+      if (!DoesEntityExist(ped)) continue;
+      const playerCoords = Util.getEntityCoords(ped);
+      if (playerCoords.distance(coords) > range) continue;
+      if (JobsInstance.getCurrentJob(plyId) === 'police') {
         return true;
       }
     }

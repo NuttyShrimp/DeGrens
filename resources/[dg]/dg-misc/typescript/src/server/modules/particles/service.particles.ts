@@ -13,6 +13,7 @@ export const startParticleThread = () => {
         if (!entity || !DoesEntityExist(entity)) {
           activeLoopedParticles.delete(id);
           mainLogger.silly('Registered particle has been removed because entity does not exist');
+          continue;
         }
       }
       sendToClosePlayers(id, data);
@@ -34,7 +35,8 @@ export const sendToClosePlayers = (id: string, data: Required<Particles.Particle
   const coords = 'coords' in data ? data.coords : Util.getEntityCoords(NetworkGetEntityFromNetworkId(data.netId));
 
   for (const plyId of Util.getAllPlayers()) {
-    if (Util.getPlyCoords(plyId).distance(coords) > 100) continue;
+    const ped = GetPlayerPed(String(plyId));
+    if (!DoesEntityExist(ped) || Util.getEntityCoords(ped).distance(coords) > 100) continue;
     Events.emitNet('particles:client:addLooped', plyId, id, data);
   }
 };
