@@ -1,5 +1,5 @@
 import { Events, Notifications, Peek, PolyZone, RayCast, Taskbar, UI, Util } from '@dgx/client';
-import { isDoingAJob } from 'modules/mechanic/services/towing.mechanic';
+import { cleanupJobVin, isDoingAJob } from 'modules/mechanic/services/towing.mechanic';
 
 Events.on('vehicles:depot:client:openSelectionMenu', () => {
   const { entity: targetVeh } = RayCast.doRaycast();
@@ -94,6 +94,7 @@ Peek.addGlobalEntry('vehicle', {
           Notifications.add('Geannuleerd');
           return;
         }
+        cleanupJobVin();
         Events.emitNet('vehicles:depot:server:doImpound', NetworkGetNetworkIdFromEntity(ent));
       },
     },
