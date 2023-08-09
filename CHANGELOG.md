@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extras van emergency voertuigen worden staan nu standaard aan
 - Custom enginesounds worden nu wel geapplied voor vehicles die in je buurt staan voordat je een character hebt geselecteerd
 - Carrying checket nu closest player op client om mogelijkse server desync te voorkomen
+- Het access systeem van de huizen werkt nu wel treffelijk
 
 ## [1.3.1]
 

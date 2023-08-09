@@ -1,6 +1,7 @@
-import { Core, Events, SQL, Util, Vehicles } from '@dgx/server';
+import { Events, SQL, Util, Vehicles } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
 import { getREConfig } from 'services/config';
+import { charModule } from 'services/core';
 import { mainLogger } from 'sv_logger';
 
 class PropertyManager {
@@ -167,7 +168,7 @@ class PropertyManager {
         accessList: p.owner
           ? p.access
               .map(cid => {
-                const ply = Core.getPlayer(cid);
+                const ply = charModule.getPlayerByCitizenId(cid);
                 return ply
                   ? {
                       cid,
@@ -218,11 +219,9 @@ class PropertyManager {
   };
 
   hasCidHouseAccess(cid: number, name: string) {
-    const plyId = Core.getModule('characters').getServerIdFromCitizenId(cid);
+    const plyId = charModule.getServerIdFromCitizenId(cid);
     if (!plyId) return false;
-    const result = this.hasHouseAccess(plyId, name);
-    console.log(result);
-    return result;
+    return this.hasHouseAccess(plyId, name);
   }
 
   hasHouseAccess = (plyId: number, name: string): boolean => {
@@ -270,7 +269,6 @@ class PropertyManager {
     property.access.splice(accIdx);
     this.savePropertyToDB(name);
 
-    const charModule = Core.getModule('characters');
     const targetPlySrvId = charModule.getServerIdFromCitizenId(cidToRemove);
     if (targetPlySrvId) {
       Events.emitNet('realestate:property:removeAccess', targetPlySrvId, property.name, cidToRemove);
@@ -307,7 +305,6 @@ class PropertyManager {
     property.access.push(target);
     this.savePropertyToDB(name);
 
-    const charModule = Core.getModule('characters');
     const targetPly = await charModule.getOfflinePlayer(target);
     if (!targetPly) {
       this.removePropertyAccess(name, target);
@@ -366,7 +363,6 @@ class PropertyManager {
     const property = this.getHouseForName(name);
     if (!property) return false;
 
-    const charModule = Core.getModule('characters');
     property.access.forEach(cid => {
       const targetPly = charModule.getServerIdFromCitizenId(cid);
       if (targetPly) {
