@@ -1,5 +1,5 @@
 import { Events, Keys, RPC } from '@dgx/client';
-import { startObjectPlacement } from 'services/objectPlacer';
+import { startGizmoPlacement } from 'services/objectPlacer';
 import {
   addLocalObject,
   addSyncedObject,
@@ -33,7 +33,7 @@ global.exports('removeObject', removeObject);
 global.exports('getEntityForObjectId', getEntityForObjectId);
 
 Events.onNet('dg-misc:objectmanager:createSynced', async (model: string) => {
-  const placementInfo = await startObjectPlacement(model);
+  const placementInfo = await startGizmoPlacement(model);
   if (!placementInfo) return;
   Events.emitNet('dg-misc:objectmanager:placeSyncedObject', model, placementInfo.coords, placementInfo.rot);
 });

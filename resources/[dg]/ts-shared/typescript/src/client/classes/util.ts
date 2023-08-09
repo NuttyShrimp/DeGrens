@@ -359,6 +359,14 @@ class Util extends UtilShared {
       DrawRect(x, y + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75);
     }
   };
+
+  startGhostPlacement = (
+    model: string,
+    maxDistance = 5,
+    ACCEPTED_MATERIALS?: string[]
+  ): Promise<{ coords: Vec3; rotation: Vec3 } | null> => {
+    return global.exports['dg-misc'].startGhostPlacement(model, maxDistance, ACCEPTED_MATERIALS);
+  };
 }
 
 export class Interiors {

@@ -306,9 +306,11 @@ export class Reputations {
 
 class SyncedObjects {
   private objectsToRemove: Set<string>;
+  private removeHandlers: Set<(ids: string[]) => void>;
 
   constructor() {
     this.objectsToRemove = new Set();
+    this.removeHandlers = new Set();
     on('onResourceStop', (res: string) => {
       if (res !== GetCurrentResourceName()) return;
       if (this.objectsToRemove.size === 0) return;
@@ -319,7 +321,9 @@ class SyncedObjects {
   public add = async (objs: Objects.SyncedCreateData | Objects.SyncedCreateData[], src?: number): Promise<string[]> => {
     const ids = (await global.exports['dg-misc'].addSyncedObject(Array.isArray(objs) ? objs : [objs], src)) as string[];
 
-    ids.forEach(id => {
+    ids.forEach((id, idx) => {
+      const obj = Array.isArray(objs) ? objs[idx] : objs;
+      if (!obj.skipStore) return;
       this.objectsToRemove.add(id);
     });
     return ids;
@@ -334,6 +338,16 @@ class SyncedObjects {
 
     global.exports['dg-misc'].removeSyncedObject(objId);
   };
+
+  public onRemove = (handler: (ids: string[]) => void) => {
+    if (this.removeHandlers.size === 0) {
+      Events.on("dg-misc:objectmanager:removeSynced", (id: string | string[]) => {
+        const ids = Array.isArray(id) ? id : [id];
+        this.removeHandlers.forEach(handler => handler(ids));
+      })
+    }
+    this.removeHandlers.add(handler);
+  }
 }
 
 class PropRemover {

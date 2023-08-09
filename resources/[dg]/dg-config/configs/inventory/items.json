@@ -2602,5 +2602,16 @@
     },
     "useable": true,
     "decayRate": 129600
+  },
+  {
+    "name": "mailbox",
+    "label": "Brievenbus",
+    "image": "mailbox.png",
+    "size": {
+      "x": 2,
+      "y": 3
+    },
+    "useable": true,
+    "decayRate": 129600
   }
 ]

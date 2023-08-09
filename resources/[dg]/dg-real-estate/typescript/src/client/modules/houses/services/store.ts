@@ -157,3 +157,8 @@ export const updateHouseLocation = (name: string, type: keyof Properties.Propert
   cleanupZones();
   generateZones();
 };
+
+export const setMailBox = (name: string, hasMailbox: boolean) => {
+  const info = houses[name];
+  info.has_mailbox = hasMailbox;
+};
