@@ -58,7 +58,10 @@ Events.onNet('misc:flyers:requestFlyer', async (src, link: string, description: 
 
 Events.onNet('misc:flyers:openRequestMenu', async src => {
   const cid = Util.getCID(src);
-  const requestedFlyers = await SQL.query<Flyers.Flyer[]>('SELECT * FROM flyer_request WHERE cid = ?', [cid]);
+  const requestedFlyers = await SQL.query<Flyers.Flyer[]>(
+    'SELECT * FROM flyer_request WHERE cid = ? AND retrieved = false',
+    [cid]
+  );
 
   if (!requestedFlyers || requestedFlyers.length === 0) {
     Notifications.add(src, 'Je hebt geen pending of approved flyers', 'error');
@@ -100,7 +103,10 @@ Events.onNet('misc:flyers:openRequestMenu', async src => {
 
 Events.onNet('misc:flyers:createItem', async (src, id: number) => {
   const cid = Util.getCID(src);
-  const flyers = await SQL.query<Flyers.Flyer[]>('SELECT * FROM flyer_request WHERE id = ? AND cid = ?', [id, cid]);
+  const flyers = await SQL.query<Flyers.Flyer[]>(
+    'SELECT * FROM flyer_request WHERE id = ? AND cid = ? AND retrieved = false',
+    [id, cid]
+  );
   if (!flyers || flyers.length === 0) {
     return;
   }
@@ -112,7 +118,7 @@ Events.onNet('misc:flyers:createItem', async (src, id: number) => {
     hiddenKeys: ['type', 'link'],
   });
 
-  await SQL.query('DELETE FROM flyer_request WHERE id = ?', [id]);
+  await SQL.query('UPDATE flyer_request SET retrieved = true WHERE id = ?', [id]);
 
   Util.Log(
     'misc:flyers:create',
