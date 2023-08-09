@@ -1,7 +1,6 @@
 import { Animations, Hospital, Jobs, Police } from '@dgx/client';
 
 const openAng = (prefix: string) => {
-  if (Jobs.getCurrentJob()?.name !== 'ambulance') return;
   if (Police.isCuffed() || Hospital.isDown()) return;
 
   Animations.startTabletAnimation();
@@ -13,10 +12,12 @@ const openAng = (prefix: string) => {
 };
 
 on('hospital:openAng', () => {
+  if (Jobs.getCurrentJob()?.name !== 'ambulance') return;
   openAng('az');
 });
 
 on('police:openAng', () => {
+  if (Jobs.getCurrentJob()?.name !== 'police') return;
   openAng('ang');
 });
 
