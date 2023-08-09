@@ -8,6 +8,8 @@ const capitalize = (text: string): string => {
   return text.charAt(0).toUpperCase() + text.slice(1);
 };
 
+const DEFAULT_HIDDEN_KEYS = ['_icon', '_description', 'hiddenKeys'];
+
 export const ItemTooltip: FC<Inventory.Item> = ({
   id,
   label,
@@ -29,7 +31,7 @@ export const ItemTooltip: FC<Inventory.Item> = ({
     const hiddenKeys: string[] = metadata.hiddenKeys ?? [];
     const formatted: JSX.Element[] = [];
     for (const [key, value] of Object.entries(metadata)) {
-      if (hiddenKeys.some(hidden => key === hidden) || key === 'hiddenKeys' || key === '_icon') continue;
+      if (hiddenKeys.some(hidden => key === hidden) || DEFAULT_HIDDEN_KEYS.includes(key)) continue;
       let formattedValue = value.toString();
       if (typeof value === 'boolean') {
         formattedValue = value ? 'Ja' : 'Nee';
@@ -71,7 +73,7 @@ export const ItemTooltip: FC<Inventory.Item> = ({
           {description && (
             <>
               <Divider />
-              <p className='description text'>{description}</p>
+              <p className='description text'>{metadata?._description ?? description}</p>
             </>
           )}
           {!isMetadataEmpty && (

@@ -746,11 +746,12 @@ model kofi_vehicleshop {
 }
 
 model flyer_request {
-  id         Int        @id @default(autoincrement())
-  cid        Int
-  link       String     @db.LongText
-  approved   Boolean    @default(false)
-  characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_flyer_request_cid")
+  id          Int        @id @default(autoincrement())
+  cid         Int
+  link        String     @db.LongText
+  description String     @default("") @db.Text
+  approved    Boolean    @default(false)
+  characters  characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_flyer_request_cid")
 }
 
 model realestate_locations {

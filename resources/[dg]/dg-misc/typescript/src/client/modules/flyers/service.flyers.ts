@@ -1,13 +1,18 @@
 import { Events, UI } from '@dgx/client';
 
 export const openCreationMenu = async () => {
-  const fields = await UI.openInput({
+  const fields = await UI.openInput<{ image: string; description: string }>({
     header: 'Create a flyer',
     inputs: [
       {
         name: 'image',
         type: 'text',
         label: 'Image link',
+      },
+      {
+        name: 'description',
+        type: 'text',
+        label: 'Flyer description',
       },
       {
         name: 'info',
@@ -19,11 +24,11 @@ export const openCreationMenu = async () => {
     ],
   });
 
-  if (!fields.accepted) {
+  if (!fields.accepted || !fields.values?.image?.length || !fields.values?.description?.length) {
     return;
   }
 
-  Events.emitNet('misc:flyers:requestFlyer', fields.values.image);
+  Events.emitNet('misc:flyers:requestFlyer', fields.values.image, fields.values.description);
 };
 
 export const openList = async () => {};

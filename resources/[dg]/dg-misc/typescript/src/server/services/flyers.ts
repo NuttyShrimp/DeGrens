@@ -16,7 +16,7 @@ Inventory.registerUseable('flyer', (src, item) => {
   }, 1500);
 });
 
-Events.onNet('misc:flyers:requestFlyer', async (src, link: string) => {
+Events.onNet('misc:flyers:requestFlyer', async (src, link: string, description: string) => {
   const cid = Util.getCID(src);
   if (blocked_cids.includes(cid)) {
     Notifications.add(src, 'De printer werkt niet meer voor jou!', 'error');
@@ -36,7 +36,11 @@ Events.onNet('misc:flyers:requestFlyer', async (src, link: string) => {
                 Notifications.add(src, 'Deze link wijst niet naar een afbeelding!', 'error');
                 return;
               }
-              await SQL.query('INSERT INTO flyer_request (cid, link) VALUES (?,?)', [cid, link]);
+              await SQL.query('INSERT INTO flyer_request (cid, link, description) VALUES (?,?,?)', [
+                cid,
+                link,
+                description,
+              ]);
               Notifications.add(src, 'Flyer requested!');
             })();
           });
@@ -70,6 +74,7 @@ Events.onNet('misc:flyers:openRequestMenu', async src => {
       .filter(f => f.approved === 1)
       .map(f => ({
         title: f.link,
+        description: f.description,
         callbackURL: 'misc/flyers/create',
         data: {
           id: f.id,
@@ -83,6 +88,7 @@ Events.onNet('misc:flyers:openRequestMenu', async src => {
       .filter(f => f.approved === 0)
       .map(f => ({
         title: f.link,
+        description: f.description,
         data: {
           id: f.id,
         },
@@ -102,6 +108,7 @@ Events.onNet('misc:flyers:createItem', async (src, id: number) => {
   await Inventory.addItemToPlayer(src, 'flyer', 1, {
     link: flyers[0].link,
     _icon: flyers[0].link,
+    _description: flyers[0].description,
     hiddenKeys: ['type', 'link'],
   });
 

@@ -9,11 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Description field voor flyers toegevoegd
+
 ### Changed
 
 - Label veranderen van container start nu op oude label ipv volledig leeg
 - Lockers blijven langer open voor je na het invoeren van het paswoord
-
 - API is herschreven in fastify
 
 ### Fixed
