@@ -1,3 +1,5 @@
+import { BsCreditCard2BackFill } from 'react-icons/bs';
+
 import { ConfigObject, defaultConfigObject } from '../../config';
 
 import Container from './component';
@@ -9,7 +11,7 @@ const config = (): ConfigObject => ({
   label: 'Payconiq',
   // TODO: Add icons
   icon: {
-    name: 'messages-dollar',
+    name: BsCreditCard2BackFill,
     color: '#a84858',
     background: 'white',
     size: '1.3rem',

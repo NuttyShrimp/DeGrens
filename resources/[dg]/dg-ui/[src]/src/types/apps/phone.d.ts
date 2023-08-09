@@ -23,7 +23,7 @@ declare namespace Phone {
   };
 
   interface Icon {
-    name: string;
+    name: string | ((props: { size: string; style: React.CSSProperties }) => JSX.Element);
     color?: string;
     background?: string;
     backgroundGradient?: string;

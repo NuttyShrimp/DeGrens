@@ -9,7 +9,7 @@ import { useVhToPixel } from '@src/lib/hooks/useVhToPixel';
 import '@styles/components/icons.scss';
 
 declare interface IconProps {
-  name: string;
+  name: string | ((props: { size: string; style: React.CSSProperties }) => JSX.Element);
   lib?: string;
   size?: string;
   color?: string;
@@ -18,6 +18,15 @@ declare interface IconProps {
 }
 
 export const Icon: FC<React.PropsWithChildren<IconProps>> = props => {
+  if (typeof props.name === 'function') {
+    return props.name({
+      size: props.size ?? '1.5rem',
+      style: {
+        color: props.color ?? 'inherit',
+        cursor: props.onClick ? 'poiner' : 'auto',
+      },
+    });
+  }
   if (props.lib == 'img') {
     return (
       <div style={{ width: props.size }}>
