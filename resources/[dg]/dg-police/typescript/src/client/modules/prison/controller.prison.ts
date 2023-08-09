@@ -1,4 +1,4 @@
-import { Core, Events, Inventory, Peek, PolyZone, UI } from '@dgx/client';
+import { Core, Events, Inventory, Notifications, Peek, PolyZone, UI } from '@dgx/client';
 import { cleanupJail, enterPrison, isInPrison, leavePrison, restoreSentence } from './service.prison';
 
 global.exports('isInPrison', isInPrison);
@@ -25,6 +25,32 @@ Peek.addZoneEntry('prison_item_retrieval', {
       action: () => {
         const cid = LocalPlayer.state?.citizenid;
         if (!cid) return;
+        const stashId = `prison_items_${cid}`;
+        Inventory.openStash(stashId, 40); // Slots same as player inventory!
+      },
+    },
+    {
+      label: 'Herbekijk Spullen',
+      icon: 'fas fa-check',
+      action: async () => {
+        const result = await UI.openInput<{ cid: string }>({
+          header: 'Wiens geconfisceerde spullen wil je bekijken?',
+          inputs: [
+            {
+              type: 'number',
+              name: 'cid',
+              label: 'CID',
+            },
+          ],
+        });
+        if (!result.accepted) return;
+
+        const cid = +result.values.cid;
+        if (isNaN(cid) || cid < 1000) {
+          Notifications.add('CID is niet geldig', 'error');
+          return;
+        }
+
         const stashId = `prison_items_${cid}`;
         Inventory.openStash(stashId, 40); // Slots same as player inventory!
       },

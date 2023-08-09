@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Description field voor flyers toegevoegd
 - Je ANG wordt doorzichtig als je met muis op het tablet-frame of erbuiten focused
+- Politie kan nu geconfisceerde items bekijken op dezelfde plek waar je ze kan op halen
 
 ### Changed
 
