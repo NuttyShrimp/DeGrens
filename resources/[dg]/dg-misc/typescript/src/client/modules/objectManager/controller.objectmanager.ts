@@ -83,8 +83,10 @@ RegisterCommand(
   () => {
     if (!isCursorEnabled()) {
       EnterCursorMode();
+      console.log('Entered cursor mode');
     } else {
       LeaveCursorMode();
+      console.log('Left cursor mode');
     }
     setCursorEnabled(!isCursorEnabled());
   },

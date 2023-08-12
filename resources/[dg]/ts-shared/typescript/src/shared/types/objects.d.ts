@@ -28,8 +28,9 @@ declare namespace Objects {
     model: string;
     coords: Vec3;
     rotation: Vec3;
-    flags?: Record<string, any>;
+    flags?: { onFloor?: boolean } & Record<string, any>;
     // Prevents the object from being stored in the DB
     skipStore?: boolean;
+    skipScheduling?: boolean;
   };
 }

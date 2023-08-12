@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Carrying checket nu closest player op client om mogelijkse server desync te voorkomen
 - Het access systeem van de huizen werkt nu wel treffelijk
 - Mechanics kunnen weer auto's impounden
+- Spikestrips reliability improved
 
 ## [1.3.1]
 

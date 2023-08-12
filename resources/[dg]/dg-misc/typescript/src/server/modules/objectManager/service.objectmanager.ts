@@ -34,20 +34,27 @@ const rotMatrixToVecs = (matrix: number[]): Record<string, Vec3> => {
   };
 };
 
-const scheduleAction = <T extends keyof typeof scheduled>(action: T, data: (typeof scheduled)[T]['data']) => {
+const scheduleAction = <T extends keyof typeof scheduled>(
+  action: T,
+  data: (typeof scheduled)[T]['data'],
+  immediate = false
+) => {
   const scheduledAction = scheduled[action];
   if (scheduledAction.timeout !== null) {
     clearTimeout(scheduledAction.timeout);
   }
   //@ts-ignore
   scheduledAction.data = scheduledAction.data.concat(data);
-  scheduledAction.timeout = setTimeout(() => {
-    scheduledAction.timeout = null;
-    const eventName = ACTION_EVENTS[action];
-    Events.emitNet(eventName, -1, scheduledAction.data);
-    Events.emit(eventName, scheduledAction.data);
-    scheduledAction.data = [];
-  }, 500);
+  scheduledAction.timeout = setTimeout(
+    () => {
+      scheduledAction.timeout = null;
+      const eventName = ACTION_EVENTS[action];
+      Events.emitNet(eventName, -1, scheduledAction.data);
+      Events.emit(eventName, scheduledAction.data);
+      scheduledAction.data = [];
+    },
+    immediate ? 0 : 250
+  );
 };
 
 export const seedObjectsToPlayer = (src: number) => {
@@ -94,6 +101,7 @@ export const loadDBObjects = async () => {
 export const addSyncedObject = async (objs: Objects.SyncedCreateData[], src?: number) => {
   if (objs.length < 1) return [];
   const newData: (Objects.ServerState & { placer: string })[] = [];
+  let skipScheduling = false;
   for (const obj of objs) {
     const numId = objectId++;
     const id = `synced_${numId}`;
@@ -120,8 +128,11 @@ export const addSyncedObject = async (objs: Objects.SyncedCreateData[], src?: nu
         ]
       );
     }
+    if (obj.skipScheduling) {
+      skipScheduling = true;
+    }
   }
-  scheduleAction('add', newData);
+  scheduleAction('add', newData, skipScheduling);
   if (src) {
     Util.Log('objects:addSynced', objs, `${newData[0].placer} has placed one or more synced object`, src);
   }

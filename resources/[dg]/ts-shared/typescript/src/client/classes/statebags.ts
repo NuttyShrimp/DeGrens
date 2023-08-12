@@ -1,6 +1,6 @@
 class Statebags {
   public addEntityStateBagChangeHandler = <T = never>(
-    type: 'player' | 'entity',
+    type: 'player' | 'entity' | 'localEntity',
     statebagKey: string,
     handler: (id: number, entity: number, value: T) => void
   ): number => {
@@ -41,6 +41,8 @@ class Statebags {
               if (NetworkDoesEntityExistWithNetworkId(bagId)) {
                 entity = NetworkGetEntityFromNetworkId(bagId);
               }
+            } else if (type === 'localEntity') {
+              entity = bagId;
             } else {
               throw new Error(`Invalid type ${type}`);
             }

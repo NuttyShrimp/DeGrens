@@ -341,13 +341,13 @@ class SyncedObjects {
 
   public onRemove = (handler: (ids: string[]) => void) => {
     if (this.removeHandlers.size === 0) {
-      Events.on("dg-misc:objectmanager:removeSynced", (id: string | string[]) => {
+      Events.on('dg-misc:objectmanager:removeSynced', (id: string | string[]) => {
         const ids = Array.isArray(id) ? id : [id];
         this.removeHandlers.forEach(handler => handler(ids));
-      })
+      });
     }
     this.removeHandlers.add(handler);
-  }
+  };
 }
 
 class PropRemover {

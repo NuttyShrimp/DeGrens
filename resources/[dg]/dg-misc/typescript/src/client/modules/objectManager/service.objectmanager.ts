@@ -170,7 +170,7 @@ export const addSyncedObject = (data: Objects.CreateState[]) => {
     registerObject(obj);
   }
   if (checkThread) {
-    checkThread.refresh();
+    scheduleChunkCheck(); // refresh restarts timer instead of immediately firing
   }
 };
 
@@ -204,7 +204,7 @@ export const removeObject = async (ids: string | string[]) => {
     delete objectStore[ids];
   }
   if (checkThread) {
-    checkThread.refresh();
+    scheduleChunkCheck(); // refresh restarts timer instead of immediately firing
   }
 };
 
@@ -213,13 +213,15 @@ export const scheduleChunkCheck = () => {
     clearInterval(checkThread);
     checkThread = null;
   }
+
   let pos = Util.getPlyCoords();
   let visibleChunks = new Set<number>();
   let oldVisChunks = new Set<number>();
-  checkThread = setInterval(() => {
+
+  const threadFunc = () => {
     pos = Util.getPlyCoords();
     oldVisChunks = new Set(visibleChunks);
-    visibleChunks = new Set();
+    visibleChunks.clear();
     neighbourMods.forEach(({ x: modX, y: modY }) => {
       const chunkId = Util.getChunkForPos({ x: pos.x + modX, y: pos.y + modY }, CHUNK_SIZE);
       visibleChunks.add(chunkId);
@@ -227,7 +229,10 @@ export const scheduleChunkCheck = () => {
     });
     cleanupChunks([...oldVisChunks.values()]);
     spawnChunks([...visibleChunks.values()]);
-  }, 1000);
+  };
+
+  threadFunc();
+  checkThread = setInterval(threadFunc, 1000);
 };
 
 export const cleanupObjects = () => {
