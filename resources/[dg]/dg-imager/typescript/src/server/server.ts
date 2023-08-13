@@ -23,7 +23,7 @@ const pendingUploads: Record<string, PendingUploadData> = {};
 
 server.register(fastifyMultipart, {
   limits: {
-    fileSize: 10485760,
+    fileSize: 20971520,
     files: 1,
   },
 });
