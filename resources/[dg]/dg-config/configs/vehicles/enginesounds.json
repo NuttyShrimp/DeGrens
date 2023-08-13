@@ -273,5 +273,15 @@
     "label": "Adder",
     "soundHash": "adder",
     "custom": false
+  },
+  {
+    "label": "BMW S58 B30",
+    "soundHash": "ta122s58",
+    "custom": true
+  },
+  {
+    "label": "Vulcar Zodiac",
+    "soundHash": "zodiac",
+    "custom": true
   }
 ]

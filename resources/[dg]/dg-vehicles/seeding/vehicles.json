@@ -10474,5 +10474,41 @@
     "price": 150000,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "m4comp",
+    "brand": "BMW",
+    "name": "M4 Competition",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 475000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "super",
+    "model": "rmodp1gtr",
+    "brand": "McLaren",
+    "name": "P1 GTR",
+    "class": "X",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 890000,
+    "shop": "nfs",
+    "type": "land"
+  },
+  {
+    "category": "sedans",
+    "model": "zodiac",
+    "brand": "Vulcar",
+    "name": "Zodiac",
+    "class": "A",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 150000,
+    "shop": "nfs",
+    "type": "land"
   }
 ]

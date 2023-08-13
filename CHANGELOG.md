@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je ANG wordt doorzichtig als je met muis op het tablet-frame of erbuiten focused
 - Politie kan nu geconfisceerde items bekijken op dezelfde plek waar je ze kan op halen
 - Een brievenbus voor bij je huis
+- Enkele kofi voertuigen toegevoegd
 
 ### Changed
 
