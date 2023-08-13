@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lockers blijven langer open voor je na het invoeren van het paswoord
 - API is herschreven in fastify
 - Ambulance kan nu ook DNA gebruiken om persoon te identificeren
+- Enginesound volumes verlaagd
 
 ### Fixed
 
