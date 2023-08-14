@@ -16,16 +16,25 @@ Events.onNet('hospital:down:playerDied', async (src: number, cause: string, kill
   let newStatus = getHospitalConfig().damagetypes[cause].status ?? 'bruises';
   Status.addStatusToPlayer(src, newStatus);
 
+  const timeOfDead = new Date().toLocaleTimeString();
+
   const minioPromises = [Screenshot.generateMinioFilename().then(fileName => Screenshot.minio(src, { fileName }))];
   if (Util.getName(killer)) {
     minioPromises.push(Screenshot.generateMinioFilename().then(fileName => Screenshot.minio(killer, { fileName })));
   }
-  const [minioLinkVictim, minioLinkKiller] = await Promise.all(minioPromises);
+  const screenshots = await Promise.race([Util.Delay(20000), Promise.all(minioPromises)]);
 
   Util.Log(
     'hospital:down:died',
-    { minioLinkVictim, minioLinkKiller, cause, killer, killerName },
-    `${Util.getName(src)} has died by ${killerName} (${cause})`,
+    {
+      minioLinkVictim: screenshots?.[0] ?? 'Failed to take screenshot',
+      minioLinkKiller: screenshots?.[1] ?? 'Failed to take screenshot',
+      cause,
+      killer,
+      killerName,
+      timeOfDead,
+    },
+    `${Util.getName(src)}(${src}) has died by ${killerName}${killer} (${cause})`,
     src
   );
 });

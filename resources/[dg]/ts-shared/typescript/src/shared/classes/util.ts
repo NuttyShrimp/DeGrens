@@ -27,7 +27,7 @@ export class Util {
     return uuid;
   };
 
-  Delay = (ms: number): Promise<any> => new Promise(res => setTimeout(res, ms));
+  Delay = (ms: number) => new Promise<void>(res => setTimeout(res, ms));
 
   getRndInteger = (minimum: number, maximum: number): number => {
     return Math.floor(Math.random() * (maximum - minimum)) + minimum;
