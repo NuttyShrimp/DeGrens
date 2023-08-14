@@ -7,8 +7,9 @@
     "./**/*",
     "../types",
     "../../../../../../types",
-    "../../../../ts-shared/typescript/src/shared/types/*.d.ts",
-    "../../../../ts-shared/typescript/src/server/types/*.d.ts"
+    "../../../../ts-shared/packages/shared/src/types/*.d.ts",
+    "../../../../ts-shared/packages/server/src/types/*.d.ts",
+    "../../../../../**/types/exports.d.ts"
   ],
   "exclude": ["**/node_modules"]
 }

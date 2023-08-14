@@ -1,5 +1,5 @@
 // Cmds to print a table with all registered events and there handlers for a resource
-import { Util } from '../classes';
+import { Util } from '../../../../packages/server/src/classes';
 
 if (Util.isDevEnv() && GetCurrentResourceName() === 'ts-shared') {
   RegisterCommand(

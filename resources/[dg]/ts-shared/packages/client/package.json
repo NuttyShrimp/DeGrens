@@ -1,0 +1,43 @@
+{
+  "name": "@dgx/client",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "src/index.ts",
+  "version": "1.2.5",
+  "sideEffects": [
+    "**/asyncExports.js",
+    "dist/index.js"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./decorators": "./dist/decorators/index.js",
+    "./classes": "./dist/classes/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "index": [
+        "src/index.ts"
+      ],
+      "decorators": [
+        "src/decorators/index.ts"
+      ],
+      "classes": [
+        "src/classes/index.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "rimraf dist && tsup",
+    "build:dev": "rimraf dist && tsup"
+  },
+  "devDependencies": {
+    "rimraf": "^5.0.1",
+    "tsup": "^7.0.0"
+  },
+  "dependencies": {
+    "@dgx/shared": "workspace:*",
+    "reflect-metadata": "^0.1.13",
+    "typescript": "^5.1.6"
+  }
+}

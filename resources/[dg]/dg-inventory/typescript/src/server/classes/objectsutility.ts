@@ -1,6 +1,8 @@
 import { Config, Events } from '@dgx/server';
-import { DGXEvent, EventListener, Export, ExportRegister, RPCRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, ExportDecorators, RPCRegister } from '@dgx/server/decorators';
 import { Util } from '@dgx/shared';
+
+const { Export, ExportRegister } = ExportDecorators<'inventory'>();
 
 @RPCRegister()
 @EventListener()

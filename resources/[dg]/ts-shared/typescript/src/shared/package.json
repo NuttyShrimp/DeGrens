@@ -1,6 +1,0 @@
-{
-  "name": "@dgx/shared",
-  "main": "./index.ts",
-  "types": "index.ts",
-  "version": "1.3.1"
-}

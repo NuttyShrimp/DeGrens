@@ -4,16 +4,11 @@
     "strict": true,
     "outDir": "./",
     "noImplicitAny": true,
-    "module": "commonjs",
-    "target": "es6",
+    "module": "ESNext",
+    "target": "es2021",
     "allowJs": true,
-    "lib": [
-      "es2017"
-    ],
-    "types": [
-      "@citizenfx/client",
-      "@types/node"
-    ],
+    "lib": ["es2021"],
+    "types": ["@citizenfx/client", "@types/node"],
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "resolveJsonModule": true,
@@ -22,11 +17,6 @@
     "baseUrl": ".",
     "skipLibCheck": true
   },
-  "include": [
-    "./**/*",
-    "../types"
-  ],
-  "exclude": [
-    "**/node_modules"
-  ]
+  "include": ["./**/*", "../types"],
+  "exclude": ["**/node_modules"]
 }

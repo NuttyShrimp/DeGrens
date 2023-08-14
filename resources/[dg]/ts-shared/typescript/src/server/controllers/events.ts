@@ -1,4 +1,4 @@
-import { Events, RPC, Util, Vehicles } from '../classes';
+import { Events, RPC, Util, Vehicles } from '@dgx/server';
 
 if (GetCurrentResourceName() === 'ts-shared') {
   onNet('dgx:requestEnv', () => {

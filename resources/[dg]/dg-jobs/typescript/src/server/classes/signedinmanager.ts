@@ -1,8 +1,10 @@
 import { Config, Notifications, Events, Util, UI, Core, DutyTime } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 import whitelistManager from './whitelistmanager';
-import { DGXEvent, EventListener, Export, ExportRegister, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, ExportDecorators, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { charModule } from 'helpers/core';
+
+const { Export, ExportRegister } = ExportDecorators<'jobs'>();
 
 @EventListener()
 @ExportRegister()
@@ -174,11 +176,11 @@ class SignedInManager extends Util.Singleton<SignedInManager>() {
 
   @Export('getCurrentJob')
   @RPCEvent('jobs:server:getCurrentJob')
-  public getPlayerJob = (src: number) => {
+  public getPlayerJob(src: number) {
     const cid = Util.getCID(src, true);
     if (!cid) return;
     return this.getJobByCid(cid);
-  };
+  }
 
   private getJobByCid = (cid: number) => {
     for (const [job, signedInJob] of this.signedIn) {
@@ -189,11 +191,11 @@ class SignedInManager extends Util.Singleton<SignedInManager>() {
   };
 
   @Export('getPlayersForJob')
-  public getPlayersForJob = (job: string) => {
+  public getPlayersForJob(job: string) {
     const activePlys = this.signedIn.get(job);
     if (!activePlys) return [];
     return activePlys.map(p => p.srvId);
-  };
+  }
 
   public getAmountsForEachJob = () =>
     Array.from(this.signedIn.keys()).reduce<Record<string, number>>((acc, jobName) => {
@@ -207,11 +209,11 @@ class SignedInManager extends Util.Singleton<SignedInManager>() {
   };
 
   @Export('signPlayerOutOfAnyJob')
-  private _signPlayerOutOfAnyJob = (plyId: number) => {
+  private _signPlayerOutOfAnyJob(plyId: number) {
     const job = this.getPlayerJob(plyId);
     if (!job) return;
     this.signOut(plyId, job);
-  };
+  }
 
   public isPlayerBlockedFromJoiningGroup = (plyId: number) => {
     const job = this.getPlayerJob(plyId);

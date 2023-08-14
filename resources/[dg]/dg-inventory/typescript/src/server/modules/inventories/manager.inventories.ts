@@ -1,9 +1,11 @@
-import { Util } from '@dgx/server';
-import { Export, ExportRegister } from '@dgx/server/decorators';
+import { ExportDecorators, Util } from '@dgx/server';
 import itemManager from 'modules/items/manager.items';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
+
 import { Inv } from './classes/inv';
+
+const { Export, ExportRegister } = ExportDecorators<'inventory'>();
 
 @ExportRegister()
 class InventoryManager extends Util.Singleton<InventoryManager>() {
@@ -49,11 +51,11 @@ class InventoryManager extends Util.Singleton<InventoryManager>() {
 
   // Unload inv, gets used when player leaves. This way, when he reconnects objects will spawn on player
   @Export('forceUnloadInventory')
-  public unload = async (invId: string) => {
+  public async unload(invId: string) {
     const inventory = await this.get(invId);
     inventory.getItems(true).forEach(item => itemManager.unloadItem(item.state.id));
     this.inventories.delete(invId);
-  };
+  }
 }
 
 const inventoryManager = InventoryManager.getInstance();

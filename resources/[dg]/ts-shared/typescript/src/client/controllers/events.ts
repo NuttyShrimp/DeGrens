@@ -1,4 +1,4 @@
-import { RPC, Events, UI, Util, Minigames } from '../index';
+import { RPC, Events, UI, Util, Minigames } from '@dgx/client';
 
 if (GetCurrentResourceName() === 'ts-shared') {
   // Util RPC to be used from server

@@ -1,0 +1,39 @@
+{
+  "name": "@dgx/shared",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "types": "src/index.ts",
+  "version": "1.2.5",
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.js",
+    "./classes": "./dist/classes/index.js",
+    "./classes/*": "./dist/classes/*"
+  },
+  "typesVersions": {
+    "*": {
+      "index": [
+        "src/index.ts"
+      ],
+      "classes": [
+        "src/classes/index.ts",
+        "src/classes/*.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "rimraf dist && tsup",
+    "build:dev": "rimraf dist && tsup"
+  },
+  "devDependencies": {
+    "rimraf": "^5.0.1",
+    "tsup": "^7.0.0"
+  },
+  "dependencies": {
+    "color-name-list": "^10.11.0",
+    "nearest-color": "^0.4.4",
+    "reflect-metadata": "^0.1.13",
+    "typescript": "^5.1.6"
+  }
+}

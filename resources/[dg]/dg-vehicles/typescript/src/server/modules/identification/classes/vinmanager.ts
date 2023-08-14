@@ -1,8 +1,9 @@
-import { SQL, Util } from '@dgx/server';
-import { Export, ExportRegister } from '@dgx/shared';
+import { ExportDecorators, SQL, Util } from '@dgx/server';
 import winston from 'winston';
 
 import { idLogger } from '../logger.id';
+
+const { Export, ExportRegister } = ExportDecorators<'vehicles'>();
 
 // vin-code is length 17
 

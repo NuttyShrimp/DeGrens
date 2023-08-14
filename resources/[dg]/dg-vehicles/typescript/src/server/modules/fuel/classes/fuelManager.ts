@@ -1,9 +1,10 @@
-import { SQL, Util } from '@dgx/server';
-import { Export, ExportRegister } from '@dgx/shared';
+import { ExportDecorators, SQL, Util } from '@dgx/server';
+import { getVinForVeh } from 'helpers/vehicle';
 
 import vinManager from '../../identification/classes/vinmanager';
 import { fuelLogger } from '../logger.fuel';
-import { getVinForVeh } from 'helpers/vehicle';
+
+const { Export, ExportRegister } = ExportDecorators<'vehicles'>();
 
 @ExportRegister()
 class FuelManager extends Util.Singleton<FuelManager>() {

@@ -20,12 +20,14 @@ const baseConfig = side => ({
   entryPoints: [`${process.argv.includes('--index') ? 'index' : side}.ts`],
   outfile: `../../../${side}/${side}.js`,
   absWorkingDir: path.resolve(`src/${side}`),
-  loader: { '.ts': 'ts', '.json': 'json' },
-  sourcemap: 'both',
+  loader: { '.node': 'binary' },
+  format: "esm",
+  sourcemap: 'linked',
   bundle: true,
   minify: false,
   keepNames: true,
   color: true,
+  treeShaking: true,
   plugins: [
     importPatternPlugin(),
     clean({
