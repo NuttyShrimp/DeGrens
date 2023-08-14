@@ -7,54 +7,56 @@
     "lint:root": "eslint --fix --resolve-plugins-relative-to ./ --ext .ts,.tsx,.jsx,.json,.vue ./resources/[dg]/",
     "lint": "pnpm run lint:root --quiet",
     "format": "turbo run format",
-    "format:staged": "pretty-quick --staged --pattern '**/*.{ts,tsx,scss,css,md,vue,json}' && lint-staged",
+    "format:staged": "lint-staged",
     "db:push": "turbo run db:push",
     "db:deploy": "turbo run db:deploy",
     "prepare": "husky install"
   },
   "dependencies": {
     "@anatine/esbuild-decorators": "^0.2.19",
-    "@citizenfx/client": "2.0.6471-1",
-    "@citizenfx/server": "2.0.6471-1",
-    "@jgoz/esbuild-plugin-typecheck": "^3.0.2",
-    "dayjs": "^1.11.7",
-    "esbuild": "^0.17.19",
-    "esbuild-loader": "^3.0.0",
+    "@citizenfx/client": "2.0.6643-1",
+    "@citizenfx/server": "2.0.6643-1",
+    "@jgoz/esbuild-plugin-typecheck": "^3.0.3",
+    "dayjs": "^1.11.9",
+    "esbuild": "^0.19.2",
+    "esbuild-loader": "^4.0.0",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-fileloc": "^0.0.6",
     "esbuild-plugin-import-pattern": "^0.1.0",
     "javascript-obfuscator": "^4.0.2",
     "pretty-quick": "^3.1.3",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4",
-    "winston": "^3.9.0"
+    "tsup": "^7.2.0",
+    "typescript": "^5.1.6",
+    "winston": "^3.10.0"
   },
   "devDependencies": {
-    "@sentry/esbuild-plugin": "^2.2.0",
-    "@sentry/integrations": "^7.53.1",
-    "@sentry/node": "^7.53.1",
-    "@sentry/tracing": "^7.53.1",
+    "@sentry/esbuild-plugin": "^2.6.2",
+    "@sentry/integrations": "^7.64.0",
+    "@sentry/node": "^7.64.0",
+    "@sentry/tracing": "^7.64.0",
     "@types/node": "^16.9.1",
-    "@typescript-eslint/eslint-plugin": "^5.59.7",
-    "@typescript-eslint/parser": "^5.59.7",
-    "@vue/eslint-config-prettier": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^11.0.3",
-    "eslint": "^8.41.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-import": "^2.27.4",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.0",
     "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-prettier": "4.2.1",
-    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-prettier": "5.0.0",
+    "eslint-plugin-react": "^7.33.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
-    "eslint-plugin-vue": "^9.14.1",
+    "eslint-plugin-vue": "^9.17.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
-    "prettier": "^2.8.8",
-    "turbo": "^1.9.9"
+    "lint-staged": "^14.0.0",
+    "prettier": "^3.0.1",
+    "turbo": "^1.10.12"
   },
   "lint-staged": {
-    "*.{ts,tsx,vue,json}": "eslint --fix --resolve-plugins-relative-to ./ --ext .ts,.tsx,.json,.vue ./resources/[dg]/ --cache"
+    "*.{ts,tsx,vue,json}": "eslint --fix --resolve-plugins-relative-to ./",
+    "*.{ts,tsx,scss,css,md,vue,json}": "prettier --write"
   },
   "workspaces": [
     "resources/**",
@@ -66,7 +68,8 @@
   "version": "1.3.1",
   "pnpm": {
     "patchedDependencies": {
-      "vite-plugin-sentry@1.2.0": "patches/vite-plugin-sentry@1.2.0.patch"
+      "@jgoz/esbuild-plugin-typecheck@3.0.3": "patches/@jgoz__esbuild-plugin-typecheck@3.0.3.patch",
+      "vite-plugin-sentry@1.3.0": "patches/vite-plugin-sentry@1.3.0.patch"
     }
   }
 }

@@ -5,17 +5,19 @@
   "author": "NuttyShrimp",
   "license": "MIT",
   "scripts": {
-    "build": "node ../../../../scripts/build.js --server",
-    "build:dev": "node ../../../../scripts/build.js --server --dev",
-    "watch": "node ../../../../scripts/watch --server",
+    "build": "tsup --env.NODE_ENV=production",
+    "build:dev": "tsup --env.NODE_ENV=development",
+    "watch": "tsup --watch --env.NODE_ENV=development ",
     "lint": "eslint --fix --ext .js,.ts ./src",
     "format": "prettier  --write --no-error-on-unmatched-pattern src/**/*.{js,ts,json,md}"
   },
   "devDependencies": {
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
-    "esbuild": "^0.17.19",
+    "@dgx/tsup-config": "workspace:*",
+    "esbuild": "^0.19.2",
     "logger": "workspace:*",
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "tsup": "^7.2.0"
   }
 }

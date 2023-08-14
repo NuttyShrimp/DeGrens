@@ -1,10 +1,11 @@
-import { SQL, Config, Notifications, Events, Util, UI, Financials, DutyTime } from '@dgx/server';
+import { SQL, Config, Notifications, Events, Util, UI, Financials, DutyTime, ExportDecorators } from '@dgx/server';
 import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
-import { AsyncExport, Export, ExportRegister } from '@dgx/shared/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import signedInManager from './signedinmanager';
 import { charModule } from 'helpers/core';
+
+const { ExportRegister, Export, AsyncExport } = ExportDecorators<'jobs'>();
 
 @RPCRegister()
 @ExportRegister()
@@ -91,7 +92,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
 
   @Export('hasSpeciality')
   @RPCEvent('jobs:server:hasSpeciality')
-  public hasSpeciality = (src: number, speciality: string, job?: string): boolean => {
+  public hasSpeciality(src: number, speciality: string, job?: string): boolean {
     if (!job) {
       // Get job player is currently signed in to
       job = signedInManager.getPlayerJob(src);
@@ -107,7 +108,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     const hasSpeciality = (entry.speciality & specBit) === specBit;
     this.logger.debug(`Player ${src} has speciality ${speciality} for job ${job}: ${hasSpeciality}`);
     return hasSpeciality;
-  };
+  }
 
   // Filter is rank or speciality seperated by a dot comma.
   @DGXEvent('jobs:whitelist:server:openJobAllowlist')
@@ -257,7 +258,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
   };
 
   @Export('addWhitelist')
-  public addWhitelist = async (src: number, jobName: string, rank = 1, cid?: number) => {
+  public async addWhitelist(src: number, jobName: string, rank = 1, cid?: number) {
     cid = cid ?? Util.getCID(src);
     if (!cid) return;
     const job = this.getPlayerInfoForJob(cid, jobName);
@@ -277,7 +278,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     this.logger.debug(`Added whitelist entry for ${cid} as ${jobName} with rank: ${rank}`);
     Util.Log('jobs:whitelist:add', { rank, job: jobName, cid }, `Whitelisted ${cid} for ${job} with rank ${rank}`, src);
     Events.emitNet('jobs:whitelists:update', src, jobName, 'add');
-  };
+  }
 
   @DGXEvent('jobs:whitelist:fire')
   private _firePlayer = (src: number, job: string, target: number) => {
@@ -285,7 +286,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
   };
 
   @Export('removeWhitelist')
-  public removeWhitelist = async (src: number, jobName: string, cid?: number) => {
+  public async removeWhitelist(src: number, jobName: string, cid?: number) {
     cid = cid ?? Util.getCID(src);
     if (!cid) return;
     const job = this.getPlayerInfoForJob(cid, jobName);
@@ -323,7 +324,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
         );
       }
     }
-  };
+  }
 
   @DGXEvent('jobs:whitelist:server:assignRank')
   private _assignRank = async (src: number, target: number, rank: number) => {
@@ -509,25 +510,25 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
 
   // See this as a check if a player can sign in to this job
   @Export('isWhitelisted')
-  private _isWhitelisted = (plyId: number, job: string) => {
+  private _isWhitelisted(plyId: number, job: string) {
     const cid = Util.getCID(plyId);
     if (!cid) return false;
     return !!this.getPlayerInfoForJob(cid, job);
-  };
+  }
 
   @Export('isCidWhitelisted')
-  private _isCidWhitelisted = (cid: number, job: string) => {
+  private _isCidWhitelisted(cid: number, job: string) {
     return !!this.getPlayerInfoForJob(cid, job);
-  };
+  }
 
   @AsyncExport('isSteamIdWhitelisted')
-  private _isSteamIdWhitelisted = async (steamId: string, job: string) => {
+  private async _isSteamIdWhitelisted(steamId: string, job: string) {
     const cids = charModule.getCitizenIdsFromSteamId(steamId);
     return cids.some(cid => !!this.getPlayerInfoForJob(cid, job));
-  };
+  }
 
   @Export('getCurrentGrade')
-  private _getCurrentGrade = (src: number) => {
+  private _getCurrentGrade(src: number) {
     const job = signedInManager.getPlayerJob(src);
     if (!job) return 0;
     const cid = Util.getCID(src, true);
@@ -535,7 +536,7 @@ class WhitelistManager extends Util.Singleton<WhitelistManager>() {
     const info = this.getPlayerInfoForJob(cid, job);
     if (!info) return 0;
     return info.rank;
-  };
+  }
 
   @DGXEvent('jobs:whitelists:requestSeeding')
   public seedPlyUIStore = (plyId: number) => {

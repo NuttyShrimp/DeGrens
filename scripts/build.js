@@ -55,6 +55,7 @@ const buildServer = async () => {
   await build({
     ...serverConfig,
     sourcemap: true,
+    minify: true,
     plugins,
   });
   console.log(`[${resName}] [Server] Successfully built`);

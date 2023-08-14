@@ -1,9 +1,11 @@
 import { Core, Inventory, Util } from '@dgx/server';
-import { Export, ExportRegister, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { ExportDecorators, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
 import groupManager from '../modules/groups/classes/GroupManager';
+
+const { Export, ExportRegister } = ExportDecorators<'jobs'>();
 
 @ExportRegister()
 @RPCRegister()
@@ -187,11 +189,11 @@ class JobManager extends Util.Singleton<JobManager>() {
    * Calculates multiplier based on amount of jobs player has already done and increase amount afterwards
    */
   @Export('getPlayerAmountOfJobsFinishedMultiplier')
-  public getPlayerAmountOfJobsFinishedMultiplier = (cid: number) => {
+  public getPlayerAmountOfJobsFinishedMultiplier(cid: number) {
     const amountOfJobsFinished = this.amountOfJobsFinished.get(cid) ?? 0;
     this.amountOfJobsFinished.set(cid, amountOfJobsFinished + 1);
     return Math.min(amountOfJobsFinished - 3, -1) * -1;
-  };
+  }
 }
 
 const jobManager = JobManager.getInstance();

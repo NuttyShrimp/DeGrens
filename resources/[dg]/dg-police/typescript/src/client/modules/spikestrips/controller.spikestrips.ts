@@ -1,6 +1,5 @@
 import { BaseEvents, Statebags, Util, Vehicles, PolyZone } from '@dgx/client';
 import { WHEELS } from './constants.spikestrips';
-import { pop } from 'core-js/core/array';
 
 let spikeThread: NodeJS.Timer | null = null;
 const spikeEntities = new Set<number>();
@@ -91,7 +90,6 @@ const startSpikeThread = (vehicle: number) => {
         }
       }
     }
-
     if (spikeEntities.size === 0) {
       stopSpikeThread();
     }

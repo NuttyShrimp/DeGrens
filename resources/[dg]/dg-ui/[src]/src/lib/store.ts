@@ -12,7 +12,7 @@ const trackedStores: string[] = [];
 type SentryMiddleware = <
   T extends object,
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
-  Mcs extends [StoreMutatorIdentifier, unknown][] = []
+  Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 >(
   f: StateCreator<T, Mps, Mcs>,
   name: string

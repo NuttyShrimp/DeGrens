@@ -74,7 +74,9 @@
 
       color: $grey-9;
       background-color: v-bind('theme.primary.lighter');
-      box-shadow: rgb(0 0 0 / 20%) 0px 0.1vh 0.2vh -0.1vh, rgb(0 0 0 / 14%) 0px 0.2vh 0.25vh,
+      box-shadow:
+        rgb(0 0 0 / 20%) 0px 0.1vh 0.2vh -0.1vh,
+        rgb(0 0 0 / 14%) 0px 0.2vh 0.25vh,
         rgb(0 0 0 / 12%) 0px 0.1vh 0.5vh;
 
       cursor: pointer;
@@ -84,7 +86,9 @@
       width: 100%;
       padding: 0.75vh 0.5vh;
 
-      box-shadow: rgb(0 0 0 / 20%) 0px 0.1vh 0.2vh -0.1vh, rgb(0 0 0 / 14%) 0px 0.2vh 0.25vh,
+      box-shadow:
+        rgb(0 0 0 / 20%) 0px 0.1vh 0.2vh -0.1vh,
+        rgb(0 0 0 / 14%) 0px 0.2vh 0.25vh,
         rgb(0 0 0 / 12%) 0px 0.1vh 0.5vh;
       border: 0.2vh solid v-bind('theme.primary.lighter');
       &-table {

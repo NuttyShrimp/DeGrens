@@ -1,11 +1,13 @@
 import { Inventory, Phone, Util } from '@dgx/server';
-import { ExportRegister, Export, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { ExportDecorators, RPCEvent, RPCRegister } from '@dgx/server/decorators';
 import repository from 'services/repository';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import { Gang } from './gang';
 import { charModule } from 'services/core';
 import { FEED_MESSAGES_BATCH } from '../../shared/constants';
+
+const { Export, ExportRegister } = ExportDecorators<'gangs'>();
 
 @RPCRegister()
 @ExportRegister()
@@ -31,7 +33,7 @@ class GangManager extends Util.Singleton<GangManager>() {
   };
 
   @Export('createGang')
-  private _createGang = async (name: string, label: string, owner: number) => {
+  private async _createGang(name: string, label: string, owner: number) {
     if (this.gangs.has(name)) return false;
     if (this.getPlayerGang(owner)) return false;
     const newGang = new Gang(name, label, owner);
@@ -41,10 +43,10 @@ class GangManager extends Util.Singleton<GangManager>() {
     this.logger.info(`A new gang ${name} with owner ${owner} has been created`);
     Util.Log('gangs:create', { name, label, owner }, `A new gang ${name} with owner ${owner} has been created`);
     return true;
-  };
+  }
 
   @Export('removeGang')
-  private _removeGang = async (name: string) => {
+  private async _removeGang(name: string) {
     const gang = this.getGang(name);
     if (!gang) return false;
 
@@ -57,7 +59,7 @@ class GangManager extends Util.Singleton<GangManager>() {
     Util.Log('gangs:remove', { name }, logMsg);
 
     return true;
-  };
+  }
 
   public getPlayerGang = (cid: number) => {
     for (const [_, gang] of this.gangs) {
@@ -286,7 +288,7 @@ class GangManager extends Util.Singleton<GangManager>() {
   };
 
   @Export('addMemberToGang')
-  private _forceAddMember = async (adminServerId: number, gangName: string, targetCid: number) => {
+  private async _forceAddMember(adminServerId: number, gangName: string, targetCid: number) {
     const gang = this.getGang(gangName);
     if (!gang) return false;
     if (gang.isMember(targetCid)) return false;
@@ -306,7 +308,7 @@ class GangManager extends Util.Singleton<GangManager>() {
     );
 
     return true;
-  };
+  }
 
   //#endregion
 
@@ -333,7 +335,7 @@ class GangManager extends Util.Singleton<GangManager>() {
   };
 
   @Export('addFeedMessage')
-  public addFeedMessage = async (newMessage: Gangs.Feed.NewMessage) => {
+  public async addFeedMessage(newMessage: Gangs.Feed.NewMessage) {
     if (newMessage.gang && !this.gangs.has(newMessage.gang)) {
       this.logger.error(`New feed message has unknown gang attribute (title: ${newMessage.title})`);
       return;
@@ -361,7 +363,7 @@ class GangManager extends Util.Singleton<GangManager>() {
     }
 
     this.registerFeedMessage(feedMessage);
-  };
+  }
 
   public getFeedMessagesForGang = (gangName: string, offset: number): Gangs.Feed.Message[] => {
     return this.feedMessages

@@ -1,6 +1,5 @@
 import { BaseEvents, BlipManager, Events, RPC, UI, Util, Vehicles } from '@dgx/client';
-import { getNearestColorFromHex } from '@dgx/shared/helpers/colorNames';
-import { getDataOfGTAColorById } from '@dgx/shared/helpers/gtacolors';
+import { getNearestColorFromHex, getDataOfGTAColorById } from '@dgx/shared';
 import { areBlipsEnabled, clearBlips, syncBlips, updateSprite } from 'services/blips';
 import { closeCam, openCam, seedUICams } from 'services/cams';
 import {

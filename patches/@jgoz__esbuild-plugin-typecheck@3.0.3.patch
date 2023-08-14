@@ -1,0 +1,89 @@
+diff --git a/dist/plugin-typecheck.js b/dist/plugin-typecheck.js
+index 70a393908150528ecf0f53c3db219f6729df3a1e..3ad2a289544d30b254cf1012d92a92d3c104dafb 100644
+--- a/dist/plugin-typecheck.js
++++ b/dist/plugin-typecheck.js
+@@ -207,12 +207,16 @@ function logFailed(logger, numErrors, duration) {
+ function typecheckPlugin({
+   configFile,
+   watch,
++  workingDir,
+   ...options
+ } = {}) {
+   return {
+     name: "typecheck-plugin",
+     setup(build) {
+-      const { absWorkingDir = process.cwd(), tsconfig } = build.initialOptions;
++      let { absWorkingDir = process.cwd(), tsconfig } = build.initialOptions;
++      if (workingDir) {
++        absWorkingDir = workingDir;
++      }
+       const runner = new TypecheckRunner({
+         ...options,
+         absWorkingDir,
+diff --git a/lib/typecheck-plugin.d.ts b/lib/typecheck-plugin.d.ts
+index e8aff618dbfad9fb1163a8d2a5921244df952318..73c0548902470f96dd90c64a332febd852e403c7 100644
+--- a/lib/typecheck-plugin.d.ts
++++ b/lib/typecheck-plugin.d.ts
+@@ -1,4 +1,4 @@
+ import type { Plugin } from 'esbuild';
+ import type { TypecheckPluginOptions } from './types';
+-export declare function typecheckPlugin({ configFile, watch, ...options }?: TypecheckPluginOptions): Plugin;
++export declare function typecheckPlugin({ configFile, watch, workingDir, ...options }?: TypecheckPluginOptions): Plugin;
+ //# sourceMappingURL=typecheck-plugin.d.ts.map
+diff --git a/lib/typecheck-plugin.js b/lib/typecheck-plugin.js
+index 81134e1c52b6e19a0bc4593d0fd5f9915dd526b2..fd6173d4e8b6e796a89872ad7fb6f3588a7cbe73 100644
+--- a/lib/typecheck-plugin.js
++++ b/lib/typecheck-plugin.js
+@@ -2,22 +2,25 @@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.typecheckPlugin = void 0;
+ const typecheck_runner_1 = require("./typecheck-runner");
+-function typecheckPlugin({ configFile, watch, ...options } = {}) {
+-    return {
+-        name: 'typecheck-plugin',
+-        setup(build) {
+-            const { absWorkingDir = process.cwd(), tsconfig } = build.initialOptions;
+-            const runner = new typecheck_runner_1.TypecheckRunner({
+-                ...options,
+-                absWorkingDir,
+-                configFile: configFile ?? tsconfig,
+-                watch,
+-            });
+-            build.onStart(() => {
+-                runner.start();
+-            });
+-        },
+-    };
++function typecheckPlugin({ configFile, watch, workingDir, ...options } = {}) {
++  return {
++    name: 'typecheck-plugin',
++    setup(build) {
++      let { absWorkingDir = process.cwd(), tsconfig } = build.initialOptions;
++      if (workingDir) {
++        absWorkingDir = workingDir;
++      }
++      const runner = new typecheck_runner_1.TypecheckRunner({
++        ...options,
++        absWorkingDir,
++        configFile: configFile ?? tsconfig,
++        watch,
++      });
++      build.onStart(() => {
++        runner.start();
++      });
++    },
++  };
+ }
+ exports.typecheckPlugin = typecheckPlugin;
+ //# sourceMappingURL=typecheck-plugin.js.map
+diff --git a/src/types.ts b/src/types.ts
+index 03ba167cf5ff82272196286b2ef62154f50116a8..9fa5b4f34ef3fa6fe054f4aeed53da2512863b54 100644
+--- a/src/types.ts
++++ b/src/types.ts
+@@ -82,4 +82,6 @@ export interface TypecheckPluginOptions {
+    * Enable typescript's watch mode
+    */
+   watch?: boolean;
++
++  workingDir?: string;
+ }

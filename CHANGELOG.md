@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ambulance kan nu ook DNA gebruiken om persoon te identificeren
 - Enginesound volumes verlaagd
 - Weedlab timeout minder gezet en loot getweaked
+- Gebundelde files zijn veel kleiner
 
 ### Fixed
 

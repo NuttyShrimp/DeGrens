@@ -23,9 +23,9 @@ export const tpcoords: CommandData = {
       }
       try {
         const coords = {
-          x: parseInt(x.replace(/.*((\d|\.)+.*/, '$1').trim()),
-          y: parseInt(y.replace(/.*((\d|\.)+.*/, '$1').trim()),
-          z: parseInt(z.replace(/.*((\d|\.)+.*/, '$1').trim()),
+          x: parseInt(x.replace(/.*(\d|\.)+.*/, '$1').trim()),
+          y: parseInt(y.replace(/.*(\d|\.)+.*/, '$1').trim()),
+          z: parseInt(z.replace(/.*(\d|\.)+.*/, '$1').trim()),
         };
         Events.emitNet('admin:util:setPedCoordsKeepVehicle', caller.source, coords);
       } catch (e) {

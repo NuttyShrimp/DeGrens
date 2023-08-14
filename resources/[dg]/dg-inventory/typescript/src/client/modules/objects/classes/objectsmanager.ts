@@ -1,8 +1,9 @@
-import { Animations, PropAttach } from '@dgx/client';
-import { Util } from '@dgx/client';
+import { Animations, ExportDecorators, PropAttach, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
-import { Export, ExportRegister } from '@dgx/shared';
+
 import { DISABLED_KEYS_DURING_ANIMATION } from '../constants.objects';
+
+const { Export, ExportRegister } = ExportDecorators<'inventory'>();
 
 @ExportRegister()
 class ObjectsManager extends Util.Singleton<ObjectsManager>() {
@@ -38,13 +39,13 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
       return;
     }
 
-    let amountOfPosition = this.getActivesForPosition(info.position).length;
-    let offset = Vector3.create(this.config.positions[info.position].offset).multiply(amountOfPosition);
+    const amountOfPosition = this.getActivesForPosition(info.position).length;
+    const offset = Vector3.create(this.config.positions[info.position].offset).multiply(amountOfPosition);
 
     const propId = PropAttach.add(info.propName, offset);
     this.activeObjects.set(item.id, { ...item, propId });
 
-    if (!!info.animData) this.startAnimation(info.animData.animDict, info.animData.anim);
+    if (info.animData) this.startAnimation(info.animData.animDict, info.animData.anim);
   };
 
   public removedItem = (item: Objects.Item) => {
@@ -78,7 +79,7 @@ class ObjectsManager extends Util.Singleton<ObjectsManager>() {
       PropAttach.move(i.propId, offset);
     });
 
-    if (!!info.animData) this.stopAnimation();
+    if (info.animData) this.stopAnimation();
 
     this.checkQueue(info.position);
   };

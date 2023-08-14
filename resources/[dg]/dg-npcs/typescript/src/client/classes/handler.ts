@@ -1,6 +1,7 @@
-import { BaseEvents, Util } from '@dgx/client';
-import { Export, ExportRegister } from '@dgx/shared';
+import { BaseEvents, Util, ExportDecorators } from '@dgx/client';
 import { Npc } from './npc';
+
+const { Export, ExportRegister } = ExportDecorators<'npcs'>();
 
 @ExportRegister()
 class Handler extends Util.Singleton<Handler>() {
@@ -21,21 +22,20 @@ class Handler extends Util.Singleton<Handler>() {
   };
 
   @Export('addNpc')
-  public addNpc = (npcData: NPCs.NPC | NPCs.NPC[]) => {
+  public addNpc(npcData: NPCs.NPC | NPCs.NPC[]) {
     if (Array.isArray(npcData)) {
       npcData.forEach(this.addNpc);
       return;
     }
-
     // remove if already exists with id
     this.removeNpc(npcData.id);
 
     const npc = new Npc(npcData);
     this.npcs.set(npcData.id, npc);
-  };
+  }
 
   @Export('removeNpc')
-  public removeNpc = (id: string | string[]) => {
+  public removeNpc(id: string | string[]) {
     if (Array.isArray(id)) {
       id.forEach(this.removeNpc);
       return;
@@ -47,21 +47,21 @@ class Handler extends Util.Singleton<Handler>() {
     npc.delete();
     npc.removeBlip();
     this.npcs.delete(id);
-  };
+  }
 
   @Export('getPedData')
-  private _getNpcData = (ped: number) => {
+  private _getNpcData(ped: number) {
     const npc = [...this.npcs.values()].find(npc => npc.entity === ped);
     if (!npc) return;
     return npc.data;
-  };
+  }
 
   @Export('setNpcEnabled')
-  private _setNpcEnabled = (id: string, enabled: boolean) => {
+  private _setNpcEnabled(id: string, enabled: boolean) {
     const npc = this.getNpc(id);
     if (!npc) return;
     npc.enabled = enabled;
-  };
+  }
 
   public startThread = () => {
     setInterval(() => {

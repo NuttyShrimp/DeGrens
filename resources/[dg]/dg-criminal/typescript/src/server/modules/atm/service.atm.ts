@@ -2,7 +2,7 @@ import { Events, Inventory, Notifications, Police, PropRemover, Util } from '@dg
 import config from 'services/config';
 import { atmLogger } from './logger.atm';
 import { ATMS } from '../../../shared/atm/constants.atm';
-import { Vector3 } from '../../../../../../ts-shared/typescript/src/shared';
+import { Vector3 } from '@dgx/shared';
 
 const activeRobberies: Criminal.ATM.Robbery[] = [];
 const atmEntityRemovalTimeout: Record<number, NodeJS.Timeout> = {};

@@ -1,5 +1,5 @@
 import { Util, Inventory, Events } from '@dgx/server';
-import { DGXEvent, EventListener, Export, ExportRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, ExportDecorators } from '@dgx/server/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import contextManager from '../../classes/contextmanager';
@@ -8,6 +8,8 @@ import { Item } from './classes/item';
 import { ON_CREATE } from './helpers.items';
 import itemDataManager from 'classes/itemdatamanager';
 import repository from 'services/repository';
+
+const { ExportRegister, Export } = ExportDecorators<'inventory'>();
 
 @EventListener()
 @ExportRegister()
@@ -156,37 +158,34 @@ class ItemManager extends Util.Singleton<ItemManager>() {
   };
 
   @Export('setMetadataOfItem')
-  private _setMetadata = (
-    id: string,
-    cb: (old: Inventory.ItemState['metadata']) => Inventory.ItemState['metadata']
-  ) => {
+  private _setMetadata(id: string, cb: (old: Inventory.ItemState['metadata']) => Inventory.ItemState['metadata']) {
     const item = this.get(id);
     if (!item) {
       this.logger.warn(`Could not get item ${id}, broke while getting item to set metadata`);
       return;
     }
     item.setMetadata(cb);
-  };
+  }
 
   @Export('setQualityOfItem')
-  private _setQuality = (id: string, cb: (old: number) => number) => {
+  private _setQuality(id: string, cb: (old: number) => number) {
     const item = this.get(id);
     if (!item) {
       this.logger.warn(`Could not get item ${id}, broke while getting item to set quality`);
       return;
     }
     item.setQuality(cb);
-  };
+  }
 
   @Export('destroyItem')
-  private _destroy = (id: string) => {
+  private _destroy(id: string) {
     const item = this.get(id);
     if (!item) {
       this.logger.warn(`Could not get item ${id}, broke while getting item to set destroy`);
       return;
     }
     item.destroy();
-  };
+  }
 
   public unloadItem = (id: string) => {
     this.items.delete(id);
