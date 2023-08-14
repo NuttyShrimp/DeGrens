@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mechanics kunnen weer auto's impounden
 - Spikestrips reliability improved
 - Deads worden terug gelogged wanneer screenshot nemen niet lukte
+- Je kunt terug op de elementen achter het contextmenu klikken
 
 ## [1.3.1]
 
