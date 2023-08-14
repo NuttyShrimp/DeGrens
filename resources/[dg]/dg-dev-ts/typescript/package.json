@@ -18,8 +18,5 @@
     "esbuild": "^0.17.19",
     "logger": "workspace:*",
     "tsconfig": "workspace:*"
-  },
-  "dependencies": {
-    "image-type": "^5.2.0"
   }
 }
