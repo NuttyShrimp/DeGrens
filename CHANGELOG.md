@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enginesound volumes verlaagd
 - Weedlab timeout minder gezet en loot getweaked
 - Gebundelde files zijn veel kleiner
+- Items om sneller te lopen verbeterd
 
 ### Fixed
 

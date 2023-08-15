@@ -4,9 +4,9 @@ let config: Config.Consumables;
 
 const effects: Record<Config.EffectConsumable['effect'], (target: number, duration: number, itemId: string) => void> = {
   speed: async (target, duration, itemId) => {
-    let success = await Minigames.keygame(target, 1, 4, 18);
+    let success = await Minigames.keygame(target, 1, 7, 18);
     if (!success) return;
-    const [isCancelled] = await Taskbar.create(target, 'nose', '', 5000, {
+    const [isCancelled] = await Taskbar.create(target, 'nose', '', 4000, {
       canCancel: true,
       cancelOnDeath: true,
       controlDisables: {
