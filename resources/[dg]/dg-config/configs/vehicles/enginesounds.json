@@ -283,5 +283,10 @@
     "label": "Vulcar Zodiac",
     "soundHash": "zodiac",
     "custom": true
+  },
+  {
+    "label": "Maibatsu Sunrise R",
+    "soundHash": "sunrise",
+    "custom": true
   }
 ]

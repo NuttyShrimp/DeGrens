@@ -10510,5 +10510,17 @@
     "price": 150000,
     "shop": "nfs",
     "type": "land"
+  },
+  {
+    "category": "sports",
+    "model": "sunrise1",
+    "brand": "Maibatsu",
+    "name": "Sunrise R",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 500000,
+    "shop": "nfs",
+    "type": "land"
   }
 ]
