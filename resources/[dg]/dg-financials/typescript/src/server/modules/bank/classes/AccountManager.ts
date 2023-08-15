@@ -1,5 +1,5 @@
 import { Business, Notifications, SQL, Util } from '@dgx/server';
-import { RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { RPCEvent, RPCRegister } from '@dgx/server/src/decorators';
 import { getConfig } from 'helpers/config';
 import { scheduleBankTaxes } from 'modules/taxes/service';
 import winston from 'winston';

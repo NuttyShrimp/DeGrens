@@ -1,4 +1,4 @@
-import { BlipManager, Events, Taskbar, Util } from '@dgx/client/classes';
+import { BlipManager, Events, Taskbar, Util } from '@dgx/client';
 import { buildTrackerBlipId } from './helpers.trackers';
 
 const activeBlips = new Set<number>();

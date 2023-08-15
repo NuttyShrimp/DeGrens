@@ -1,5 +1,5 @@
 import { SQL, Config, Notifications, Events, Util, UI, Financials, DutyTime, ExportDecorators } from '@dgx/server';
-import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/src/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import signedInManager from './signedinmanager';

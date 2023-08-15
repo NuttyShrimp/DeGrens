@@ -1,6 +1,6 @@
 import { Util, Inventory } from '@dgx/server';
 import { Plant } from './plant';
-import { EventListener, DGXEvent } from '@dgx/server/decorators';
+import { EventListener, DGXEvent } from '@dgx/server/src/decorators';
 import config from 'services/config';
 
 @EventListener()

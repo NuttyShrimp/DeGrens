@@ -1,4 +1,4 @@
-import { Util as UtilShared } from '@dgx/shared/classes';
+import { Util as UtilShared } from '@dgx/shared/src/classes';
 import { firstNames, lastNames } from '../data/names';
 
 import { Config, Core, Events, RPC } from './index';

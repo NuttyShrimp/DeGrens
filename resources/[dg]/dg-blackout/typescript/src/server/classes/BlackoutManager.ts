@@ -2,7 +2,7 @@ import { Chat, Events, Police, Util } from '@dgx/server';
 import config from '../services/config';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
-import { EventListener, DGXEvent } from '@dgx/server/decorators';
+import { EventListener, DGXEvent } from '@dgx/server/src/decorators';
 
 @EventListener()
 class BlackoutManager extends Util.Singleton<BlackoutManager>() {
@@ -136,9 +136,12 @@ class BlackoutManager extends Util.Singleton<BlackoutManager>() {
     if (this.hitPowerstations.size < config.powerstations.length) return;
 
     blackoutManager.setBlackoutState(true);
-    setTimeout(() => {
-      blackoutManager.setBlackoutState(false);
-    }, config.duration * 60 * 1000);
+    setTimeout(
+      () => {
+        blackoutManager.setBlackoutState(false);
+      },
+      config.duration * 60 * 1000
+    );
   };
 
   @DGXEvent('blackout:server:setAtLocation')

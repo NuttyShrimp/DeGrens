@@ -1,5 +1,5 @@
 import { Business, Config, Events, Inventory, Notifications, Util, UI, Core } from '@dgx/server';
-import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/src/decorators';
 import { getPlayerVehicleInfo, insertNewVehicle, setVehicleState } from 'db/repository';
 import { spawnOwnedVehicle } from 'helpers/vehicle';
 import plateManager from 'modules/identification/classes/platemanager';

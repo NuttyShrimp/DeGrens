@@ -1,5 +1,6 @@
-import { Util } from '../index';
+import { Util } from './util';
 
+const util = new Util();
 declare type HookFunction = (this: Thread, ref: Thread) => void | Promise<void>;
 
 export class Thread {
@@ -78,7 +79,7 @@ export class Thread {
           } catch (error: any) {
             console.log('Error while calling active hook', error.message);
           }
-          this.delay > 0 && (await Util.Delay(this.delay));
+          this.delay > 0 && (await util.Delay(this.delay));
         });
         break;
       }

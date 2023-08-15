@@ -1,5 +1,5 @@
 import { Util } from '@dgx/server';
-import { DGXEvent, EventListener } from '@dgx/server/decorators';
+import { DGXEvent, EventListener } from '@dgx/server/src/decorators';
 import inventoryManager from 'modules/inventories/manager.inventories';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';

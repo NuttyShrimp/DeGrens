@@ -1,5 +1,4 @@
-import { Events, HUD, Keys, Notifications } from '@dgx/client';
-import { Util } from '@dgx/shared';
+import { Events, HUD, Keys, Notifications, Util } from '@dgx/client';
 import { getCurrentVehicle, isDriver } from '@helpers/vehicle';
 
 import { getNosConfig } from './config.nos';

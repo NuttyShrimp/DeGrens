@@ -23,7 +23,7 @@ const getOptions = opts => {
     name: resName,
     splitting: false,
     clean: true, // clean up the dist folder
-    format: 'esm',
+    format: 'cjs',
     minify: IS_PROD,
     bundle: true,
     skipNodeModulesBundle: false,
@@ -31,9 +31,10 @@ const getOptions = opts => {
     sourcemap: true,
     keepNames: true,
     noExternal: [/.*/],
-    target: 'es2020',
+    target: 'node16',
     outDir: 'dist',
     treeshake: 'recommended',
+    platform: "node",
     entry: [],
     env: {
       NODE_ENV: ENV,
@@ -47,26 +48,37 @@ const getOptions = opts => {
       };
     },
     async onSuccess() {
-      fs.stat('./dist/client/client.js', e => {
-        if (e !== undefined) return;
-        fs.cpSync('./dist/client/client.js', '../client/client.js');
-        console.log('[Client] moved js file');
-      });
-      fs.stat('./dist/server/server.js', e => {
-        if (e !== undefined) return;
-        fs.cpSync('./dist/server/server.js', '../server/server.js');
-        console.log('[Server] moved js file');
-      });
-      fs.stat('./dist/server/server.js.map', e => {
-        if (e !== undefined) return;
-        fs.cpSync('./dist/server/server.js.map', '../server/server.js.map');
-        console.log('[Server] moved map.js file');
-      });
+      await Promise.allSettled([
+        new Promise(res => {
+          fs.stat('./dist/client/client.js', e => {
+            if (e !== null) return;
+            fs.cpSync('./dist/client/client.js', '../client/client.js');
+            console.log('[Client] moved js file');
+            res();
+          });
+        }),
+        new Promise(res => {
+          fs.stat('./dist/server/server.js', e => {
+            if (e !== null) return;
+            fs.cpSync('./dist/server/server.js', '../server/server.js');
+            console.log('[Server] moved js file');
+            res();
+          });
+        }),
+        new Promise(res => {
+          fs.stat('./dist/server/server.js.map', e => {
+            if (e !== null) return;
+            fs.cpSync('./dist/server/server.js.map', '../server/server.js.map');
+            console.log('[Server] moved map.js file');
+            res();
+          });
+        }),
+      ])
       if (process.env.SENTRY_UPLOAD_SOURCEMAPS || opts.env.SENTRY_UPLOAD_SOURCEMAPS) {
-        uploadSourceMaps(resName);
+        await uploadSourceMaps(resName);
       }
       // cleanup
-      // fs.rmSync('./dist', { recursive: true });
+      fs.rmSync('./dist', { recursive: true });
     },
   };
 

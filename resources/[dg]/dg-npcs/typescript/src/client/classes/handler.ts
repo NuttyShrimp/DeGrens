@@ -22,9 +22,9 @@ class Handler extends Util.Singleton<Handler>() {
   };
 
   @Export('addNpc')
-  public addNpc(npcData: NPCs.NPC | NPCs.NPC[]) {
+  addNpc(npcData: NPCs.NPC | NPCs.NPC[]) {
     if (Array.isArray(npcData)) {
-      npcData.forEach(this.addNpc);
+      npcData.forEach(this.addNpc.bind(this));
       return;
     }
     // remove if already exists with id
@@ -37,7 +37,7 @@ class Handler extends Util.Singleton<Handler>() {
   @Export('removeNpc')
   public removeNpc(id: string | string[]) {
     if (Array.isArray(id)) {
-      id.forEach(this.removeNpc);
+      id.forEach(this.removeNpc.bind(this));
       return;
     }
 

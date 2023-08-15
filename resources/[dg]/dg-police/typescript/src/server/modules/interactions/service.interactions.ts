@@ -1,4 +1,4 @@
-import { Util } from '@dgx/shared';
+import { Util } from '@dgx/server';
 import { isPlayerInCarryDuo, stopCarryDuo } from './modules/carry';
 import {
   getPlayerBeingEscorted,

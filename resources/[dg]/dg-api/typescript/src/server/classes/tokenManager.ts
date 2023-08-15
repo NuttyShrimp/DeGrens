@@ -1,4 +1,4 @@
-import { SQL, Util } from '@dgx/server/classes';
+import { SQL, Util } from '@dgx/server';
 import { FastifyRequest } from 'fastify';
 import { mainLogger } from 'sv_logger';
 

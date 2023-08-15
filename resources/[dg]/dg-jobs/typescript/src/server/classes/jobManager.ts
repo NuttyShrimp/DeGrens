@@ -1,5 +1,5 @@
 import { Core, Inventory, Util } from '@dgx/server';
-import { ExportDecorators, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { ExportDecorators, RPCEvent, RPCRegister } from '@dgx/server/src/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
@@ -72,9 +72,12 @@ class JobManager extends Util.Singleton<JobManager>() {
 
     // Update payout levels in 60-90 mins
     const timeout = Util.getRndInteger(60, 91);
-    setTimeout(() => {
-      this.updatePayoutLevels();
-    }, timeout * 60 * 1000);
+    setTimeout(
+      () => {
+        this.updatePayoutLevels();
+      },
+      timeout * 60 * 1000
+    );
   }
 
   public getJobByName(job: string) {

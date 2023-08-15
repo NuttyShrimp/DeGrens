@@ -1,4 +1,4 @@
-import { BaseEvents, Jobs, Keys, Notifications } from '@dgx/client/classes';
+import { BaseEvents, Jobs, Keys, Notifications } from '@dgx/client';
 import { isRadarActive, lockPlate, openPlateHistory, resetRadar, setRadarActive } from './service.radar';
 
 Keys.register('police_radar_toggle', '(police) Radar - Toggle (+mod)', '7');

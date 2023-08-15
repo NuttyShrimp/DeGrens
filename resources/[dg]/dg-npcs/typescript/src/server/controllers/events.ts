@@ -1,4 +1,4 @@
-import { Auth, Events } from '@dgx/server/classes';
+import { Auth, Events } from '@dgx/server';
 import { awaitNpcConfigLoad } from 'services/config';
 import { handleGuardDied, spawnGuard, transferGuardDeathCheck } from 'services/guards';
 import { dispatchAllNpcsToClient } from 'services/npcs';

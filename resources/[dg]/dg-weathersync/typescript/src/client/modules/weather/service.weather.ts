@@ -1,5 +1,4 @@
-import { RPC } from '@dgx/client/classes';
-import { Util } from '@dgx/shared';
+import { RPC, Util } from '@dgx/client';
 import { TRANSITION_TIME } from './constants.weather';
 
 let weatherFrozen = false;

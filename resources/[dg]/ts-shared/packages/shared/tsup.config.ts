@@ -10,7 +10,7 @@ export const tsup: Options = {
   skipNodeModulesBundle: false,
   noExternal: [/.*/],
   entryPoints: ['./src/index.ts'],
-  target: 'es2020',
+  target: 'es2021',
   outDir: 'dist',
   treeshake: true,
   keepNames: true,

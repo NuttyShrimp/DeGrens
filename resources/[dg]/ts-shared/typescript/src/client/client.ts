@@ -4,7 +4,7 @@ import { returnClassRefs } from '@dgx/shared';
 // Following code is for DGX.xxx.yyy access
 import * as Shared from '@dgx/shared';
 
-import * as Classes from '@dgx/client/classes';
+import * as Classes from '@dgx/client/src/classes';
 
 const DGX = {
   ...Shared,

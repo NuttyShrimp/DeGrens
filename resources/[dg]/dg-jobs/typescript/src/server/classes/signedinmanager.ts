@@ -1,7 +1,7 @@
 import { Config, Notifications, Events, Util, UI, Core, DutyTime } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 import whitelistManager from './whitelistmanager';
-import { DGXEvent, EventListener, ExportDecorators, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, ExportDecorators, RPCEvent, RPCRegister } from '@dgx/server/src/decorators';
 import { charModule } from 'helpers/core';
 
 const { Export, ExportRegister } = ExportDecorators<'jobs'>();

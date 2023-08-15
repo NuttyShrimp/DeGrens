@@ -1,5 +1,5 @@
 import { Events, RPC } from './index';
-import { Util as UtilShared } from '@dgx/shared/classes';
+import { Util as UtilShared } from '@dgx/shared/src/classes';
 import { MATERIAL_HASH_ENUM, MOVEMENT_CLIPSET_ENUM } from '../constants';
 
 class Util extends UtilShared {

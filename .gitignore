@@ -20,6 +20,7 @@ logtypes.json
 .env
 !.env.template
 .replxx_history
+tsup.config.bundled*
 
 
 positions.txt

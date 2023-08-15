@@ -1,5 +1,4 @@
-import { Events, Peek, Weapons, Phone } from '@dgx/client';
-import { Util } from '@dgx/shared';
+import { Events, Peek, Weapons, Phone, Util } from '@dgx/client';
 import { activateLocation, deactivateLocation, enterHouse, leaveHouse } from './service.house';
 import { getInsideHouseId } from 'modules/interior/service.interior';
 
@@ -94,19 +93,22 @@ Events.onNet('houserobbery:client:setSelectedHouse', (houseId: string, coords: V
   SetBlipAlpha(radiusBlip, blipAlpha);
   SetBlipHighDetail(radiusBlip, true);
 
-  radiusBlipInterval = setInterval(() => {
-    if (radiusBlip === null) return;
-    if (blipAlpha === 0) {
-      if (radiusBlipInterval) {
-        clearInterval(radiusBlipInterval);
-        radiusBlipInterval = null;
+  radiusBlipInterval = setInterval(
+    () => {
+      if (radiusBlip === null) return;
+      if (blipAlpha === 0) {
+        if (radiusBlipInterval) {
+          clearInterval(radiusBlipInterval);
+          radiusBlipInterval = null;
+        }
+        RemoveBlip(radiusBlip);
+        return;
       }
-      RemoveBlip(radiusBlip);
-      return;
-    }
-    blipAlpha--;
-    SetBlipAlpha(radiusBlip, blipAlpha);
-  }, (timeToFind * 60000) / 150);
+      blipAlpha--;
+      SetBlipAlpha(radiusBlip, blipAlpha);
+    },
+    (timeToFind * 60000) / 150
+  );
 
   Phone.addMail({
     subject: 'Huisinbraak',

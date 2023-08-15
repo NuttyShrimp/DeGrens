@@ -1,5 +1,5 @@
 import { Admin, Core, Events, Util } from '@dgx/server';
-import { DGXEvent, EventListener, ExportDecorators } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, ExportDecorators } from '@dgx/server/src/decorators';
 import { handleCommandExecution } from 'helpers/commands';
 
 const { Export, ExportRegister } = ExportDecorators<'chat'>();

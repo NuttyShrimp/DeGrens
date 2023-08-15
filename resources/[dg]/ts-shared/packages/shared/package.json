@@ -1,31 +1,10 @@
 {
   "name": "@dgx/shared",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
   "type": "module",
   "types": "src/index.ts",
   "version": "1.2.5",
-  "sideEffects": false,
-  "exports": {
-    ".": "./dist/index.js",
-    "./classes": "./dist/classes/index.js",
-    "./classes/*": "./dist/classes/*"
-  },
-  "typesVersions": {
-    "*": {
-      "index": [
-        "src/index.ts"
-      ],
-      "classes": [
-        "src/classes/index.ts",
-        "src/classes/*.ts"
-      ]
-    }
-  },
-  "scripts": {
-    "build": "rimraf dist && tsup",
-    "build:dev": "rimraf dist && tsup"
-  },
   "devDependencies": {
     "rimraf": "^5.0.1",
     "tsup": "^7.0.0"

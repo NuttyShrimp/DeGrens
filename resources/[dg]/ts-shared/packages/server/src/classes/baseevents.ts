@@ -1,4 +1,4 @@
-import { BaseEvents as SharedBaseEvents } from '@dgx/shared/classes';
+import { BaseEvents as SharedBaseEvents } from '@dgx/shared/src/classes';
 
 class BaseEvents extends SharedBaseEvents {
   public onEnterWater = (handler: (plyId: number) => void) => {

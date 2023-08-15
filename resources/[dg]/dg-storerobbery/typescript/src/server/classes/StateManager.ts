@@ -1,5 +1,5 @@
 import { Vector3 } from '@dgx/shared';
-import { RPCRegister } from '@dgx/server/decorators';
+import { RPCRegister } from '@dgx/server/src/decorators';
 import { getConfig } from 'helpers/config';
 import winston from 'winston';
 import { mainLogger } from 'sv_logger';
@@ -79,17 +79,20 @@ class StateManager extends Util.Singleton<StateManager>() {
     );
 
     if (register.canRob) return;
-    register.timeout = setTimeout(() => {
-      register.canRob = true;
-      register.timeout = null;
+    register.timeout = setTimeout(
+      () => {
+        register.canRob = true;
+        register.timeout = null;
 
-      this.logger.silly(`Register ${register.idx} (${register.storeId}) has been refilled`);
-      Util.Log(
-        'storerobbery:registers:refill',
-        { ...register },
-        `Register ${register.idx} (${register.storeId}) has been refilled`
-      );
-    }, getConfig().register.refillTime * 60 * 1000);
+        this.logger.silly(`Register ${register.idx} (${register.storeId}) has been refilled`);
+        Util.Log(
+          'storerobbery:registers:refill',
+          { ...register },
+          `Register ${register.idx} (${register.storeId}) has been refilled`
+        );
+      },
+      getConfig().register.refillTime * 60 * 1000
+    );
   };
 
   getSafeState = (storeId: Storerobbery.Id) => (this.safeStates[storeId] ??= 'closed');

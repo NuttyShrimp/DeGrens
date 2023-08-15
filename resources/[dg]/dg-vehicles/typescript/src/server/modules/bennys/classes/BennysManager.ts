@@ -1,5 +1,12 @@
 import { Financials, TaxIds, Util } from '@dgx/server';
-import { DGXEvent, EventListener, ExportDecorators, LocalEvent, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import {
+  DGXEvent,
+  EventListener,
+  ExportDecorators,
+  LocalEvent,
+  RPCEvent,
+  RPCRegister,
+} from '@dgx/server/src/decorators';
 import { getVinForVeh } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { getConfigByEntity } from 'modules/info/service.info';

@@ -1,4 +1,5 @@
 import { Util } from './index';
+import 'core-js/stable/btoa';
 
 class TokenStorage {
   private static instance: TokenStorage;

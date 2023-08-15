@@ -1,5 +1,5 @@
 import { Util, Jobs } from '@dgx/server';
-import { DGXEvent, EventListener } from '@dgx/server/decorators';
+import { DGXEvent, EventListener } from '@dgx/server/src/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import { HeistLocation } from './heistlocation';
@@ -258,9 +258,12 @@ class HeistManager extends Util.Singleton<HeistManager>() {
       clearTimeout(this.globalTimeoutTimeout);
     }
 
-    this.globalTimeoutTimeout = setTimeout(() => {
-      this.globalTimeoutTimeout = null;
-    }, 15 * 60 * 1000);
+    this.globalTimeoutTimeout = setTimeout(
+      () => {
+        this.globalTimeoutTimeout = null;
+      },
+      15 * 60 * 1000
+    );
   };
 }
 

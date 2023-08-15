@@ -1,5 +1,4 @@
-import { SQL } from '@dgx/server';
-import { Util } from '@dgx/shared';
+import { SQL, Util } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 

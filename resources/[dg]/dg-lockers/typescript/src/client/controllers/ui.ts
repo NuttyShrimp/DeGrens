@@ -1,4 +1,4 @@
-import { Events, UI } from '@dgx/client/classes';
+import { Events, UI } from '@dgx/client';
 
 UI.RegisterUICallback('lockers/open', (data: { id: string }, cb) => {
   Events.emitNet('lockers:server:open', data.id);

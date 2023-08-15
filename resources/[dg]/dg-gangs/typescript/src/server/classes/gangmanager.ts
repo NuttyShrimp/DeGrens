@@ -1,5 +1,5 @@
 import { Inventory, Phone, Util } from '@dgx/server';
-import { ExportDecorators, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { ExportDecorators, RPCEvent, RPCRegister } from '@dgx/server/src/decorators';
 import repository from 'services/repository';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';

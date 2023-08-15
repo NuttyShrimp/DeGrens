@@ -1,4 +1,4 @@
-import { Util, Taskbar, Events, SyncedObjects, Jobs } from '@dgx/client/classes';
+import { Util, Taskbar, Events, SyncedObjects, Jobs } from '@dgx/client';
 
 const weedPlantModels = new Set<number>();
 

@@ -1,5 +1,5 @@
 import { Events, Notifications, RayCast, Sync, UI, Util, Vehicles, ExportDecorators } from '@dgx/client';
-import { DGXEvent, EventListener } from '@dgx/client/decorators';
+import { DGXEvent, EventListener } from '@dgx/client/src/decorators';
 import { TYPES_WITH_OPEN_ANIMATION } from '../constants';
 import { canOpenInventory, doCloseAnimation, doLookAnimation, doOpenAnimation } from '../util';
 import { isInNoDropZone } from 'services/nodropzones';

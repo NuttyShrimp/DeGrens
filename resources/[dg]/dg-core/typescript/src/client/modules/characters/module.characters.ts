@@ -1,5 +1,5 @@
 import { Events } from '@dgx/client';
-import { DGXEvent, Event, EventListener } from '@dgx/client/decorators';
+import { DGXEvent, Event, EventListener } from '@dgx/client/src/decorators';
 
 @EventListener()
 export class CharacterModule implements Modules.Module, Core.ClientModules.CharacterModule {

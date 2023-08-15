@@ -1,4 +1,4 @@
-import { Events, Util, UI, Taskbar, Peek, RayCast, Notifications, Weapons } from '@dgx/client/classes';
+import { Events, Util, UI, Taskbar, Peek, RayCast, Notifications, Weapons } from '@dgx/client';
 import { ACCEPTED_MATERIALS } from './constants.weed';
 import {
   anyPlantInRange,
