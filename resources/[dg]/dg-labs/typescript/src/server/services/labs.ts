@@ -33,6 +33,7 @@ export const initiateLabs = async () => {
     const idsToTry = Util.shuffleArray([...new Array(config.locations.length)].map((_, i) => i));
     while (newId === null && idsToTry.length > 0) {
       const id = idsToTry.pop();
+      if (id === undefined) continue;
       if (getLabTypeFromId(id)) continue; // check if generated id isnt already an active lab
       if (!config.locations[id].allowedTypes.includes(type)) continue; // check if location allows this interior type
       newId = id;
