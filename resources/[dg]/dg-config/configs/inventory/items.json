@@ -286,6 +286,54 @@
   {
     "markedForSeizure": true,
     "useable": true,
+    "name": "weapon_combatpistol",
+    "label": "MW M19",
+    "image": "weapon_combatpistol.png",
+    "decayRate": 129600,
+    "size": {
+      "x": 3,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_vintagepistol",
+    "label": "TT 33",
+    "image": "weapon_vintagepistol.png",
+    "decayRate": 129600,
+    "size": {
+      "x": 3,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_revolver_mk2",
+    "label": "Taurus Raging Bull",
+    "image": "weapon_revolver_mk2.png",
+    "decayRate": 129600,
+    "size": {
+      "x": 4,
+      "y": 2
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
+    "name": "weapon_pistol50",
+    "label": "Desert Eagle",
+    "image": "weapon_pistol50.png",
+    "decayRate": 129600,
+    "size": {
+      "x": 4,
+      "y": 3
+    }
+  },
+  {
+    "markedForSeizure": true,
+    "useable": true,
     "name": "weapon_pistol",
     "label": "Walther P99",
     "image": "weapon_pistol.png",

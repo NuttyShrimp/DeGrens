@@ -7,7 +7,7 @@ declare namespace Weapons {
 
   type WeaponConfig = Optional<SharedWeaponConfig> & {
     name: string;
-    durabilityMultiplier: number;
+    durabilityDecreasePerShot: number;
     unlimitedAmmo?: boolean;
     attachments?: Record<string, string>;
   };
