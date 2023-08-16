@@ -5,16 +5,16 @@
   "shared": true,
   "location": {
     "vector": {
-      "x": 968.91,
-      "y": -117.85,
-      "z": 74.35
+      "x": 962.96,
+      "y": -111.35,
+      "z": 74.36
     },
-    "width": 6.6,
-    "length": 14.4,
+    "width": 13.0,
+    "length": 9.4,
     "options": {
-      "heading": 43,
-      "minZ": 73.35,
-      "maxZ": 77.35
+      "heading": 312,
+      "minZ": 73.36,
+      "maxZ": 77.36
     }
   },
   "vehicle_types": ["land"],
@@ -23,23 +23,15 @@
       "type": "land",
       "size": 2.0,
       "distance": 1.8,
-      "heading": 221.0661,
-      "coords": {
-        "x": 966.2185,
-        "y": -120.1013,
-        "z": 74.353
-      }
+      "heading": 220.7037,
+      "coords": { "x": 959.7629, "y": -113.3413, "z": 74.3636 }
     },
     {
       "type": "land",
       "size": 2.0,
       "distance": 1.8,
-      "heading": 220.9122,
-      "coords": {
-        "x": 971.65,
-        "y": -115.1363,
-        "z": 74.353
-      }
+      "heading": 222.8727,
+      "coords": { "x": 964.9342, "y": -108.7771, "z": 74.3636 }
     }
   ]
 }
