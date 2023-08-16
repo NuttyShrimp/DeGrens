@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Politie kan nu geconfisceerde items bekijken op dezelfde plek waar je ze kan op halen
 - Een brievenbus voor bij je huis
 - Enkele kofi voertuigen toegevoegd
+- Nieuwe wapens toegevoegd
 
 ### Changed
 
@@ -38,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Deads worden terug gelogged wanneer screenshot nemen niet lukte
 - Je kunt terug op de elementen achter het contextmenu klikken
 - Tackle reliability verbeterd
+- Vergeten southside tankstation werkt nu wel
 
 ## [1.3.1]
 
