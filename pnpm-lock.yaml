@@ -1752,6 +1752,9 @@ importers:
       esbuild:
         specifier: ^0.19.2
         version: 0.19.2
+      logger:
+        specifier: workspace:*
+        version: link:../../../../packages/logger
       tsconfig:
         specifier: workspace:*
         version: link:../../../../packages/tsconfig

@@ -16,6 +16,7 @@
     "@dgx/tsup-config": "workspace:*",
     "db": "*",
     "esbuild": "^0.19.2",
+    "logger": "workspace:*",
     "tsconfig": "workspace:*",
     "tsup": "^7.2.0"
   }

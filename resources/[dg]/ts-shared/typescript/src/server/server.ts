@@ -1,4 +1,6 @@
-import './helpers/cmds';
+import { generateLogger } from 'logger';
+import packageInfo from './../../package.json';
+
 import './controllers/events';
 
 import { returnClassRefs } from '@dgx/shared';
@@ -27,4 +29,8 @@ setImmediate(() => {
     });
     return funcRefs;
   });
+
+  if (GetCurrentResourceName() === 'ts-shared') {
+    generateLogger('DGX', packageInfo);
+  }
 });

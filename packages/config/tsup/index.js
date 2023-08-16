@@ -4,6 +4,12 @@ const fs = require('fs');
 const { importPatternPlugin } = require('esbuild-plugin-import-pattern');
 const { uploadSourceMaps, esbuildDebugIdInjectionPlugin } = require('./sentry');
 
+const FILES_TO_MOVE = {
+  '../client/client.js': ['./dist/client/client.js', './dist/client.js'],
+  '../server/server.js': ['./dist/server/server.js', './dist/server.js'],
+  '../server/server.js.map': ['./dist/server/server.js.map', './dist/server.js.map'],
+};
+
 const findResourceName = filePath => {
   const dirName = path.dirname(filePath);
   if (fs.existsSync(path.resolve(dirName, 'fxmanifest.lua'))) {
@@ -12,6 +18,20 @@ const findResourceName = filePath => {
     return null;
   }
   return findResourceName(dirName);
+};
+
+const moveBuildedFiles = (source, target) => {
+  return new Promise(res => {
+    fs.stat(source, e => {
+      if (e !== null) {
+        res();
+        return;
+      }
+      fs.cpSync(source, target);
+      console.log(`moved ${path.basename(target)} file`);
+      res();
+    });
+  });
 };
 
 /** @type {import("tsup").Options} */
@@ -31,49 +51,29 @@ const getOptions = opts => {
     sourcemap: true,
     keepNames: true,
     noExternal: [/.*/],
-    target: 'node16',
+    target: 'es2021',
     outDir: 'dist',
     treeshake: 'recommended',
-    platform: "node",
+    platform: 'node',
     entry: [],
     env: {
       NODE_ENV: ENV,
     },
-    esbuildPlugins: [
-      importPatternPlugin(),
-    ],
+    esbuildPlugins: [importPatternPlugin()],
     outExtension() {
       return {
         js: `.js`,
       };
     },
     async onSuccess() {
-      await Promise.allSettled([
-        new Promise(res => {
-          fs.stat('./dist/client/client.js', e => {
-            if (e !== null) return;
-            fs.cpSync('./dist/client/client.js', '../client/client.js');
-            console.log('[Client] moved js file');
-            res();
-          });
-        }),
-        new Promise(res => {
-          fs.stat('./dist/server/server.js', e => {
-            if (e !== null) return;
-            fs.cpSync('./dist/server/server.js', '../server/server.js');
-            console.log('[Server] moved js file');
-            res();
-          });
-        }),
-        new Promise(res => {
-          fs.stat('./dist/server/server.js.map', e => {
-            if (e !== null) return;
-            fs.cpSync('./dist/server/server.js.map', '../server/server.js.map');
-            console.log('[Server] moved map.js file');
-            res();
-          });
-        }),
-      ])
+      await Promise.allSettled(
+        Object.keys(FILES_TO_MOVE)
+          .map(target => {
+            const sources = FILES_TO_MOVE[target];
+            return sources.map(source => moveBuildedFiles(source, target));
+          })
+          .flat()
+      );
       if (process.env.SENTRY_UPLOAD_SOURCEMAPS || opts.env.SENTRY_UPLOAD_SOURCEMAPS) {
         await uploadSourceMaps(resName);
       }
@@ -83,8 +83,8 @@ const getOptions = opts => {
   };
 
   try {
-    if (fs.statSync("./src/client/client.ts")) {
-      baseConfig.entry.push("./src/client/client.ts");
+    if (fs.statSync('./src/client/client.ts')) {
+      baseConfig.entry.push('./src/client/client.ts');
       baseConfig.esbuildPlugins.push(
         typecheckPlugin({
           configFile: 'tsconfig.json',
@@ -97,8 +97,8 @@ const getOptions = opts => {
   }
 
   try {
-    if (fs.statSync("./src/server/server.ts")) {
-      baseConfig.entry.push("./src/server/server.ts");
+    if (fs.statSync('./src/server/server.ts')) {
+      baseConfig.entry.push('./src/server/server.ts');
       baseConfig.esbuildPlugins.push(
         typecheckPlugin({
           configFile: 'tsconfig.json',

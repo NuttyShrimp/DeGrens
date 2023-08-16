@@ -47,6 +47,7 @@ export const generateLogger = (name: string, packageInfo: Record<string, any>, l
         return e;
       },
       release: packageInfo.version,
+      attachStacktrace: true,
       environment: mainJSON.production ? 'production' : 'development',
       // Set tracesSampleRate to 1.0 to capture 100%
       // of transactions for performance monitoring.

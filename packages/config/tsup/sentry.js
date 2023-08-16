@@ -30,7 +30,7 @@ const genOptions = () => ({
   org: 'nutty',
   project: 'degrens-cfx',
   sourcemaps: {
-    assets: './dist/server/*',
+    assets: '../server/*',
     rewriteSources: defaultRewriteSourcesHook,
   },
   // From default options
