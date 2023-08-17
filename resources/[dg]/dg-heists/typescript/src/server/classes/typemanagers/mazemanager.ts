@@ -1,4 +1,4 @@
-import { Notifications, Police, SyncedObjects, Taskbar, Util } from '@dgx/server';
+import { Minigames, Notifications, Phone, Police, Sounds, SyncedObjects, Taskbar, Util } from '@dgx/server';
 import { EventListener, DGXEvent } from '@dgx/server/src/decorators';
 import heistManager from 'classes/heistmanager';
 import config from 'services/config';
@@ -95,12 +95,44 @@ export class MazeManager implements Heists.TypeManager {
         flags: 1,
       },
     });
+    if (canceled) {
+      this.busyActions.panelHack = false;
+      return;
+    }
+
+    const success = await Minigames.binarysudoku(plyId, config.maze.hack.gridSize, config.maze.hack.time);
+    Sounds.playSuccessSoundFromCoord(HACK_PANEL_DATA.coords, success);
+
+    if (!success) {
+      Util.changePlayerStress(plyId, 20);
+      this.busyActions.panelHack = false;
+      return;
+    }
 
     this.busyActions.panelHack = false;
-
-    if (canceled) return;
-
     this.state.hacked = true;
+
+    Phone.addMail(plyId, {
+      subject: 'Openen Deur',
+      sender: 'Hackermans',
+      message: 'Ik doe er alles aan om zo snel mogelijk de deur te laten opengaan.',
+    });
+
+    const locationData = config.locations['maze'];
+    Police.createDispatchCall({
+      title: `Overval: ${locationData.label}`,
+      blip: {
+        sprite: 618,
+        color: 1,
+      },
+      coords: { ...locationData.zone.points[0], z: 0 },
+      entries: {
+        'camera-cctv': locationData.cams.join(', '),
+      },
+      tag: '10-90',
+      important: true,
+    });
+
     setTimeout(
       () => {
         heistManager.startGlobalTimeout();
@@ -137,7 +169,7 @@ export class MazeManager implements Heists.TypeManager {
         this.state.awaitingEmptyLocation = false;
         this.startResetTimeout();
       },
-      config.maze.emptyLocationTimeForReset * 60 * 1000
+      Util.isDevEnv() ? 0 : config.maze.emptyLocationTimeForReset * 60 * 1000
     );
   };
 

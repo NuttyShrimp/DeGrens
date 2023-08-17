@@ -1,7 +1,8 @@
-import { Auth, Config, Core, Events } from '@dgx/server';
+import { Auth, BaseEvents, Config, Core, Events } from '@dgx/server';
 import heistManager from 'classes/heistmanager';
 import { JewelryManager } from 'classes/typemanagers/jewelrymanager';
 import config from 'services/config';
+import { removeAllTrolleyObjects } from 'services/trolleys';
 
 Auth.onAuth(async plyId => {
   await Config.awaitConfigLoad();
@@ -22,4 +23,8 @@ Auth.onAuth(async plyId => {
 
 Core.onPlayerUnloaded(plyId => {
   heistManager.leaveCurrentLocation(plyId);
+});
+
+BaseEvents.onResourceStop(() => {
+  removeAllTrolleyObjects();
 });

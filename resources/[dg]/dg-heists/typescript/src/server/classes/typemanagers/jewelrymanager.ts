@@ -140,6 +140,7 @@ export class JewelryManager implements Heists.TypeManager {
         'camera-cctv': locationData.cams.join(', '),
       },
       tag: '10-90',
+      important,
     });
   };
 

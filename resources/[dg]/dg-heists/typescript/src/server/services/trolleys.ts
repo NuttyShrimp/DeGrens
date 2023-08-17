@@ -119,6 +119,8 @@ Events.onNet('heists:trolleys:finishLooting', (plyId, trolleyNetId: number) => {
     plyId
   );
 
+  Util.changePlayerStress(plyId, 10);
+
   const specialItem = heistTypeConfig.trolley.specialItem;
   if (specialItem && Util.getRndInteger(1, 101) < specialItem.chance) {
     Inventory.addItemToPlayer(plyId, specialItem.item, 1);
@@ -134,3 +136,14 @@ Events.onNet('heists:trolleys:finishLooting', (plyId, trolleyNetId: number) => {
     );
   }
 });
+
+export const removeAllTrolleyObjects = () => {
+  for (const [ent, t] of activeTrolleys) {
+    if (t.deleteTimeout) {
+      clearInterval(t.deleteTimeout);
+    }
+    if (DoesEntityExist(ent) && !!getTrolleyDataByEntity(ent)) {
+      DeleteEntity(ent);
+    }
+  }
+};
