@@ -6,6 +6,7 @@
   "author": "NuttyShrimp",
   "license": "MIT",
   "dependencies": {
+    "glob": "10.3.3",
     "tsup": "^7.0.0",
     "uuid": "^9.0.0"
   }
