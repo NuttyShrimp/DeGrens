@@ -8,9 +8,9 @@ const carSchema: Schema = {
   id: '/Car',
   type: 'object',
   properties: {
-    name: { type: 'string' },
-    brand: { type: 'string' },
-    model: { type: 'string' },
+    name: { type: 'string', required: true },
+    brand: { type: 'string', required: true },
+    model: { type: 'string', required: true },
     category: {
       type: 'string',
       enum: [
@@ -38,19 +38,20 @@ const carSchema: Schema = {
         'trains',
         'openwheel',
       ] satisfies Vehicles.Category[],
+      required: true,
     },
-    class: { type: 'string' },
-    price: { type: 'number' },
-    defaultStock: { type: 'number' },
-    restockTime: { type: 'number' },
-    shop: { type: 'string', enum: ['pdm', 'nfs'] satisfies Config.Shop[] },
+    class: { type: 'string', required: true },
+    price: { type: 'number', required: true },
+    defaultStock: { type: 'number', required: true },
+    restockTime: { type: 'number', required: true },
+    shop: { type: 'string', enum: ['pdm', 'nfs'] satisfies Config.Shop[], required: true },
     type: {
       type: 'string',
       enum: ['land', 'air', 'sea'],
+      required: true,
     },
     inCarboostPool: { type: 'boolean', required: true },
   },
-  required: true,
 };
 
 v.addSchema(carSchema, '/Car');

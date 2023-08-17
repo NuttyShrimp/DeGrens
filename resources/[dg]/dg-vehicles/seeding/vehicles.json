@@ -11254,6 +11254,7 @@
     "restockTime": 14,
     "price": 890000,
     "shop": "nfs",
+    "type": "land",
     "inCarboostPool": true
   },
   {
@@ -11331,6 +11332,7 @@
     "restockTime": 15,
     "price": 475000,
     "shop": "nfs",
+    "type": "land",
     "inCarboostPool": true
   },
   {
