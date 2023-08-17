@@ -726,7 +726,7 @@ export default class Boost {
     if (this.flags.finished) return;
 
     const fullReward = this.getClassConfig().price.boost * config.contracts.finishRewardPriceMultiplier;
-    const reward = Math.max(Math.round(fullReward * healthPercentage), 2); // always receive minimum of 2 or player would get nothing for D because its free
+    const reward = Math.max(Math.round(fullReward * healthPercentage), 1); // always receive minimum of 1 or player would get nothing for D because its free
     Financials.cryptoAdd(this.owner.serverId ?? plyId, 'Suliro', reward, `Finished ${this.vehicleClass} Contract`);
 
     this.finish();
