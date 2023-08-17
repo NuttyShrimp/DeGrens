@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kunt terug op de elementen achter het contextmenu klikken
 - Tackle reliability verbeterd
 - Vergeten southside tankstation werkt nu wel
+- Synced objects wachten tot collision is geladen voor ze treffelijk op de grond te zetten
 
 ## [1.3.1]
 

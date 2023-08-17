@@ -11,6 +11,7 @@ let checkThread: NodeJS.Timer | null = null;
 let objId = 1;
 let gizmoTick: number = 0;
 let cursorEnabled = false;
+let flagThread: Record<string, NodeJS.Timer[]> = {};
 
 export const isCursorEnabled = () => {
   return cursorEnabled;
@@ -67,10 +68,18 @@ const createObject = async (id: string) => {
 
   Entity(entity).state.set('objId', id, false);
   if (data.flags) {
+    if (!flagThread[id]) {
+      flagThread[id];
+    }
     for (const [key, value] of Object.entries(data.flags)) {
       switch (key) {
         case 'onFloor': {
-          PlaceObjectOnGroundProperly(entity);
+          let onFloorThread = setInterval(() => {
+            if (!HasCollisionLoadedAroundEntity(entity)) return;
+            PlaceObjectOnGroundProperly(entity);
+            clearInterval(onFloorThread);
+          }, 100);
+          flagThread[id].push(onFloorThread);
           break;
         }
         default: {
@@ -92,6 +101,10 @@ const destroyObject = (id: string) => {
   }
 
   DeleteEntity(entityId);
+  if (flagThread[id]) {
+    flagThread[id].forEach(clearInterval);
+    delete flagThread[id];
+  }
   objectStore[id].entity = undefined;
 };
 
@@ -181,11 +194,9 @@ export const removeObject = async (ids: string | string[]) => {
     for (let id of ids) {
       const data = objectStore[id];
       if (!data) continue;
+      destroyObject(id);
+      await Util.Delay(50);
       chunksToCheck.add(data.chunk);
-      if (data.entity) {
-        DeleteEntity(data.entity);
-        await Util.Delay(50);
-      }
       delete objectStore[id];
     }
     chunksToCheck.forEach(chunk => {
@@ -197,9 +208,7 @@ export const removeObject = async (ids: string | string[]) => {
   } else {
     const data = objectStore[ids];
     if (!data) return;
-    if (data.entity) {
-      DeleteEntity(data.entity);
-    }
+    destroyObject(ids);
     chunkMap[data.chunk] = chunkMap[data.chunk].filter(id => ids !== id);
     delete objectStore[ids];
   }
