@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Alle autos kunnen terug in bennys
+- Core probeerd spelers met temporary id niet meer op te slaan
 
 ## [1.4.0]
 

@@ -1,5 +1,6 @@
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
+import { isTemporaryServerId } from '../helpers.users';
 
 class IdentifierManager {
   private readonly logger: winston.Logger;
@@ -16,10 +17,8 @@ class IdentifierManager {
     );
   }
 
-  private isTemporaryServerId = (plyId: number) => plyId >= 65535;
-
   private setStatebagSteamId = (plyId: number, steamId: string) => {
-    if (this.isTemporaryServerId(plyId)) return;
+    if (isTemporaryServerId(plyId)) return;
     Player(plyId).state.set('steamId', steamId, false);
   };
 
@@ -66,7 +65,7 @@ class IdentifierManager {
 
   getServerIdFromIdentifier(key: string, identifier: string) {
     for (const [src, identifiers] of this.identifiers) {
-      if (identifiers[key] === identifier && !this.isTemporaryServerId(src)) {
+      if (identifiers[key] === identifier && !isTemporaryServerId(src)) {
         return +src;
       }
     }

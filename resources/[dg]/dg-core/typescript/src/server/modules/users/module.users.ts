@@ -3,6 +3,7 @@ import { identifierManager } from './managers/IdentifierManager';
 import { userManager } from './managers/userManager';
 import { mainLogger } from '../../sv_logger';
 import winston from 'winston';
+import { isTemporaryServerId } from './helpers.users';
 
 export class UserModule implements Modules.ServerModule, Core.ServerModules.UserModule {
   private identifierManager = identifierManager;
@@ -45,6 +46,8 @@ export class UserModule implements Modules.ServerModule, Core.ServerModules.User
     this.identifierManager.getServerIdFromIdentifier(key, identifier);
 
   saveUser = async (src: number) => {
+    if (isTemporaryServerId(src)) return;
+
     const identifiers = this.getPlyIdentifiers(src);
     const userName = this.userManager.getUserName(src);
     if (!userName) {
