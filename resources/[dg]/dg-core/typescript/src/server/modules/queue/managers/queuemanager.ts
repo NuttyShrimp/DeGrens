@@ -10,7 +10,7 @@ import { generateQueueCard } from '../util.queue';
 
 class QueueManager {
   // Sorted array of steamIds
-  private queue: string[] = ['steam:11000010b3c8b9e', 'steam:110001'];
+  private queue: string[] = [];
   private queueEntryInfo: Map<string, Core.Queue.EntryInfo> = new Map();
   private queueInterval: Map<string, NodeJS.Timer> = new Map();
   private power: Record<string, number> = {};
