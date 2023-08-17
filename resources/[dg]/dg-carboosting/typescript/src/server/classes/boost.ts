@@ -95,13 +95,23 @@ export default class Boost {
     };
 
     // we preload these to be able to provide them along other data in startlog
-    const shouldDoDispatchAlert = tryClassChanceEntry(vehicleClass, 'dispatch');
-    this.chances = {
-      tunes: tryClassChanceEntry(vehicleClass, 'tunes'),
-      guards: tryClassChanceEntry(vehicleClass, 'guards'),
-      dispatch: shouldDoDispatchAlert,
-      tracker: shouldDoDispatchAlert && tryClassChanceEntry(vehicleClass, 'tracker'), // never do tracker if no dispatch alert
-    };
+
+    if (this.type === 'scratch') {
+      this.chances = {
+        tunes: false,
+        guards: true,
+        dispatch: true,
+        tracker: true,
+      };
+    } else {
+      const shouldDoDispatchAlert = tryClassChanceEntry(vehicleClass, 'dispatch');
+      this.chances = {
+        tunes: tryClassChanceEntry(vehicleClass, 'tunes'),
+        guards: tryClassChanceEntry(vehicleClass, 'guards'),
+        dispatch: shouldDoDispatchAlert,
+        tracker: shouldDoDispatchAlert && tryClassChanceEntry(vehicleClass, 'tracker'), // never do tracker if no dispatch alert
+      };
+    }
 
     // Randomize radius blip location
     const vehicleLocation = this.getVehicleLocation().vehicle;
@@ -144,7 +154,7 @@ export default class Boost {
     const group = Jobs.getGroupById(this.groupId);
     if (!group && !ignoreUndefined) {
       this.log('noGroup', 'error', 'Could not find group', { groupId: this.groupId }, true);
-      this.finish();
+      this.finish('Could not find group'); // Jobs.onGroupLeave should catch this, so we can safely assume if this happens, its bugged
       return;
     }
     return group;
@@ -214,7 +224,7 @@ export default class Boost {
     );
   };
 
-  public finish = (skipReputation = false) => {
+  public finish = (failReason?: string) => {
     if (this.flags.finished) return;
     this.flags.finished = true;
 
@@ -228,12 +238,21 @@ export default class Boost {
       });
     }
 
-    if (!skipReputation && !this.flags.droppedOff) {
+    if (!failReason && !this.flags.droppedOff) {
       const repDecrease = this.getClassConfig().reputation.decrease;
       const groupMemberRepDecrease = Math.round(repDecrease * config.contracts.groupReputationPercentage);
       this.initialMembers.forEach(mCid => {
         contractManager.updateReputation(mCid, (mCid === this.owner.cid ? repDecrease : groupMemberRepDecrease) * -1);
       });
+    }
+
+    if (failReason && this.owner.serverId) {
+      Financials.cryptoAdd(
+        this.owner.serverId,
+        'Suliro',
+        this.getClassConfig().price[this.type],
+        `Carboosting Refund: ${failReason}`
+      );
     }
 
     this.stopGuardThread();
@@ -264,6 +283,7 @@ export default class Boost {
 
     this.log('finish', 'info', `boost has been finished | success: ${this.flags.droppedOff}`, {
       success: this.flags.droppedOff,
+      failReason,
     });
   };
 
@@ -357,7 +377,7 @@ export default class Boost {
     });
     if (!spawnedVehicle) {
       this.log('failedToSpawnVehicle', 'error', `Failed to spawn vehicle`, {}, true);
-      this.finish(true);
+      this.finish('Failed To Spawn Vehicle');
       return;
     }
 
