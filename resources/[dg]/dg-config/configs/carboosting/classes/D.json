@@ -1,0 +1,44 @@
+{
+  "reputation": {
+    "required": 0,
+    "increase": 1,
+    "decrease": 0
+  },
+  "contractType": "personal",
+  "chances": {
+    "dispatch": 0.2,
+    "tracker": 0,
+    "guards": 0.1,
+    "tunes": 0.25,
+    "contract": 1
+  },
+  "price": {
+    "boost": 0,
+    "scratch": 10
+  },
+  "expirationTime": 5,
+  "radiusBlipSize": 75,
+  "tracker": {
+    "delay": 10000,
+    "increase": 5000,
+    "amount": 3,
+    "hack": {
+      "gridSize": 4,
+      "length": 4,
+      "displayTime": 1.2,
+      "inputTime": 2
+    }
+  },
+  "guards": {
+    "models": [
+      "a_f_m_fatbla_01",
+      "a_f_m_trampbeac_01",
+      "a_m_m_mexlabor_01",
+      "a_m_m_tramp_01",
+      "a_m_y_acult_01",
+      "g_m_y_azteca_01"
+    ],
+    "amount": 1,
+    "weapons": ["weapon_bat", "weapon_bottle"]
+  }
+}

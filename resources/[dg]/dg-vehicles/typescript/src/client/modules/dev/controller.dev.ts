@@ -1,14 +1,14 @@
-import { Util } from '@dgx/client';
 import { createCurrentSpotBox, removeCurrentSpotBox } from './service.dev';
 
-setImmediate(() => {
-  if (Util.isDevEnv()) {
-    onNet('vehicles:dev:currentSpot', (spot: Vehicles.Garages.ParkingSpot) => {
-      if (spot) {
-        createCurrentSpotBox(spot);
-        return;
-      }
-      removeCurrentSpotBox();
-    });
-  }
+let registeredEvent = false;
+
+onNet('dgx:isProduction', (isProd: boolean) => {
+  if (!isProd || registeredEvent) return;
+  onNet('vehicles:dev:currentSpot', (spot: Vehicles.Garages.ParkingSpot) => {
+    if (spot) {
+      createCurrentSpotBox(spot);
+      return;
+    }
+    removeCurrentSpotBox();
+  });
 });

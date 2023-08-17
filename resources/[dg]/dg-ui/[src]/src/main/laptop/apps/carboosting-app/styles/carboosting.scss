@@ -1,0 +1,126 @@
+@use '../../../styles/colors.scss';
+@use 'src/styles/variables';
+
+.laptop-carboosting {
+  height: 100%;
+  background-color: colors.$primary;
+  padding: 1vh;
+
+  // stop selection
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  & .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1vh;
+    height: 3vh;
+    padding: 0vh 1vh;
+    margin-bottom: 1vh;
+
+    & > .progressbar {
+      width: 80vh;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5vh;
+
+      & > p {
+        font-size: 2vh;
+      }
+
+      & > :not(p) {
+        width: 90%;
+      }
+    }
+
+    & > .refresh {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 4vh;
+      height: 4vh;
+
+      & :hover {
+        color: variables.$secondary_normal;
+        cursor: pointer;
+      }
+    }
+  }
+
+  & .content {
+    height: calc(100% - 4vh); // 4vh is header hight
+    padding: 2vh 1vh 1vh 1vh;
+  }
+
+  &-contract-list {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    gap: 2vh;
+
+    & > .contract {
+      height: 100%;
+      width: 20vh;
+      min-width: 20vh;
+      border-radius: 0.4vh;
+      background-color: colors.$secondary;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: column;
+      padding: 2vh;
+
+      & > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      & .divider {
+        margin: 1vh 0vh 1vh 0vh;
+        width: 100%;
+      }
+
+      & > .class {
+        height: 7vh;
+        width: 7vh;
+        min-height: 7vh;
+        border-radius: 100%;
+        border: 0.3vh solid variables.$tertiary_normal;
+
+        & > p {
+          color: variables.$tertiary_normal;
+          font-size: 3vh;
+        }
+      }
+
+      & > .label {
+        margin-top: 2vh;
+        margin-bottom: 1vh;
+        height: 100%;
+        width: 100%;
+        border-radius: 0.4vh;
+        background-color: colors.$tertiary;
+        padding: 1vh;
+        overflow: hidden;
+      }
+
+      & p {
+        text-align: center;
+        word-wrap: break-word;
+      }
+
+      & .buttons > :not(:last-child) {
+        margin-bottom: 1vh;
+      }
+    }
+  }
+}

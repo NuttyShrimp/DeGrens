@@ -137,6 +137,10 @@ class Police {
     return global.exports['dg-police'].addTrackerToVehicle(vehicle, delay);
   };
 
+  public changeVehicleTrackerDelay = (trackerId: number, newDelay: number) => {
+    global.exports['dg-police'].changeVehicleTrackerDelay(trackerId, newDelay);
+  };
+
   public removeTrackerFromVehicle = (trackerId: number) => {
     global.exports['dg-police'].removeTrackerFromVehicle(trackerId);
   };

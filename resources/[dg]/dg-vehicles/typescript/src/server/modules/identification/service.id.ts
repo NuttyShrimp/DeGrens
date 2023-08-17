@@ -3,16 +3,22 @@ import { getPlayerVehicleInfo } from 'db/repository';
 import { setEngineState } from '../../helpers/vehicle';
 import { fuelManager } from '../fuel/classes/fuelManager';
 import vinManager from './classes/vinmanager';
-import { handleVehicleLock } from 'modules/keys/service.keys';
+import { handleVehicleLockForNewVehicle } from 'modules/keys/service.keys';
 import plateManager from './classes/platemanager';
 import { getConfigByEntity, getConfigByModel } from 'modules/info/service.info';
 
 // set gets filled by vehicles without vin on entering, to disable engine when entered
 const vehiclesToDisableEngine = new Set<number>();
 
-export const validateVehicleVin = (vehicle: number, vehicleClass?: number) => {
+export const validateVehicleVin = (vehicle: number, vehicleClass?: number): { vin: string; isNewVehicle: boolean } => {
   const vehicleState = Entity(vehicle).state;
-  if (vehicleState.vin && vinManager.doesVinMatch(vehicleState.vin, vehicle)) return;
+  const vehStateVin = vehicleState.vin;
+  if (vehStateVin && vinManager.doesVinMatch(vehStateVin, vehicle)) {
+    return {
+      vin: vehStateVin,
+      isNewVehicle: false,
+    };
+  }
 
   // This is for vehicles new to the server
   const vin = vinManager.generateVin();
@@ -24,8 +30,13 @@ export const validateVehicleVin = (vehicle: number, vehicleClass?: number) => {
 
   fuelManager.registerVehicle(vehicle);
 
-  handleVehicleLock(vehicle, vehicleClass);
+  handleVehicleLockForNewVehicle(vehicle, vehicleClass);
   vehiclesToDisableEngine.add(vehicle);
+
+  return {
+    vin: vehStateVin,
+    isNewVehicle: true,
+  };
 };
 
 export const disableEngineForNewVehicle = (vehicle: number) => {
@@ -51,7 +62,7 @@ export const isPlayerVehicleOwner = async (playerId: number, vin: string) => {
   return ownerCid === playerCid;
 };
 
-export const getClassOfVehicleWithVin = async (vin: string): Promise<CarClass | undefined> => {
+export const getClassOfVehicleWithVin = async (vin: string): Promise<Vehicles.Class | undefined> => {
   // Try to get it from model of existing vehicle entity
   const vehicle = vinManager.getEntity(vin);
   if (vehicle) {

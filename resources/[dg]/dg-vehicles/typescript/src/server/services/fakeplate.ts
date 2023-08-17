@@ -2,13 +2,17 @@ import { Events, Notifications, Taskbar, Util, Inventory } from '@dgx/server';
 import { getPlayerVehicleInfo, updateVehicleFakeplate } from 'db/repository';
 import { getVinForVeh } from 'helpers/vehicle';
 import plateManager from 'modules/identification/classes/platemanager';
+import vinManager from 'modules/identification/classes/vinmanager';
 
 Events.onNet('vehicles:fakeplate:install', async (plyId, netId: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(netId);
   if (!vehicle || !DoesEntityExist(vehicle)) return;
 
   const vin = getVinForVeh(vehicle);
-  if (!vin) return;
+  if (!vin || !vinManager.isVinFromPlayerVeh(vin)) {
+    Notifications.add(plyId, 'Dit voertuig is niet van een burger', 'error');
+    return;
+  }
 
   const [cancelled] = await Taskbar.create(plyId, 'screwdriver', 'Monteren', 7500, {
     canCancel: true,

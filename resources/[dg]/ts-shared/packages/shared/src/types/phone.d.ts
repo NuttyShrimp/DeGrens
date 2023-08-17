@@ -24,5 +24,6 @@ declare namespace Phone {
     _data?: any;
     timer?: number;
     app?: string;
+    skipHasPhoneCheck?: boolean; // Option to skip phone check when adding notifications on charLoading because inventory will not be loaded yet
   }
 }

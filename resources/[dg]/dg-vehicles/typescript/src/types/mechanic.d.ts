@@ -12,13 +12,13 @@ declare namespace Mechanic {
         parts: Record<Vehicles.Upgrades.Tune, number>;
         stageModifier: Record<number, number>;
       };
-      classModifier: Record<CarClass, number>;
+      classModifier: Record<Vehicles.Class, number>;
     };
   }
 
   type PartType = 'repair' | 'tune';
 
-  type PartItem = { class: CarClass } & (
+  type PartItem = { class: Vehicles.Class } & (
     | { type: 'repair'; part: Service.Part }
     | { type: 'tune'; part: Vehicles.Upgrades.Tune; stage: number }
   );

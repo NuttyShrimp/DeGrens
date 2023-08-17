@@ -2,11 +2,13 @@ import { Events, Jobs, Sounds, Util } from '@dgx/server';
 import { trackersLogger } from './logger.trackers';
 import { buildTrackerSoundId } from './helpers.trackers';
 
-let currentTrackerId = 1;
+let currentTrackerId = 0;
 const activeTrackers = new Map<number, { vehicle: number; interval: NodeJS.Timer }>();
 
 export const addTrackerToVehicle = (vehicle: number, delay: number) => {
-  const trackerId = currentTrackerId++;
+  if (delay < 1000) throw new Error('Tracker delay must be at least 1000ms');
+
+  const trackerId = ++currentTrackerId;
 
   // first check if vehicle already has tracker, and remove
   for (const [tId, t] of activeTrackers) {
@@ -44,9 +46,35 @@ const emitTrackerLocationToPolice = (trackerId: number) => {
     emitNet('police:trackers:setCoords', plyId, trackerId, coords);
   });
 
-  // Replace with custom single beep sound that is louder, this one works fine but enginesound makes it unhearable
   const netId = NetworkGetNetworkIdFromEntity(vehicle);
-  Sounds.playOnEntity(buildTrackerSoundId(trackerId), 'PIN_BUTTON', 'ATM_SOUNDS', netId);
+  Sounds.playOnEntity(buildTrackerSoundId(trackerId), 'Count_Stop', 'GTAO_Speed_Race_Sounds', netId);
+};
+
+export const changeVehicleTrackerDelay = (trackerId: number, newDelay: number) => {
+  if (newDelay < 1000) throw new Error('Tracker delay must be at least 1000ms');
+
+  const tracker = activeTrackers.get(trackerId);
+  if (!tracker) {
+    trackersLogger.warn(`Tried to change tracker delay for unknown tracker ${trackerId}`);
+    return;
+  }
+
+  if (!DoesEntityExist(tracker.vehicle)) {
+    trackersLogger.warn(
+      `Tried to change tracker delay for tracker ${trackerId} but vehicle ${tracker.vehicle} does not exist`
+    );
+    return;
+  }
+
+  clearInterval(tracker.interval);
+  const newInterval = setInterval(() => {
+    emitTrackerLocationToPolice(trackerId);
+  }, newDelay);
+  tracker.interval = newInterval;
+
+  trackersLogger.silly(`Changing tracker ${trackerId} delay to ${newDelay}`);
+
+  return trackerId;
 };
 
 export const removeTrackerFromVehicle = (trackerId: number) => {
@@ -62,6 +90,7 @@ export const removeTrackerFromVehicle = (trackerId: number) => {
   }
 
   clearInterval(tracker.interval);
+  activeTrackers.delete(trackerId);
   trackersLogger.silly(`Removing tracker ${trackerId} from vehicle ${tracker.vehicle}`);
 
   Jobs.getPlayersForJob('police').forEach(plyId => {

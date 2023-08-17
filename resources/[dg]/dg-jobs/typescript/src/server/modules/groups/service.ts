@@ -43,9 +43,6 @@ export const changeJob = (groupId: string, job: string | null) => {
         icon: 'jobcenter',
       });
     }
-    group.getMembers().forEach(m => {
-      if (!m.serverId) return;
-    });
     return false;
   }
   return group.setActiveJob(job);

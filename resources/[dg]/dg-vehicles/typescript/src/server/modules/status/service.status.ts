@@ -44,7 +44,7 @@ export const setNativeStatus = (vehicle: number, status: Partial<Omit<Vehicle.Ve
 export const useRepairPart = async (
   src: number,
   type: Service.Part,
-  itemState: Inventory.ItemState<{ class: CarClass }>
+  itemState: Inventory.ItemState<{ class: Vehicles.Class }>
 ) => {
   const { entity: veh } = await RayCast.doRaycast(src);
   if (!veh || GetEntityType(veh) !== 2) {
@@ -62,7 +62,7 @@ export const useRepairPart = async (
   const vin = getVinForVeh(veh);
   if (!vin) return;
 
-  const partClass: CarClass = itemState.metadata?.class ?? 'D';
+  const partClass: Vehicles.Class = itemState.metadata?.class ?? 'D';
   if (vehInfo.class !== partClass) {
     Notifications.add(src, 'Dit onderdeel past niet op dit voertuig', 'error');
     return;

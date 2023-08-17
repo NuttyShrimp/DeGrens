@@ -13,6 +13,12 @@ import vinManager from '../modules/identification/classes/vinmanager';
 import { mainLogger } from '../sv_logger';
 import plateManager from 'modules/identification/classes/platemanager';
 import { TUNE_PARTS } from '../../shared/upgrades/constants.upgrades';
+import { getConfigByEntity } from 'modules/info/service.info';
+import { getVehicleHarnessUses } from 'modules/seatbelts/service.seatbelts';
+import { getCurrentVehicleStance } from 'modules/stances/service.stances';
+import { getVehicleWaxExpirationDate } from 'modules/carwash/service.carwash';
+import { getVehicleNosAmount } from 'modules/nos/service.nos';
+import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 
 RPC.register('vehicles:getVehicleByVin', (src, vin: string) => {
   mainLogger.silly(`Request to get vehicle by vin: ${vin}`);
@@ -111,3 +117,52 @@ global.exports('locateVehicleFromAdminMenu', (plyId: number, vin: string) => {
   const coords = Util.getEntityCoords(vehicle);
   Util.setWaypoint(plyId, coords);
 });
+
+// This export will take an entity handle, and insert said vehicle into player_vehicles table so it becomes owned
+global.exports(
+  'setExistingVehicleAsPlayerOwned',
+  async (vehicle: number, ownerCid: number, vinscratched = false): Promise<boolean> => {
+    if (!DoesEntityExist(vehicle)) {
+      mainLogger.warn(`[setExistingVehicleAsPlayerOwned] Vehicle does not exist`);
+      return false;
+    }
+    const vin = getVinForVeh(vehicle);
+    if (!vin) {
+      mainLogger.warn(`[setExistingVehicleAsPlayerOwned] Vehicle ${vehicle} does not have a vin`);
+      return false;
+    }
+    if (vinManager.isVinFromPlayerVeh(vin)) {
+      mainLogger.warn(`[setExistingVehicleAsPlayerOwned] ${vin} is already owned`);
+      return false;
+    }
+    const vehConfig = getConfigByEntity(vehicle);
+    if (!vehConfig) {
+      mainLogger.warn(`[setExistingVehicleAsPlayerOwned] Failed to get vehicle config`);
+      return false;
+    }
+
+    const plate = plateManager.getVehiclePlate(vehicle);
+    const cosmeticUpgrades = await upgradesManager.getAppliedVehicleCosmeticUpgrades(vehicle);
+
+    await insertNewVehicle(
+      vin,
+      ownerCid,
+      vehConfig.model,
+      plate,
+      null,
+      'out',
+      undefined,
+      getVehicleHarnessUses(vehicle) ?? 0,
+      getCurrentVehicleStance(vehicle),
+      getVehicleWaxExpirationDate(vin),
+      getVehicleNosAmount(vehicle),
+      cosmeticUpgrades,
+      vinscratched
+    );
+
+    vinManager.addPlayerVin(vin);
+    plateManager.addPlayerPlate(plate);
+
+    return true;
+  }
+);

@@ -1,6 +1,7 @@
-import { Peek, Sync, Vehicles } from '@dgx/client';
+import { Peek, RPC, Sync, Vehicles } from '@dgx/client';
 import { checkIllegalTunes } from './service.upgrades';
 import upgradesManager from './classes/manager.upgrades';
+import { getCurrentVehicle } from '@helpers/vehicle';
 
 global.exports('getCosmeticUpgrades', (vehicle: number) => {
   return upgradesManager.get('cosmetic', vehicle);
@@ -36,4 +37,10 @@ Peek.addGlobalEntry('vehicle', {
   // this prevents entry not being enabled because we use raycast hit coord on entity for distancecheck
   // which can scuff when moving around vehicle while keeping raycast center on vehicle
   distance: 10,
+});
+
+RPC.register('vehicles:upgrades:getCosmetic', (netId: number) => {
+  const vehicle = NetworkGetEntityFromNetworkId(netId);
+  if (!vehicle || !DoesEntityExist(vehicle)) return;
+  return upgradesManager.get('cosmetic', vehicle);
 });

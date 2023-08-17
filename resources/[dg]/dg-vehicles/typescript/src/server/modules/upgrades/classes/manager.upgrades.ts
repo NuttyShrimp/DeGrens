@@ -48,7 +48,7 @@ class UpgradesManager extends Util.Singleton<UpgradesManager>() {
   public getPricesForClass = (
     data:
       | {
-          carClass: CarClass;
+          carClass: Vehicles.Class;
           includeTax: boolean;
         }
       | { free: true }
@@ -76,7 +76,10 @@ class UpgradesManager extends Util.Singleton<UpgradesManager>() {
     );
   };
 
-  public calculatePriceForUpgrades = (carClass: CarClass, upgrades: Partial<Vehicles.Upgrades.Cosmetic.Upgrades>) => {
+  public calculatePriceForUpgrades = (
+    carClass: Vehicles.Class,
+    upgrades: Partial<Vehicles.Upgrades.Cosmetic.Upgrades>
+  ) => {
     const prices = this.getPricesForClass({ carClass, includeTax: false });
     let price = 0;
     for (const upgrade of Object.keys(upgrades) as Vehicles.Upgrades.Cosmetic.Key[]) {
@@ -105,7 +108,7 @@ class UpgradesManager extends Util.Singleton<UpgradesManager>() {
       return upgrades;
     }
 
-    const items = await Inventory.getItemsInInventory<{ class: CarClass; stage: number }>('tunes', vin);
+    const items = await Inventory.getItemsInInventory<{ class: Vehicles.Class; stage: number }>('tunes', vin);
     for (const item of items) {
       if (item.metadata?.class !== vehicleClass) continue;
 
@@ -142,6 +145,15 @@ class UpgradesManager extends Util.Singleton<UpgradesManager>() {
     if (!modelConfig) return false;
     if (modelConfig.type !== 'land') return true;
     return STANDARD_EXTRA_UPGRADES.includes(modelConfig.category);
+  };
+
+  public getAppliedVehicleCosmeticUpgrades = async (vehicle: number) => {
+    const cosmeticUpgrades = await Util.sendRPCtoEntityOwner<Vehicles.Upgrades.Cosmetic.Upgrades | undefined>(
+      vehicle,
+      'vehicles:upgrades:getCosmetic',
+      NetworkGetNetworkIdFromEntity(vehicle)
+    );
+    return cosmeticUpgrades ?? undefined;
   };
 }
 

@@ -14,3 +14,4 @@ import './fakeplate';
 import './enginesounds';
 import './holdbmx';
 import './bulletprooftires';
+import './vinscratch';

@@ -176,8 +176,8 @@ export class Util {
   /**
    * Shuffles immutable
    */
-  shuffleArray = (originalArray: any[]) => {
-    const array: any[] = [...originalArray];
+  shuffleArray = <T extends unknown[]>(originalArray: T): T => {
+    const array = [...originalArray] as T;
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];

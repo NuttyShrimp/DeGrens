@@ -12,8 +12,9 @@ RPC.register('vehicle:getArchType', (netId: number): string => {
 });
 
 RPC.register('vehicle:getClass', (vehNetId: number) => {
-  const veh = NetToVeh(vehNetId);
-  return !veh || !DoesEntityExist(veh) ? -1 : GetVehicleClass(veh);
+  const veh = NetworkGetEntityFromNetworkId(vehNetId);
+  if (!veh || !DoesEntityExist(veh)) return -1;
+  return GetVehicleClass(veh);
 });
 
 RPC.register('vehicles:isNearEngine', (vehNetId: number, distance: number, mustBeOpen = false) => {
@@ -35,3 +36,8 @@ RPC.register('vehicles:isNearDoor', (vehNetId: number, distance: number) => {
 });
 
 RPC.register('vehicles:getAllVehicleModels', () => GetAllVehicleModels());
+
+RPC.register('vehicles:getNumberOfSeats', (model: string | number) => {
+  const modelHash = typeof model === 'string' ? GetHashKey(model) : model;
+  return +GetVehicleModelNumberOfSeats(modelHash);
+});

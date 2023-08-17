@@ -40,5 +40,47 @@
   },
   "methrun": {
     "police": 5
+  },
+  "carboost_boost_D": {
+    "police": 0
+  },
+  "carboost_scratch_D": {
+    "police": 0
+  },
+  "carboost_boost_C": {
+    "police": 0
+  },
+  "carboost_scratch_C": {
+    "police": 1
+  },
+  "carboost_boost_B": {
+    "police": 0
+  },
+  "carboost_scratch_B": {
+    "police": 2
+  },
+  "carboost_boost_A": {
+    "police": 0
+  },
+  "carboost_scratch_A": {
+    "police": 3
+  },
+  "carboost_boost_A+": {
+    "police": 1
+  },
+  "carboost_scratch_A+": {
+    "police": 4
+  },
+  "carboost_boost_S": {
+    "police": 5
+  },
+  "carboost_scratch_S": {
+    "police": 5
+  },
+  "carboost_boost_X": {
+    "police": 6
+  },
+  "carboost_scratch_X": {
+    "police": 6
   }
 }

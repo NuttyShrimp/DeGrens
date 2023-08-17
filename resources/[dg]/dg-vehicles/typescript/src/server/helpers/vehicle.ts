@@ -20,6 +20,8 @@ import {
   mergeUpgrades,
 } from '@shared/upgrades/service.upgrades';
 import { setVehicleEngineSound } from 'services/enginesounds';
+import { setVehicleAsVinScratched } from 'services/vinscratch';
+import { setVehicleDoorsLocked } from 'modules/keys/service.keys';
 
 /**
  * Spawn a vehicle
@@ -66,7 +68,7 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   const modelHash = GetHashKey(data.model);
 
   // const vehicle = CreateVehicleServerSetter(modelHash, modelType, position.x, position.y, position.z + 0.5, position.w); // 0.5 offset to avoid ground clipping
-  const vehicle = CreateVehicle(modelHash, position.x, position.y, position.z + 0.5, position.w, true, true);
+  const vehicle = CreateVehicle(modelHash, position.x, position.y, position.z + 0.4, position.w, true, true);
   await Util.awaitEntityExistence(vehicle);
 
   if (!vehicle || !DoesEntityExist(vehicle)) {
@@ -106,6 +108,11 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
 
   assignModelConfig(vehicle);
 
+  // door locks
+  if (data.doorsLocked !== undefined) {
+    setVehicleDoorsLocked(vehicle, data.doorsLocked);
+  }
+
   Util.awaitOwnership(vehicle).then(owner => {
     if (!owner) return;
 
@@ -124,11 +131,6 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     // engine state
     if (data.engineState !== undefined) {
       setEngineState(vehicle, data.engineState, true);
-    }
-
-    // door locks
-    if (data.doorsLocked !== undefined) {
-      Vehicles.setVehicleDoorsLocked(vehicle, data.doorsLocked);
     }
 
     cleanVehicle(vehicle);
@@ -173,10 +175,10 @@ export const spawnOwnedVehicle = async (
   // If status is all null generate a perfect status and save it
   if (Object.values(vehicleInfo.status).every(v => v === null)) {
     // this really should never happen because we insert status when inserting new vehicle
-    setImmediate(async () => {
-      vehicleInfo.status = await getNativeStatus(vehicle, vin);
+    getNativeStatus(vehicle, vin).then(status => {
+      vehicleInfo.status = status;
       vehicleInfo.status.fuel = 100;
-      await insertVehicleStatus(vin, vehicleInfo.status);
+      insertVehicleStatus(vin, vehicleInfo.status);
     });
   } else {
     // Without timeout it does not wanna apply, probably because also doing mods at same moment
@@ -184,6 +186,10 @@ export const spawnOwnedVehicle = async (
       const vehicleStatus = vehicleInfo.status;
       setNativeStatus(vehicle, vehicleStatus as Vehicle.VehicleStatus);
     }, 500);
+  }
+
+  if (vehicleInfo.vinscratched) {
+    setVehicleAsVinScratched(vehicle);
   }
 
   if (vehicleInfo.wax) {
@@ -210,11 +216,7 @@ export const getVinForVeh = (veh: number): string | null => {
     mainLogger.warn('Cannot get VIN of nonexistent vehicle');
     return null;
   }
-  const vehState = Entity(veh).state;
-  if (!vehState?.vin) {
-    validateVehicleVin(veh);
-  }
-  return vehState?.vin ?? null;
+  return validateVehicleVin(veh).vin;
 };
 
 export const getVinForNetId = (netId: number): string | null => {

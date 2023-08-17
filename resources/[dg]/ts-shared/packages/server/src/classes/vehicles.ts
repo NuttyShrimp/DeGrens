@@ -1,5 +1,7 @@
+import { Util } from './index';
+
 class Vehicles {
-  onLockpick = (handler: (plyId: number, vehicle: number, type: 'door' | 'hotwire') => void) => {
+  onLockpick = (handler: (plyId: number, vehicle: number, type: Vehicles.LockpickType) => void) => {
     on('vehicles:lockpick', handler);
   };
 
@@ -19,8 +21,8 @@ class Vehicles {
     return global.exports['dg-vehicles'].getVinForNetId(netId);
   };
 
-  giveKeysToPlayer = (plyId: number, vehNetId: number) => {
-    global.exports['dg-vehicles'].giveKeysToPlayer(plyId, vehNetId);
+  giveKeysToPlayer = (plyId: number, vehicle: number) => {
+    global.exports['dg-vehicles'].giveKeysToPlayer(plyId, vehicle);
   };
 
   setFuelLevel = (vehicle: number, fuelLevel: number) => {
@@ -86,28 +88,12 @@ class Vehicles {
     global.exports['dg-vehicles'].doAdminFix(vehicle);
   };
 
-  getVehicleDoorsLocked = (vehicle: number) => {
-    return GetVehicleDoorLockStatus(vehicle) === 2;
+  getVehicleDoorsLocked = (vehicle: number): boolean => {
+    return global.exports['dg-vehicles'].getVehicleDoorsLocked(vehicle);
   };
 
   setVehicleDoorsLocked = (vehicle: number, locked: boolean) => {
-    let triesRemaining = 3;
-
-    const t = setInterval(() => {
-      if (triesRemaining === 0 || !DoesEntityExist(vehicle)) {
-        clearInterval(t);
-        return;
-      }
-
-      const currentlyLocked = this.getVehicleDoorsLocked(vehicle);
-      if (currentlyLocked === locked) {
-        clearInterval(t);
-        return;
-      }
-
-      SetVehicleDoorsLocked(vehicle, locked ? 2 : 1);
-      triesRemaining--;
-    }, 250);
+    global.exports['dg-vehicles'].setVehicleDoorsLocked(vehicle, locked);
   };
 
   blockVinInBennys = (vin: string) => {
@@ -116,6 +102,10 @@ class Vehicles {
 
   setVehicleCannotBeLockpicked = (vin: string, cannotBeLockpicked: boolean, rejectMessage?: string) => {
     global.exports['dg-vehicles'].setVehicleCannotBeLockpicked(vin, cannotBeLockpicked, rejectMessage);
+  };
+
+  skipDispatchOnLockpickForVin = (vin: string, skipDispatch: boolean) => {
+    global.exports['dg-vehicles'].skipDispatchOnLockpickForVin(vin, skipDispatch);
   };
 
   openEngineSoundMenu = (plyId: number) => {
@@ -140,6 +130,37 @@ class Vehicles {
 
   openGarage = (plyId: number, garageId: string, shared = false): Promise<void> => {
     return global.exports['dg-vehicles'].openGarage(plyId, garageId, shared);
+  };
+
+  public isVehicleVinScratched = (vehicle: number) => {
+    return global.exports['dg-vehicles'].isVehicleVinScratched(vehicle);
+  };
+
+  public doesPlayerHaveVinscratchedVehicleOfClass = (cid: number, vehicleClass: Vehicles.Class): Promise<boolean> => {
+    return global.exports['dg-vehicles'].doesPlayerHaveVinscratchedVehicleOfClass(cid, vehicleClass);
+  };
+
+  public awaitInfoLoaded = () => {
+    return Util.awaitCondition(
+      () => GetResourceState('dg-vehicles') === 'started' && global.exports['dg-vehicles']?.isInfoLoaded?.(),
+      false
+    );
+  };
+
+  public getCarboostVehiclePool = (): Partial<Record<Vehicles.Class, string[]>> => {
+    return global.exports['dg-vehicles'].getCarboostVehiclePool();
+  };
+
+  public addMaxPerformanceTunesForVin = (vin: string, vehicleClass: Vehicles.Class) => {
+    global.exports['dg-vehicles'].addMaxPerformanceTunesForVin(vin, vehicleClass);
+  };
+
+  public setExistingVehicleAsPlayerOwned = (
+    vehicle: number,
+    ownerCid: number,
+    vinscratched?: boolean
+  ): Promise<boolean> => {
+    return global.exports['dg-vehicles'].setExistingVehicleAsPlayerOwned(vehicle, ownerCid, vinscratched);
   };
 }
 

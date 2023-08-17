@@ -1600,3 +1600,110 @@ devData.realEstateProperties = [
     },
   },
 ] as Phone.RealEstate.Property[];
+
+devData.carboosting = {
+  signedUp: true,
+  reputation: {
+    percentage: 50,
+    currentClass: 'C',
+    nextClass: 'B',
+  },
+  contracts: [
+    {
+      id: 1,
+      class: 'A',
+      brand: 'BMW',
+      name: 'M4 Competition',
+      expirationTime: 1691766386853,
+      disabledActions: {
+        boost: false,
+        scratch: false,
+        decline: false,
+      },
+      price: {
+        boost: 0,
+        scratch: 10,
+      },
+    },
+    {
+      id: 2,
+      class: 'X',
+      brand: 'Mclaren',
+      name: '720s',
+      expirationTime: 1691766697190,
+      disabledActions: {
+        boost: false,
+        scratch: false,
+        decline: true,
+      },
+      price: {
+        boost: 20,
+        scratch: 40,
+      },
+    },
+    {
+      id: 3,
+      class: 'D',
+      brand: 'Lumbergumber',
+      name: 'Aventador',
+      expirationTime: 1691766697190,
+      disabledActions: {
+        boost: false,
+        scratch: true,
+        decline: false,
+      },
+      price: {
+        boost: 20,
+        scratch: 40,
+      },
+    },
+    {
+      id: 4,
+      class: 'C',
+      brand: 'Volvo',
+      name: 'V90 Liberty Walk Widebody Tuned Insane Stancing Politie',
+      expirationTime: 1691766697190,
+      disabledActions: {
+        boost: false,
+        scratch: true,
+        decline: false,
+      },
+      price: {
+        boost: 20,
+        scratch: 40,
+      },
+    },
+    {
+      id: 5,
+      class: 'B',
+      brand: 'Audi',
+      name: 'RS6',
+      expirationTime: 1691766697190,
+      disabledActions: {
+        boost: true,
+        scratch: false,
+        decline: false,
+      },
+      price: {
+        boost: 20,
+        scratch: 40,
+      },
+    },
+    {
+      id: 6,
+      class: 'A+',
+      brand: 'Ocelot',
+      name: 'Jugular',
+      expirationTime: 1691766697190,
+      disabledActions: {
+        boost: true,
+        scratch: false,
+        decline: false,
+      },
+      price: {
+        boost: 20,
+        scratch: 40,
+      },
+    },
+  ],
+} satisfies Laptop.Carboosting.State;

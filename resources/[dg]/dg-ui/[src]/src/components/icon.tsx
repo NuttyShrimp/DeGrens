@@ -30,12 +30,7 @@ export const Icon: FC<React.PropsWithChildren<IconProps>> = props => {
   if (props.lib == 'img') {
     return (
       <div style={{ width: props.size }}>
-        <img
-          src={props.name}
-          alt={'Icon img'}
-          style={{ width: '100%', cursor: props.onClick ? 'poiner' : 'auto' }}
-          onClick={props.onClick}
-        />
+        <img src={props.name} alt={'Icon img'} style={{ width: '100%' }} onClick={props.onClick} />
       </div>
     );
   }

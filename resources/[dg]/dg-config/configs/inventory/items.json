@@ -2661,5 +2661,41 @@
     },
     "useable": true,
     "decayRate": 129600
+  },
+  {
+    "name": "car_hack_tool",
+    "label": "RF Interceptor",
+    "decayRate": 72000,
+    "image": "car_hack_tool.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "useable": true,
+    "markedForSeizure": true
+  },
+  {
+    "name": "gate_unlock_tool",
+    "label": "Anti Gatekeeper",
+    "decayRate": 72000,
+    "image": "gate_unlock_tool.png",
+    "size": {
+      "x": 3,
+      "y": 2
+    },
+    "useable": true,
+    "markedForSeizure": true
+  },
+  {
+    "name": "tracker_disabler",
+    "label": "Tracker Disabler",
+    "decayRate": 30240,
+    "image": "tracker_disabler.png",
+    "size": {
+      "x": 3,
+      "y": 2
+    },
+    "useable": true,
+    "markedForSeizure": true
   }
 ]

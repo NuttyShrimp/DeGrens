@@ -41,7 +41,9 @@ declare type ReputationType =
   | 'mechanic_crafting'
   | 'cornersell'
   | 'blazeit_crafting'
-  | 'kingpills_crafting';
+  | 'kingpills_crafting'
+  | 'carboost_crafting'
+  | 'carboosting';
 
 declare type BadgeType = 'police';
 

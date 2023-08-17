@@ -24,11 +24,12 @@ export const VehicleList: FC<{ fetchVehicles: () => void }> = ({ fetchVehicles }
     nuiAction('phone/garage/track', { vin });
   };
 
-  const recoverVehicle = (vin: string) => {
-    nuiAction('phone/garage/recover', { vin });
+  const recoverVehicle = (veh: Phone.Garage.Vehicle) => {
+    nuiAction('phone/garage/recover', { vin: veh.vin });
   };
 
   const sellVehicle = (veh: Phone.Garage.Vehicle) => {
+    if (veh.vinscratched) return;
     showFormModal(<SellModal vin={veh.vin} name={veh.name} fetchVehicles={fetchVehicles} />);
   };
 
@@ -79,21 +80,21 @@ export const VehicleList: FC<{ fetchVehicles: () => void }> = ({ fetchVehicles }
                 <Button.Primary size={'small'} onClick={() => trackVehicle(v.vin)}>
                   TRACK
                 </Button.Primary>
-                {v.state === 'out' && (
-                  <MuiButton
-                    variant={'contained'}
-                    size={'small'}
-                    onClick={() => recoverVehicle(v.vin)}
-                    style={{
-                      backgroundColor: baseStyle.tertiary.normal,
-                    }}
-                  >
-                    RECOVER
-                  </MuiButton>
+                <MuiButton
+                  variant={'contained'}
+                  size={'small'}
+                  onClick={() => recoverVehicle(v)}
+                  style={{
+                    backgroundColor: baseStyle.tertiary.normal,
+                  }}
+                >
+                  RECOVER
+                </MuiButton>
+                {!v.vinscratched && (
+                  <Button.Secondary size={'small'} onClick={() => sellVehicle(v)}>
+                    SELL
+                  </Button.Secondary>
                 )}
-                <Button.Secondary size={'small'} onClick={() => sellVehicle(v)}>
-                  SELL
-                </Button.Secondary>
               </div>
             </>
           }

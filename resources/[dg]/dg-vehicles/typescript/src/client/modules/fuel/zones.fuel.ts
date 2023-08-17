@@ -482,10 +482,11 @@ setImmediate(() => {
       scale: 0.6,
     });
   });
-  PolyZone.onEnter('gasstation', () => {
-    inZone = true;
-  });
-  PolyZone.onLeave('gasstation', () => {
-    inZone = false;
-  });
+});
+
+PolyZone.onEnter('gasstation', () => {
+  inZone = true;
+});
+PolyZone.onLeave('gasstation', () => {
+  inZone = false;
 });

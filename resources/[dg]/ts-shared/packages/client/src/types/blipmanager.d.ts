@@ -4,6 +4,7 @@ declare namespace NBlipManager {
   type Info = {
     coords: Vec3;
     color?: number;
+    alpha?: number;
     display?: number;
   } & (
     | {

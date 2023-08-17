@@ -183,3 +183,12 @@ export const checkMissingModels = async (plyId: number) => {
 
   missingModelsChecked = true;
 };
+
+export const getCarboostVehiclePool = () => {
+  const pool: Partial<Record<Vehicles.Class, string[]>> = {};
+  for (const [_, info] of vehicleInfo) {
+    if (!info.inCarboostPool) continue;
+    (pool[info.class] ??= []).push(info.model);
+  }
+  return pool;
+};

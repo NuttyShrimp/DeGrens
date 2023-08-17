@@ -57,7 +57,7 @@ export const doVehicleShopTransaction = async (transaction: {
   return transactionSuccesful;
 };
 
-export const getCategoryLabel = (categorisation: ModelCategorisation, category: Category) => {
+export const getCategoryLabel = (categorisation: ModelCategorisation, category: Vehicles.Category) => {
   switch (categorisation) {
     case 'brand':
       return category;

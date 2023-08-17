@@ -1,5 +1,6 @@
 import { Keys, Notifications, PolyZone, RPC, UI, BlipManager } from '@dgx/client';
 import { getCurrentVehicle, isDriver } from '@helpers/vehicle';
+import { isVehicleVinScratched } from 'services/vinscratch';
 
 // This shit does not matter so no fucking config on server for this stupid ass bitch positiuon
 const quicksellPosition: { position: Vec3; heading: number } = {
@@ -50,6 +51,11 @@ Keys.onPressDown('GeneralUse', async () => {
   const isOwner = await RPC.execute<boolean>('vehicles:isOwnerOfVehicle', netId);
   if (!isOwner) {
     Notifications.add('Je bent niet de eigenaar van dit voertuig', 'error');
+    return;
+  }
+
+  if (isVehicleVinScratched(veh)) {
+    Notifications.add('Je kan dit voertuig niet verkopen', 'error');
     return;
   }
 

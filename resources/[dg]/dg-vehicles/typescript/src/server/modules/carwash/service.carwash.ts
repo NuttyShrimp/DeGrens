@@ -65,3 +65,7 @@ const removeVehicleWax = (vin: string) => {
   updateVehicleWax(vin, null);
   vehiclesWithWax.delete(vin);
 };
+
+export const getVehicleWaxExpirationDate = (vin: string) => {
+  return vehiclesWithWax.get(vin)?.expirationDate;
+};

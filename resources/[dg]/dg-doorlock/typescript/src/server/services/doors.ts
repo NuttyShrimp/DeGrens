@@ -6,6 +6,8 @@ let doorsLoaded = false;
 const doors = new Map<number, Doorlock.DoorData>(); // After loading doors, this should NEVER change
 const doorStates = new Map<number, boolean>(); // We keep state seperate to not constantly modify the doorconfigdata
 
+const nameToDoorId = new Map<string, number>();
+
 export const areDoorsLoaded = () => doorsLoaded;
 
 export const loadDoors = async () => {
@@ -18,6 +20,7 @@ export const loadDoors = async () => {
       // First we generate a correct amount of ids for every model in this config
       // This way we can instantly give every door the correct linkedDoors
       const doorIds = [...new Array(doorConfig.doors.length)].map(() => generateDoorId());
+      if (doorIds.length === 0) return;
 
       // For every doormodel per config we add a door to the map
       for (let i = 0; i < doorIds.length; i++) {
@@ -39,8 +42,18 @@ export const loadDoors = async () => {
           allowThroughWalls: doorConfig.allowThroughWalls ?? false,
           lockpickable: doorConfig.lockpickable ?? false,
           thermiteable: doorConfig.thermiteable,
+          canUseGateUnlock: doorConfig.canUseGateUnlock ?? false,
           linkedIds: [...doorIds], // This array includes all the ids of doors to change state (including itself)
         });
+      }
+
+      // we only set for one doormodel, doesnt matter which one because changeState will change all linked doors
+      if (doorConfig.name) {
+        if (nameToDoorId.has(doorConfig.name)) {
+          mainLogger.error(`Duplicate doorname ${doorConfig.name}`);
+        } else {
+          nameToDoorId.set(doorConfig.name, doorIds[0]);
+        }
       }
     });
 
@@ -79,10 +92,14 @@ export const changeDoorState = (doorId: number, state: boolean) => {
     return;
   }
 
+  const clientData: { id: number; state: boolean }[] = [];
+
   door.linkedIds.forEach(id => {
     doorStates.set(id, state);
-    Events.emitNet('doorlock:client:changeDoorState', -1, id, state);
+    clientData.push({ id, state });
   });
+
+  Events.emitNet('doorlock:client:changeDoorState', -1, clientData);
 
   if (door.playSound) {
     const soundName = state ? 'Remote_Control_Close' : 'Remote_Control_Open';
@@ -90,12 +107,7 @@ export const changeDoorState = (doorId: number, state: boolean) => {
   }
 };
 
-export const getDoorIdByName = (doorName: string) => {
-  for (const [id, data] of doors) {
-    if (data.name !== doorName) continue;
-    return id;
-  }
-};
+export const getDoorIdByName = (doorName: string) => nameToDoorId.get(doorName);
 
 export const getDoorById = (doorId: number) => doors.get(doorId);
 

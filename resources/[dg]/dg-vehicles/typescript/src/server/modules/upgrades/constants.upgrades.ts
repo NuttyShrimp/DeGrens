@@ -1,4 +1,4 @@
-export const STANDARD_EXTRA_UPGRADES: Category[] = [
+export const STANDARD_EXTRA_UPGRADES: Vehicles.Category[] = [
   'helicopters',
   'planes',
   'boats',

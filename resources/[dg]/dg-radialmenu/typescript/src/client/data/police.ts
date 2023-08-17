@@ -1,4 +1,4 @@
-import { Jobs, Police, RPC } from '@dgx/client';
+import { Police, RPC } from '@dgx/client';
 
 export const police: RadialMenu.Entry[] = [
   {
@@ -118,5 +118,17 @@ export const police: RadialMenu.Entry[] = [
     event: 'police:barriers:create',
     shouldClose: true,
     isEnabled: ({ currentVehicle }) => !currentVehicle,
+  },
+  {
+    title: 'Voertuig Vorderen',
+    icon: 'car',
+    type: 'dgxServer',
+    event: 'vehicles:keys:policeTakeKeys',
+    shouldClose: true,
+    isEnabled: ({ currentVehicle, raycastEntity }) => {
+      if (currentVehicle && DoesEntityExist(currentVehicle)) return true;
+      if (raycastEntity && DoesEntityExist(raycastEntity) && GetEntityType(raycastEntity) === 2) return true;
+      return false;
+    },
   },
 ];

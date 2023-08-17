@@ -1,77 +1,19 @@
-import { Events, Hospital, Keys, Minigames, Peek, Police, Util, Vehicles } from '@dgx/client';
+import { Events, Hospital, Keys, Peek, Police, Util } from '@dgx/client';
 import { getCurrentVehicle } from '@helpers/vehicle';
 import { setClassesWithoutLock, toggleVehicleLock } from './service.keys';
 import { hasVehicleKeys } from './cache.keys';
-
-let animThread: NodeJS.Timer | null = null;
-const lockpickAnimations = {
-  door: {
-    animDict: 'veh@break_in@0h@p_m_one@',
-    play: () => {
-      const doAnim = () => {
-        TaskPlayAnim(
-          PlayerPedId(),
-          'veh@break_in@0h@p_m_one@',
-          'low_force_entry_ds',
-          3.0,
-          3.0,
-          -1.0,
-          17,
-          0,
-          false,
-          false,
-          false
-        );
-      };
-
-      doAnim();
-      animThread = setInterval(doAnim, 1000);
-    },
-    stop: () => {
-      if (animThread !== null) {
-        clearInterval(animThread);
-        animThread = null;
-      }
-      StopAnimTask(PlayerPedId(), 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 1.0);
-    },
-  },
-  hotwire: {
-    animDict: 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
-    play: () => {
-      TaskPlayAnim(
-        PlayerPedId(),
-        'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
-        'machinic_loop_mechandplayer',
-        8.0,
-        8.0,
-        -1,
-        17,
-        0,
-        false,
-        false,
-        false
-      );
-    },
-    stop: () => {
-      const ped = PlayerPedId();
-      const vehData = Vehicles.getCurrentVehicleInfo(); // the animcancel SOMEHOW tps ped out of veh
-      StopAnimTask(ped, 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@', 'machinic_loop_mechandplayer', 1);
-      if (vehData) {
-        SetPedIntoVehicle(ped, vehData.vehicle, vehData.seat);
-      }
-    },
-  },
-};
+import { LOCKPICK_TYPE_DATA } from './constants.keys';
 
 Events.onNet(
   'vehicles:keys:startLockpick',
-  async (type: keyof typeof lockpickAnimations, id: string, amount: number, diff: { speed: number; size: number }) => {
-    const animData = lockpickAnimations[type];
-    await Util.loadAnimDict(animData.animDict);
-    animData.play();
-    const lockpickResult = await Minigames.keygame(amount, diff.speed, diff.size);
-    animData.stop();
-    Events.emitNet('vehicles:keys:finishLockPick', type, id, lockpickResult);
+  async (lockpickType: Vehicles.LockpickType, id: string, minigameData?: any) => {
+    const typeData = LOCKPICK_TYPE_DATA[lockpickType];
+
+    const startData = typeData.start ? await typeData.start() : undefined;
+    const success = await typeData.minigame(minigameData);
+    if (typeData.end) await typeData.end(startData);
+
+    Events.emitNet('vehicles:keys:finishLockPick', id, success);
   }
 );
 
@@ -80,7 +22,7 @@ Keys.onPressDown('vehicle-lock', () => {
   toggleVehicleLock();
 });
 
-Keys.register('vehicle-lock', 'Toggle auto slot', 'L');
+Keys.register('vehicle-lock', '(vehicle) toggle auto slot', 'L');
 
 on('vehicles:keys:share', () => {
   const veh = getCurrentVehicle();
