@@ -144,7 +144,7 @@ class Util extends UtilShared {
   isAnyPedInRange = (coords: Vec3, range: number, onlyPlayers = false) => {
     const allPeds: number[] = GetAllPeds();
     const anyInRange = allPeds
-      .filter(ped => !onlyPlayers || IsPedAPlayer(ped))
+      .filter(ped => DoesEntityExist(ped) && (!onlyPlayers || IsPedAPlayer(ped)))
       .some(ped => this.getEntityCoords(ped).distance(coords) <= range);
     return anyInRange;
   };
