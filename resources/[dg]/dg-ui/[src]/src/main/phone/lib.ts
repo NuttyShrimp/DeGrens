@@ -150,9 +150,11 @@ const sortNotification = (s1: Phone.Notifications.Notification, s2: Phone.Notifi
 export const addNotification = (
   notification: Omit<Phone.Notifications.Notification, 'icon'> & { icon: string | Phone.Notifications.Icon }
 ) => {
-  const charState = useMainStore.getState().character;
-  if (!charState.hasPhone) {
-    return;
+  if (!notification.skipHasPhoneCheck) {
+    const charState = useMainStore.getState().character;
+    if (!charState.hasPhone) {
+      return;
+    }
   }
 
   // Prevent duplicate notifications

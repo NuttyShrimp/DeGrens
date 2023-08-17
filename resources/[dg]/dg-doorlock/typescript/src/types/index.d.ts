@@ -19,6 +19,7 @@ declare namespace Doorlock {
         | 'noAnimation'
         | 'playSound'
         | 'lockpickable'
+        | 'canUseGateUnlock'
         | 'forceOpen'
         | 'allowThroughWalls'
       >
@@ -48,6 +49,8 @@ declare namespace Doorlock {
     lockpickable?: boolean;
     // Makes door thermiteable
     thermiteable?: Thermite;
+    // Makes door able to be opened using gate_unlock_tool (Defaults to false)
+    canUseGateUnlock?: boolean;
   };
 
   type ClientData = Record<number, DoorData & { locked: boolean }>;

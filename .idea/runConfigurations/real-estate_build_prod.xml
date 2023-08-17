@@ -1,0 +1,24 @@
+
+  <component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="real-estate:build prod" type="js.build_tools.npm" folderName="real-estate">
+      <package-json value="$PROJECT_DIR$/resources/[dg]/dg-real-estate/typescript/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2">
+        <option name="NpmBeforeRunTask" enabled="true">
+          <package-json value="$PROJECT_DIR$/resources/[dg]/dg-real-estate/typescript/package.json" />
+          <command value="run" />
+          <scripts>
+            <script value="lint" />
+          </scripts>
+          <node-interpreter value="project" />
+          <envs />
+        </option>
+      </method>
+    </configuration>
+  </component>
+  

@@ -13,9 +13,7 @@ import { getConfigByModel } from '../modules/info/service.info';
 import { charModule } from 'helpers/core';
 
 Events.onNet('vehicles:server:app:trackVehicle', async (src, vin: string) => {
-  if (!vinManager.doesVinExist(vin) || !vinManager.isVinFromPlayerVeh(vin)) {
-    return;
-  }
+  if (!vinManager.doesVinExist(vin) || !vinManager.isVinFromPlayerVeh(vin)) return;
   const vehicle = await getPlayerVehicleInfo(vin);
   if (!vehicle) return;
   const cid = Util.getCID(src);
@@ -24,15 +22,24 @@ Events.onNet('vehicles:server:app:trackVehicle', async (src, vin: string) => {
     Admin.ACBan(src, `Requested location for non-owned vehicle`);
     return;
   }
-  if (vehicle.state === 'impounded') return;
+
+  if (vehicle.state === 'impounded') {
+    Notifications.add(src, 'Dit voertuig staat in beslag');
+    return;
+  }
+
   if (vehicle.state === 'out') {
     // Mark vehicle
     const vehNetId = vinManager.getNetId(vin);
-    if (!vehNetId) return;
+    if (!vehNetId) {
+      Notifications.add(src, 'Kon voertuig niet traceren');
+      return;
+    }
     const vehCoords = Util.getEntityCoords(NetworkGetEntityFromNetworkId(vehNetId));
     Events.emitNet('vehicles:server:app:setTrackedBlip', src, vehCoords);
     return;
   }
+
   const parkingSpot = getFirstGarageSpot(vehicle.garageId);
   if (!parkingSpot) return;
   Events.emitNet('vehicles:server:app:setTrackedBlip', src, parkingSpot);
@@ -48,6 +55,7 @@ Events.onNet('vehicles:server:app:sellVehicle', async (src, targetCID: number, v
   if (!targetServerId) return;
   const vehicle = await getPlayerVehicleInfo(vin);
   if (!vehicle) return;
+  if (vehicle.vinscratched) return;
   const cid = Util.getCID(src);
   if (!cid) return;
   if (cid === targetCID) {
@@ -112,6 +120,7 @@ RPC.register('vehicles:server:app:getVehicles', async src => {
       body: veh.status.body,
       plate: veh.plate,
       parking: vehicleGarage?.name ?? 'Unknown Garage',
+      vinscratched: veh.vinscratched,
     });
   });
   return vehicles;

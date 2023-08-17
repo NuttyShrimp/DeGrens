@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 patchedDependencies:
   '@jgoz/esbuild-plugin-typecheck@3.0.3':
     hash: ndm3sazgzt4xnxojebp6ovabj4
@@ -338,7 +334,7 @@ importers:
         version: 5.1.6
       vite:
         specifier: ^4.4.9
-        version: 4.4.9(@types/node@16.18.34)(sass@1.65.1)
+        version: 4.4.9(@types/node@16.18.34)
 
   resources/[dg]/dg-blackout/typescript:
     devDependencies:
@@ -389,6 +385,33 @@ importers:
         version: 7.2.0(ts-node@10.9.1)(typescript@5.1.6)
 
   resources/[dg]/dg-business/typescript:
+    devDependencies:
+      '@dgx/client':
+        specifier: workspace:*
+        version: link:../../ts-shared/packages/client
+      '@dgx/server':
+        specifier: workspace:*
+        version: link:../../ts-shared/packages/server
+      '@dgx/shared':
+        specifier: workspace:*
+        version: link:../../ts-shared/packages/shared
+      '@dgx/tsup-config':
+        specifier: workspace:*
+        version: link:../../../../packages/config/tsup
+      esbuild:
+        specifier: ^0.19.2
+        version: 0.19.2
+      logger:
+        specifier: workspace:*
+        version: link:../../../../packages/logger
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../../../packages/tsconfig
+      tsup:
+        specifier: ^7.2.0
+        version: 7.2.0(ts-node@10.9.1)(typescript@5.1.6)
+
+  resources/[dg]/dg-carboosting/typescript:
     devDependencies:
       '@dgx/client':
         specifier: workspace:*
@@ -1782,7 +1805,7 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       '@jridgewell/gen-mapping': 0.3.3
-      '@jridgewell/trace-mapping': 0.3.18
+      '@jridgewell/trace-mapping': 0.3.19
 
   /@anatine/esbuild-decorators@0.2.19(esbuild@0.19.2):
     resolution: {integrity: sha512-pyj6ULyMacyzpDqlnbS2OCkOqxcVgk8IqiTMRJ5CrsF8Yl1azvlX/AM6xWR8UzHKUYDlWOw5mOpos3+7KKR0Lw==}
@@ -1915,7 +1938,7 @@ packages:
     dependencies:
       '@babel/types': 7.22.3
       '@jridgewell/gen-mapping': 0.3.3
-      '@jridgewell/trace-mapping': 0.3.18
+      '@jridgewell/trace-mapping': 0.3.19
       jsesc: 2.5.2
     dev: true
 
@@ -4667,7 +4690,6 @@ packages:
   /@jridgewell/resolve-uri@3.1.1:
     resolution: {integrity: sha512-dSYZh7HhCDtCKm4QakX0xFpsRDqjjtZf/kjI/v3T3Nwt5r8/qz/M19F9ySyOqU94SXBmeG9ttTul+YnR4LOxFA==}
     engines: {node: '>=6.0.0'}
-    dev: false
 
   /@jridgewell/set-array@1.1.2:
     resolution: {integrity: sha512-xnkseuNADM0gt2bs+BvhO0p78Mk762YnZdsuzFV018NoG1Sj1SCQvpSqa7XUaTam5vAGasABV9qXASMKnFMwMw==}
@@ -4697,7 +4719,6 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
-    dev: false
 
   /@jridgewell/trace-mapping@0.3.9:
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
@@ -14700,6 +14721,42 @@ packages:
       - typescript
     dev: true
 
+  /vite@4.4.9(@types/node@16.18.34):
+    resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      '@types/node': 16.18.34
+      esbuild: 0.18.20
+      postcss: 8.4.27
+      rollup: 3.28.0
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
   /vite@4.4.9(@types/node@16.18.34)(sass@1.65.1):
     resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -15287,3 +15344,7 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

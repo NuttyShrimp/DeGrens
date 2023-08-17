@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enkele kofi voertuigen toegevoegd
 - Nieuwe wapens toegevoegd
 - Nieuwe overval toegevoegd
+- Politie kan nu een voertuig vorderen zonder dat ze een lockpick nodig hebben (Via F1 > Politie)
+- Carboosting toegevoegd
 
 ### Changed
 

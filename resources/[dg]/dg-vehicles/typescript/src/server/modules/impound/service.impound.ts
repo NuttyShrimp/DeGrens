@@ -1,6 +1,7 @@
 import { Business, Config, Financials, Jobs, Notifications, Phone, Police, SQL, UI, Util } from '@dgx/server';
 import {
   checkVehicleStrikes,
+  deleteOwnedVehicle,
   doVehicleForfeiture,
   getImpoundedVehicle,
   getImpoundedVehicles,
@@ -51,24 +52,35 @@ export const openReasonSelectionMenu = (src: number, vehNetId: number) => {
 export const impoundVehicle = async (src: number, reason: Depot.Reason, veh: number) => {
   // delete vehicle and move vehicle state to depot
   const vin = getVinForVeh(veh);
-  if (vin && vinManager.isVinFromPlayerVeh(vin)) {
-    const ownerCid = await getCidFromVin(vin);
-    if (ownerCid === 1000) {
+  if (!vin) {
+    Notifications.add(src, 'Dit voertuig heeft geen VIN', 'error');
+    return;
+  }
+
+  if (Jobs.getCurrentJob(src) !== 'police' && !isPlayerAssigned(src, vin)) {
+    Notifications.add(src, 'Dit kan jij niet!', 'error');
+    return;
+  }
+
+  const vehicleInfo = await getPlayerVehicleInfo(vin);
+  if (vehicleInfo) {
+    if (vehicleInfo.cid === 1000) {
       Notifications.add(src, 'Dit overheidsvoertuig kan niet in beslag worden genomen', 'error');
       return;
     }
-    await putVehicleInImpound(vin, reason);
-    const strikes = await getVehicleStrikeAmount(vin);
-    if (strikes > config.strikes.permImpound) {
-      permaImpoundVehicle(vin);
+
+    if (vehicleInfo.vinscratched) {
+      await deleteOwnedVehicle(vin);
+    } else {
+      await putVehicleInImpound(vin, reason);
+      const strikes = await getVehicleStrikeAmount(vin);
+      if (strikes > config.strikes.permImpound) {
+        permaImpoundVehicle(vin);
+      }
     }
-    if (Jobs.getCurrentJob(src) !== 'police' && !isPlayerAssigned(src, vin)) {
-      Notifications.add(src, 'Dit kan jij niet!', 'error');
-      return;
-    }
-    finishJob(vin);
   }
 
+  finishJob(vin);
   deleteVehicle(veh);
   Notifications.add(src, `Voertuig in beslaggenomen`);
 };

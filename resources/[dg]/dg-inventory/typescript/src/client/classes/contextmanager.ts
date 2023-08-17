@@ -77,8 +77,8 @@ class ContextManager extends Util.Singleton<ContextManager>() {
 
     const { entity: entityAimingAt } = RayCast.doRaycast();
     if (entityAimingAt && IsEntityAVehicle(entityAimingAt) && NetworkGetEntityIsNetworked(entityAimingAt)) {
-      if (GetVehicleDoorLockStatus(entityAimingAt) < 2) {
-        if (Vehicles.isNearVehiclePlace(entityAimingAt, 'boot', 2)) {
+      if (Vehicles.isNearVehiclePlace(entityAimingAt, 'boot', 2)) {
+        if (GetVehicleDoorLockStatus(entityAimingAt) < 2) {
           const vin = await Vehicles.getVehicleVin(entityAimingAt);
           if (vin) {
             const vehicleClass = GetVehicleClass(entityAimingAt);
@@ -87,9 +87,9 @@ class ContextManager extends Util.Singleton<ContextManager>() {
             this.closingData = { type: 'trunk', data: entityAimingAt };
             return { type: 'trunk', identifier: vin, data: vehicleClass };
           }
+        } else {
+          Notifications.add('Voertuig staat op slot', 'error');
         }
-      } else {
-        Notifications.add('Voertuig staat op slot', 'error');
       }
     }
 

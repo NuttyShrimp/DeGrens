@@ -35,10 +35,10 @@ export const Component: FC = () => {
         <p>{modalData?.label ?? 'Undefined'}</p>
         <div className='buttons'>
           <Button variant='outlined' onClick={handleAccept} color={'secondary'} size='small' startIcon={<CheckIcon />}>
-            Accept
+            accept
           </Button>
           <Button variant='outlined' onClick={handleDecline} color={'secondary'} size='small' startIcon={<CloseIcon />}>
-            Decline
+            decline
           </Button>
         </div>
       </div>

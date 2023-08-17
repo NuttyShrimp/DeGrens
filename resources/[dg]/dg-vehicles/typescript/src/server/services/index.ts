@@ -8,3 +8,4 @@ import './itemupgrades';
 import './fakeplate';
 import './enginesounds';
 import './bulletprooftires';
+import './vinscratch';

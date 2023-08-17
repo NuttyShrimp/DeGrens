@@ -3,7 +3,7 @@ declare namespace NVehicles {
     name: string;
     brand: string;
     model: string;
-    category: string;
-    class: string;
+    category: Vehicles.Category;
+    class: Vehicles.Class;
   }
 }

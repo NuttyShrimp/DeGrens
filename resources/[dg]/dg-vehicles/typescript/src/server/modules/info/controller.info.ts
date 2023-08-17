@@ -3,15 +3,19 @@ import { Core, RPC } from '@dgx/server';
 import {
   assignModelConfig,
   checkMissingModels,
+  getCarboostVehiclePool,
   getConfigByEntity,
   getConfigByModel,
   getModelStock,
   getVehicleModels,
+  isInfoLoaded,
 } from './service.info';
 
 global.exports('getConfigByModel', getConfigByModel);
 global.exports('getConfigByEntity', getConfigByEntity);
 global.exports('getVehicleModels', getVehicleModels);
+global.exports('isInfoLoaded', isInfoLoaded);
+global.exports('getCarboostVehiclePool', getCarboostVehiclePool);
 
 RPC.register('vehicles:info:getModelstock', (src: number, model: string) => {
   return getModelStock(model);

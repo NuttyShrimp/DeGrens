@@ -160,6 +160,8 @@ model character_reputations {
   cornersell         Int        @default(0)
   blazeit_crafting   Int        @default(0)
   kingpills_crafting Int        @default(0)
+  carboost_crafting  Int        @default(0)
+  carboosting        Int        @default(0)
   characters         characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "character_reputations_ibfk_1")
 }
 
@@ -485,6 +487,7 @@ model player_vehicles {
   stance                 String?                 @db.LongText
   wax                    Int?
   nos                    Int                     @default(0) @db.SmallInt
+  vinscratched           Boolean                 @default(false)
   characters             characters              @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "player_vehicles_ibfk_1")
   engineSound            String?                 @db.VarChar(255)
   vehicle_depot_info     vehicle_depot_info[]

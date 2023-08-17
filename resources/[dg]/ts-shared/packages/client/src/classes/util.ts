@@ -413,6 +413,10 @@ export class Animations {
     global.exports['dg-misc'].stopTabletAnimation();
   }
 
+  doLaptopHackAnimation = (hackFunc?: () => Promise<boolean>): Promise<boolean> => {
+    return global.exports['dg-misc'].doLaptopHackAnimation(hackFunc);
+  };
+
   /**
    * @returns id to be used to cancel later
    */

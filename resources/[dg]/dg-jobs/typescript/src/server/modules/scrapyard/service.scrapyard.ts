@@ -61,14 +61,13 @@ export const assignLocationToGroup = async (ownerId: number) => {
   const spawnedVehicle = await Vehicles.spawnVehicle({
     model,
     position: location.vehicleLocation,
+    doorsLocked: true,
   });
   if (!spawnedVehicle) {
     Notifications.add(ownerId, 'Kon het voertuig niet uithalen', 'error');
     return;
   }
-  const { vehicle, netId, vin } = spawnedVehicle;
-
-  Vehicles.setVehicleDoorsLocked(vehicle, true);
+  const { netId, vin } = spawnedVehicle;
 
   activeGroups.set(group.id, {
     ...location,

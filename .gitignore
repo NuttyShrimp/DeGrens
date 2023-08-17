@@ -278,6 +278,7 @@ dist
 positions.txt
 imgui.ini
 polyzone_created_zones.txt
+carboosting_locations.json
 
 # Mac thing
 .DS_Store

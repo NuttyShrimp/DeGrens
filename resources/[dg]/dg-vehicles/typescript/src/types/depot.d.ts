@@ -33,7 +33,7 @@ declare namespace Depot {
     };
     price: {
       earlyReleaseBase: number;
-      multipliers: Record<CarClass, number>;
+      multipliers: Record<Vehicles.Class, number>;
     };
   }
 

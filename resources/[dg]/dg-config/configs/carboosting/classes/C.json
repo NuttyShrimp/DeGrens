@@ -1,0 +1,45 @@
+{
+  "reputation": {
+    "required": 15,
+    "increase": 2,
+    "decrease": 1
+  },
+  "contractType": "personal",
+  "chances": {
+    "dispatch": 0.4,
+    "tracker": 0.15,
+    "guards": 0.2,
+    "tunes": 0.25,
+    "contract": 0.9
+  },
+  "price": {
+    "boost": 5,
+    "scratch": 25
+  },
+  "expirationTime": 10,
+  "radiusBlipSize": 100,
+  "tracker": {
+    "delay": 5000,
+    "increase": 4000,
+    "amount": 4,
+    "cooldown": 30000,
+    "hack": {
+      "gridSize": 4,
+      "length": 5,
+      "displayTime": 1.8,
+      "inputTime": 2.5
+    }
+  },
+  "guards": {
+    "models": [
+      "a_f_m_fatbla_01",
+      "a_m_m_hillbilly_02",
+      "a_m_m_mexlabor_01",
+      "a_m_y_acult_01",
+      "g_m_importexport_01",
+      "g_m_y_azteca_01"
+    ],
+    "amount": 1,
+    "weapons": ["weapon_knife", "weapon_switchblade"]
+  }
+}

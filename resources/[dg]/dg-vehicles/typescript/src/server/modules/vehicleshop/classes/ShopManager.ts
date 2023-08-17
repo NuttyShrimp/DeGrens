@@ -50,7 +50,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
 
   private loadSpotData = async () => {
     await Config.awaitConfigLoad();
-    await Util.awaitCondition(() => isInfoLoaded(), 99999);
+    await Util.awaitCondition(() => isInfoLoaded(), false);
     const config = Config.getConfigValue<VehicleShop.Config>('vehicles.shop');
     this.spots.clear();
     config.carSpots.forEach((data, id) => {

@@ -1,5 +1,6 @@
 import { Notifications, Peek, UI, Vehicles } from '@dgx/client';
 import { getVehicleVin, getVehicleVinWithoutValidation } from './service.identification';
+import { isVehicleVinScratched } from 'services/vinscratch';
 
 global.asyncExports('getVehicleVin', getVehicleVin);
 global.exports('getVehicleVinWithoutValidation', getVehicleVinWithoutValidation);
@@ -11,9 +12,14 @@ Peek.addGlobalEntry('vehicle', {
       icon: 'fas fa-barcode',
       action: async (_, entity) => {
         if (!entity) return;
+        if (isVehicleVinScratched(entity)) {
+          Notifications.add('VIN: ☐☐☐☐☐☐☐☐☐☐☐☐☐☐☐☐☐', 'error');
+          return;
+        }
+
         const vin = await getVehicleVin(entity);
         if (!vin) return;
-        Notifications.add(`VIN: '${vin}'`, 'info');
+        Notifications.add(`VIN: '${vin}'`);
         UI.addToClipboard(vin);
       },
       canInteract: ent => {

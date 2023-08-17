@@ -17,6 +17,15 @@ const parseStatus = (status: string): Vehicle.VehicleStatus => {
   };
 };
 
+const parseVehicleInfo = (info: Vehicle.Vehicle<string, string>): Vehicle.Vehicle => {
+  return {
+    ...info,
+    status: parseStatus(info.status),
+    stance: info.stance !== null ? JSON.parse(info.stance) : null,
+    vinscratched: Boolean(info.vinscratched),
+  };
+};
+
 /**
  * Get all vehicles for a player without filtering on the state
  * @param cid
@@ -31,13 +40,9 @@ export const getPlayerOwnedVehicles = async (cid: number): Promise<Vehicle.Vehic
                         LEFT OUTER JOIN vehicle_status vs on pv.vin = vs.vin
                  where pv.cid = ?
                  ORDER BY pv.vin DESC`;
-  const vehicles = await SQL.query(query, [cid]);
+  const vehicles = await SQL.query<Vehicle.Vehicle<string, string>[]>(query, [cid]);
 
-  return vehicles.map((v: Vehicle.Vehicle<string, string>) => ({
-    ...v,
-    status: parseStatus(v.status),
-    stance: v.stance !== null ? JSON.parse(v.stance) : null,
-  }));
+  return vehicles.map(parseVehicleInfo);
 };
 
 /**
@@ -55,12 +60,8 @@ export const getPlayerOwnedVehiclesAtGarage = async (cid: number, garageId: stri
                  where pv.cid = ?
                    AND pv.garageId = ?
                  ORDER BY pv.vin DESC`;
-  const vehicles = await SQL.query(query, [cid, garageId]);
-  return vehicles.map((v: Vehicle.Vehicle<string, string>) => ({
-    ...v,
-    status: parseStatus(v.status),
-    stance: v.stance !== null ? JSON.parse(v.stance) : null,
-  }));
+  const vehicles = await SQL.query<Vehicle.Vehicle<string, string>[]>(query, [cid, garageId]);
+  return vehicles.map(parseVehicleInfo);
 };
 
 export const getPlayerSharedVehicles = async (cid: number, garageId: string): Promise<Vehicle.Vehicle[]> => {
@@ -72,13 +73,9 @@ export const getPlayerSharedVehicles = async (cid: number, garageId: string): Pr
                  where pv.garageId = ?
                    AND pv.cid != ?
                  ORDER BY pv.vin DESC`;
-  const vehicles = await SQL.query(query, [garageId, cid]);
+  const vehicles = await SQL.query<Vehicle.Vehicle<string, string>[]>(query, [garageId, cid]);
 
-  return vehicles.map((v: Vehicle.Vehicle<string, string>) => ({
-    ...v,
-    status: parseStatus(v.status),
-    stance: v.stance !== null ? JSON.parse(v.stance) : null,
-  }));
+  return vehicles.map(parseVehicleInfo);
 };
 
 export const getPlayerVehicleInfo = async (
@@ -104,11 +101,7 @@ export const getPlayerVehicleInfo = async (
   const result = await SQL.query<Vehicle.Vehicle<string, string>[]>(query, args);
   const info = result?.[0];
   if (!info) return;
-  return {
-    ...info,
-    stance: info.stance !== null ? JSON.parse(info.stance) : null,
-    status: parseStatus(info.status),
-  };
+  return parseVehicleInfo(info);
 };
 
 export const getVehicleLog = (vin: string) => {
@@ -220,7 +213,8 @@ export const insertNewVehicle = async (
   stance: Stances.Stance | null = null,
   wax: number | null = null,
   nos = 0,
-  upgrades?: Vehicles.Upgrades.Cosmetic.Upgrades
+  upgrades?: Vehicles.Upgrades.Cosmetic.Upgrades,
+  vinscratched = false
 ) => {
   await SQL.insertValues('player_vehicles', [
     {
@@ -235,6 +229,7 @@ export const insertNewVehicle = async (
       stance: stance === null ? null : JSON.stringify(stance),
       wax,
       nos,
+      vinscratched,
     },
   ]);
 

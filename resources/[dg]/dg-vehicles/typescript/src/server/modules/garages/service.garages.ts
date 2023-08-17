@@ -42,7 +42,7 @@ export const unregisterGarage = (garageId: string) => {
     return;
   }
   garages.delete(garageId);
-  Events.emitNet("vehicles:garage:remove", -1, garageId);
+  Events.emitNet('vehicles:garage:remove', -1, garageId);
 };
 
 export const setGaragesLoaded = () => {
@@ -463,6 +463,11 @@ export const recoverVehicle = async (plyId: number, vin: string) => {
       plyId
     );
   } else if (vehicleInfo.state === 'out') {
+    if (vehicleInfo.vinscratched) {
+      Notifications.add(plyId, 'Dit voertuig was niet verzekerd...', 'error');
+      return;
+    }
+
     // vehicle is out but entity does not exist so mark as parked
     const netId = vinManager.getNetId(vin);
     if (netId) {

@@ -1,0 +1,39 @@
+{
+  "reputation": {
+    "required": 405,
+    "increase": 18,
+    "decrease": 30
+  },
+  "contractType": "global",
+  "chances": {
+    "dispatch": 1,
+    "tracker": 1,
+    "guards": 1,
+    "tunes": 0.4,
+    "contract": 0.2
+  },
+  "price": {
+    "boost": 100,
+    "scratch": 350
+  },
+  "expirationTime": 45,
+  "timeoutAfterAccepting": 45,
+  "radiusBlipSize": 175,
+  "tracker": {
+    "delay": 2000,
+    "increase": 1000,
+    "amount": 15,
+    "cooldown": 50000,
+    "hack": {
+      "gridSize": 5,
+      "length": 8,
+      "displayTime": 3,
+      "inputTime": 4
+    }
+  },
+  "guards": {
+    "models": ["a_m_m_bevhills_02", "a_m_m_bevhills_01", "a_m_y_busicas_01", "a_m_y_gencaspat_01"],
+    "amount": 7,
+    "weapons": ["weapon_heavypistol", "weapon_pistol50", "weapon_revolver", "weapon_minismg"]
+  }
+}

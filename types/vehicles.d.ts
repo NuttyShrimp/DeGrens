@@ -1,4 +1,31 @@
 declare namespace Vehicles {
+  type Class = 'X' | 'S' | 'A+' | 'A' | 'B' | 'C' | 'D';
+
+  type Category =
+    | 'compacts'
+    | 'sedans'
+    | 'suvs'
+    | 'coupes'
+    | 'muscle'
+    | 'sportsclassics'
+    | 'sports'
+    | 'super'
+    | 'motorcycles'
+    | 'offroad'
+    | 'industrial'
+    | 'utility'
+    | 'vans'
+    | 'cycles'
+    | 'boats'
+    | 'helicopters'
+    | 'planes'
+    | 'service'
+    | 'emergency'
+    | 'military'
+    | 'commercial'
+    | 'trains'
+    | 'openwheel';
+
   type SpawnVehicleFunction = (data: {
     model: string;
     position: Vec3 | Vec4;
@@ -146,7 +173,7 @@ declare namespace Vehicles {
       cosmetic: Vehicles.Upgrades.Cosmetic.Key[];
       performance: Vehicles.Upgrades.Performance.Key[];
     };
-    type Type = 'cosmetic' | 'performance';
+    type Type = keyof TypeToKeys;
 
     type Amount = Record<
       Exclude<
@@ -173,12 +200,12 @@ declare namespace Vehicles {
     type AmountKey = keyof Amount;
 
     namespace Prices {
-      type Category = keyof AllCosmeticModIds | 'extras';
+      type Category = Cosmetic.Key | 'extras';
       type Prices = Record<Category, number>;
 
       type Config = {
         categories: CategoryPrices;
-        classMultiplier: Record<CarClass, number>;
+        classMultiplier: Record<Vehicles.Class, number>;
       };
     }
   }
@@ -278,4 +305,6 @@ declare namespace Vehicles {
       coords: Vec3;
     }
   }
+
+  type LockpickType = 'door' | 'hotwire' | 'hack';
 }

@@ -41,7 +41,7 @@ class Vehicles {
   };
 
   public setVehicleDoorsLocked = (vehicle: number, locked: boolean) => {
-    Events.emitNet('dgx:vehicles:setLock', NetworkGetNetworkIdFromEntity(vehicle), locked);
+    Events.emitNet('vehicles:keys:setVehicleDoorsLocked', NetworkGetNetworkIdFromEntity(vehicle), locked);
   };
 
   public applyUpgrades = (vehicle: number, upgrades: Partial<Vehicles.Upgrades.Upgrades>) => {
@@ -51,6 +51,7 @@ class Vehicles {
   public getCosmeticUpgrades = (vehicle: number): Vehicles.Upgrades.Cosmetic.Upgrades | undefined => {
     return global.exports['dg-vehicles'].getCosmeticUpgrades(vehicle);
   };
+
   isRearEngineVehicle = (vehicle: number) => {
     let boneIndex = GetEntityBoneIndexByName(vehicle, 'bonnet');
 
@@ -110,6 +111,10 @@ class Vehicles {
 
   getVehicleHasBulletProofTires = (vehicle: number): boolean => {
     return global.exports['dg-vehicles'].getVehicleHasBulletProofTires(vehicle);
+  };
+
+  public isVehicleVinScratched = (vehicle: number) => {
+    return global.exports['dg-vehicles'].isVehicleVinScratched(vehicle);
   };
 }
 

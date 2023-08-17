@@ -25,8 +25,10 @@ export const spawnGuard = async (guardData: NPCs.Guard) => {
     SetEntityRoutingBucket(ped, guardData.routingBucket);
   }
 
+  const entState = Entity(ped).state;
+  entState.set('guardId', guardId, true); // use to check if we are deleting correct entity in timeouts
+
   if (guardData.flags) {
-    const entState = Entity(ped).state;
     for (const [key, value] of Object.entries(guardData.flags)) {
       entState.set(key, value, true);
     }
@@ -85,7 +87,12 @@ const startDeleteTimeout = (guardId: string, delay: number) => {
     const guardInfo = guards.get(guardId);
     if (!guardInfo) return;
     guards.delete(guardId);
-    if (!DoesEntityExist(guardInfo.ped) || GetEntityType(guardInfo.ped) !== 1) return;
+    if (
+      !DoesEntityExist(guardInfo.ped) ||
+      GetEntityType(guardInfo.ped) !== 1 ||
+      Entity(guardInfo.ped).state.guardId !== guardId
+    )
+      return;
     DeleteEntity(guardInfo.ped);
   }, delay * 1000);
 };

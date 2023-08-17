@@ -129,16 +129,37 @@
     },
     {
       "type": "node-terminal",
-      "name": "chars:ui:dev",
+      "name": "carboosting:build prod",
       "request": "launch",
-      "command": "pnpm run dev",
-      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
+      "command": "pnpm run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-carboosting/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "carboosting:build dev",
+      "request": "launch",
+      "command": "pnpm run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-carboosting/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "carboosting:watch",
+      "request": "launch",
+      "command": "pnpm run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-carboosting/typescript"
     },
     {
       "type": "node-terminal",
       "name": "chars:ui:build",
       "request": "launch",
       "command": "pnpm run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
+    },
+    {
+      "type": "node-terminal",
+      "name": "chars:ui:dev",
+      "request": "launch",
+      "command": "pnpm run dev",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-chars/ui"
     },
     {
@@ -696,6 +717,27 @@
     },
     {
       "type": "node-terminal",
+      "name": "phone:build prod",
+      "request": "launch",
+      "command": "pnpm run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-phone/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "phone:build dev",
+      "request": "launch",
+      "command": "pnpm run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-phone/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "phone:watch",
+      "request": "launch",
+      "command": "pnpm run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-phone/typescript"
+    },
+    {
+      "type": "node-terminal",
       "name": "police:build prod",
       "request": "launch",
       "command": "pnpm run build",
@@ -735,6 +777,27 @@
       "request": "launch",
       "command": "pnpm run watch",
       "cwd": "${workspaceFolder}/resources/[dg]/dg-radialmenu/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "real-estate:build prod",
+      "request": "launch",
+      "command": "pnpm run build",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-real-estate/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "real-estate:build dev",
+      "request": "launch",
+      "command": "pnpm run build:dev",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-real-estate/typescript"
+    },
+    {
+      "type": "node-terminal",
+      "name": "real-estate:watch",
+      "request": "launch",
+      "command": "pnpm run watch",
+      "cwd": "${workspaceFolder}/resources/[dg]/dg-real-estate/typescript"
     },
     {
       "type": "node-terminal",
