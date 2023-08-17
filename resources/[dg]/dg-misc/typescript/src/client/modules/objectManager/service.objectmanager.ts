@@ -297,6 +297,7 @@ export const startObjectGizmo = (objId: string) => {
     DrawGizmo(objData.matrix, objId);
     applyMatrixByEuler(objData.entity, objData.matrix);
     DisableControlAction(0, 24, true);
+    DisableControlAction(0, 44, true); // cover
   });
 };
 

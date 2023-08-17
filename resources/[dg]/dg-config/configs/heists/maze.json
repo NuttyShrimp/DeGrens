@@ -1,0 +1,5 @@
+{
+  "doorOpenDelay": 5,
+  "emptyLocationTimeForReset": 3,
+  "resetTime": 20
+}

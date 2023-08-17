@@ -20,6 +20,9 @@
   "heist_jewelry": {
     "police": 5
   },
+  "heist_maze": {
+    "police": 4
+  },
   "bench_container_enter": {
     "players": 20
   },

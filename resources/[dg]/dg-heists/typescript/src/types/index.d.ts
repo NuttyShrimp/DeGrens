@@ -7,6 +7,7 @@ declare namespace Heists {
     fleeca: Fleeca.Config;
     paleto: Paleto.Config;
     jewelry: Jewelry.Config;
+    maze: Maze.Config;
   };
 
   type InitData = {
@@ -18,12 +19,12 @@ declare namespace Heists {
     jewelry: Jewelry.InitData;
   };
 
-  type HeistType = 'fleeca' | 'paleto' | 'jewelry'; //| 'maze' | 'pacific' | 'bobcat';
+  type HeistType = 'fleeca' | 'paleto' | 'jewelry' | 'maze'; //| 'pacific' | 'bobcat';
   type Type = {
     trolley: Trolley.Config;
   };
 
-  type LocationId = Fleeca.Id | 'paleto' | 'jewelry'; //| 'maze' | 'pacific' | 'bobcat';
+  type LocationId = Fleeca.Id | 'paleto' | 'jewelry' | 'maze'; //| 'pacific' | 'bobcat';
   type Location = {
     type: HeistType;
     label: string;
@@ -107,6 +108,7 @@ declare namespace Heists {
       type: Type;
       locationId: LocationId;
       lootingPlayer: number | null;
+      deleteTimeout: NodeJS.Timeout | null;
     };
   }
 }

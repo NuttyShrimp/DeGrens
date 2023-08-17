@@ -7,6 +7,14 @@ import heistManager from 'classes/heistmanager';
 const activeTrolleys: Map<number, Heists.Trolley.Data> = new Map();
 const trolleyLogger = mainLogger.child({ module: 'Trolleys' });
 
+const getTrolleyDataByEntity = (entity: number) => {
+  const trolley = activeTrolleys.get(entity);
+  if (!trolley) return;
+  const typeStatebag: Heists.Trolley.Type = Entity(entity).state.heistTrolleyType;
+  if (trolley.type !== typeStatebag) return;
+  return trolley;
+};
+
 export const spawnTrolleys = (locationId: Heists.LocationId) => {
   const heistTypeConfig = heistManager.getHeistTypeConfigByLocationId(locationId);
   if (!heistTypeConfig) return;
@@ -26,7 +34,7 @@ export const spawnTrolleys = (locationId: Heists.LocationId) => {
     if (Util.getRndInteger(1, 101) > trolleyType.spawnChance) continue;
 
     const modelHash = TROLLEY_OBJECTS[trolleySpot.type].trolley;
-    const entity = CreateObject(
+    const entity = CreateObjectNoOffset(
       modelHash,
       trolleySpot.coords.x,
       trolleySpot.coords.y,
@@ -36,13 +44,26 @@ export const spawnTrolleys = (locationId: Heists.LocationId) => {
       false
     );
 
-    Util.awaitCondition(() => DoesEntityExist(entity), 1000).then(() => {
+    Util.awaitEntityExistence(entity).then(() => {
       if (!DoesEntityExist(entity)) return;
+
       SetEntityHeading(entity, trolleySpot.coords.w);
       FreezeEntityPosition(entity, true);
-
       Entity(entity).state.set('heistTrolleyType', trolleySpot.type, true);
-      activeTrolleys.set(entity, { type: trolleySpot.type, locationId, lootingPlayer: null });
+
+      activeTrolleys.set(entity, {
+        type: trolleySpot.type,
+        locationId,
+        lootingPlayer: null,
+        deleteTimeout: setTimeout(
+          () => {
+            if (!DoesEntityExist(entity) || !getTrolleyDataByEntity(entity)) return; // this validates statebag to make sure we delete correct entity
+            activeTrolleys.delete(entity);
+            DeleteEntity(entity);
+          },
+          10 * 60 * 1000
+        ),
+      });
     });
   }
 };
@@ -51,9 +72,13 @@ RPC.register('heists:trolleys:startLooting', (plyId, trolleyNetId: number) => {
   const trolleyEntity = NetworkGetEntityFromNetworkId(trolleyNetId);
   if (!trolleyEntity || !DoesEntityExist(trolleyEntity)) return false;
 
-  const activeTrolley = activeTrolleys.get(trolleyEntity);
+  const activeTrolley = getTrolleyDataByEntity(trolleyEntity);
   if (!activeTrolley || activeTrolley.lootingPlayer !== null) return false;
 
+  if (activeTrolley.deleteTimeout) {
+    clearTimeout(activeTrolley.deleteTimeout);
+    activeTrolley.deleteTimeout = null;
+  }
   activeTrolley.lootingPlayer = plyId;
 
   return true;
@@ -63,7 +88,7 @@ Events.onNet('heists:trolleys:finishLooting', (plyId, trolleyNetId: number) => {
   const trolleyEntity = NetworkGetEntityFromNetworkId(trolleyNetId);
   if (!trolleyEntity || !DoesEntityExist(trolleyEntity)) return;
 
-  const activeTrolley = activeTrolleys.get(trolleyEntity);
+  const activeTrolley = getTrolleyDataByEntity(trolleyEntity);
   if (!activeTrolley || activeTrolley.lootingPlayer !== plyId) return;
 
   activeTrolleys.delete(trolleyEntity);

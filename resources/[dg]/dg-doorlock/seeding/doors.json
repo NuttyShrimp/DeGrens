@@ -1244,8 +1244,7 @@
   {
     "description": "Mazebank offices",
     "locked": true,
-    "authorized": {},
-    "distance": 5,
+    "distance": 2,
     "hideInteraction": true,
     "doors": [
       {
@@ -1256,12 +1255,13 @@
           "z": 17.14
         }
       }
-    ]
+    ],
+    "authorized": {},
+    "lockpickable": true
   },
   {
     "description": "Mazebank vault",
     "locked": true,
-    "authorized": {},
     "distance": 5,
     "hideInteraction": true,
     "doors": [
@@ -1273,7 +1273,12 @@
           "z": 17.14
         }
       }
-    ]
+    ],
+    "authorized": {},
+    "thermiteable": {
+      "grid": 6,
+      "amount": 4
+    }
   },
   {
     "description": "Fleeca BP Gate",

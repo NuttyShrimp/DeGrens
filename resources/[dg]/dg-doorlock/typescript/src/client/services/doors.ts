@@ -215,8 +215,8 @@ export const tryToLockpickDoor = async () => {
 
   if (!doors[doorId].lockpickable || !doors[doorId].locked) return;
 
-  const success = await Minigames.keygame(3, 1, 5);
-  Events.emitNet('dg-doorlock:server:triedLockpickingDoor', doorId);
+  const success = await Minigames.keygame(5, 6, 7);
+  Events.emitNet('doorlock:server:triedLockpickingDoor', doorId);
   if (success) {
     Events.emitNet('doorlock:server:changeDoorState', doorId, false);
   }

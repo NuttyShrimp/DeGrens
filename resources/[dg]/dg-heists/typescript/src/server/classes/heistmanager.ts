@@ -7,6 +7,7 @@ import config from 'services/config';
 import { FleecaManager } from './typemanagers/fleecamanager';
 import { PaletoManager } from './typemanagers/paletomanager';
 import { JewelryManager } from './typemanagers/jewelrymanager';
+import { MazeManager } from './typemanagers/mazemanager';
 
 @EventListener()
 class HeistManager extends Util.Singleton<HeistManager>() {
@@ -27,6 +28,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
       fleeca: new FleecaManager(),
       paleto: new PaletoManager(),
       jewelry: new JewelryManager(),
+      maze: new MazeManager(),
     };
 
     this.onEnterHandlers = [];

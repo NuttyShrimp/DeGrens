@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Een brievenbus voor bij je huis
 - Enkele kofi voertuigen toegevoegd
 - Nieuwe wapens toegevoegd
+- Nieuwe overval toegevoegd
 
 ### Changed
 
