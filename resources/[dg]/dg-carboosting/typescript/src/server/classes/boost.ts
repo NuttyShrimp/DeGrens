@@ -50,6 +50,7 @@ export default class Boost {
   public dropoffLocationIdx: number | null;
 
   private flags: {
+    zoneEntered: boolean;
     lockpicked: boolean;
     disablingTracker: boolean;
     droppedOff: boolean;
@@ -86,6 +87,7 @@ export default class Boost {
     this.dropoffLocationIdx = null;
 
     this.flags = {
+      zoneEntered: false,
       lockpicked: false,
       disablingTracker: false,
       droppedOff: false,
@@ -330,8 +332,12 @@ export default class Boost {
       return;
     }
 
+    if (this.flags.zoneEntered) return;
+
     const group = this.getGroup();
     if (!group) return;
+
+    this.flags.zoneEntered = true;
 
     group.members.forEach(member => {
       if (!member.serverId) return;

@@ -1,6 +1,6 @@
 {
   "interval": {
-    "personal": 3,
+    "personal": 5,
     "global": 15
   },
   "groupReputationPercentage": 0.6,
