@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Alle autos kunnen terug in bennys
 - Core probeerd spelers met temporary id niet meer op te slaan
 - Politie barriers werken weer
+- Locker toegestane tijd wordt nu correct weergegeven
 
 ## [1.4.0]
 

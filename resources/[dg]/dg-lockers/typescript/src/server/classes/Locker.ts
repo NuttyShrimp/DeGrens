@@ -6,6 +6,8 @@ import repository from './Repository';
 import lockersManager from './LockersManager';
 import { getCurrentDay } from 'helpers';
 
+const ALLOWED_TIME = 10;
+
 export class Locker {
   private readonly logger: winston.Logger;
 
@@ -184,13 +186,16 @@ export class Locker {
         return;
       }
 
-      // allow ply to access for 5 minutes
+      // allow ply to access for limited time
       this.activePlayers.add(plyId);
-      setTimeout(() => {
-        this.activePlayers.delete(plyId);
-      }, 10 * 60 * 1000);
+      setTimeout(
+        () => {
+          this.activePlayers.delete(plyId);
+        },
+        ALLOWED_TIME * 60 * 1000
+      );
 
-      Notifications.add(plyId, 'Je hebt toegang voor 5 minuten', 'success');
+      Notifications.add(plyId, `Je hebt toegang voor ${ALLOWED_TIME} minuten`, 'success');
       if (this.doAnimation) {
         Events.emitNet('lockers:client:doAnimation', plyId);
       }
