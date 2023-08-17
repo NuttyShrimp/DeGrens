@@ -106,12 +106,15 @@ export const handleLockpickStart = async (
   const vin = getVinForVeh(vehicle);
   if (!vin) return;
 
-  // Check if vehicle class has a lock depending on what we trying to lockpick
-  const nativeClass = (await RPC.execute<number>('vehicle:getClass', plyId, netId)) ?? -1;
-  if (nativeClass < 0 || NO_LOCK_CLASSES[lockpickType].indexOf(nativeClass) !== -1) {
-    Notifications.add(plyId, 'Je kan dit niet op dit type voertuig', 'error');
-    return;
-  }
+  // TODO: Is this actually needed? We check the NO_LOCK_CLASSES when toggling lock but if a vehicle that should be locked,
+  // is somehow locked, we should still be able to lockpick it right?
+
+  // // Check if vehicle class has a lock depending on what we trying to lockpick
+  // const nativeClass = (await RPC.execute<number>('vehicle:getClass', plyId, netId)) ?? -1;
+  // if (nativeClass < 0 || NO_LOCK_CLASSES[lockpickType].indexOf(nativeClass) !== -1) {
+  //   Notifications.add(plyId, 'Je kan dit niet op dit type voertuig', 'error');
+  //   return;
+  // }
 
   if (lockpickType === 'door' || lockpickType === 'hack') {
     // Check if near door

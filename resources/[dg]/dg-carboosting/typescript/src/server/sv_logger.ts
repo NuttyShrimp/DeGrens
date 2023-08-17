@@ -4,4 +4,4 @@ import * as SentryTracing from '@sentry/tracing';
 
 SentryTracing.addExtensionMethods();
 
-export const mainLogger = generateLogger('Carboosting', packageInfo, 'silly');
+export const mainLogger = generateLogger('Carboosting', packageInfo);

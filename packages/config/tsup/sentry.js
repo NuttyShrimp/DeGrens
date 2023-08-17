@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const { glob } = require('glob');
+const { globSync } = require('glob');
 const { promisify } = require('util');
 const { version } = require('./package.json');
 const SentryCli = require('@sentry/cli');
@@ -200,7 +200,7 @@ const uploadSourceMaps = async resName => {
       }
     }
 
-    const globResult = await glob(globAssets, {
+    const globResult = globSync(globAssets, {
       absolute: true,
       nodir: true,
       ignore: options.sourcemaps?.ignore,
@@ -257,7 +257,7 @@ const uploadSourceMaps = async resName => {
     const filesToDeleteAfterUpload =
       options.sourcemaps?.filesToDeleteAfterUpload ?? options.sourcemaps?.deleteFilesAfterUpload;
     if (filesToDeleteAfterUpload) {
-      const filePathsToDelete = await glob(filesToDeleteAfterUpload, {
+      const filePathsToDelete = globSync(filesToDeleteAfterUpload, {
         absolute: true,
         nodir: true,
       });

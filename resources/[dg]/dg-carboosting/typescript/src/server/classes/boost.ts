@@ -50,6 +50,7 @@ export default class Boost {
   public dropoffLocationIdx: number | null;
 
   private flags: {
+    zoneEntered: boolean;
     lockpicked: boolean;
     disablingTracker: boolean;
     droppedOff: boolean;
@@ -86,6 +87,7 @@ export default class Boost {
     this.dropoffLocationIdx = null;
 
     this.flags = {
+      zoneEntered: false,
       lockpicked: false,
       disablingTracker: false,
       droppedOff: false,
@@ -212,7 +214,7 @@ export default class Boost {
     );
   };
 
-  public finish = () => {
+  public finish = (skipReputation = false) => {
     if (this.flags.finished) return;
     this.flags.finished = true;
 
@@ -226,7 +228,7 @@ export default class Boost {
       });
     }
 
-    if (!this.flags.droppedOff) {
+    if (!skipReputation && !this.flags.droppedOff) {
       const repDecrease = this.getClassConfig().reputation.decrease;
       const groupMemberRepDecrease = Math.round(repDecrease * config.contracts.groupReputationPercentage);
       this.initialMembers.forEach(mCid => {
@@ -330,8 +332,12 @@ export default class Boost {
       return;
     }
 
+    if (this.flags.zoneEntered) return;
+
     const group = this.getGroup();
     if (!group) return;
+
+    this.flags.zoneEntered = true;
 
     group.members.forEach(member => {
       if (!member.serverId) return;
@@ -351,7 +357,7 @@ export default class Boost {
     });
     if (!spawnedVehicle) {
       this.log('failedToSpawnVehicle', 'error', `Failed to spawn vehicle`, {}, true);
-      this.finish();
+      this.finish(true);
       return;
     }
 

@@ -6,7 +6,6 @@
     width: 100vw;
     height: 100vh;
     overflow: scroll;
-    pointer-events: none !important;
 
     &::-webkit-scrollbar {
       display: none;
@@ -21,7 +20,6 @@
     max-width: 35vh;
     display: inline-flex;
     flex-direction: column;
-    pointer-events: auto;
 
     & .entry {
       display: flex;

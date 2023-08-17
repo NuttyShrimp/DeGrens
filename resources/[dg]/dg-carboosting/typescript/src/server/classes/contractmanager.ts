@@ -170,7 +170,7 @@ class ContractManager {
   };
 
   public updateReputation = (cid: number, amount: number) => {
-    Reputations.setReputation(cid, 'carboosting', old => (old ?? 0) + amount);
+    Reputations.setReputation(cid, 'carboosting', old => Math.max(0, (old ?? 0) + amount));
   };
 
   private getClassForReputation = (reputation: number) => {
