@@ -1,0 +1,8 @@
+{
+  "interval": {
+    "personal": 3,
+    "global": 15
+  },
+  "groupReputationPercentage": 0.6,
+  "finishRewardPriceMultiplier": 2
+}

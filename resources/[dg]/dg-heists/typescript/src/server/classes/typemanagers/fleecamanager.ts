@@ -1,5 +1,5 @@
 import { Police, Util, UI, Inventory } from '@dgx/server';
-import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/src/decorators';
 import { Vector3 } from '@dgx/shared';
 import heistManager from 'classes/heistmanager';
 import config from 'services/config';
@@ -128,11 +128,14 @@ export class FleecaManager implements Heists.TypeManager {
     if (this.resetTimeout) {
       clearTimeout(this.resetTimeout);
     }
-    this.resetTimeout = setTimeout(() => {
-      this.logger.info(`Power has been reset`);
-      this.hackAvailable = false;
-      this.pickNewPowerLocation();
-      this.resetTimeout = null;
-    }, minutes * 60 * 1000);
+    this.resetTimeout = setTimeout(
+      () => {
+        this.logger.info(`Power has been reset`);
+        this.hackAvailable = false;
+        this.pickNewPowerLocation();
+        this.resetTimeout = null;
+      },
+      minutes * 60 * 1000
+    );
   };
 }

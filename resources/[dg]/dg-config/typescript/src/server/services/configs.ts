@@ -1,5 +1,5 @@
 import fs, { lstatSync } from 'fs';
-import * as path from 'path';
+import path from 'path';
 import { mainLogger } from 'sv_logger';
 
 const root = `${GetResourcePath(GetCurrentResourceName())}/configs`;

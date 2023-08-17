@@ -118,3 +118,7 @@ export const handleStanceOnCosmeticChange = (
   if (!upgradeStance) return;
   updateVehicleStance(vin, null);
 };
+
+export const getCurrentVehicleStance = (vehicle: number): Stances.Stance | null => {
+  return Entity(vehicle).state.stance ?? null;
+};

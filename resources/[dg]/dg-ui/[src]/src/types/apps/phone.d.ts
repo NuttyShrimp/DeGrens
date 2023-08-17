@@ -23,7 +23,7 @@ declare namespace Phone {
   };
 
   interface Icon {
-    name: string;
+    name: string | ((props: { size: string; style: React.CSSProperties }) => JSX.Element);
     color?: string;
     background?: string;
     backgroundGradient?: string;
@@ -109,6 +109,7 @@ declare namespace Phone {
       _data?: any;
       timer?: number;
       app?: string;
+      skipHasPhoneCheck?: boolean; // Option to skip phone check when adding notifications on charLoading because inventory will not be loaded yet
     }
 
     interface State {
@@ -432,6 +433,7 @@ declare namespace Phone {
       state: 'parked' | 'out' | 'impounded';
       engine: number;
       body: number;
+      vinscratched: boolean;
     }
     interface State {
       list: Vehicle[];

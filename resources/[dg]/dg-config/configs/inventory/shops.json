@@ -157,6 +157,11 @@
         "name": "lawntable",
         "amount": 50,
         "price": 250
+      },
+      {
+        "name": "mailbox",
+        "amount": 50,
+        "price": 500
       }
     ],
     "fishing": [

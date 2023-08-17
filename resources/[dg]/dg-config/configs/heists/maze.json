@@ -1,0 +1,9 @@
+{
+  "doorOpenDelay": 5,
+  "emptyLocationTimeForReset": 3,
+  "resetTime": 20,
+  "hack": {
+    "gridSize": 6,
+    "time": 75
+  }
+}

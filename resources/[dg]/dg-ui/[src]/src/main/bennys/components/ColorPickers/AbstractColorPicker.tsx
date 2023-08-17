@@ -10,13 +10,16 @@ export const AbstractColorPicker: FC<Bennys.ColorSelector.AbstractProps> = props
   const { useEventRegister } = useKeyEvents();
 
   const options = useMemo(() => {
-    return props.options.reduce((acc, cur, index) => {
-      const rgb = typeof cur === 'string' ? hexToRGB(cur) : cur;
-      const x = Math.floor(index / props.rows);
-      const y = index % props.rows;
-      acc.push({ rgb, x, y });
-      return acc;
-    }, [] as { rgb: RGB; x: number; y: number }[]);
+    return props.options.reduce(
+      (acc, cur, index) => {
+        const rgb = typeof cur === 'string' ? hexToRGB(cur) : cur;
+        const x = Math.floor(index / props.rows);
+        const y = index % props.rows;
+        acc.push({ rgb, x, y });
+        return acc;
+      },
+      [] as { rgb: RGB; x: number; y: number }[]
+    );
   }, [props.options, props.rows]);
 
   const grid = useMemo(() => {

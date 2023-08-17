@@ -1,25 +1,23 @@
 {
   "name": "dg-shared",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "sentry_dsn": "https://47836ea9173b4e52b8820a05996cf549@sentry.nuttyshrimp.me/2",
   "scripts": {
-    "build": "node ../../../../scripts/build.js --client --server --index",
-    "build:dev": "node ../../../../scripts/build.js --client --server --dev --index",
-    "watch": "node ../../../../scripts/watch --server --client --index",
+    "build": "tsup --env.NODE_ENV=production",
+    "build:dev": "tsup --env.NODE_ENV=development",
+    "watch": "tsup --watch --env.NODE_ENV=development ",
     "lint": "eslint --fix --ext .js,.ts ./src",
     "format": "prettier  --write --no-error-on-unmatched-pattern src/**/*.{js,ts,json,md}"
   },
-  "dependencies": {
-    "cli-table3": "^0.6.2",
-    "color-name-list": "^10.8.0",
-    "core-js": "^3.30.2",
-    "nearest-color": "^0.4.4",
-    "reflect-metadata": "^0.1.13"
-  },
   "devDependencies": {
-    "@sentry/types": "^7.53.1",
-    "@types/core-js": "^2.5.5",
+    "@dgx/client": "workspace:*",
+    "@dgx/server": "workspace:*",
+    "@dgx/shared": "workspace:*",
+    "@dgx/tsup-config": "workspace:*",
     "db": "*",
-    "esbuild": "^0.17.19"
+    "esbuild": "^0.19.2",
+    "logger": "workspace:*",
+    "tsconfig": "workspace:*",
+    "tsup": "^7.2.0"
   }
 }

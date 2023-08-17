@@ -13,7 +13,7 @@ import {
   Events,
   Police,
 } from '@dgx/server';
-import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/src/decorators';
 import heistManager from 'classes/heistmanager';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
@@ -140,6 +140,7 @@ export class JewelryManager implements Heists.TypeManager {
         'camera-cctv': locationData.cams.join(', '),
       },
       tag: '10-90',
+      important,
     });
   };
 
@@ -401,12 +402,15 @@ export class JewelryManager implements Heists.TypeManager {
     const timeout = config.jewelry.overrideDuration;
     this.sendMail(plyId, `Het zal ongeveer ${timeout} minuten duren om het alarm uit te schakelen`);
 
-    setTimeout(() => {
-      this.setActionBusy('overridingAlarm', false);
-      this.state.alarmOverridden = true;
-      this.dispatchAlarmToClients();
-      this.sendMail(plyId, `Het alarm is uitgeschakeld`);
-    }, timeout * 60 * 1000);
+    setTimeout(
+      () => {
+        this.setActionBusy('overridingAlarm', false);
+        this.state.alarmOverridden = true;
+        this.dispatchAlarmToClients();
+        this.sendMail(plyId, `Het alarm is uitgeschakeld`);
+      },
+      timeout * 60 * 1000
+    );
 
     this.log(plyId, 'info', 'overrideAlarm', `has overriden jewelry alarm system`);
   };
@@ -438,10 +442,13 @@ export class JewelryManager implements Heists.TypeManager {
     if (this.emptyLocationTimeout) clearTimeout(this.emptyLocationTimeout);
 
     const timeout = config.jewelry.emptyLocationRequirementTime;
-    this.emptyLocationTimeout = setTimeout(() => {
-      this.emptyLocationTimeout = null;
-      this.startResetTimeout();
-    }, timeout * 60 * 1000);
+    this.emptyLocationTimeout = setTimeout(
+      () => {
+        this.emptyLocationTimeout = null;
+        this.startResetTimeout();
+      },
+      timeout * 60 * 1000
+    );
   };
 
   private startResetTimeout = () => {
@@ -456,21 +463,24 @@ export class JewelryManager implements Heists.TypeManager {
 
     this.log(undefined, 'info', 'startReset', `All players have left jewelry, starting restart timeout`);
 
-    setTimeout(() => {
-      this.inTimeout = false;
+    setTimeout(
+      () => {
+        this.inTimeout = false;
 
-      this.state.alarmOverridden = false;
-      this.generatePinCode();
-      this.lootedVitrines.clear();
+        this.state.alarmOverridden = false;
+        this.generatePinCode();
+        this.lootedVitrines.clear();
 
-      this.setActionBusy('laptopHack', false);
-      this.setActionBusy('overridingAlarm', false);
+        this.setActionBusy('laptopHack', false);
+        this.setActionBusy('overridingAlarm', false);
 
-      // relock thermiteable door
-      DoorLock.changeDoorState('jewelry_office', true);
+        // relock thermiteable door
+        DoorLock.changeDoorState('jewelry_office', true);
 
-      this.log(undefined, 'info', 'reset', `Jewelry has been reset`);
-    }, config.jewelry.resetTime * 60 * 1000);
+        this.log(undefined, 'info', 'reset', `Jewelry has been reset`);
+      },
+      config.jewelry.resetTime * 60 * 1000
+    );
   };
 
   @DGXEvent('heists:jewelry:smashVitrine')

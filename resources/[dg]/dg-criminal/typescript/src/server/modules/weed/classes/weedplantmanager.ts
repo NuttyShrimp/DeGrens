@@ -1,5 +1,5 @@
 import { SQL, Util } from '@dgx/server';
-import { DGXEvent, EventListener } from '@dgx/server/decorators';
+import { DGXEvent, EventListener } from '@dgx/server/src/decorators';
 import { WeedPlant } from './weedplant';
 import winston from 'winston';
 import { mainLogger } from 'sv_logger';
@@ -121,13 +121,16 @@ class WeedPlantManager extends Util.Singleton<WeedPlantManager>() {
 
   public startThreads = () => {
     // Growing loop
-    setInterval(() => {
-      this.logger.silly('Plant grow interval fired');
+    setInterval(
+      () => {
+        this.logger.silly('Plant grow interval fired');
 
-      for (const [_, weedPlant] of this.weedPlants) {
-        weedPlant.checkGrowth();
-      }
-    }, 10 * 60 * 1000);
+        for (const [_, weedPlant] of this.weedPlants) {
+          weedPlant.checkGrowth();
+        }
+      },
+      10 * 60 * 1000
+    );
   };
 }
 

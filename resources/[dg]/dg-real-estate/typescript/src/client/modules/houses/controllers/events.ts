@@ -6,6 +6,7 @@ import {
   loadHouses,
   removeKeyFromHouse,
   setHouseLock,
+  setMailBox,
   updateHouseGarage,
   updateHouseLocation,
   updateHouseOwner,
@@ -67,6 +68,10 @@ Events.onNet('realestate:property:removeAccess', (name: string, cid: number) => 
 
 Events.onNet('realestate:property:setGarage', (name: string, coords: Vec4) => {
   updateHouseGarage(name, coords);
+});
+
+Events.onNet('realestate:property:setMailBox', (name: string, hasMailbox: boolean) => {
+  setMailBox(name, hasMailbox);
 });
 
 RPC.register('realestate:property:create', () => {

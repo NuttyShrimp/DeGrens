@@ -2,6 +2,7 @@ cache/
 /db/
 /resources/\[local\]/
 /resources/\[dg\]/dg-logs/data/
+dist/
 mysql.cfg
 server.cfg
 .yarn.installed
@@ -19,6 +20,7 @@ logtypes.json
 .env
 !.env.template
 .replxx_history
+tsup.config.bundled*
 
 
 positions.txt
@@ -276,6 +278,7 @@ dist
 positions.txt
 imgui.ini
 polyzone_created_zones.txt
+carboosting_locations.json
 
 # Mac thing
 .DS_Store

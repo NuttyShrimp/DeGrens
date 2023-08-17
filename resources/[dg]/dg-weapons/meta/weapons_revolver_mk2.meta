@@ -37,6 +37,7 @@
     </Item>
     <Item>
       <Infos>
+        <!-- OBTAINABLE -->
         <Item type="CWeaponInfo">
           <Name>WEAPON_REVOLVER_MK2</Name>
           <Model>w_pi_revolvermk2</Model>
@@ -63,16 +64,16 @@
           <RunAndGunAccuracyMinOverride value="-1.000000" />
           <RecoilAccuracyMax value="1.000000" />
           <RecoilErrorTime value="0.001000" />
-          <RecoilRecoveryRate value="1.000000" />
+          <RecoilRecoveryRate value="1.500000" />
           <RecoilAccuracyToAllowHeadShotAI value="1000.000000" />
           <MinHeadShotDistanceAI value="1000.000000" />
           <MaxHeadShotDistanceAI value="1000.000000" />
           <HeadShotDamageModifierAI value="1000.000000" />
           <RecoilAccuracyToAllowHeadShotPlayer value="0.175000" />
-          <MinHeadShotDistancePlayer value="5.000000" />
-          <MaxHeadShotDistancePlayer value="40.000000" />
-          <HeadShotDamageModifierPlayer value="18.000000" />
-          <Damage value="200.000000" />
+          <MinHeadShotDistancePlayer value="0.000000" />
+          <MaxHeadShotDistancePlayer value="2.000000" />
+          <HeadShotDamageModifierPlayer value="100.000000" />
+          <Damage value="75.000000" />
           <DamageTime value="0.000000" />
           <DamageTimeInVehicle value="0.000000" />
           <DamageTimeInVehicleHeadShot value="0.000000" />
@@ -197,16 +198,16 @@
           <NetworkPlayerDamageModifier value="1.000000" />
           <NetworkPedDamageModifier value="1.000000" />
           <NetworkHeadShotPlayerDamageModifier value="1.000000" />
-          <LockOnRange value="45.000000" />
-          <WeaponRange value="120.000000" />
+          <LockOnRange value="0.000000" />
+          <WeaponRange value="1000.000000" />
           <BulletDirectionOffsetInDegrees value="0.000000" />
           <BulletDirectionPitchOffset value="0.000000" />
           <BulletDirectionPitchHomingOffset value="0.000000" />
           <AiSoundRange value="-1.000000" />
           <AiPotentialBlastEventRange value="-1.000000" />
-          <DamageFallOffRangeMin value="20.000000" />
-          <DamageFallOffRangeMax value="120.000000" />
-          <DamageFallOffModifier value="0.700000" />
+          <DamageFallOffRangeMin value="100.000000" />
+          <DamageFallOffRangeMax value="200.000000" />
+          <DamageFallOffModifier value="0.750000" />
           <VehicleWeaponHash />
           <DefaultCameraHash>DEFAULT_THIRD_PERSON_PED_AIM_CAMERA</DefaultCameraHash>
           <AimCameraHash />
@@ -254,7 +255,7 @@
           <RecoilShakeHashFirstPerson>FPS_PISTOL_RECOIL_SHAKE</RecoilShakeHashFirstPerson>
           <AccuracyOffsetShakeHash />
           <MinTimeBetweenRecoilShakes value="150" />
-          <RecoilShakeAmplitude value="1.750000" />
+          <RecoilShakeAmplitude value="2.750000" />
           <ExplosionShakeAmplitude value="-1.000000" />
           <IkRecoilDisplacement value="0.010000" />
           <IkRecoilDisplacementScope value="0.009000" />
@@ -411,7 +412,13 @@
           </AttachPoints>
           <GunFeedBone />
           <TargetSequenceGroup />
-          <WeaponFlags>CarriedInHand Gun CanLockonOnFoot CanLockonInVehicle CanFreeAim AnimReload AnimCrouchFire UsableOnFoot UsableClimbing UsableInCover OnlyFireOneShotPerTriggerPress HasLowCoverReloads HasLowCoverSwaps QuitTransitionToIdleIntroOnWeaponChange DisableLeftHandIkWhenOnFoot TorsoIKForWeaponBlock DisableIdleAnimationFilter UseFPSAimIK UseFPSSecondaryMotion DisableIdleAnimationFilterWhenReloading BlockFirstPersonStateTransitionWhileFiring IdlePhaseBasedOnTrigger IncendiaryGuaranteedChance UseRevolverBehaviour UseInstantAnimBlendFromFireToIdle</WeaponFlags>
+          <WeaponFlags>CarriedInHand Gun CanLockonOnFoot CanLockonInVehicle CanFreeAim AnimReload
+            AnimCrouchFire UsableOnFoot UsableClimbing UsableInCover OnlyFireOneShotPerTriggerPress
+            HasLowCoverReloads HasLowCoverSwaps QuitTransitionToIdleIntroOnWeaponChange
+            DisableLeftHandIkWhenOnFoot TorsoIKForWeaponBlock DisableIdleAnimationFilter UseFPSAimIK
+            UseFPSSecondaryMotion DisableIdleAnimationFilterWhenReloading
+            BlockFirstPersonStateTransitionWhileFiring IdlePhaseBasedOnTrigger
+            IncendiaryGuaranteedChance UseRevolverBehaviour UseInstantAnimBlendFromFireToIdle</WeaponFlags>
           <TintSpecValues ref="TINT_GUNRUNNING" />
           <FiringPatternAliases ref="FIRING_PATTERN_PISTOL" />
           <ReloadUpperBodyFixupExpressionData ref="default" />

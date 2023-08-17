@@ -6,6 +6,7 @@
     width: 100vw;
     height: 100vh;
     overflow: scroll;
+    pointer-events: none !important;
 
     &::-webkit-scrollbar {
       display: none;
@@ -20,6 +21,7 @@
     max-width: 35vh;
     display: inline-flex;
     flex-direction: column;
+    pointer-events: auto;
 
     & .entry {
       display: flex;
@@ -29,7 +31,7 @@
       cursor: pointer;
       background-color: rgba(variables.$primary_darker_darker, 0.75);
       color: white;
-      transition: border .1s ease-in-out;
+      transition: border 0.1s ease-in-out;
 
       &:not(:last-child) {
         border-bottom: 0.1vh solid rgba(variables.$gray_light, 0.5);
@@ -37,7 +39,7 @@
 
       &:hover {
         background-color: variables.$primary_darker_darker;
-        border-bottom: .2vh solid white;
+        border-bottom: 0.2vh solid white;
       }
 
       &.disabled {

@@ -25,6 +25,7 @@ const createBlip = (id: string, info: NBlipManager.Info) => {
 
   SetBlipColour(newBlip, info.color ?? 0);
   SetBlipDisplay(newBlip, info.display ?? 6);
+  SetBlipAlpha(newBlip, info.alpha ?? 255);
 
   blips[id].handle = newBlip;
 };

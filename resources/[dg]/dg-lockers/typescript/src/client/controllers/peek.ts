@@ -1,4 +1,4 @@
-import { Events, Peek } from '@dgx/client/classes';
+import { Events, Peek } from '@dgx/client';
 
 Peek.addZoneEntry('locker', {
   options: [

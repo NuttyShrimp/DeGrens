@@ -93,7 +93,7 @@ Inventory.registerUseable<{ dna: string }>('evidence_dna', async (src, item) => 
   // Currently police have NO way of getting a persons name if he doesnt have an ID
 
   const job = Jobs.getCurrentJob(src);
-  if (job !== 'police') return;
+  if (job !== 'police' && job !== 'ambulance') return;
 
   const cid = await getCidOfDNA(dna);
   if (!cid) return;

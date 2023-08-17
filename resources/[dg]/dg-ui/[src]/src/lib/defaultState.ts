@@ -222,4 +222,10 @@ defaultState.gridgame = {
     gridSize: 5,
     time: 60,
   },
+  binarysudoku: {
+    id: 'testgame',
+    game: 'binarysudoku',
+    gridSize: 4,
+    time: 60,
+  },
 };

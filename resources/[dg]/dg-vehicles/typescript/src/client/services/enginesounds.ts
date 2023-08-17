@@ -1,7 +1,13 @@
-import { Events, Statebags, UI } from '@dgx/client';
+import { Core, Events, Statebags, UI } from '@dgx/client';
 
-Statebags.addEntityStateBagChangeHandler('entity', 'engineSound', (_, vehicle, engineSound) => {
-  PreloadVehicleAudio(GetEntityModel(vehicle));
+let scheduledSoundChanges: { vehicle: number; engineSound: string }[] = [];
+
+Statebags.addEntityStateBagChangeHandler<string>('entity', 'engineSound', (_, vehicle, engineSound) => {
+  if (!LocalPlayer.state.isLoggedIn) {
+    scheduledSoundChanges.push({ vehicle, engineSound });
+    return;
+  }
+
   ForceVehicleEngineAudio(vehicle, engineSound);
 });
 
@@ -18,4 +24,12 @@ UI.RegisterUICallback('vehicles/enginesounds/save', (data: { netId: number }, cb
 UI.RegisterUICallback('vehicles/enginesounds/reset', (data: { netId: number }, cb) => {
   Events.emitNet('vehicles:enginesounds:reset', data.netId);
   cb({ data: {}, meta: { ok: true, message: '' } });
+});
+
+Core.onPlayerLoaded(() => {
+  for (const { vehicle, engineSound } of scheduledSoundChanges) {
+    if (!DoesEntityExist(vehicle)) continue;
+    ForceVehicleEngineAudio(vehicle, engineSound);
+  }
+  scheduledSoundChanges = [];
 });

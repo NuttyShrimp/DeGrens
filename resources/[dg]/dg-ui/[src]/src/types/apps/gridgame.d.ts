@@ -3,21 +3,22 @@ declare namespace Gridgame {
     gridSize: number;
     active: Game | null;
     id: string;
-    data: OrderGameData | SequenceGameData | LogicGameData | null;
-    cells: Cells[];
+    data: OrderGameData | SequenceGameData | VisionGameData | BinarySudokuData | null;
+    cells: Cell[];
   };
 
   interface StateActions {
-    startGame: (id: string, active: Game, size: number, data: GameData) => void;
+    startGame: (id: string, active: Game, size: number, data: State['data']) => void;
     resetGame: () => void;
-    setCells: (cb: (oldCells: Cells[]) => Cells[]) => void;
+    setCells: (cb: (oldCells: Cell[]) => Cell[]) => void;
   }
 
   type GameData = BaseGameData &
     (
       | ({ game: 'order' } & OrderGameData)
       | ({ game: 'sequence' } & SequenceGameData)
-      | ({ game: 'logic' } & LogicGameData)
+      | ({ game: 'vision' } & VisionGameData)
+      | ({ game: 'binarysudoku' } & BinarySudokuData)
     );
 
   type BaseGameData = {
@@ -40,7 +41,11 @@ declare namespace Gridgame {
     time: number;
   };
 
-  type Game = 'sequence' | 'order' | 'vision';
+  type BinarySudokuData = {
+    time: number;
+  };
+
+  type Game = GameData['game'];
 
   type Cell = {
     id: number;

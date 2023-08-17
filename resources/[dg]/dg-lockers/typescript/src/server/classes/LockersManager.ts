@@ -1,4 +1,4 @@
-import { DGXEvent, DGXLocalEvent, EventListener } from '@dgx/server/decorators';
+import { DGXEvent, DGXLocalEvent, EventListener } from '@dgx/server/src/decorators';
 import winston from 'winston';
 import { mainLogger } from 'sv_logger';
 import { Admin, Events, Financials, Notifications, Util } from '@dgx/server';
@@ -20,7 +20,7 @@ class LockersManager extends Util.Singleton<LockersManager>() {
 
   private registerLocker = (data: Lockers.Locker | Lockers.Locker[]) => {
     if (Array.isArray(data)) {
-      data.forEach(this.registerLocker);
+      data.forEach(this.registerLocker.bind(this));
       return;
     }
     const locker = new Locker(data);

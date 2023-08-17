@@ -1,9 +1,9 @@
-import { Config, Events } from '@dgx/server';
-import { RPCRegister } from '@dgx/server/decorators';
-import { Util } from '@dgx/shared';
-import { Export, ExportRegister } from '@dgx/shared';
+import { Config, Events, ExportDecorators, Util } from '@dgx/server';
+import { RPCRegister } from '@dgx/server/src/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
+
+const { Export, ExportRegister } = ExportDecorators<'inventory'>();
 
 @ExportRegister()
 @RPCRegister()
@@ -20,7 +20,9 @@ class ItemDataManager extends Util.Singleton<ItemDataManager>() {
   }
 
   @Export('isItemDataLoaded')
-  private _getIsLoaded = () => this.loaded;
+  private _getIsLoaded() {
+    return this.loaded;
+  }
 
   public seed = () => {
     const data = Config.getConfigValue<Inventory.ItemData[]>('inventory.items');
@@ -37,22 +39,22 @@ class ItemDataManager extends Util.Singleton<ItemDataManager>() {
   };
 
   @Export('getItemData')
-  public get = (name: string) => {
+  public get(name: string) {
     const item = this.itemData.get(name);
     if (!item) {
       throw new Error(`Could not get itemdata with nonexistent name ${name}`);
     }
     return item;
-  };
+  }
 
   public doesItemNameExist = (name: string) => {
     return this.itemData.has(name);
   };
 
   @Export('getAllItemData')
-  private getAll = () => {
+  private getAll() {
     return Object.fromEntries(this.itemData);
-  };
+  }
 
   public seedItemDataForPlayer = (plyId: number) => {
     Events.emitNet('inventory:itemdata:seed', plyId, this.getAll());

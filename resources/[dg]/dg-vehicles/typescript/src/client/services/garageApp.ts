@@ -1,4 +1,4 @@
-import { Events, RPC, UI, Util } from '@dgx/client';
+import { Events, Notifications, RPC, UI, Util } from '@dgx/client';
 
 let trackedVehBlip: number;
 let trackedVehTimeout: NodeJS.Timeout | null;
@@ -70,4 +70,6 @@ Events.onNet('vehicles:server:app:setTrackedBlip', (coords: Vec3) => {
     trackedVehTimeout = null;
   }, 15000);
   Util.setWaypoint(coords);
+
+  Notifications.add('Voertuiglocatie staat op je GPS');
 });

@@ -234,8 +234,8 @@
         }
       ]
     },
-    "weapon_heavypistol": {
-      "requiredReputation": 50,
+    "weapon_vintagepistol": {
+      "requiredReputation": 25,
       "items": [
         {
           "name": "advanced_parts",
@@ -247,21 +247,21 @@
         }
       ]
     },
-    "weapon_appistol": {
-      "requiredReputation": 200,
+    "weapon_combatpistol": {
+      "requiredReputation": 25,
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 5
+          "amount": 4
         },
         {
           "name": "material_electronics",
-          "amount": 5
+          "amount": 3
         }
       ]
     },
-    "weapon_machinepistol": {
-      "requiredReputation": 200,
+    "weapon_heavypistol": {
+      "requiredReputation": 50,
       "items": [
         {
           "name": "advanced_parts",
@@ -269,7 +269,33 @@
         },
         {
           "name": "material_electronics",
-          "amount": 5
+          "amount": 4
+        }
+      ]
+    },
+    "weapon_revolver_mk2": {
+      "requiredReputation": 75,
+      "items": [
+        {
+          "name": "advanced_parts",
+          "amount": 7
+        },
+        {
+          "name": "material_electronics",
+          "amount": 6
+        }
+      ]
+    },
+    "weapon_pistol50": {
+      "requiredReputation": 75,
+      "items": [
+        {
+          "name": "advanced_parts",
+          "amount": 7
+        },
+        {
+          "name": "material_electronics",
+          "amount": 6
         }
       ]
     },
@@ -278,11 +304,11 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 7
+          "amount": 15
         },
         {
           "name": "material_electronics",
-          "amount": 8
+          "amount": 10
         }
       ]
     },
@@ -291,11 +317,11 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 7
+          "amount": 15
         },
         {
           "name": "material_electronics",
-          "amount": 8
+          "amount": 10
         }
       ]
     },
@@ -304,11 +330,11 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 10
+          "amount": 25
         },
         {
           "name": "material_electronics",
-          "amount": 10
+          "amount": 20
         }
       ]
     },
@@ -317,11 +343,37 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 10
+          "amount": 25
         },
         {
           "name": "material_electronics",
-          "amount": 10
+          "amount": 20
+        }
+      ]
+    },
+    "weapon_appistol": {
+      "requiredReputation": 200,
+      "items": [
+        {
+          "name": "advanced_parts",
+          "amount": 20
+        },
+        {
+          "name": "material_electronics",
+          "amount": 15
+        }
+      ]
+    },
+    "weapon_machinepistol": {
+      "requiredReputation": 200,
+      "items": [
+        {
+          "name": "advanced_parts",
+          "amount": 20
+        },
+        {
+          "name": "material_electronics",
+          "amount": 15
         }
       ]
     },
@@ -330,11 +382,11 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 13
+          "amount": 40
         },
         {
           "name": "material_electronics",
-          "amount": 12
+          "amount": 35
         }
       ]
     },
@@ -343,11 +395,11 @@
       "items": [
         {
           "name": "advanced_parts",
-          "amount": 13
+          "amount": 40
         },
         {
           "name": "material_electronics",
-          "amount": 12
+          "amount": 35
         }
       ]
     },
@@ -440,14 +492,10 @@
       ]
     },
     "thermite": {
-      "requiredReputation": 260,
+      "requiredReputation": 190,
       "items": [
         {
           "name": "refined_steel",
-          "amount": 1
-        },
-        {
-          "name": "refined_copper",
           "amount": 1
         },
         {
@@ -455,24 +503,16 @@
           "amount": 1
         },
         {
-          "name": "refined_aluminum",
-          "amount": 1
-        },
-        {
-          "name": "material_glass",
-          "amount": 2
+          "name": "material_aluminum",
+          "amount": 5
         }
       ]
     },
     "mini_emp": {
-      "requiredReputation": 230,
+      "requiredReputation": 195,
       "items": [
         {
           "name": "refined_steel",
-          "amount": 1
-        },
-        {
-          "name": "refined_copper",
           "amount": 1
         },
         {
@@ -480,12 +520,8 @@
           "amount": 1
         },
         {
-          "name": "refined_aluminum",
-          "amount": 1
-        },
-        {
-          "name": "material_glass",
-          "amount": 2
+          "name": "material_copper",
+          "amount": 5
         }
       ]
     },
@@ -836,6 +872,65 @@
           "amount": 1
         }
       ]
+    },
+    "tracker_disabler": {
+      "requiredReputation": 0,
+      "items": [
+        {
+          "name": "refined_plastic",
+          "amount": 2
+        },
+        {
+          "name": "material_aluminum",
+          "amount": 5
+        },
+        {
+          "name": "material_electronics",
+          "amount": 1
+        }
+      ]
+    },
+    "car_hack_tool": {
+      "requiredReputation": 35,
+      "items": [
+        {
+          "name": "refined_plastic",
+          "amount": 2
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 3
+        },
+        {
+          "name": "refined_copper",
+          "amount": 3
+        },
+        {
+          "name": "material_electronics",
+          "amount": 10
+        }
+      ]
+    },
+    "gate_unlock_tool": {
+      "requiredReputation": 45,
+      "items": [
+        {
+          "name": "refined_plastic",
+          "amount": 5
+        },
+        {
+          "name": "refined_aluminum",
+          "amount": 2
+        },
+        {
+          "name": "refined_copper",
+          "amount": 2
+        },
+        {
+          "name": "material_electronics",
+          "amount": 10
+        }
+      ]
     }
   },
   "benches": {
@@ -874,7 +969,9 @@
     "weapon_bench_A": {
       "items": [
         "weapon_pistol",
+        "weapon_vintagepistol",
         "weapon_heavypistol",
+        "weapon_revolver_mk2",
         "weapon_machinepistol",
         "weapon_microsmg",
         "weapon_advancedrifle",
@@ -886,12 +983,14 @@
         "hand_cuffs",
         "container_weapons"
       ],
-      "visibleReputationLimit": 175
+      "visibleReputationLimit": 199
     },
     "weapon_bench_B": {
       "items": [
         "weapon_pistol",
+        "weapon_vintagepistol",
         "weapon_heavypistol",
+        "weapon_pistol50",
         "weapon_appistol",
         "weapon_microsmg",
         "weapon_assaultrifle",
@@ -903,12 +1002,14 @@
         "hand_cuffs",
         "container_weapons"
       ],
-      "visibleReputationLimit": 175
+      "visibleReputationLimit": 199
     },
     "weapon_bench_C": {
       "items": [
         "weapon_pistol",
+        "weapon_combatpistol",
         "weapon_heavypistol",
+        "weapon_pistol50",
         "weapon_machinepistol",
         "weapon_assaultsmg",
         "weapon_assaultrifle",
@@ -920,7 +1021,7 @@
         "hand_cuffs",
         "container_weapons"
       ],
-      "visibleReputationLimit": 175
+      "visibleReputationLimit": 199
     },
     "mechanic_bench": {
       "items": ["repair_kit", "tire_repair_kit", "weapon_petrolcan", "advanced_repair_kit"],
@@ -933,6 +1034,10 @@
     "kingpills_bench": {
       "items": ["kingpills_bandage", "kingpills_pressure_bandage", "kingpills_ferrodyn", "kingpills_antibiotics"],
       "reputation": "kingpills_crafting"
+    },
+    "carboost_bench": {
+      "items": ["tracker_disabler", "car_hack_tool", "gate_unlock_tool"],
+      "reputation": "carboost_crafting"
     }
   }
 }

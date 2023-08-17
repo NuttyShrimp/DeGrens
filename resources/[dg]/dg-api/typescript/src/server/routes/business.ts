@@ -1,48 +1,52 @@
 import { Config } from '@dgx/server';
-import { registerRoute } from 'sv_routes';
+import { FastifyPluginAsync } from 'fastify';
 
-registerRoute('POST', '/business/actions/new', async (req, res) => {
-  await global.exports['dg-business'].createBusiness(
-    req.body.name,
-    req.body.label,
-    Number(req.body.owner),
-    req.body.typeName
+export const businessRouter: FastifyPluginAsync = async server => {
+  server.post<{ Body: { name: string; label: string; owner: number; typeName: string } }>(
+    '/actions/new',
+    async (req, res) => {
+      await global.exports['dg-business'].createBusiness(
+        req.body.name,
+        req.body.label,
+        Number(req.body.owner),
+        req.body.typeName
+      );
+      return res.code(200).send({});
+    }
   );
-  res(200, {});
-});
 
-registerRoute('GET', '/business/permissions', async (_, res) => {
-  try {
-    await Config.awaitConfigLoad();
-    const perms = global.exports['dg-business'].getAllPermissions();
-    res(200, perms);
-  } catch (e) {
-    console.error(e);
-    res(500, {
-      error: 'kon de permissies niet ophalen uit het business resource',
-    });
-  }
-});
+  server.get('/permissions', async (_, res) => {
+    try {
+      await Config.awaitConfigLoad();
+      const perms = global.exports['dg-business'].getAllPermissions();
+      return res.code(200).send(perms);
+    } catch (e) {
+      console.error(e);
+      return res.code(500).send({
+        error: 'kon de permissies niet ophalen uit het business resource',
+      });
+    }
+  });
 
-registerRoute('DELETE', '/business/:id', (req, res) => {
-  const id = req.params.id;
-  if (!id || isNaN(Number(id))) {
-    res(500, {
-      error: 'business id is not a valid number',
-    });
-    return;
-  }
-  global.exports['dg-business'].deleteBusiness(id);
-  res(200, {});
-});
+  server.delete<{ Params: { id: string } }>('/:id', (req, res) => {
+    const id = req.params.id;
+    if (!id || isNaN(Number(id))) {
+      return res.code(500).send({
+        error: 'business id is not a valid number',
+      });
+      return;
+    }
+    global.exports['dg-business'].deleteBusiness(id);
+    return res.code(200).send({});
+  });
 
-registerRoute('POST', '/business/updateOwner', (req, res) => {
-  if (!req.body.businessId || !req.body.newOwner) {
-    res(500, {
-      error: 'missing data in request body',
-    });
-    return;
-  }
-  global.exports['dg-business'].updateOwner(req.body.businessId, req.body.newOwner);
-  res(200, {});
-});
+  server.post<{ Body: { businessId: number; newOwner: number } }>('/updateOwner', (req, res) => {
+    if (!req.body.businessId || !req.body.newOwner) {
+      return res.code(500).send({
+        error: 'missing data in request body',
+      });
+    }
+    global.exports['dg-business'].updateOwner(req.body.businessId, req.body.newOwner);
+    return res.code(200).send({});
+  });
+};

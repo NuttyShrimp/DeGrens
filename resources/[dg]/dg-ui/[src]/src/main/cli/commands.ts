@@ -369,7 +369,7 @@ export const cmds: {
     cmd: 'show gridgame',
     app: 'gridgame',
     show: true,
-    data: defaultState.gridgame.vision,
+    data: defaultState.gridgame.binarysudoku,
   },
   {
     cmd: 'hide gridgame',

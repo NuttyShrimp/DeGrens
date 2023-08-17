@@ -1,4 +1,4 @@
-import { Util } from '@dgx/shared';
+import { Util } from '@dgx/client';
 
 export const generateKeygameSequence = () => {
   const sequence: {

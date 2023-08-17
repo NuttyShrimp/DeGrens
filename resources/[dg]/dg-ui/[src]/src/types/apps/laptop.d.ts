@@ -131,4 +131,37 @@ declare namespace Laptop {
       image: string;
     }
   }
+
+  namespace Carboosting {
+    type State = {
+      signedUp: boolean;
+      contracts: Contract[];
+      reputation: {
+        percentage: number;
+        currentClass: string;
+        nextClass?: string;
+      };
+    };
+
+    type StateActions = {
+      fetchData: () => void;
+    } & Store.UpdateStore<State>;
+
+    type Contract = {
+      id: number;
+      class: string;
+      brand: string;
+      name: string;
+      expirationTime: number;
+      price: {
+        boost: number;
+        scratch: number;
+      };
+      disabledActions: {
+        boost: boolean;
+        scratch: boolean;
+        decline: boolean;
+      };
+    };
+  }
 }

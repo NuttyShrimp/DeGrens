@@ -1,5 +1,5 @@
 import { Business, Notifications, Util } from '@dgx/server';
-import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/src/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import { Restaurant } from './restaurant';

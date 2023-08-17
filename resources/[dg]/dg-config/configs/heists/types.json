@@ -9,8 +9,8 @@
         },
         "gold": {
           "itemName": "gold_bar",
-          "amount": [2, 5],
-          "spawnChance": 50
+          "amount": [3, 7],
+          "spawnChance": 75
         }
       },
       "specialItem": {
@@ -44,18 +44,18 @@
       "types": {
         "cash": {
           "itemName": "marked_bills",
-          "amount": [15, 30],
+          "amount": [3, 6],
           "spawnChance": 100
         },
         "gold": {
           "itemName": "gold_bar",
-          "amount": [2, 5],
-          "spawnChance": 10
+          "amount": [5, 9],
+          "spawnChance": 100
         }
       },
       "specialItem": {
         "chance": 10,
-        "item": "drive_v2"
+        "item": "drive_v1"
       }
     }
   },

@@ -18,6 +18,7 @@ declare namespace Flyers {
     id: number;
     cid: number;
     link: string;
+    description: string;
     approved: number;
   }
   type UIFlyer = { type: 'police'; name: string } | { link: string };

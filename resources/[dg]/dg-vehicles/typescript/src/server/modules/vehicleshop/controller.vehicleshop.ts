@@ -70,7 +70,7 @@ Events.onNet('vehicles:shop:openVehicleMenu', (src: number, spotId: number, cate
     .sort(([brandA], [brandB]) => brandA.localeCompare(brandB))
     .forEach(([category, vehicles]) => {
       menu.push({
-        title: getCategoryLabel(categorisation, category as Category),
+        title: getCategoryLabel(categorisation, category as Vehicles.Category),
         submenu: vehicles
           .sort((carA, carB) => carA.class.localeCompare(carB.class))
           .map(vehicle => buildVehicleContextMenuEntry(vehicle, 'vehicleshop/selectModel')),

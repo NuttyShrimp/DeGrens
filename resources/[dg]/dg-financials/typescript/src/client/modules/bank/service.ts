@@ -1,4 +1,4 @@
-import { Events, Peek, PolyTarget, RPC, UI } from '@dgx/client';
+import { Events, Peek, PolyTarget, RPC, UI, Taskbar } from '@dgx/client';
 import locationManager from 'classes/LocationManager';
 
 import { config } from '../../config';
@@ -80,7 +80,7 @@ export const doAnimation = async (isAtm: boolean, isOpen: boolean) => {
         flags: 49,
         animDict: 'mp_common',
       };
-  return DGX.Taskbar.create('credit-card', config.animText[isOpen ? 'open' : 'close'], 1000, {
+  return Taskbar.create('credit-card', config.animText[isOpen ? 'open' : 'close'], 1000, {
     canCancel: false,
     cancelOnDeath: true,
     controlDisables: {

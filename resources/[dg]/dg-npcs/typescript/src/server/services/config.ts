@@ -1,5 +1,4 @@
-import { Config } from '@dgx/server';
-import { Util } from '@dgx/shared';
+import { Config, Util } from '@dgx/server';
 import { addConfigNpcs } from './npcs';
 
 let configLoaded = false;

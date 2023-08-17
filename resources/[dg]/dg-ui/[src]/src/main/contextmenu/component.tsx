@@ -45,7 +45,7 @@ const Component: AppFunction = props => {
   }, []);
 
   return (
-    <AppWrapper appName={config.name} onShow={onShow} onHide={onHide} full hideOnEscape>
+    <AppWrapper appName={config.name} onShow={onShow} onHide={onHide} full hideOnEscape unSelectable>
       <ContextMenu />
     </AppWrapper>
   );

@@ -13,7 +13,7 @@ export const finishOrder = async (plyId: number, order: Mechanic.PartItem[]) => 
     return;
   }
 
-  const stashItems = await Inventory.getItemsInInventory<{ class: CarClass; stage?: number }>(
+  const stashItems = await Inventory.getItemsInInventory<{ class: Vehicles.Class; stage?: number }>(
     'stash',
     `mechanic-shop-parts-${shop}`
   );
@@ -86,7 +86,7 @@ const getRevenueForItem = (item: Mechanic.PartItem) => {
 };
 
 const getCountsInShopStash = async (shop: string) => {
-  const stashItems = await Inventory.getItemsInInventory<{ class: CarClass; stage?: number }>(
+  const stashItems = await Inventory.getItemsInInventory<{ class: Vehicles.Class; stage?: number }>(
     'stash',
     `mechanic-shop-parts-${shop}`
   );
@@ -259,7 +259,7 @@ export const getOrderMenu = async (plyId: number) => {
 
 const generatePartMenuEntries = (
   itemCounts: Record<string, number>,
-  carClass: CarClass,
+  carClass: Vehicles.Class,
   callbackURL: string,
   disableWhenZero = false
 ) => {

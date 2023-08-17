@@ -1,4 +1,16 @@
-import { Events, Keys, PolyZone, Util, UI, Minigames, Inventory, Particles, RayCast, Sounds } from '@dgx/client';
+import {
+  Events,
+  Keys,
+  PolyZone,
+  Util,
+  UI,
+  Minigames,
+  Inventory,
+  Particles,
+  RayCast,
+  Sounds,
+  Animations,
+} from '@dgx/client';
 import { doDoorAnimation, getDoorId, isAuthorized } from 'helpers/doors';
 import { doThermiteOnDoorAnimScene, findAnimScenePositionForDoor } from 'helpers/scenes';
 
@@ -215,14 +227,14 @@ export const tryToLockpickDoor = async () => {
 
   if (!doors[doorId].lockpickable || !doors[doorId].locked) return;
 
-  const success = await Minigames.keygame(3, 1, 5);
-  Events.emitNet('dg-doorlock:server:triedLockpickingDoor', doorId);
+  const success = await Minigames.keygame(5, 6, 7);
+  Events.emitNet('doorlock:server:triedLockpickingDoor', doorId);
   if (success) {
     Events.emitNet('doorlock:server:changeDoorState', doorId, false);
   }
 };
 
-export const tryToThermiteDoor = async () => {
+export const tryToThermiteDoor = async (itemId: string) => {
   if (!doors) return;
 
   // we use the normal active door as targetdoor
@@ -238,7 +250,7 @@ export const tryToThermiteDoor = async () => {
   const scenePosition = findAnimScenePositionForDoor(doorEntity, raycastHitCoords);
   if (!scenePosition) return;
 
-  const removed = await Inventory.removeItemByNameFromPlayer('thermite');
+  const removed = await Inventory.removeItemById(itemId);
   if (!removed) return;
 
   const thermiteObject = await doThermiteOnDoorAnimScene(scenePosition);
@@ -264,7 +276,7 @@ export const tryToThermiteDoor = async () => {
   Util.deleteEntity(thermiteObject);
 };
 
-export const tryToDetcordDoor = async () => {
+export const tryToDetcordDoor = async (itemId: string) => {
   if (!doors) return;
 
   // we use the normal active door as targetdoor
@@ -277,7 +289,7 @@ export const tryToDetcordDoor = async () => {
   const scenePosition = findAnimScenePositionForDoor(doorEntity, raycastHitCoords);
   if (!scenePosition) return;
 
-  const removed = await Inventory.removeItemByNameFromPlayer('detcord');
+  const removed = await Inventory.removeItemById(itemId);
   if (!removed) return;
 
   const thermiteObject = await doThermiteOnDoorAnimScene(scenePosition);
@@ -299,10 +311,30 @@ export const tryToDetcordDoor = async () => {
   Util.deleteEntity(thermiteObject);
 };
 
+export const tryToGateUnlockDoor = async (itemId: string) => {
+  if (!doors) return;
+
+  // we use the normal active door as targetdoor
+  if (!activeDoorRaycast) return;
+
+  const { entity: doorEntity } = activeDoorRaycast;
+  const doorId = getDoorId(doorEntity);
+  if (!doorId) return;
+
+  if (!doors[doorId].canUseGateUnlock || !doors[doorId].locked) return;
+
+  const success = await Animations.doLaptopHackAnimation(() => Minigames.binarysudoku(6, 90));
+  Events.emitNet('doorlock:server:finishGateUnlock', doorId, itemId, success);
+};
+
 export const getDoorState = (doorId: number) => {
   if (doors?.[doorId]?.forceOpen) {
     return doors[doorId].locked;
   }
 
   return DoorSystemGetDoorState(doorId) !== 0;
+};
+
+export const getDoorInfo = (doorId: number) => {
+  return (doors ?? {})[doorId];
 };

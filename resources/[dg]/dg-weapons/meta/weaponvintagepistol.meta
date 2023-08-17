@@ -37,6 +37,7 @@
     </Item>
     <Item>
       <Infos>
+        <!-- OBTAINABLE -->
         <Item type="CWeaponInfo">
           <Name>WEAPON_VINTAGEPISTOL</Name>
           <Model>w_pi_vintage_pistol</Model>
@@ -57,22 +58,22 @@
           <AmmoInfo ref="AMMO_PISTOL" />
           <AimingInfo ref="PISTOL_2H_BASE_STRAFE" />
           <ClipSize value="7" />
-          <AccuracySpread value="1.500000" />
-          <AccurateModeAccuracyModifier value="0.500000" />
+          <AccuracySpread value="4.000000" />
+          <AccurateModeAccuracyModifier value="0.700000" />
           <RunAndGunAccuracyModifier value="2.000000" />
           <RunAndGunAccuracyMaxModifier value="1.000000" />
           <RecoilAccuracyMax value="1.000000" />
           <RecoilErrorTime value="3.300000" />
-          <RecoilRecoveryRate value="1.000000" />
+          <RecoilRecoveryRate value="1.800000" />
           <RecoilAccuracyToAllowHeadShotAI value="1000.000000" />
           <MinHeadShotDistanceAI value="1000.000000" />
           <MaxHeadShotDistanceAI value="1000.000000" />
           <HeadShotDamageModifierAI value="1000.000000" />
           <RecoilAccuracyToAllowHeadShotPlayer value="0.175000" />
-          <MinHeadShotDistancePlayer value="5.000000" />
-          <MaxHeadShotDistancePlayer value="40.000000" />
-          <HeadShotDamageModifierPlayer value="20.000000" />
-          <Damage value="34.000000" />
+          <MinHeadShotDistancePlayer value="0.000000" />
+          <MaxHeadShotDistancePlayer value="2.000000" />
+          <HeadShotDamageModifierPlayer value="100.000000" />
+          <Damage value="28.000000" />
           <DamageTime value="0.000000" />
           <DamageTimeInVehicle value="0.000000" />
           <DamageTimeInVehicleHeadShot value="0.000000" />
@@ -156,7 +157,7 @@
             <MuzzleSmokeFxIncPerShot value="0.000000" />
             <MuzzleSmokeFxDecPerSec value="0.000000" />
             <ShellFx>eject_pistol</ShellFx>
-			<ShellFxFP>eject_pistol_fp</ShellFxFP>
+            <ShellFxFP>eject_pistol_fp</ShellFxFP>
             <TracerFx>bullet_tracer</TracerFx>
             <PedDamageHash>BulletSmall</PedDamageHash>
             <TracerFxChanceSP value="0.200000" />
@@ -194,15 +195,15 @@
           <RumbleIntensityFps value="1.000000" />
           <NetworkPlayerDamageModifier value="1.000000" />
           <NetworkPedDamageModifier value="1.000000" />
-          <NetworkHeadShotPlayerDamageModifier value="2.000000" />
-          <LockOnRange value="55.000000" />
-          <WeaponRange value="120.000000" />
+          <NetworkHeadShotPlayerDamageModifier value="1.000000" />
+          <LockOnRange value="0.000000" />
+          <WeaponRange value="1000.000000" />
           <BulletDirectionOffsetInDegrees value="0.000000" />
           <AiSoundRange value="-1.000000" />
           <AiPotentialBlastEventRange value="-1.000000" />
-          <DamageFallOffRangeMin value="40.000000" />
-          <DamageFallOffRangeMax value="120.000000" />
-          <DamageFallOffModifier value="0.300000" />
+          <DamageFallOffRangeMin value="100.000000" />
+          <DamageFallOffRangeMax value="200.000000" />
+          <DamageFallOffModifier value="0.7500000" />
           <VehicleWeaponHash />
           <DefaultCameraHash>DEFAULT_THIRD_PERSON_PED_AIM_CAMERA</DefaultCameraHash>
           <CoverCameraHash>DEFAULT_THIRD_PERSON_PED_AIM_IN_COVER_CAMERA</CoverCameraHash>
@@ -238,7 +239,7 @@
           <RecoilShakeHashFirstPerson>FPS_PISTOL_RECOIL_SHAKE</RecoilShakeHashFirstPerson>
           <AccuracyOffsetShakeHash />
           <MinTimeBetweenRecoilShakes value="150" />
-          <RecoilShakeAmplitude value="1.000000" />
+          <RecoilShakeAmplitude value="1.600000" />
           <ExplosionShakeAmplitude value="-1.000000" />
           <IkRecoilDisplacement value="0.000000" />
           <IkRecoilDisplacementScope value="0.004000" />
@@ -311,7 +312,10 @@
           </AttachPoints>
           <GunFeedBone />
           <TargetSequenceGroup>Pistol</TargetSequenceGroup>
-          <WeaponFlags>CarriedInHand Gun CanLockonOnFoot CanLockonInVehicle CanFreeAim AnimReload AnimCrouchFire UsableOnFoot UsableClimbing UsableInCover HasLowCoverReloads HasLowCoverSwaps QuitTransitionToIdleIntroOnWeaponChange DisableLeftHandIkWhenOnFoot TorsoIKForWeaponBlock UseFPSAimIK UseFPSSecondaryMotion</WeaponFlags>
+          <WeaponFlags>CarriedInHand Gun CanLockonOnFoot CanLockonInVehicle CanFreeAim AnimReload
+            AnimCrouchFire UsableOnFoot UsableClimbing UsableInCover HasLowCoverReloads
+            HasLowCoverSwaps QuitTransitionToIdleIntroOnWeaponChange DisableLeftHandIkWhenOnFoot
+            TorsoIKForWeaponBlock UseFPSAimIK UseFPSSecondaryMotion</WeaponFlags>
           <TintSpecValues ref="TINT_DEFAULT" />
           <FiringPatternAliases ref="FIRING_PATTERN_PISTOL" />
           <ReloadUpperBodyFixupExpressionData ref="DEFAULT" />

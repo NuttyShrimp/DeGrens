@@ -1,21 +1,23 @@
-import { Core, Events, SQL, Util, Vehicles } from '@dgx/server';
+import { Events, SQL, Util, Vehicles } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
 import { getREConfig } from 'services/config';
+import { charModule } from 'services/core';
 import { mainLogger } from 'sv_logger';
 
 class PropertyManager {
   private properties: Properties.ServerProperty[] = [];
   private types: Config.HousesConfig['types'] = {};
   private propertyState: Record<string, Properties.PropertyState> = {};
+  mailboxIds: string[] = [];
 
   private async savePropertyToDB(name: string) {
     const property = this.getHouseForName(name);
     if (!property) return;
     let result = await SQL.query(
       `
-                                   INSERT INTO realestate_locations (name, garage, stash, logout, clothing)
-                                   VALUES (?,?,?,?,?)
-                                   ON DUPLICATE KEY UPDATE garage = VALUES(garage), stash = VALUES(stash), logout = VALUES(logout), clothing = VALUES(clothing)
+                                   INSERT INTO realestate_locations (name, garage, stash, logout, clothing, has_mailbox)
+                                   VALUES (?,?,?,?,?,?)
+                                   ON DUPLICATE KEY UPDATE garage = VALUES(garage), stash = VALUES(stash), logout = VALUES(logout), clothing = VALUES(clothing), has_mailbox = VALUES(has_mailbox)
                                    RETURNING id
     `,
       [
@@ -24,6 +26,7 @@ class PropertyManager {
         property.locations.stash ? JSON.stringify(property.locations.stash) : null,
         property.locations.logout ? JSON.stringify(property.locations.logout) : null,
         property.locations.clothing ? JSON.stringify(property.locations.clothing) : null,
+        property.has_mailbox ?? false,
       ]
     );
 
@@ -105,7 +108,15 @@ class PropertyManager {
     this.types = config.properties.types;
 
     const storedPropertyInfo = await SQL.query<
-      { id: number; name: string; garage?: string; stash?: string; logout?: string; clothing?: string }[]
+      {
+        id: number;
+        name: string;
+        garage?: string;
+        stash?: string;
+        logout?: string;
+        clothing?: string;
+        has_mailbox?: string;
+      }[]
     >(`
       SELECT *
       FROM realestate_locations as rl
@@ -113,6 +124,8 @@ class PropertyManager {
     const storedPropertyAccess = await SQL.query<{ location_id: number; cid: number; owner: boolean }[]>(
       'SELECT * FROM realestate_location_access'
     );
+
+    this.mailboxIds = storedPropertyInfo.filter(p => !!p.has_mailbox).map(p => p.has_mailbox) as string[];
 
     config.locations.forEach(location => {
       const storedInfo = storedPropertyInfo.find(house => house.name === location.name);
@@ -127,6 +140,7 @@ class PropertyManager {
             logout: storedInfo?.logout ? JSON.parse(storedInfo.logout) : undefined,
             stash: storedInfo?.stash ? JSON.parse(storedInfo.stash) : undefined,
           },
+          has_mailbox: storedInfo?.has_mailbox,
           type: location.type,
           access: storedInfo
             ? storedPropertyAccess
@@ -164,10 +178,11 @@ class PropertyManager {
         garage: p.garage,
         type: p.type,
         locked: propState?.locked ?? true,
+        has_mailbox: !!p.has_mailbox,
         accessList: p.owner
           ? p.access
               .map(cid => {
-                const ply = Core.getPlayer(cid);
+                const ply = charModule.getPlayerByCitizenId(cid);
                 return ply
                   ? {
                       cid,
@@ -185,6 +200,10 @@ class PropertyManager {
 
   getHouseForName = (name: string) => {
     return this.properties.find(p => p.name === name);
+  };
+
+  getHouseForMailboxId = (id: string) => {
+    return this.properties.find(p => p.has_mailbox === id);
   };
 
   getHousePrice = async (name: string, zone: string) => {
@@ -218,11 +237,9 @@ class PropertyManager {
   };
 
   hasCidHouseAccess(cid: number, name: string) {
-    const plyId = Core.getModule('characters').getServerIdFromCitizenId(cid);
+    const plyId = charModule.getServerIdFromCitizenId(cid);
     if (!plyId) return false;
-    const result = this.hasHouseAccess(plyId, name);
-    console.log(result);
-    return result;
+    return this.hasHouseAccess(plyId, name);
   }
 
   hasHouseAccess = (plyId: number, name: string): boolean => {
@@ -270,7 +287,6 @@ class PropertyManager {
     property.access.splice(accIdx);
     this.savePropertyToDB(name);
 
-    const charModule = Core.getModule('characters');
     const targetPlySrvId = charModule.getServerIdFromCitizenId(cidToRemove);
     if (targetPlySrvId) {
       Events.emitNet('realestate:property:removeAccess', targetPlySrvId, property.name, cidToRemove);
@@ -307,7 +323,6 @@ class PropertyManager {
     property.access.push(target);
     this.savePropertyToDB(name);
 
-    const charModule = Core.getModule('characters');
     const targetPly = await charModule.getOfflinePlayer(target);
     if (!targetPly) {
       this.removePropertyAccess(name, target);
@@ -362,11 +377,28 @@ class PropertyManager {
     return true;
   }
 
+  setPropertyMailbox(name: string, mailBoxId: string, action: 'add' | 'remove') {
+    const property = this.getHouseForName(name);
+    if (!property) return false;
+
+    property.has_mailbox = action === 'add' ? mailBoxId : undefined;
+    if (action === 'add') {
+      this.mailboxIds.push(mailBoxId);
+    } else {
+      const idx = this.mailboxIds.findIndex(id => id === mailBoxId);
+      if (idx !== -1) {
+        this.mailboxIds.splice(idx);
+      }
+    }
+    this.savePropertyToDB(name);
+
+    Events.emitNet('realestate:property:setMailBox', -1, name, true);
+  }
+
   transferOwnership(name: string, newOwnerCid: number) {
     const property = this.getHouseForName(name);
     if (!property) return false;
 
-    const charModule = Core.getModule('characters');
     property.access.forEach(cid => {
       const targetPly = charModule.getServerIdFromCitizenId(cid);
       if (targetPly) {

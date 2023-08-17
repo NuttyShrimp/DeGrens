@@ -160,6 +160,8 @@ model character_reputations {
   cornersell         Int        @default(0)
   blazeit_crafting   Int        @default(0)
   kingpills_crafting Int        @default(0)
+  carboost_crafting  Int        @default(0)
+  carboosting        Int        @default(0)
   characters         characters @relation(fields: [citizenid], references: [citizenid], onDelete: Cascade, map: "character_reputations_ibfk_1")
 }
 
@@ -485,6 +487,7 @@ model player_vehicles {
   stance                 String?                 @db.LongText
   wax                    Int?
   nos                    Int                     @default(0) @db.SmallInt
+  vinscratched           Boolean                 @default(false)
   characters             characters              @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "player_vehicles_ibfk_1")
   engineSound            String?                 @db.VarChar(255)
   vehicle_depot_info     vehicle_depot_info[]
@@ -746,11 +749,12 @@ model kofi_vehicleshop {
 }
 
 model flyer_request {
-  id         Int        @id @default(autoincrement())
-  cid        Int
-  link       String     @db.LongText
-  approved   Boolean    @default(false)
-  characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_flyer_request_cid")
+  id          Int        @id @default(autoincrement())
+  cid         Int
+  link        String     @db.LongText
+  description String     @default("") @db.Text
+  approved    Boolean    @default(false)
+  characters  characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_flyer_request_cid")
 }
 
 model realestate_locations {
@@ -760,6 +764,7 @@ model realestate_locations {
   stash                      String?
   logout                     String?
   clothing                   String?
+  has_mailbox                String
   realestate_location_access realestate_location_access[]
 }
 

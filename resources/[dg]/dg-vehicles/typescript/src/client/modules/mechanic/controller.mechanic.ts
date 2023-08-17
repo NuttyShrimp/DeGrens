@@ -14,6 +14,7 @@ import {
 } from './services/towing.mechanic';
 import { getCurrentMechanicBusiness } from './service.mechanic';
 import { buildMechanicStashId } from '@shared/mechanic/helpers.mechanic';
+import { isInItemUpgradesZone } from 'services/itemupgrades';
 
 let modelPeekIds: string[];
 
@@ -143,7 +144,7 @@ Peek.addGlobalEntry('vehicle', {
       icon: 'fas fa-engine',
       action: (_, entity) => {
         if (!entity) return;
-        if (!getCurrentMechanicBusiness()) return;
+        if (!getCurrentMechanicBusiness() && !isInItemUpgradesZone()) return;
         // Validation not required because if it does not have a vin already neither would it have any upgrades
         const vin = getVehicleVinWithoutValidation(entity);
         if (!vin) {
@@ -152,13 +153,13 @@ Peek.addGlobalEntry('vehicle', {
         }
         Inventory.openTunes(vin);
       },
-      // TODO: add crim zones someday
       canInteract: veh => {
         if (!veh || !NetworkGetEntityIsNetworked(veh)) return false;
         if (GetVehicleClass(veh) === 18) return false;
-        return (
-          Vehicles.isNearVehiclePlace(veh, 'bonnet', 2, true) && hasVehicleKeys(veh) && !!getCurrentMechanicBusiness()
-        );
+        if (!hasVehicleKeys(veh)) return false;
+        if (!Vehicles.isNearVehiclePlace(veh, 'bonnet', 2, true)) return false;
+
+        return !!getCurrentMechanicBusiness() || isInItemUpgradesZone();
       },
     },
     {

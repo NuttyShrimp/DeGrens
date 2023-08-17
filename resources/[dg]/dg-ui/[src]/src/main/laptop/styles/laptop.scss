@@ -34,11 +34,14 @@
       justify-content: center;
       width: 10vh;
       aspect-ratio: 1;
-      cursor: pointer;
       text-align: center;
 
       & :first-child {
-        margin-bottom: 0.3vh;
+        cursor: pointer;
+      }
+
+      & :last-child {
+        margin-top: 0.3vh;
       }
     }
   }

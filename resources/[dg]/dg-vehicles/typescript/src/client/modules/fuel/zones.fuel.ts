@@ -439,6 +439,20 @@ const gasStationZones: {
     maxZ: 36.34,
     type: 'air',
   },
+
+  {
+    center: {
+      x: 175.78,
+      y: -1561.79,
+      z: 29.26,
+    },
+    width: 18.0,
+    length: 20.2,
+    heading: 45,
+    minZ: 28.26,
+    maxZ: 32.26,
+    type: 'land',
+  },
 ];
 
 let inZone = false;
@@ -468,10 +482,11 @@ setImmediate(() => {
       scale: 0.6,
     });
   });
-  PolyZone.onEnter('gasstation', () => {
-    inZone = true;
-  });
-  PolyZone.onLeave('gasstation', () => {
-    inZone = false;
-  });
+});
+
+PolyZone.onEnter('gasstation', () => {
+  inZone = true;
+});
+PolyZone.onLeave('gasstation', () => {
+  inZone = false;
 });

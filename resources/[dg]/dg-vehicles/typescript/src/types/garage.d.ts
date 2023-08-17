@@ -10,6 +10,7 @@ declare namespace Garage {
     state: 'parked' | 'out' | 'impounded';
     engine: number;
     body: number;
+    vinscratched: boolean;
   }
 
   declare type ParkLog = {

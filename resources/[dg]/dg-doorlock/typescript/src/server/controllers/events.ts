@@ -2,22 +2,50 @@ import { Auth, Config, Events, Inventory, Jobs, Notifications, Police, Util } fr
 import { areDoorsLoaded, changeDoorState, getAllDoors, getDoorById, registerNewDoor } from 'services/doors';
 
 // Client and server event emit
-Inventory.registerUseable('lockpick', (src, item) => {
-  Events.emitNet('doorlock:client:useLockpick', src);
-  emit('doorlock:server:useLockpick', src, item.id);
+Inventory.registerUseable('lockpick', (plyId, item) => {
+  Events.emitNet('doorlock:client:useLockpick', plyId);
+  emit('doorlock:server:useLockpick', plyId, item.id);
 });
 
-Inventory.registerUseable('thermite', src => {
-  Events.emitNet('doorlock:client:useThermite', src);
+Inventory.registerUseable('thermite', (plyId, itemState) => {
+  Events.emitNet('doorlock:client:useThermite', plyId, itemState.id);
 });
 
-Inventory.registerUseable('detcord', plyId => {
+Inventory.registerUseable('detcord', (plyId, itemState) => {
   if (Jobs.getCurrentJob(plyId) !== 'police') {
     Notifications.add(plyId, 'Dit is enkel voor overheidsdiensten', 'error');
     return;
   }
 
-  Events.emitNet('doorlock:client:useDetcord', plyId);
+  Events.emitNet('doorlock:client:useDetcord', plyId, itemState.id);
+});
+
+Inventory.registerUseable('gate_unlock_tool', async (plyId, itemState) => {
+  const hasLaptop = await Inventory.doesPlayerHaveItems(plyId, ['laptop']);
+  if (!hasLaptop) {
+    Notifications.add(plyId, 'Je hebt geen laptop om dit te gebruiken', 'error');
+    return;
+  }
+  Events.emitNet('doorlock:client:useGateUnlock', plyId, itemState.id);
+});
+
+Events.onNet('doorlock:server:finishGateUnlock', async (plyId, doorId: number, itemId: string, success: boolean) => {
+  const hasItem = await Inventory.doesPlayerHaveItemWithId(plyId, itemId);
+  if (!hasItem) {
+    Notifications.add(plyId, 'Je hebt dit item niet meer');
+    return;
+  }
+
+  Inventory.setQualityOfItem(itemId, old => old - 20);
+  if (success) {
+    changeDoorState(doorId, false);
+  }
+  Util.Log(
+    'doorlock:gateunlock',
+    { doorId, itemId, success },
+    `${Util.getName(plyId)}(${plyId}) has ${success ? 'succesfully' : 'failed to'} unlock door using gateunlock`,
+    plyId
+  );
 });
 
 Auth.onAuth(async plyId => {
@@ -39,7 +67,7 @@ Events.onNet('doorlock:server:triedLockpickingDoor', async (src: number, doorId:
   if (rng < Config.getConfigValue('dispatch.callChance.doorlockpick')) {
     Police.createDispatchCall({
       tag: '10-31',
-      title: 'Poging tot inbraak',
+      title: 'Poging Inbraak Deur',
       description: 'Er was een verdacht persoon aan een deur aan het prutsen',
       coords: data.coords,
       skipCoordsRandomization: true,

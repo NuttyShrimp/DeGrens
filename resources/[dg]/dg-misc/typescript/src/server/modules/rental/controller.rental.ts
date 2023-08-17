@@ -22,10 +22,10 @@ Events.onNet('misc:rentals:rent', (src: number, data: { model: string; id: strin
 
 Inventory.registerUseable<{ vin: string }>('rent_papers', (src, itemState) => {
   if (!itemState.metadata?.vin) return;
-  const vehNetId = Vehicles.getNetIdOfVin(itemState.metadata.vin);
-  if (!vehNetId) {
-    Notifications.add(src, 'Da voertuig bestaat nie', 'error');
+  const vehicle = Vehicles.getVehicleOfVin(itemState.metadata.vin);
+  if (!vehicle) {
+    Notifications.add(src, 'Gehuurd voertuig niet gevonden', 'error');
     return;
   }
-  Vehicles.giveKeysToPlayer(src, vehNetId);
+  Vehicles.giveKeysToPlayer(src, vehicle);
 });

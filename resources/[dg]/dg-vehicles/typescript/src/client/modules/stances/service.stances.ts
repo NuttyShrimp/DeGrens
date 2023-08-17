@@ -4,7 +4,6 @@ import { removeInfoNotif, roundOffset } from './helpers.stances';
 import { getCurrentVehicle, isDriver, useDummyVehicle } from '@helpers/vehicle';
 import { setEngineState } from 'services/engine';
 import { getStanceFromPossibilities } from '@shared/stances/helpers.stances';
-import { Util } from '@dgx/shared';
 
 const closeVehicles: Map<number, Stances.Stance> = new Map();
 let stancingThread: NodeJS.Timer | null = null;

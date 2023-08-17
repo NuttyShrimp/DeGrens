@@ -2,6 +2,7 @@ import './controllers';
 import './modules/fleeca';
 import './modules/paleto';
 import './modules/jewelry';
+import './modules/maze';
 import './services/shop';
 import './services/laptops';
 import './services/locations';

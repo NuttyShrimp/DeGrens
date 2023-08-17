@@ -6,7 +6,7 @@ declare namespace Config {
     brand: string;
     model: string;
     category: Category;
-    class: CarClass;
+    class: Vehicles.Class;
     type: Vehicle.VehicleType;
   };
 
@@ -19,5 +19,6 @@ declare namespace Config {
      */
     restockTime: number;
     shop: Shop;
+    inCarboostPool: boolean;
   };
 }

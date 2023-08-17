@@ -56,7 +56,6 @@ const canTackle = () => {
   return (
     !IsPedInAnyVehicle(ped, true) &&
     GetEntitySpeed(ped) > 2.5 &&
-    IsPedRunning(ped) &&
     !IsPedRagdoll(ped) &&
     !Police.isCuffed() &&
     !Police.isEscorting() &&

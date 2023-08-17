@@ -11,7 +11,7 @@ import {
   Taskbar,
   Util,
 } from '@dgx/server';
-import { DGXEvent, EventListener } from '@dgx/server/decorators';
+import { DGXEvent, EventListener } from '@dgx/server/src/decorators';
 import heistManager from 'classes/heistmanager';
 import config from 'services/config';
 import { mainLogger } from 'sv_logger';
@@ -101,14 +101,17 @@ export class PaletoManager implements Heists.TypeManager {
     this.currentCode = this.generateCode();
     Inventory.addItemToPlayer(plyId, 'paper_note', 1, { tekst: this.currentCode });
 
-    setTimeout(() => {
-      this.resetCodes();
-      Phone.addMail(plyId, {
-        subject: 'Codes',
-        sender: 'Pol Etto',
-        message: 'Ik kreeg van een contact te horen dat de codes zijn gereset',
-      });
-    }, codeConfig.resetTime * 60 * 1000);
+    setTimeout(
+      () => {
+        this.resetCodes();
+        Phone.addMail(plyId, {
+          subject: 'Codes',
+          sender: 'Pol Etto',
+          message: 'Ik kreeg van een contact te horen dat de codes zijn gereset',
+        });
+      },
+      codeConfig.resetTime * 60 * 1000
+    );
 
     Phone.addMail(plyId, {
       subject: 'Codes',
@@ -175,10 +178,13 @@ export class PaletoManager implements Heists.TypeManager {
       });
 
       this.lockdownTimeoutActive = true;
-      setTimeout(() => {
-        this.lockdownTimeoutActive = false;
-        this.inLockdown = true;
-      }, config.paleto.code.lockdownTime * 60 * 1000);
+      setTimeout(
+        () => {
+          this.lockdownTimeoutActive = false;
+          this.inLockdown = true;
+        },
+        config.paleto.code.lockdownTime * 60 * 1000
+      );
     }
 
     const logMsg = `${Util.getName(plyId)}(${plyId}) has succesfully entered code for ${keypadId}`;
@@ -245,9 +251,12 @@ export class PaletoManager implements Heists.TypeManager {
     if (!hackSuccess) return;
 
     this.canHackSafe = false;
-    setTimeout(() => {
-      this.canHackSafe = true;
-    }, config.paleto.safeDelay * 60 * 1000);
+    setTimeout(
+      () => {
+        this.canHackSafe = true;
+      },
+      config.paleto.safeDelay * 60 * 1000
+    );
 
     Inventory.addItemToPlayer(plyId, 'heist_paleto_key', 1);
 

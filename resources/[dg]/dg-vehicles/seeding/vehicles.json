@@ -9,7 +9,8 @@
     "restockTime": 20,
     "price": 235000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -21,7 +22,8 @@
     "restockTime": 20,
     "price": 90000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -33,7 +35,8 @@
     "restockTime": 20,
     "price": 82000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "compacts",
@@ -45,7 +48,8 @@
     "restockTime": 15,
     "price": 37000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -57,7 +61,8 @@
     "restockTime": 7,
     "price": 5000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -69,7 +74,8 @@
     "restockTime": 45,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -81,7 +87,8 @@
     "restockTime": 15,
     "price": 35500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -93,7 +100,8 @@
     "restockTime": 15,
     "price": 35500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -105,7 +113,8 @@
     "restockTime": 15,
     "price": 95000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -117,7 +126,8 @@
     "restockTime": 15,
     "price": 90000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -129,7 +139,8 @@
     "restockTime": 20,
     "price": 110000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sports",
@@ -141,7 +152,8 @@
     "restockTime": 20,
     "price": 110000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -153,7 +165,8 @@
     "restockTime": 45,
     "price": 190000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -165,7 +178,8 @@
     "restockTime": 20,
     "price": 35000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -177,7 +191,8 @@
     "restockTime": 45,
     "price": 210000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -189,7 +204,8 @@
     "restockTime": 15,
     "price": 30000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -201,7 +217,8 @@
     "restockTime": 10,
     "price": 19000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -213,7 +230,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -225,7 +243,8 @@
     "restockTime": 10,
     "price": 17000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -237,7 +256,8 @@
     "restockTime": 10,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -249,7 +269,8 @@
     "restockTime": 10,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -261,7 +282,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -273,7 +295,8 @@
     "restockTime": 20,
     "price": 35000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -285,19 +308,21 @@
     "restockTime": 7,
     "price": 6000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
     "model": "blazer2",
     "brand": "Annis",
     "name": "Blazer Lifeguard",
-    "class": "D",
+    "class": "C",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 6000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -309,7 +334,8 @@
     "restockTime": 10,
     "price": 30000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -321,7 +347,8 @@
     "restockTime": 15,
     "price": 30500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -333,7 +360,8 @@
     "restockTime": 10,
     "price": 17000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -345,7 +373,8 @@
     "restockTime": 10,
     "price": 17000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -357,7 +386,8 @@
     "restockTime": 10,
     "price": 45000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -369,7 +399,8 @@
     "restockTime": 20,
     "price": 95000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -381,7 +412,8 @@
     "restockTime": 10,
     "price": 30000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -393,7 +425,8 @@
     "restockTime": 10,
     "price": 32000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -405,7 +438,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -417,7 +451,8 @@
     "restockTime": 10,
     "price": 32000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -429,7 +464,8 @@
     "restockTime": 15,
     "price": 37000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -441,7 +477,8 @@
     "restockTime": 15,
     "price": 37500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -453,7 +490,8 @@
     "restockTime": 15,
     "price": 40000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -465,7 +503,8 @@
     "restockTime": 15,
     "price": 85000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -477,7 +516,8 @@
     "restockTime": 20,
     "price": 185000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -489,7 +529,8 @@
     "restockTime": 7,
     "price": 8000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "vans",
@@ -501,7 +542,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -513,7 +555,8 @@
     "restockTime": 7,
     "price": 8000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -525,7 +568,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -537,7 +581,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "vans",
@@ -549,7 +594,8 @@
     "restockTime": 7,
     "price": 10000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -561,7 +607,8 @@
     "restockTime": 10,
     "price": 45000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -573,7 +620,8 @@
     "restockTime": 20,
     "price": 75000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -585,7 +633,8 @@
     "restockTime": 20,
     "price": 65000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -597,7 +646,8 @@
     "restockTime": 15,
     "price": 36500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -609,7 +659,8 @@
     "restockTime": 10,
     "price": 29000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -621,7 +672,8 @@
     "restockTime": 15,
     "price": 35000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -633,7 +685,8 @@
     "restockTime": 45,
     "price": 436000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -645,7 +698,8 @@
     "restockTime": 45,
     "price": 310000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -657,7 +711,8 @@
     "restockTime": 15,
     "price": 32000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -669,7 +724,8 @@
     "restockTime": 10,
     "price": 25000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -681,7 +737,8 @@
     "restockTime": 10,
     "price": 26000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -693,7 +750,8 @@
     "restockTime": 15,
     "price": 42000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -705,7 +763,8 @@
     "restockTime": 20,
     "price": 85000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -717,7 +776,8 @@
     "restockTime": 20,
     "price": 88000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -729,7 +789,8 @@
     "restockTime": 20,
     "price": 105000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -741,7 +802,8 @@
     "restockTime": 20,
     "price": 126000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -753,7 +815,8 @@
     "restockTime": 30,
     "price": 130000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -765,7 +828,8 @@
     "restockTime": 20,
     "price": 152000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -777,7 +841,8 @@
     "restockTime": 15,
     "price": 35000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -789,7 +854,8 @@
     "restockTime": 15,
     "price": 36500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -801,7 +867,8 @@
     "restockTime": 45,
     "price": 457000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -813,7 +880,8 @@
     "restockTime": 45,
     "price": 457000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -825,7 +893,8 @@
     "restockTime": 10,
     "price": 15000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -837,7 +906,8 @@
     "restockTime": 15,
     "price": 31000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -849,7 +919,8 @@
     "restockTime": 7,
     "price": 9500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -861,7 +932,8 @@
     "restockTime": 15,
     "price": 82000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -873,7 +945,8 @@
     "restockTime": 20,
     "price": 105000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -885,7 +958,8 @@
     "restockTime": 15,
     "price": 39500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -897,7 +971,8 @@
     "restockTime": 20,
     "price": 135000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -909,7 +984,8 @@
     "restockTime": 15,
     "price": 82500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -921,7 +997,8 @@
     "restockTime": 10,
     "price": 43000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -933,7 +1010,8 @@
     "restockTime": 15,
     "price": 39000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -945,7 +1023,8 @@
     "restockTime": 10,
     "price": 21000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -957,7 +1036,8 @@
     "restockTime": 10,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -969,7 +1049,8 @@
     "restockTime": 10,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -981,7 +1062,8 @@
     "restockTime": 10,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -993,7 +1075,8 @@
     "restockTime": 10,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sportsclassics",
@@ -1005,7 +1088,8 @@
     "restockTime": 7,
     "price": 7000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1017,7 +1101,8 @@
     "restockTime": 45,
     "price": 220000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1029,7 +1114,8 @@
     "restockTime": 20,
     "price": 110000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -1041,7 +1127,8 @@
     "restockTime": 20,
     "price": 53000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -1053,7 +1140,8 @@
     "restockTime": 10,
     "price": 16000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -1065,7 +1153,8 @@
     "restockTime": 45,
     "price": 461000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -1077,7 +1166,8 @@
     "restockTime": 45,
     "price": 461000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -1089,7 +1179,8 @@
     "restockTime": 10,
     "price": 19000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -1101,7 +1192,8 @@
     "restockTime": 15,
     "price": 51000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -1113,7 +1205,8 @@
     "restockTime": 15,
     "price": 35000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -1125,7 +1218,8 @@
     "restockTime": 20,
     "price": 67000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -1137,7 +1231,8 @@
     "restockTime": 15,
     "price": 36500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -1149,7 +1244,8 @@
     "restockTime": 15,
     "price": 37500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -1161,7 +1257,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -1173,7 +1270,8 @@
     "restockTime": 7,
     "price": 4000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -1185,7 +1283,8 @@
     "restockTime": 7,
     "price": 5000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -1197,7 +1296,8 @@
     "restockTime": 15,
     "price": 39500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -1209,7 +1309,8 @@
     "restockTime": 20,
     "price": 70000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1221,7 +1322,8 @@
     "restockTime": 20,
     "price": 65000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -1233,7 +1335,8 @@
     "restockTime": 15,
     "price": 55000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sports",
@@ -1245,7 +1348,8 @@
     "restockTime": 15,
     "price": 42000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -1257,7 +1361,8 @@
     "restockTime": 60,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -1269,7 +1374,8 @@
     "restockTime": 10,
     "price": 28500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -1281,7 +1387,8 @@
     "restockTime": 15,
     "price": 47500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1293,7 +1400,8 @@
     "restockTime": 20,
     "price": 80000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1305,7 +1413,8 @@
     "restockTime": 15,
     "price": 49500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1317,7 +1426,8 @@
     "restockTime": 15,
     "price": 37000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -1329,7 +1439,8 @@
     "restockTime": 15,
     "price": 52500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -1341,7 +1452,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -1353,7 +1465,8 @@
     "restockTime": 7,
     "price": 8000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -1365,7 +1478,8 @@
     "restockTime": 10,
     "price": 21000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -1377,7 +1491,8 @@
     "restockTime": 45,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -1389,7 +1504,8 @@
     "restockTime": 10,
     "price": 23000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -1401,7 +1517,8 @@
     "restockTime": 15,
     "price": 47500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -1413,7 +1530,8 @@
     "restockTime": 15,
     "price": 56000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "industrial",
@@ -1425,7 +1543,8 @@
     "restockTime": 10,
     "price": 35000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -1437,7 +1556,8 @@
     "restockTime": 45,
     "price": 65000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -1449,7 +1569,8 @@
     "restockTime": 45,
     "price": 135000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -1461,7 +1582,8 @@
     "restockTime": 15,
     "price": 38500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -1473,7 +1595,8 @@
     "restockTime": 10,
     "price": 22500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -1485,19 +1608,21 @@
     "restockTime": 15,
     "price": 44500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
     "model": "hustler",
     "brand": "Vapid",
     "name": "Hustler",
-    "class": "D",
+    "class": "C",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -1509,7 +1634,8 @@
     "restockTime": 30,
     "price": 140000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -1521,7 +1647,8 @@
     "restockTime": 45,
     "price": 220000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -1533,7 +1660,8 @@
     "restockTime": 15,
     "price": 37500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -1545,7 +1673,8 @@
     "restockTime": 10,
     "price": 19000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -1557,7 +1686,8 @@
     "restockTime": 10,
     "price": 23000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1569,7 +1699,8 @@
     "restockTime": 15,
     "price": 60000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -1581,7 +1712,8 @@
     "restockTime": 45,
     "price": 461000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1593,7 +1725,8 @@
     "restockTime": 45,
     "price": 464000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -1605,7 +1738,8 @@
     "restockTime": 15,
     "price": 45000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1617,7 +1751,8 @@
     "restockTime": 30,
     "price": 132000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1629,7 +1764,8 @@
     "restockTime": 30,
     "price": 130000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1641,7 +1777,8 @@
     "restockTime": 20,
     "price": 127000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -1653,7 +1790,8 @@
     "restockTime": 10,
     "price": 24000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -1665,7 +1803,8 @@
     "restockTime": 30,
     "price": 60000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1677,7 +1816,8 @@
     "restockTime": 30,
     "price": 115000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1689,7 +1829,8 @@
     "restockTime": 15,
     "price": 85000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -1701,7 +1842,8 @@
     "restockTime": 45,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -1713,7 +1855,8 @@
     "restockTime": 45,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1725,7 +1868,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -1737,7 +1881,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -1749,7 +1894,8 @@
     "restockTime": 10,
     "price": 22000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1761,7 +1907,8 @@
     "restockTime": 20,
     "price": 130000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1773,7 +1920,8 @@
     "restockTime": 20,
     "price": 75000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -1785,7 +1933,8 @@
     "restockTime": 15,
     "price": 35000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1797,7 +1946,8 @@
     "restockTime": 20,
     "price": 117000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -1809,7 +1959,8 @@
     "restockTime": 10,
     "price": 17000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -1821,7 +1972,8 @@
     "restockTime": 10,
     "price": 18000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -1833,7 +1985,8 @@
     "restockTime": 20,
     "price": 25000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -1845,7 +1998,8 @@
     "restockTime": 20,
     "price": 55000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1857,7 +2011,8 @@
     "restockTime": 45,
     "price": 450000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1869,7 +2024,8 @@
     "restockTime": 15,
     "price": 125000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -1881,7 +2037,8 @@
     "restockTime": 45,
     "price": 457000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -1893,7 +2050,8 @@
     "restockTime": 15,
     "price": 35000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -1905,7 +2063,8 @@
     "restockTime": 15,
     "price": 36500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1917,7 +2076,8 @@
     "restockTime": 20,
     "price": 105000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1929,7 +2089,8 @@
     "restockTime": 20,
     "price": 105000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -1941,7 +2102,8 @@
     "restockTime": 15,
     "price": 82500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1953,7 +2115,8 @@
     "restockTime": 15,
     "price": 61000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -1965,7 +2128,8 @@
     "restockTime": 15,
     "price": 197500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -1977,7 +2141,8 @@
     "restockTime": 15,
     "price": 45000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -1989,7 +2154,8 @@
     "restockTime": 15,
     "price": 41500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -2001,7 +2167,8 @@
     "restockTime": 45,
     "price": 472000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -2013,7 +2180,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -2025,7 +2193,8 @@
     "restockTime": 10,
     "price": 16000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2037,7 +2206,8 @@
     "restockTime": 30,
     "price": 150000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2049,7 +2219,8 @@
     "restockTime": 30,
     "price": 150000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sports",
@@ -2061,7 +2232,8 @@
     "restockTime": 20,
     "price": 85000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -2073,7 +2245,8 @@
     "restockTime": 10,
     "price": 21000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -2085,7 +2258,8 @@
     "restockTime": 15,
     "price": 41000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -2097,7 +2271,8 @@
     "restockTime": 30,
     "price": 185000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2109,7 +2284,8 @@
     "restockTime": 30,
     "price": 145000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -2121,7 +2297,8 @@
     "restockTime": 30,
     "price": 165000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -2133,7 +2310,8 @@
     "restockTime": 15,
     "price": 41000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -2145,7 +2323,8 @@
     "restockTime": 10,
     "price": 21500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -2157,7 +2336,8 @@
     "restockTime": 7,
     "price": 12000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -2169,7 +2349,8 @@
     "restockTime": 15,
     "price": 41500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -2181,7 +2362,8 @@
     "restockTime": 10,
     "price": 19500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -2193,7 +2375,8 @@
     "restockTime": 60,
     "price": 479000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -2205,7 +2388,8 @@
     "restockTime": 10,
     "price": 20500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2217,7 +2401,8 @@
     "restockTime": 15,
     "price": 96000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2229,7 +2414,8 @@
     "restockTime": 20,
     "price": 87000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2241,7 +2427,8 @@
     "restockTime": 20,
     "price": 87000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -2253,7 +2440,8 @@
     "restockTime": 15,
     "price": 52500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -2265,7 +2453,8 @@
     "restockTime": 10,
     "price": 19500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -2277,7 +2466,8 @@
     "restockTime": 30,
     "price": 170000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -2289,7 +2479,8 @@
     "restockTime": 10,
     "price": 18500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -2301,7 +2492,8 @@
     "restockTime": 10,
     "price": 21000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -2313,7 +2505,8 @@
     "restockTime": 15,
     "price": 90000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -2325,7 +2518,8 @@
     "restockTime": 7,
     "price": 8000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2337,7 +2531,8 @@
     "restockTime": 15,
     "price": 57500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -2349,7 +2544,8 @@
     "restockTime": 10,
     "price": 17500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -2361,7 +2557,8 @@
     "restockTime": 15,
     "price": 52500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -2373,7 +2570,8 @@
     "restockTime": 20,
     "price": 65000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -2385,7 +2583,8 @@
     "restockTime": 7,
     "price": 8000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -2397,7 +2596,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2409,7 +2609,8 @@
     "restockTime": 20,
     "price": 100000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -2421,7 +2622,8 @@
     "restockTime": 15,
     "price": 42500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -2433,7 +2635,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -2445,7 +2648,8 @@
     "restockTime": 15,
     "price": 39500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -2457,7 +2661,8 @@
     "restockTime": 7,
     "price": 31000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -2469,7 +2674,8 @@
     "restockTime": 30,
     "price": 155000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -2481,7 +2687,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2493,7 +2700,8 @@
     "restockTime": 20,
     "price": 85000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -2505,7 +2713,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sedans",
@@ -2517,7 +2726,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "suvs",
@@ -2529,7 +2739,8 @@
     "restockTime": 10,
     "price": 27000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -2541,7 +2752,8 @@
     "restockTime": 10,
     "price": 26500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -2553,7 +2765,8 @@
     "restockTime": 15,
     "price": 40000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -2565,7 +2778,8 @@
     "restockTime": 15,
     "price": 42500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2577,7 +2791,8 @@
     "restockTime": 15,
     "price": 83000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2589,7 +2804,8 @@
     "restockTime": 20,
     "price": 95000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -2601,7 +2817,8 @@
     "restockTime": 20,
     "price": 70000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -2613,7 +2830,8 @@
     "restockTime": 20,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -2625,7 +2843,8 @@
     "restockTime": 20,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -2637,7 +2856,8 @@
     "restockTime": 20,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "motorcycles",
@@ -2649,7 +2869,8 @@
     "restockTime": 15,
     "price": 37500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2661,7 +2882,8 @@
     "restockTime": 20,
     "price": 75000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2673,7 +2895,8 @@
     "restockTime": 20,
     "price": 80000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -2685,7 +2908,8 @@
     "restockTime": 20,
     "price": 67000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -2697,7 +2921,8 @@
     "restockTime": 15,
     "price": 39500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -2709,7 +2934,8 @@
     "restockTime": 20,
     "price": 77000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2721,7 +2947,8 @@
     "restockTime": 10,
     "price": 32500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -2733,7 +2960,8 @@
     "restockTime": 20,
     "price": 55000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2745,7 +2973,8 @@
     "restockTime": 20,
     "price": 65000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2757,7 +2986,8 @@
     "restockTime": 15,
     "price": 60000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2769,7 +2999,8 @@
     "restockTime": 15,
     "price": 55000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2781,7 +3012,8 @@
     "restockTime": 45,
     "price": 135000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -2793,7 +3025,8 @@
     "restockTime": 15,
     "price": 60000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2805,7 +3038,8 @@
     "restockTime": 20,
     "price": 70000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -2817,7 +3051,8 @@
     "restockTime": 10,
     "price": 17000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -2829,7 +3064,8 @@
     "restockTime": 15,
     "price": 57500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -2841,7 +3077,8 @@
     "restockTime": 30,
     "price": 190000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -2853,7 +3090,8 @@
     "restockTime": 15,
     "price": 49500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -2865,7 +3103,8 @@
     "restockTime": 45,
     "price": 457000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -2877,7 +3116,8 @@
     "restockTime": 15,
     "price": 41500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -2889,7 +3129,8 @@
     "restockTime": 30,
     "price": 105000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -2901,7 +3142,8 @@
     "restockTime": 30,
     "price": 105000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "super",
@@ -2913,7 +3155,8 @@
     "restockTime": 45,
     "price": 464000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -2925,7 +3168,8 @@
     "restockTime": 45,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -2937,7 +3181,8 @@
     "restockTime": 60,
     "price": 482000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -2949,7 +3194,8 @@
     "restockTime": 15,
     "price": 37500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -2961,7 +3207,8 @@
     "restockTime": 30,
     "price": 145000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "utility",
@@ -2973,7 +3220,8 @@
     "restockTime": 7,
     "price": 13500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "utility",
@@ -2985,7 +3233,8 @@
     "restockTime": 7,
     "price": 13500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "utility",
@@ -2997,7 +3246,8 @@
     "restockTime": 7,
     "price": 13500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -3009,7 +3259,8 @@
     "restockTime": 15,
     "price": 75000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -3021,7 +3272,8 @@
     "restockTime": 15,
     "price": 75000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -3033,7 +3285,8 @@
     "restockTime": 45,
     "price": 461000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -3045,7 +3298,8 @@
     "restockTime": 60,
     "price": 396000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -3057,7 +3311,8 @@
     "restockTime": 45,
     "price": 450000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -3069,7 +3324,8 @@
     "restockTime": 60,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -3081,7 +3337,8 @@
     "restockTime": 15,
     "price": 52500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3093,7 +3350,8 @@
     "restockTime": 20,
     "price": 71000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3105,7 +3363,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3117,7 +3376,8 @@
     "restockTime": 45,
     "price": 195000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3129,7 +3389,8 @@
     "restockTime": 7,
     "price": 9000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -3141,7 +3402,8 @@
     "restockTime": 45,
     "price": 461000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -3153,7 +3415,8 @@
     "restockTime": 30,
     "price": 140000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3165,7 +3428,8 @@
     "restockTime": 7,
     "price": 7500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -3177,7 +3441,8 @@
     "restockTime": 20,
     "price": 55000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3189,7 +3454,8 @@
     "restockTime": 15,
     "price": 94500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -3201,7 +3467,8 @@
     "restockTime": 10,
     "price": 19500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -3213,7 +3480,8 @@
     "restockTime": 15,
     "price": 95000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -3225,7 +3493,8 @@
     "restockTime": 15,
     "price": 90000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -3237,7 +3506,8 @@
     "restockTime": 30,
     "price": 152000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -3249,7 +3519,8 @@
     "restockTime": 15,
     "price": 47500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3261,7 +3532,8 @@
     "restockTime": 20,
     "price": 65000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -3273,7 +3545,8 @@
     "restockTime": 10,
     "price": 29500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -3285,7 +3558,8 @@
     "restockTime": 10,
     "price": 16000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -3297,7 +3571,8 @@
     "restockTime": 20,
     "price": 70000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -3309,7 +3584,8 @@
     "restockTime": 45,
     "price": 464000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -3321,7 +3597,8 @@
     "restockTime": 15,
     "price": 51500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -3333,7 +3610,8 @@
     "restockTime": 15,
     "price": 52000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -3345,7 +3623,8 @@
     "restockTime": 15,
     "price": 37500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -3357,7 +3636,8 @@
     "restockTime": 60,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -3369,7 +3649,8 @@
     "restockTime": 20,
     "price": 75000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -3381,7 +3662,8 @@
     "restockTime": 15,
     "price": 47500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -3393,7 +3675,8 @@
     "restockTime": 20,
     "price": 120000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -3405,7 +3688,8 @@
     "restockTime": 7,
     "price": 6500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3417,7 +3701,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3429,7 +3714,8 @@
     "restockTime": 15,
     "price": 45000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3441,7 +3727,8 @@
     "restockTime": 20,
     "price": 105000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -3453,7 +3740,8 @@
     "restockTime": 45,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3465,7 +3753,8 @@
     "restockTime": 15,
     "price": 42500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3477,7 +3766,8 @@
     "restockTime": 15,
     "price": 43000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -3489,7 +3779,8 @@
     "restockTime": 15,
     "price": 75000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3501,7 +3792,8 @@
     "restockTime": 30,
     "price": 160000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3513,7 +3805,8 @@
     "restockTime": 20,
     "price": 65000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3525,7 +3818,8 @@
     "restockTime": 20,
     "price": 67000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -3537,7 +3831,8 @@
     "restockTime": 60,
     "price": 432000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3549,7 +3844,8 @@
     "restockTime": 10,
     "price": 23000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -3561,7 +3857,8 @@
     "restockTime": 15,
     "price": 49500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3573,7 +3870,8 @@
     "restockTime": 15,
     "price": 57500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -3585,7 +3883,8 @@
     "restockTime": 20,
     "price": 100000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3597,7 +3896,8 @@
     "restockTime": 30,
     "price": 102000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -3609,7 +3909,8 @@
     "restockTime": 15,
     "price": 45000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -3621,7 +3922,8 @@
     "restockTime": 10,
     "price": 15000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -3633,7 +3935,8 @@
     "restockTime": 10,
     "price": 16500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -3645,7 +3948,8 @@
     "restockTime": 20,
     "price": 67000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -3657,7 +3961,8 @@
     "restockTime": 20,
     "price": 24000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3669,7 +3974,8 @@
     "restockTime": 20,
     "price": 120000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3681,7 +3987,8 @@
     "restockTime": 20,
     "price": 120000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -3693,7 +4000,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -3705,7 +4013,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -3717,7 +4026,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -3729,7 +4039,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "vans",
@@ -3741,7 +4052,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "coupes",
@@ -3753,7 +4065,8 @@
     "restockTime": 30,
     "price": 155000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -3765,7 +4078,8 @@
     "restockTime": 30,
     "price": 162000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -3777,7 +4091,8 @@
     "restockTime": 30,
     "price": 140000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3789,7 +4104,8 @@
     "restockTime": 30,
     "price": 145000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3801,7 +4117,8 @@
     "restockTime": 30,
     "price": 165000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3813,7 +4130,8 @@
     "restockTime": 15,
     "price": 37500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3825,7 +4143,8 @@
     "restockTime": 30,
     "price": 150000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3837,7 +4156,8 @@
     "restockTime": 30,
     "price": 155000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3849,7 +4169,8 @@
     "restockTime": 20,
     "price": 85000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3861,7 +4182,8 @@
     "restockTime": 45,
     "price": 235000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3873,7 +4195,8 @@
     "restockTime": 45,
     "price": 210000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3885,7 +4208,8 @@
     "restockTime": 30,
     "price": 175000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3897,7 +4221,8 @@
     "restockTime": 30,
     "price": 160000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3909,7 +4234,8 @@
     "restockTime": 30,
     "price": 175000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "cycles",
@@ -3921,7 +4247,8 @@
     "restockTime": 7,
     "price": 200,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "cycles",
@@ -3933,7 +4260,8 @@
     "restockTime": 7,
     "price": 200,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "cycles",
@@ -3945,7 +4273,8 @@
     "restockTime": 7,
     "price": 200,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "cycles",
@@ -3957,7 +4286,8 @@
     "restockTime": 7,
     "price": 100,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -3969,7 +4299,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "utility",
@@ -3981,7 +4312,8 @@
     "restockTime": 7,
     "price": 5000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "utility",
@@ -3993,7 +4325,8 @@
     "restockTime": 7,
     "price": 5000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -4005,7 +4338,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -4017,7 +4351,8 @@
     "restockTime": 30,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -4029,7 +4364,8 @@
     "restockTime": 15,
     "price": 46000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -4041,7 +4377,8 @@
     "restockTime": 20,
     "price": 87000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -4053,7 +4390,8 @@
     "restockTime": 30,
     "price": 142000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -4065,7 +4403,8 @@
     "restockTime": 45,
     "price": 461000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -4077,7 +4416,8 @@
     "restockTime": 20,
     "price": 78000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -4089,7 +4429,8 @@
     "restockTime": 45,
     "price": 464000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -4101,7 +4442,8 @@
     "restockTime": 45,
     "price": 457000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -4113,7 +4455,8 @@
     "restockTime": 7,
     "price": 6000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4125,19 +4468,21 @@
     "restockTime": 20,
     "price": 80000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
     "model": "reever",
-    "brand": "Wester",
+    "brand": "Western",
     "name": "Reever",
     "class": "A",
     "defaultStock": 7,
     "restockTime": 20,
     "price": 75000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -4149,7 +4494,8 @@
     "restockTime": 45,
     "price": 457000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -4161,7 +4507,8 @@
     "restockTime": 20,
     "price": 100000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -4173,7 +4520,8 @@
     "restockTime": 20,
     "price": 112000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -4185,7 +4533,8 @@
     "restockTime": 30,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -4197,7 +4546,8 @@
     "restockTime": 30,
     "price": 159000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -4209,7 +4559,8 @@
     "restockTime": 45,
     "price": 235000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -4221,7 +4572,8 @@
     "restockTime": 30,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -4233,7 +4585,8 @@
     "restockTime": 15,
     "price": 67500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -4245,7 +4598,8 @@
     "restockTime": 20,
     "price": 118000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -4257,7 +4611,8 @@
     "restockTime": 45,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -4269,7 +4624,8 @@
     "restockTime": 15,
     "price": 72500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -4281,7 +4637,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -4293,7 +4650,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -4305,7 +4663,8 @@
     "restockTime": 45,
     "price": 464000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -4317,7 +4676,8 @@
     "restockTime": 7,
     "price": 5000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -4329,7 +4689,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "compacts",
@@ -4341,7 +4702,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "compacts",
@@ -4353,7 +4715,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "compacts",
@@ -4365,7 +4728,8 @@
     "restockTime": 15,
     "price": 42500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "cycles",
@@ -4377,7 +4741,8 @@
     "restockTime": 7,
     "price": 100,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "cycles",
@@ -4389,7 +4754,8 @@
     "restockTime": 7,
     "price": 100,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "cycles",
@@ -4401,7 +4767,8 @@
     "restockTime": 7,
     "price": 100,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4413,7 +4780,8 @@
     "restockTime": 20,
     "price": 100000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4425,7 +4793,8 @@
     "restockTime": 10,
     "price": 21500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4437,7 +4806,8 @@
     "restockTime": 10,
     "price": 18500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4449,7 +4819,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4461,7 +4832,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4473,7 +4845,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4485,7 +4858,8 @@
     "restockTime": 15,
     "price": 38000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4497,7 +4871,8 @@
     "restockTime": 20,
     "price": 70000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4509,7 +4884,8 @@
     "restockTime": 15,
     "price": 37500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4521,7 +4897,8 @@
     "restockTime": 7,
     "price": 5000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4533,7 +4910,8 @@
     "restockTime": 10,
     "price": 19500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4545,7 +4923,8 @@
     "restockTime": 15,
     "price": 37500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4557,7 +4936,8 @@
     "restockTime": 15,
     "price": 36500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4569,7 +4949,8 @@
     "restockTime": 20,
     "price": 100000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4581,7 +4962,8 @@
     "restockTime": 10,
     "price": 19500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4593,7 +4975,8 @@
     "restockTime": 10,
     "price": 18500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4605,7 +4988,8 @@
     "restockTime": 15,
     "price": 37500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4617,7 +5001,8 @@
     "restockTime": 60,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "motorcycles",
@@ -4629,7 +5014,8 @@
     "restockTime": 15,
     "price": 35000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4641,7 +5027,8 @@
     "restockTime": 15,
     "price": 32500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4653,7 +5040,8 @@
     "restockTime": 30,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4665,7 +5053,8 @@
     "restockTime": 15,
     "price": 35000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4677,7 +5066,8 @@
     "restockTime": 15,
     "price": 39000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4689,7 +5079,8 @@
     "restockTime": 10,
     "price": 17500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4701,7 +5092,8 @@
     "restockTime": 10,
     "price": 18500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -4713,7 +5105,8 @@
     "restockTime": 15,
     "price": 38500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -4725,7 +5118,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -4737,7 +5131,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4749,7 +5144,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4761,7 +5157,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4773,7 +5170,8 @@
     "restockTime": 20,
     "price": 100000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4785,7 +5183,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4797,7 +5196,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -4809,7 +5209,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -4821,7 +5222,8 @@
     "restockTime": 20,
     "price": 98000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -4833,7 +5235,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -4845,7 +5248,8 @@
     "restockTime": 20,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4857,7 +5261,8 @@
     "restockTime": 20,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4869,7 +5274,8 @@
     "restockTime": 20,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4881,7 +5287,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4893,7 +5300,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4905,7 +5313,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4917,7 +5326,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4929,7 +5339,8 @@
     "restockTime": 20,
     "price": 82000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -4941,7 +5352,8 @@
     "restockTime": 30,
     "price": 80000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -4953,7 +5365,8 @@
     "restockTime": 30,
     "price": 145000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -4965,7 +5378,8 @@
     "restockTime": 20,
     "price": 71000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -4977,7 +5391,8 @@
     "restockTime": 20,
     "price": 71000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -4989,7 +5404,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -5001,7 +5417,8 @@
     "restockTime": 15,
     "price": 39000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -5013,7 +5430,8 @@
     "restockTime": 15,
     "price": 41000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -5025,7 +5443,8 @@
     "restockTime": 20,
     "price": 78000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -5037,7 +5456,8 @@
     "restockTime": 7,
     "price": 7000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -5049,7 +5469,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -5061,7 +5482,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -5073,7 +5495,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -5085,7 +5508,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -5097,7 +5521,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -5109,7 +5534,8 @@
     "restockTime": 15,
     "price": 42000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -5121,7 +5547,8 @@
     "restockTime": 15,
     "price": 52500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -5133,19 +5560,21 @@
     "restockTime": 10,
     "price": 29000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
     "model": "verus",
     "brand": "Dinka",
     "name": "Verus",
-    "class": "D",
+    "class": "C",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 5000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -5157,7 +5586,8 @@
     "restockTime": 15,
     "price": 97000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -5169,7 +5599,8 @@
     "restockTime": 20,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "suvs",
@@ -5181,7 +5612,8 @@
     "restockTime": 7,
     "price": 6000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -5193,7 +5625,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -5205,7 +5638,8 @@
     "restockTime": 10,
     "price": 26500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -5217,7 +5651,8 @@
     "restockTime": 7,
     "price": 6500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -5229,7 +5664,8 @@
     "restockTime": 10,
     "price": 24500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -5241,7 +5677,8 @@
     "restockTime": 10,
     "price": 22000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -5253,7 +5690,8 @@
     "restockTime": 7,
     "price": 7500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -5265,7 +5703,8 @@
     "restockTime": 10,
     "price": 35000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -5277,7 +5716,8 @@
     "restockTime": 10,
     "price": 21000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -5289,7 +5729,8 @@
     "restockTime": 7,
     "price": 5000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -5301,7 +5742,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -5313,7 +5755,8 @@
     "restockTime": 7,
     "price": 6000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -5325,19 +5768,21 @@
     "restockTime": 20,
     "price": 80000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
     "model": "stretch",
     "brand": "Dundreary",
     "name": "Stretch",
-    "class": "D",
+    "class": "C",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 5000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -5349,7 +5794,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -5361,7 +5807,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -5373,7 +5820,8 @@
     "restockTime": 30,
     "price": 145000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -5385,7 +5833,8 @@
     "restockTime": 30,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -5397,7 +5846,8 @@
     "restockTime": 20,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sports",
@@ -5409,7 +5859,8 @@
     "restockTime": 20,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -5421,7 +5872,8 @@
     "restockTime": 15,
     "price": 42500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -5433,7 +5885,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -5445,7 +5898,8 @@
     "restockTime": 20,
     "price": 115000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5457,7 +5911,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sportsclassics",
@@ -5469,7 +5924,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sportsclassics",
@@ -5481,7 +5937,8 @@
     "restockTime": 10,
     "price": 22000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5493,7 +5950,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -5505,7 +5963,8 @@
     "restockTime": 15,
     "price": 40000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5517,7 +5976,8 @@
     "restockTime": 20,
     "price": 91000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5529,7 +5989,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5541,7 +6002,8 @@
     "restockTime": 15,
     "price": 47500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5553,7 +6015,8 @@
     "restockTime": 20,
     "price": 112000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5565,7 +6028,8 @@
     "restockTime": 20,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5577,7 +6041,8 @@
     "restockTime": 15,
     "price": 42500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5589,7 +6054,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5601,7 +6067,8 @@
     "restockTime": 20,
     "price": 115000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5613,7 +6080,8 @@
     "restockTime": 10,
     "price": 18500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5625,7 +6093,8 @@
     "restockTime": 10,
     "price": 19000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5637,7 +6106,8 @@
     "restockTime": 10,
     "price": 19000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sportsclassics",
@@ -5649,7 +6119,8 @@
     "restockTime": 10,
     "price": 19000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sportsclassics",
@@ -5661,7 +6132,8 @@
     "restockTime": 15,
     "price": 41500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5673,7 +6145,8 @@
     "restockTime": 15,
     "price": 41500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5685,7 +6158,8 @@
     "restockTime": 30,
     "price": 150000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -5697,7 +6171,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "super",
@@ -5709,7 +6184,8 @@
     "restockTime": 30,
     "price": 178000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -5721,7 +6197,8 @@
     "restockTime": 45,
     "price": 472000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -5733,7 +6210,8 @@
     "restockTime": 45,
     "price": 461000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -5745,7 +6223,8 @@
     "restockTime": 45,
     "price": 472000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -5757,7 +6236,8 @@
     "restockTime": 30,
     "price": 161000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -5769,7 +6249,8 @@
     "restockTime": 20,
     "price": 1000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "vans",
@@ -5781,7 +6262,8 @@
     "restockTime": 7,
     "price": 5000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -5793,7 +6275,8 @@
     "restockTime": 7,
     "price": 6000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -5805,7 +6288,8 @@
     "restockTime": 10,
     "price": 21000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -5817,7 +6301,8 @@
     "restockTime": 7,
     "price": 8000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -5829,7 +6314,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -5841,7 +6327,8 @@
     "restockTime": 7,
     "price": 8000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -5853,7 +6340,8 @@
     "restockTime": 10,
     "price": 16000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -5865,7 +6353,8 @@
     "restockTime": 10,
     "price": 16000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -5877,7 +6366,8 @@
     "restockTime": 7,
     "price": 6000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "utility",
@@ -5889,7 +6379,8 @@
     "restockTime": 10,
     "price": 18000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "utility",
@@ -5901,7 +6392,8 @@
     "restockTime": 10,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -5913,7 +6405,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -5925,7 +6418,8 @@
     "restockTime": 15,
     "price": 50000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -5937,7 +6431,8 @@
     "restockTime": 7,
     "price": 5000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -5949,7 +6444,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -5961,7 +6457,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -5973,7 +6470,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -5985,7 +6483,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -5997,7 +6496,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -6009,7 +6509,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -6021,7 +6522,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -6033,7 +6535,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -6045,7 +6548,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -6057,7 +6561,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -6069,7 +6574,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -6081,7 +6587,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -6093,7 +6600,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -6105,7 +6613,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -6117,7 +6626,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -6129,7 +6639,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6141,7 +6652,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6153,7 +6665,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6165,7 +6678,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6177,7 +6691,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6189,7 +6704,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6201,7 +6717,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6213,7 +6730,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6225,7 +6743,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6237,7 +6756,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6249,7 +6769,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6261,7 +6782,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6273,7 +6795,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6285,7 +6808,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -6297,7 +6821,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6309,7 +6834,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6321,7 +6847,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6333,7 +6860,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6345,7 +6873,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6357,7 +6886,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6369,7 +6899,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6381,7 +6912,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6393,7 +6925,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6405,7 +6938,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6417,7 +6951,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6429,7 +6964,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6441,7 +6977,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -6453,7 +6990,8 @@
     "restockTime": 60,
     "price": 20000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "sports",
@@ -6465,7 +7003,8 @@
     "restockTime": 45,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6477,7 +7016,8 @@
     "restockTime": 45,
     "price": 486000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -6489,7 +7029,8 @@
     "restockTime": 30,
     "price": 200000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6501,7 +7042,8 @@
     "restockTime": 60,
     "price": 920000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6513,7 +7055,8 @@
     "restockTime": 45,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6525,7 +7068,8 @@
     "restockTime": 45,
     "price": 486000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -6537,7 +7081,8 @@
     "restockTime": 45,
     "price": 170000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
@@ -6549,7 +7094,8 @@
     "restockTime": 45,
     "price": 468000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6561,7 +7107,8 @@
     "restockTime": 45,
     "price": 472000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6573,7 +7120,8 @@
     "restockTime": 45,
     "price": 479000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6585,7 +7133,8 @@
     "restockTime": 45,
     "price": 479000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6597,7 +7146,8 @@
     "restockTime": 60,
     "price": 915000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -6609,7 +7159,8 @@
     "restockTime": 20,
     "price": 150000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6621,7 +7172,8 @@
     "restockTime": 45,
     "price": 475000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6633,7 +7185,8 @@
     "restockTime": 30,
     "price": 200000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -6645,7 +7198,8 @@
     "restockTime": 20,
     "price": 150000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6657,7 +7211,8 @@
     "restockTime": 60,
     "price": 935000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6669,7 +7224,8 @@
     "restockTime": 60,
     "price": 950000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6681,7 +7237,8 @@
     "restockTime": 60,
     "price": 457000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6693,7 +7250,8 @@
     "restockTime": 30,
     "price": 190000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6705,7 +7263,8 @@
     "restockTime": 30,
     "price": 200000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
@@ -6717,7 +7276,8 @@
     "restockTime": 30,
     "price": 189000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6729,7 +7289,8 @@
     "restockTime": 30,
     "price": 200000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -6741,7 +7302,8 @@
     "restockTime": 20,
     "price": 170000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "motorcycles",
@@ -6753,7 +7315,8 @@
     "restockTime": 30,
     "price": 195000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6765,7 +7328,8 @@
     "restockTime": 60,
     "price": 935000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6777,7 +7341,8 @@
     "restockTime": 60,
     "price": 930000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -6789,7 +7354,8 @@
     "restockTime": 45,
     "price": 482000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6801,7 +7367,8 @@
     "restockTime": 30,
     "price": 210000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6813,7 +7380,8 @@
     "restockTime": 30,
     "price": 220000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6825,7 +7393,8 @@
     "restockTime": 60,
     "price": 930000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6837,7 +7406,8 @@
     "restockTime": 60,
     "price": 935000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6849,7 +7419,8 @@
     "restockTime": 45,
     "price": 350000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6861,7 +7432,8 @@
     "restockTime": 45,
     "price": 970000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -6873,7 +7445,8 @@
     "restockTime": 30,
     "price": 205000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -6885,7 +7458,8 @@
     "restockTime": 30,
     "price": 200000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6897,7 +7471,8 @@
     "restockTime": 45,
     "price": 479000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6909,7 +7484,8 @@
     "restockTime": 20,
     "price": 200000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6921,7 +7497,8 @@
     "restockTime": 20,
     "price": 215000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6933,7 +7510,8 @@
     "restockTime": 45,
     "price": 475000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6945,7 +7523,8 @@
     "restockTime": 60,
     "price": 443000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6957,7 +7536,8 @@
     "restockTime": 45,
     "price": 475000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6969,7 +7549,8 @@
     "restockTime": 45,
     "price": 472000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -6981,7 +7562,8 @@
     "restockTime": 45,
     "price": 475000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -6993,7 +7575,8 @@
     "restockTime": 45,
     "price": 970000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -7005,7 +7588,8 @@
     "restockTime": 30,
     "price": 205000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -7017,7 +7601,8 @@
     "restockTime": 45,
     "price": 475000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -7029,7 +7614,8 @@
     "restockTime": 30,
     "price": 200000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -7041,7 +7627,8 @@
     "restockTime": 45,
     "price": 475000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -7053,7 +7640,8 @@
     "restockTime": 45,
     "price": 479000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "commercial",
@@ -7065,7 +7653,8 @@
     "restockTime": 15,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7077,7 +7666,8 @@
     "restockTime": 15,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7089,7 +7679,8 @@
     "restockTime": 15,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7101,7 +7692,8 @@
     "restockTime": 15,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7113,7 +7705,8 @@
     "restockTime": 15,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "service",
@@ -7125,7 +7718,8 @@
     "restockTime": 15,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "service",
@@ -7137,7 +7731,8 @@
     "restockTime": 15,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7149,7 +7744,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7161,7 +7757,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7173,7 +7770,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7185,7 +7783,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7197,7 +7796,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "commercial",
@@ -7209,7 +7809,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "commercial",
@@ -7221,7 +7822,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7233,7 +7835,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7245,7 +7848,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7257,7 +7861,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7269,7 +7874,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -7281,7 +7887,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7293,7 +7900,8 @@
     "restockTime": 10,
     "price": 130000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7305,7 +7913,8 @@
     "restockTime": 10,
     "price": 130000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7317,7 +7926,8 @@
     "restockTime": 10,
     "price": 135000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7329,7 +7939,8 @@
     "restockTime": 10,
     "price": 100000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7341,7 +7952,8 @@
     "restockTime": 10,
     "price": 100000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7353,7 +7965,8 @@
     "restockTime": 10,
     "price": 100000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7365,7 +7978,8 @@
     "restockTime": 10,
     "price": 80000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7377,7 +7991,8 @@
     "restockTime": 10,
     "price": 80000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7389,7 +8004,8 @@
     "restockTime": 10,
     "price": 105000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7401,7 +8017,8 @@
     "restockTime": 10,
     "price": 105000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7413,7 +8030,8 @@
     "restockTime": 10,
     "price": 125000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "industrial",
@@ -7425,7 +8043,8 @@
     "restockTime": 10,
     "price": 10000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sedans",
@@ -7437,7 +8056,8 @@
     "restockTime": 15,
     "price": 115000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -7449,7 +8069,8 @@
     "restockTime": 7,
     "price": 7500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -7461,7 +8082,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "industrial",
@@ -7473,7 +8095,8 @@
     "restockTime": 10,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "service",
@@ -7485,7 +8108,8 @@
     "restockTime": 7,
     "price": 12500,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -7497,7 +8121,8 @@
     "restockTime": 7,
     "price": 15500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -7509,7 +8134,8 @@
     "restockTime": 7,
     "price": 15500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "industrial",
@@ -7521,7 +8147,8 @@
     "restockTime": 7,
     "price": 15500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "industrial",
@@ -7533,7 +8160,8 @@
     "restockTime": 7,
     "price": 15500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sedans",
@@ -7545,7 +8173,8 @@
     "restockTime": 10,
     "price": 16000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sedans",
@@ -7557,7 +8186,8 @@
     "restockTime": 10,
     "price": 16000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "service",
@@ -7569,7 +8199,8 @@
     "restockTime": 15,
     "price": 20000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "emergency",
@@ -7581,7 +8212,8 @@
     "restockTime": 10,
     "price": 1500000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7593,7 +8225,8 @@
     "restockTime": 10,
     "price": 1500000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7605,7 +8238,8 @@
     "restockTime": 10,
     "price": 200000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7617,7 +8251,8 @@
     "restockTime": 10,
     "price": 75000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -7629,19 +8264,21 @@
     "restockTime": 7,
     "price": 5000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sedans",
     "model": "romero",
     "brand": "Chariot",
     "name": "Romero Hearse",
-    "class": "D",
+    "class": "C",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 5000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "boats",
@@ -7653,7 +8290,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -7665,7 +8303,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -7677,7 +8316,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -7689,7 +8329,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -7701,7 +8342,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -7713,7 +8355,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7725,7 +8368,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sedans",
@@ -7737,7 +8381,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "military",
@@ -7749,7 +8394,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "military",
@@ -7761,7 +8407,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "military",
@@ -7773,7 +8420,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -7785,7 +8433,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7797,7 +8446,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -7809,7 +8459,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "service",
@@ -7821,7 +8472,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "service",
@@ -7833,7 +8485,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -7845,7 +8498,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "service",
@@ -7857,7 +8511,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "service",
@@ -7869,7 +8524,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "planes",
@@ -7881,7 +8537,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -7893,7 +8550,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "industrial",
@@ -7905,31 +8563,34 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
     "model": "towtruck",
     "brand": "Vapid",
     "name": "Towtruck Large",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "utility",
     "model": "towtruck2",
     "brand": "Vapid",
     "name": "Towtruck Small",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -7941,7 +8602,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "vans",
@@ -7953,19 +8615,21 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
     "model": "docktug",
     "brand": "HVY",
     "name": "Docktug",
-    "class": "D",
+    "class": "C",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "planes",
@@ -7977,7 +8641,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "service",
@@ -7989,7 +8654,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -8001,7 +8667,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "military",
@@ -8013,7 +8680,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -8025,7 +8693,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -8037,7 +8706,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -8049,7 +8719,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -8061,19 +8732,21 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "industrial",
     "model": "bulldozer",
     "brand": "HVY",
     "name": "Dozer",
-    "class": "D",
+    "class": "C",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -8085,7 +8758,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8097,7 +8771,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -8109,7 +8784,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "trains",
@@ -8121,7 +8797,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "industrial",
@@ -8133,7 +8810,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "industrial",
@@ -8145,7 +8823,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8157,7 +8836,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8169,7 +8849,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8181,7 +8862,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8193,7 +8875,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8205,7 +8888,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8217,7 +8901,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "military",
@@ -8229,7 +8914,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8241,7 +8927,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8253,7 +8940,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8265,7 +8953,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8277,7 +8966,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8289,7 +8979,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8301,7 +8992,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8313,7 +9005,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "industrial",
@@ -8325,7 +9018,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -8337,7 +9031,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -8349,7 +9044,8 @@
     "restockTime": 7,
     "price": 75000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "industrial",
@@ -8361,7 +9057,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -8373,7 +9070,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -8385,7 +9083,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -8397,7 +9096,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -8409,7 +9109,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -8421,7 +9122,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -8433,19 +9135,21 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
     "model": "forklift",
     "brand": "HVY",
     "name": "Forklift",
-    "class": "D",
+    "class": "C",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "utility",
@@ -8457,7 +9161,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8469,7 +9174,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8481,7 +9187,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8493,7 +9200,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sports",
@@ -8505,7 +9213,8 @@
     "restockTime": 14,
     "price": 227000,
     "shop": "pdm",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "trains",
@@ -8517,7 +9226,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "trains",
@@ -8529,7 +9239,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "trains",
@@ -8541,7 +9252,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "trains",
@@ -8553,7 +9265,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "trains",
@@ -8565,7 +9278,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "trains",
@@ -8577,7 +9291,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "trains",
@@ -8589,31 +9304,34 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
     "model": "lguard",
     "brand": "Declasse",
     "name": "Lifeguard SUV",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "military",
     "model": "crusader",
     "brand": "Canis",
     "name": "Crusader",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "utility",
@@ -8625,19 +9343,21 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
     "model": "monster",
     "brand": "Vapid",
     "name": "Liberator",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -8649,7 +9369,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -8661,7 +9382,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -8673,7 +9395,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -8685,7 +9408,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -8697,7 +9421,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -8709,7 +9434,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -8721,7 +9447,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -8733,7 +9460,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -8745,7 +9473,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -8757,7 +9486,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -8769,7 +9499,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -8781,7 +9512,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -8793,7 +9525,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -8805,7 +9538,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -8817,7 +9551,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -8829,7 +9564,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -8841,7 +9577,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -8853,7 +9590,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -8865,7 +9603,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "openwheel",
@@ -8877,7 +9616,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "openwheel",
@@ -8889,7 +9629,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "openwheel",
@@ -8901,7 +9642,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "openwheel",
@@ -8913,7 +9655,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -8925,7 +9668,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -8937,7 +9681,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -8949,7 +9694,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "military",
@@ -8961,7 +9707,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
@@ -8973,7 +9720,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "boats",
@@ -8985,7 +9733,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -8997,7 +9746,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -9009,7 +9759,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -9021,7 +9772,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -9033,7 +9785,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -9045,7 +9798,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -9057,7 +9811,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -9069,7 +9824,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -9081,7 +9837,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -9093,7 +9850,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -9105,43 +9863,47 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "utility",
     "model": "utillitruck",
     "brand": "Brute",
     "name": "Utility Truck (Cherry Picker)",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "utility",
     "model": "utillitruck2",
     "brand": "Brute",
     "name": "Utility Truck (Van)",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "utility",
     "model": "utillitruck3",
     "brand": "Vapid",
     "name": "Utility Truck (Contender)",
-    "class": "D",
+    "class": "C",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "military",
@@ -9153,7 +9915,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9165,7 +9928,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -9177,7 +9941,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -9189,7 +9954,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9201,7 +9967,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9213,7 +9980,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -9225,7 +9993,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -9237,7 +10006,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -9249,7 +10019,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9261,7 +10032,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "trains",
@@ -9273,7 +10045,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9285,7 +10058,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -9297,7 +10071,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "military",
@@ -9309,7 +10084,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "service",
@@ -9321,7 +10097,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sedans",
@@ -9333,7 +10110,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sports",
@@ -9345,7 +10123,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sports",
@@ -9357,7 +10136,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sports",
@@ -9369,7 +10149,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -9381,7 +10162,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -9393,7 +10175,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "sedans",
@@ -9405,7 +10188,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "sedans",
@@ -9417,19 +10201,21 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "suvs",
     "model": "squaddie",
     "brand": "Mammoth",
     "name": "Squaddie",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "planes",
@@ -9441,7 +10227,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "suvs",
@@ -9453,7 +10240,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -9465,19 +10253,21 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "service",
     "model": "rallytruck",
     "brand": "HVY",
     "name": "Dune",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "military",
@@ -9489,7 +10279,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "military",
@@ -9501,7 +10292,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "military",
@@ -9513,7 +10305,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -9525,19 +10318,21 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "service",
     "model": "wastelander",
     "brand": "MTL",
     "name": "Wastelander",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
@@ -9549,7 +10344,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "muscle",
@@ -9561,43 +10357,47 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
     "model": "tenf",
     "brand": "Obey",
     "name": "10F",
-    "class": "D",
+    "class": "S",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
     "model": "tenf2",
     "brand": "Obey",
     "name": "10F Widebody",
-    "class": "D",
+    "class": "X",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
     "model": "weevil2",
     "brand": "BF",
     "name": "Weevil Custom",
-    "class": "D",
+    "class": "A",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "military",
@@ -9609,7 +10409,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9621,7 +10422,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9633,7 +10435,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -9645,7 +10448,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9657,7 +10461,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9669,19 +10474,21 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "military",
     "model": "vetir",
     "brand": "HVY",
     "name": "Vetir",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "planes",
@@ -9693,7 +10500,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9705,7 +10513,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9717,7 +10526,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9729,7 +10539,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9741,7 +10552,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "military",
@@ -9753,7 +10565,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9765,7 +10578,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "helicopters",
@@ -9777,7 +10591,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "emergency",
@@ -9789,7 +10604,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9801,7 +10617,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9813,7 +10630,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "military",
@@ -9825,19 +10643,21 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "sports",
     "model": "hotring",
     "brand": "Declasse",
     "name": "Hotring Sabre",
-    "class": "D",
+    "class": "A",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -9849,7 +10669,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9861,7 +10682,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "commercial",
@@ -9873,7 +10695,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "motorcycles",
@@ -9885,7 +10708,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -9897,19 +10721,21 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "suvs",
     "model": "patriot2",
     "brand": "Mammoth",
     "name": "Patriot Stretch",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "offroad",
@@ -9921,7 +10747,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -9933,7 +10760,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "military",
@@ -9945,7 +10773,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "planes",
@@ -9957,7 +10786,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "air"
+    "type": "air",
+    "inCarboostPool": false
   },
   {
     "category": "boats",
@@ -9969,79 +10799,86 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "sports",
     "model": "sentinel4",
     "brand": "Ubermacht",
     "name": "Sentinel Classic Widebody",
-    "class": "D",
+    "class": "A",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
     "model": "baller7",
     "brand": "Gallivanter",
     "name": "Baller ST",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "compacts",
     "model": "brioso3",
     "brand": "Grotti",
     "name": "Brioso 300 Widebody",
-    "class": "D",
+    "class": "A",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
     "model": "kanjosj",
     "brand": "Dinka",
     "name": "Kanjo SJ",
-    "class": "D",
+    "class": "A",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "coupes",
     "model": "postlude",
     "brand": "Dinka",
     "name": "Postlude",
-    "class": "D",
+    "class": "B",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
     "model": "torero2",
     "brand": "Pegassi",
     "name": "Torero XO",
-    "class": "D",
+    "class": "X",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -10053,31 +10890,34 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "muscle",
     "model": "greenwood",
     "brand": "Bravado",
     "name": "Greenwood",
-    "class": "D",
+    "class": "C",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
     "model": "sm722",
     "brand": "Benefactor",
     "name": "SM722",
-    "class": "D",
+    "class": "S",
     "defaultStock": 10,
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "boats",
@@ -10089,7 +10929,8 @@
     "restockTime": 7,
     "price": 10000000,
     "shop": "nfs",
-    "type": "sea"
+    "type": "sea",
+    "inCarboostPool": false
   },
   {
     "category": "sportsclassics",
@@ -10101,7 +10942,8 @@
     "restockTime": 14,
     "price": 215000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -10113,7 +10955,8 @@
     "restockTime": 14,
     "price": 890000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10125,7 +10968,8 @@
     "restockTime": 14,
     "price": 460000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10137,7 +10981,8 @@
     "restockTime": 14,
     "price": 460000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "suvs",
@@ -10149,7 +10994,8 @@
     "restockTime": 14,
     "price": 470000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10161,7 +11007,8 @@
     "restockTime": 14,
     "price": 207500,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10173,7 +11020,8 @@
     "restockTime": 14,
     "price": 205000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10185,7 +11033,8 @@
     "restockTime": 14,
     "price": 480000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10197,7 +11046,8 @@
     "restockTime": 14,
     "price": 475000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -10209,7 +11059,8 @@
     "restockTime": 14,
     "price": 490000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10221,7 +11072,8 @@
     "restockTime": 14,
     "price": 210000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10233,7 +11085,8 @@
     "restockTime": 14,
     "price": 485000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -10245,7 +11098,8 @@
     "restockTime": 14,
     "price": 490000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -10257,7 +11111,8 @@
     "restockTime": 14,
     "price": 490000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -10269,7 +11124,8 @@
     "restockTime": 14,
     "price": 150000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
   },
   {
     "category": "super",
@@ -10281,7 +11137,8 @@
     "restockTime": 14,
     "price": 925000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10293,7 +11150,8 @@
     "restockTime": 14,
     "price": 475000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10305,7 +11163,8 @@
     "restockTime": 14,
     "price": 475000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -10317,7 +11176,8 @@
     "restockTime": 14,
     "price": 480000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10329,7 +11189,8 @@
     "restockTime": 14,
     "price": 480000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10341,7 +11202,8 @@
     "restockTime": 14,
     "price": 475000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -10353,7 +11215,8 @@
     "restockTime": 14,
     "price": 120000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -10365,7 +11228,8 @@
     "restockTime": 14,
     "price": 470000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -10377,7 +11241,8 @@
     "restockTime": 14,
     "price": 470000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -10389,7 +11254,7 @@
     "restockTime": 14,
     "price": 890000,
     "shop": "nfs",
-    "type": "land"
+    "inCarboostPool": true
   },
   {
     "category": "sports",
@@ -10401,7 +11266,8 @@
     "restockTime": 14,
     "price": 220000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -10413,7 +11279,8 @@
     "restockTime": 14,
     "price": 180000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -10425,7 +11292,8 @@
     "restockTime": 15,
     "price": 195000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "super",
@@ -10437,7 +11305,8 @@
     "restockTime": 15,
     "price": 890000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sportsclassics",
@@ -10449,7 +11318,8 @@
     "restockTime": 15,
     "price": 195000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -10461,7 +11331,7 @@
     "restockTime": 15,
     "price": 475000,
     "shop": "nfs",
-    "type": "land"
+    "inCarboostPool": true
   },
   {
     "category": "sedans",
@@ -10473,6 +11343,59 @@
     "restockTime": 14,
     "price": 150000,
     "shop": "nfs",
-    "type": "land"
+    "type": "land",
+    "inCarboostPool": false
+  },
+  {
+    "category": "sports",
+    "model": "m4comp",
+    "brand": "BMW",
+    "name": "M4 Competition",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 475000,
+    "shop": "nfs",
+    "type": "land",
+    "inCarboostPool": true
+  },
+  {
+    "category": "super",
+    "model": "rmodp1gtr",
+    "brand": "McLaren",
+    "name": "P1 GTR",
+    "class": "X",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 890000,
+    "shop": "nfs",
+    "type": "land",
+    "inCarboostPool": true
+  },
+  {
+    "category": "sedans",
+    "model": "zodiac",
+    "brand": "Vulcar",
+    "name": "Zodiac",
+    "class": "A",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 150000,
+    "shop": "nfs",
+    "type": "land",
+    "inCarboostPool": true
+  },
+  {
+    "category": "sports",
+    "model": "sunrise1",
+    "brand": "Maibatsu",
+    "name": "Sunrise R",
+    "class": "S",
+    "defaultStock": 5,
+    "restockTime": 14,
+    "price": 500000,
+    "shop": "nfs",
+    "type": "land",
+    "inCarboostPool": true
   }
 ]

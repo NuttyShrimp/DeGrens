@@ -137,8 +137,7 @@ class QueueManager {
         this.quitQueue(steamId);
       }
       showCard(
-        `Your position: ${pos + 1}/${this.queue.length} | ${Emojis[Util.getRndInteger(0, Emojis.length)]}${
-          Emojis[Util.getRndInteger(0, Emojis.length)]
+        `Your position: ${pos + 1}/${this.queue.length} | ${Emojis[Util.getRndInteger(0, Emojis.length)]}${Emojis[Util.getRndInteger(0, Emojis.length)]
         }${Emojis[Util.getRndInteger(0, Emojis.length)]} | 🕒 ${timeInQ.format('HH:mm:ss')}`
       );
       if (pos === 0 && this.isSlotAvailable()) {

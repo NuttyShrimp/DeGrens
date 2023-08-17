@@ -1,5 +1,4 @@
-import { SQL } from '@dgx/server';
-import { Util } from '@dgx/shared';
+import { SQL, Util } from '@dgx/server';
 import { getModule } from 'moduleController';
 
 export const generateDNA = async () => {

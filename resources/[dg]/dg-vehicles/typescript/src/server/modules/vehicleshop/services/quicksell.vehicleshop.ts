@@ -63,6 +63,8 @@ RPC.register('vehicles:quicksell:sellVehicle', async (plyId: number, netId: numb
 
   const vehicleInfo = await getPlayerVehicleInfo(targetVin);
   if (!vehicleInfo) return false;
+  if (vehicleInfo.vinscratched) return false;
+
   const modelInfo = getConfigByModel(vehicleInfo.model);
   if (!modelInfo) return false;
 

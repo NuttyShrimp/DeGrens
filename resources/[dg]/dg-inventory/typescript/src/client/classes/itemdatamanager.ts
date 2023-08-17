@@ -1,5 +1,6 @@
-import { Util } from '@dgx/client';
-import { Export, ExportRegister } from '@dgx/shared';
+import { ExportDecorators, Util } from '@dgx/client';
+
+const { Export, ExportRegister } = ExportDecorators<'inventory'>();
 
 @ExportRegister()
 class ItemDataManager extends Util.Singleton<ItemDataManager>() {
@@ -10,16 +11,18 @@ class ItemDataManager extends Util.Singleton<ItemDataManager>() {
   };
 
   @Export('getItemData')
-  public get = (name: string) => {
+  public get(name: string) {
     const item = this.itemData[name];
     if (!item) {
       throw new Error(`Could not get itemdata with nonexistent name ${name}`);
     }
     return item;
-  };
+  }
 
   @Export('getAllItemData')
-  public getAll = () => this.itemData;
+  public getAll() {
+    return this.itemData;
+  }
 }
 
 const itemDataManager = ItemDataManager.getInstance();

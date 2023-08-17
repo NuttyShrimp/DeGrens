@@ -1,5 +1,7 @@
 export const setVehicleNosAmount = (veh: number, nos: number) => {
-  const vehState = Entity(veh).state;
-  if (!vehState) return;
-  vehState.nos = nos;
+  Entity(veh).state?.set('nos', nos, true);
+};
+
+export const getVehicleNosAmount = (veh: number) => {
+  return Entity(veh).state?.nos ?? 0;
 };

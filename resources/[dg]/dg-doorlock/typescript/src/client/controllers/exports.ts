@@ -1,6 +1,6 @@
 import { Events, Notifications, UI } from '@dgx/client';
 import { getDoorId } from 'helpers/doors';
-import { getDoorState } from 'services/doors';
+import { getDoorInfo, getDoorState } from 'services/doors';
 
 global.exports('toggleEntityDoorState', (entity: number) => {
   if (!entity || GetEntityType(entity) !== 3) {
@@ -13,6 +13,19 @@ global.exports('toggleEntityDoorState', (entity: number) => {
     return;
   }
   Events.emitNet('doorlock:server:changeDoorState', doorId, !getDoorState(doorId));
+});
+
+global.exports('logDoorInfo', (entity: number) => {
+  if (!entity || GetEntityType(entity) !== 3) {
+    Notifications.add('Dit is geen deur', 'error');
+    return;
+  }
+  const doorId = getDoorId(entity);
+  if (!doorId) {
+    Notifications.add('Dit is geen deur', 'error');
+    return;
+  }
+  console.log(getDoorInfo(doorId));
 });
 
 global.exports('registerDoor', async (entity: number) => {

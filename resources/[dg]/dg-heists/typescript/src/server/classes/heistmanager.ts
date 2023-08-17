@@ -1,5 +1,5 @@
 import { Util, Jobs } from '@dgx/server';
-import { DGXEvent, EventListener } from '@dgx/server/decorators';
+import { DGXEvent, EventListener } from '@dgx/server/src/decorators';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 import { HeistLocation } from './heistlocation';
@@ -7,6 +7,7 @@ import config from 'services/config';
 import { FleecaManager } from './typemanagers/fleecamanager';
 import { PaletoManager } from './typemanagers/paletomanager';
 import { JewelryManager } from './typemanagers/jewelrymanager';
+import { MazeManager } from './typemanagers/mazemanager';
 
 @EventListener()
 class HeistManager extends Util.Singleton<HeistManager>() {
@@ -27,6 +28,7 @@ class HeistManager extends Util.Singleton<HeistManager>() {
       fleeca: new FleecaManager(),
       paleto: new PaletoManager(),
       jewelry: new JewelryManager(),
+      maze: new MazeManager(),
     };
 
     this.onEnterHandlers = [];
@@ -258,9 +260,12 @@ class HeistManager extends Util.Singleton<HeistManager>() {
       clearTimeout(this.globalTimeoutTimeout);
     }
 
-    this.globalTimeoutTimeout = setTimeout(() => {
-      this.globalTimeoutTimeout = null;
-    }, 15 * 60 * 1000);
+    this.globalTimeoutTimeout = setTimeout(
+      () => {
+        this.globalTimeoutTimeout = null;
+      },
+      15 * 60 * 1000
+    );
   };
 }
 

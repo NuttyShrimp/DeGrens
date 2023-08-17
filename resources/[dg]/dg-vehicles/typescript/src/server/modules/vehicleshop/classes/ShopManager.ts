@@ -1,5 +1,5 @@
 import { Business, Config, Events, Inventory, Notifications, Util, UI, Core } from '@dgx/server';
-import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/src/decorators';
 import { getPlayerVehicleInfo, insertNewVehicle, setVehicleState } from 'db/repository';
 import { spawnOwnedVehicle } from 'helpers/vehicle';
 import plateManager from 'modules/identification/classes/platemanager';
@@ -50,7 +50,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
 
   private loadSpotData = async () => {
     await Config.awaitConfigLoad();
-    await Util.awaitCondition(() => isInfoLoaded(), 99999);
+    await Util.awaitCondition(() => isInfoLoaded(), false);
     const config = Config.getConfigValue<VehicleShop.Config>('vehicles.shop');
     this.spots.clear();
     config.carSpots.forEach((data, id) => {

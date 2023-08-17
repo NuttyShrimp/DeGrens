@@ -1,4 +1,4 @@
-import { BaseEvents, Events, PolyZone, Statebags, Sync, Util, Vehicles } from '@dgx/client';
+import { BaseEvents, Statebags, Util, Vehicles, PolyZone } from '@dgx/client';
 import { WHEELS } from './constants.spikestrips';
 
 let spikeThread: NodeJS.Timer | null = null;
@@ -8,20 +8,11 @@ const spikesWithZones = new Set<number>();
 onNet('police:spikestrips:doAnim', async () => {
   await Util.loadAnimDict('anim@heists@narcotics@trash');
   TaskPlayAnim(PlayerPedId(), 'anim@heists@narcotics@trash', 'drop_front', 8.0, 8.0, 800, 17, 1, false, false, false);
-});
-
-Sync.registerActionHandler('police:spikestrips:setup', async entity => {
-  const entCoord = Util.getEntityCoords(entity);
-  SetEntityVisible(entity, false, false);
-  SetEntityCoordsNoOffset(entity, entCoord.x, entCoord.y, entCoord.z + 2.5, false, false, false);
-  await Util.Delay(100);
-  PlaceObjectOnGroundProperly(entity);
-  SetEntityVisible(entity, true, false);
+  RemoveAnimDict('anim@heists@narcotics@trash');
 });
 
 BaseEvents.onEnteredVehicle((vehicle, seat) => {
   if (seat !== -1) return;
-  if (spikeEntities.size === 0) return;
   startSpikeThread(vehicle);
 });
 
@@ -38,7 +29,7 @@ BaseEvents.onLeftVehicle(() => {
   stopSpikeThread();
 });
 
-Statebags.addEntityStateBagChangeHandler('entity', 'spikestrip', (netId, entity) => {
+Statebags.addEntityStateBagChangeHandler('localEntity', 'isSpikestrip', entity => {
   spikeEntities.add(entity);
 
   const ped = PlayerPedId();
@@ -49,14 +40,13 @@ Statebags.addEntityStateBagChangeHandler('entity', 'spikestrip', (netId, entity)
 });
 
 const startSpikeThread = (vehicle: number) => {
-  if (spikeThread) return;
+  if (spikeEntities.size === 0) return;
 
-  const hasBulletProofTires = Vehicles.getVehicleHasBulletProofTires(vehicle);
+  const poppedTyres = new Set<number>();
 
   spikeThread = setInterval(() => {
-    if (hasBulletProofTires) return;
-    if (!DoesEntityExist(vehicle)) return;
-    if (Vehicles.getVehicleSpeed(vehicle) < 1) return;
+    if (!DoesEntityExist(vehicle) || Vehicles.getVehicleSpeed(vehicle) < 1) return;
+    if (Vehicles.getVehicleHasBulletProofTires(vehicle)) return;
 
     for (const entity of spikeEntities) {
       if (!DoesEntityExist(entity)) {
@@ -69,22 +59,23 @@ const startSpikeThread = (vehicle: number) => {
       }
 
       const entityCoords = Util.getEntityCoords(entity);
-      if (Util.getEntityCoords(vehicle).distance(entityCoords) > 50) continue;
+      if (Util.getEntityCoords(vehicle).distance(entityCoords) > 30) continue;
       const entityHeading = GetEntityHeading(entity);
 
       if (!spikesWithZones.has(entity)) {
         spikesWithZones.add(entity);
-        PolyZone.addBoxZone('spikestrip', entityCoords, 3.7, 0.6, {
+        PolyZone.addBoxZone('spikestrip', entityCoords, 3.7, 0.5, {
           heading: entityHeading,
           data: { id: `spikestrip_${entity}` },
           minZ: entityCoords.z - 1,
-          maxZ: entityCoords.z + 2,
+          maxZ: entityCoords.z + 1.5,
         });
       }
 
       if (!IsEntityTouchingEntity(vehicle, entity)) continue;
 
       for (let wheelIdx = 0; wheelIdx < WHEELS.length; wheelIdx++) {
+        if (poppedTyres.has(wheelIdx)) continue;
         const wheelBone = GetEntityBoneIndexByName(vehicle, WHEELS[wheelIdx]);
         if (wheelBone === -1) continue;
         const wheelPos = Util.ArrayToVector3(GetWorldPositionOfEntityBone(vehicle, wheelBone));
@@ -92,14 +83,17 @@ const startSpikeThread = (vehicle: number) => {
         if (!wheelInside) continue;
         if (!IsVehicleTyreBurst(vehicle, wheelIdx, true) || IsVehicleTyreBurst(vehicle, wheelIdx, false)) {
           SetVehicleTyreBurst(vehicle, wheelIdx, true, 1000.0);
+          poppedTyres.add(wheelIdx);
+          setTimeout(() => {
+            poppedTyres.delete(wheelIdx);
+          }, 1000);
         }
       }
     }
-
     if (spikeEntities.size === 0) {
       stopSpikeThread();
     }
-  }, 50);
+  }, 10);
 };
 
 const stopSpikeThread = () => {

@@ -5,7 +5,7 @@
   },
   "delayAfterDropOff": 300,
   "amountOfGuards": 25,
-  "trackerTime": 30,
+  "trackerTime": 20,
   "pricePercentage": 0.8,
   "timeoutBetweenRuns": 60,
   "vehicleModels": [

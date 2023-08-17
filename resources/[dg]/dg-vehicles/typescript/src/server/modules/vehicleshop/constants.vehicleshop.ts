@@ -8,7 +8,7 @@ export const CATEGORY_LABEL: Record<ModelCategorisation, string> = {
   category: 'Op Categorie',
 };
 
-export const VEHICLE_CATEGORY_TO_LABEL: Record<Category, string> = {
+export const VEHICLE_CATEGORY_TO_LABEL: Record<Vehicles.Category, string> = {
   compacts: 'Kleine Voertuigen',
   sedans: 'Sedans',
   suvs: 'SUVs',

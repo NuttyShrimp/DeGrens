@@ -66,7 +66,7 @@ Events.onNet(
     }
 
     // We decrease quality based on amount of shots fired
-    const decrease = weaponConfig.durabilityMultiplier * shotFirePositions.length;
+    const decrease = weaponConfig.durabilityDecreasePerShot * shotFirePositions.length;
     Inventory.setQualityOfItem(itemId, old => old - decrease);
     saveWeaponAmmo(src, itemId, ammoCount);
 
@@ -81,7 +81,7 @@ Events.onNet('weapons:server:meleeHit', (plyId: number, itemId: string, hits: nu
   const weaponConfig = getWeaponConfig(itemState.name);
   if (!weaponConfig) return;
 
-  const decrease = weaponConfig.durabilityMultiplier * hits;
+  const decrease = weaponConfig.durabilityDecreasePerShot * hits;
   Inventory.setQualityOfItem(itemId, old => old - decrease);
 });
 

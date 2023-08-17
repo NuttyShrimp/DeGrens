@@ -1,9 +1,10 @@
-import { Events, Notifications, RayCast, Sync, UI, Util, Vehicles } from '@dgx/client';
-import { DGXEvent, EventListener } from '@dgx/client/decorators';
-import { Vector3, Export, ExportRegister } from '@dgx/shared';
+import { Events, Notifications, RayCast, Sync, UI, Util, Vehicles, ExportDecorators } from '@dgx/client';
+import { DGXEvent, EventListener } from '@dgx/client/src/decorators';
 import { TYPES_WITH_OPEN_ANIMATION } from '../constants';
 import { canOpenInventory, doCloseAnimation, doLookAnimation, doOpenAnimation } from '../util';
 import { isInNoDropZone } from 'services/nodropzones';
+
+const { ExportRegister, Export } = ExportDecorators<'inventory'>();
 
 @ExportRegister()
 @EventListener()
@@ -19,11 +20,13 @@ class ContextManager extends Util.Singleton<ContextManager>() {
   }
 
   @Export('isOpen')
-  private _isOpen = () => this.isInventoryOpen;
+  private _isOpen() {
+    return this.isInventoryOpen;
+  }
 
   @Export('open')
   @DGXEvent('inventory:client:open')
-  public openInventory = (sec?: IdBuildData) => {
+  public openInventory(sec?: IdBuildData) {
     if (this.isInventoryOpen || !canOpenInventory()) {
       Notifications.add('Je kan dit momenteel niet', 'error');
       return;
@@ -32,7 +35,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
     UI.openApplication('inventory');
     this.isInventoryOpen = true;
     TriggerScreenblurFadeIn(0);
-  };
+  }
 
   public close = () => {
     TriggerScreenblurFadeOut(0);
@@ -74,8 +77,8 @@ class ContextManager extends Util.Singleton<ContextManager>() {
 
     const { entity: entityAimingAt } = RayCast.doRaycast();
     if (entityAimingAt && IsEntityAVehicle(entityAimingAt) && NetworkGetEntityIsNetworked(entityAimingAt)) {
-      if (GetVehicleDoorLockStatus(entityAimingAt) < 2) {
-        if (Vehicles.isNearVehiclePlace(entityAimingAt, 'boot', 2)) {
+      if (Vehicles.isNearVehiclePlace(entityAimingAt, 'boot', 2)) {
+        if (GetVehicleDoorLockStatus(entityAimingAt) < 2) {
           const vin = await Vehicles.getVehicleVin(entityAimingAt);
           if (vin) {
             const vehicleClass = GetVehicleClass(entityAimingAt);
@@ -84,9 +87,9 @@ class ContextManager extends Util.Singleton<ContextManager>() {
             this.closingData = { type: 'trunk', data: entityAimingAt };
             return { type: 'trunk', identifier: vin, data: vehicleClass };
           }
+        } else {
+          Notifications.add('Voertuig staat op slot', 'error');
         }
-      } else {
-        Notifications.add('Voertuig staat op slot', 'error');
       }
     }
 

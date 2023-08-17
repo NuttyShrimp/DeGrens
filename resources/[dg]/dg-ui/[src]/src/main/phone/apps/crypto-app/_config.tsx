@@ -1,4 +1,5 @@
-import Icon from '@assets/phone/icons/crypto.svg';
+import { FaCoins } from 'react-icons/fa';
+import { baseStyle } from '@src/base.styles';
 
 import { ConfigObject, defaultConfigObject } from '../../config';
 
@@ -10,11 +11,10 @@ const config = (): ConfigObject => ({
   name: 'crypto',
   label: 'Crypto',
   icon: {
-    name: Icon,
-    lib: 'svg',
-    color: 'white',
-    background: '#282828',
-    size: '2.5rem',
+    name: FaCoins,
+    color: baseStyle.primaryDarker.dark,
+    background: '#e3ffe7',
+    backgroundGradient: '#d9e7ff',
   },
   position: 10,
   render: p => <Container {...p} />,

@@ -1,5 +1,5 @@
 import { Admin, Events, SQL, Util } from '@dgx/server';
-import { DGXEvent, EventListener } from '@dgx/server/decorators';
+import { DGXEvent, EventListener } from '@dgx/server/src/decorators';
 import { getModule } from 'moduleController';
 import { Player } from './classes/player';
 import { characterLogger } from './logger.character';

@@ -48,7 +48,6 @@ const buildServer = async () => {
         project: 'degrens-cfx',
         sourcemaps: {
           assets: '../server/**',
-          rewriteSources: source => `@${resName}/server/${path.basename(source)}`,
         },
       })
     );
@@ -56,6 +55,7 @@ const buildServer = async () => {
   await build({
     ...serverConfig,
     sourcemap: true,
+    minify: true,
     plugins,
   });
   console.log(`[${resName}] [Server] Successfully built`);

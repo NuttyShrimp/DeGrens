@@ -1,0 +1,18 @@
+{
+  "name": "@dgx/shared",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "type": "module",
+  "types": "src/index.ts",
+  "version": "1.4.0",
+  "devDependencies": {
+    "rimraf": "^5.0.1",
+    "tsup": "^7.0.0"
+  },
+  "dependencies": {
+    "color-name-list": "^10.11.0",
+    "nearest-color": "^0.4.4",
+    "reflect-metadata": "^0.1.13",
+    "typescript": "^5.1.6"
+  }
+}

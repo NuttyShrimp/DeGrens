@@ -37,7 +37,7 @@ const carSchema: Schema = {
         'commercial',
         'trains',
         'openwheel',
-      ] satisfies Category[],
+      ] satisfies Vehicles.Category[],
     },
     class: { type: 'string' },
     price: { type: 'number' },
@@ -48,6 +48,7 @@ const carSchema: Schema = {
       type: 'string',
       enum: ['land', 'air', 'sea'],
     },
+    inCarboostPool: { type: 'boolean', required: true },
   },
   required: true,
 };

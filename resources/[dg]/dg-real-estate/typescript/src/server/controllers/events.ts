@@ -1,9 +1,22 @@
-import { BaseEvents, Chat, Events, Financials, Notifications, RPC, TaxIds, Util, Vehicles } from '@dgx/server';
+import {
+  BaseEvents,
+  Chat,
+  Events,
+  Financials,
+  Inventory,
+  Notifications,
+  RPC,
+  SyncedObjects,
+  TaxIds,
+  Util,
+  Vehicles,
+} from '@dgx/server';
 import { instanceManager } from 'classes/instanceManager';
 import { propertyManager } from 'classes/propertyManager';
 import { appendFile } from 'fs/promises';
 import { enterProperty } from 'services/actions';
 import { getREConfig } from 'services/config';
+import { mainLogger } from 'sv_logger';
 
 global.exports('playerHasAccess', (cid: number, garageId: string) => {
   return propertyManager.hasCidHouseAccess(cid, garageId.replace('realestate_', '').replace(/_/g, ' '));
@@ -20,6 +33,35 @@ Events.onNet('realestate:enterProperty', (src, propertyName: string) => {
 Events.onNet('realestate:leaveProperty', src => {
   if (!instanceManager.inBuilding(src)) return;
   instanceManager.leave(src);
+});
+
+Events.onNet('realestate:placeMailbox', async (src, propertyName: string, coords: Vec3, rotation: Vec3) => {
+  const success = await Inventory.removeItemByNameFromPlayer(src, 'mailbox', 1);
+  if (!success) {
+    Notifications.add(src, 'Je hebt geen brievenbus bij', 'error');
+    return;
+  }
+  if (!propertyName) return;
+  const propertyInfo = propertyManager.getHouseForName(propertyName);
+  if (!propertyInfo) return;
+  if (propertyInfo.owner !== Util.getCID(src)) return;
+  const objId = await SyncedObjects.add(
+    {
+      model: 'prop_letterbox_01',
+      coords,
+      rotation,
+      flags: {
+        houseName: propertyName,
+        isMailBox: true,
+      },
+      skipStore: false,
+    },
+    src
+  );
+  if (!objId) {
+    mainLogger.error(`Failed to place mailbox for ${propertyName}`, { src, coords, rotation });
+  }
+  propertyManager.setPropertyMailbox(propertyName, objId[0], 'add');
 });
 
 RPC.register('realestate:houses:getHouses', src => propertyManager.getHouses(src));

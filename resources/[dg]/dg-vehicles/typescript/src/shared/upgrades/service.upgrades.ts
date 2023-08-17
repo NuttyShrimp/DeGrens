@@ -27,10 +27,13 @@ export const generateBaseCosmeticUpgrades = (
 ): Vehicles.Upgrades.Cosmetic.Upgrades => {
   const primaryColor = randomColor ? RANDOM_COLORS[Math.floor(Math.random() * RANDOM_COLORS.length)] : 0;
   return {
-    ...(Object.keys(NORMAL_COSMETIC_KEYS_TO_ID) as Vehicles.Upgrades.Cosmetic.NormalKey[]).reduce((acc, k) => {
-      acc[k] = -1;
-      return acc;
-    }, {} as Pick<Vehicles.Upgrades.Cosmetic.Upgrades, Vehicles.Upgrades.Cosmetic.NormalKey>),
+    ...(Object.keys(NORMAL_COSMETIC_KEYS_TO_ID) as Vehicles.Upgrades.Cosmetic.NormalKey[]).reduce(
+      (acc, k) => {
+        acc[k] = -1;
+        return acc;
+      },
+      {} as Pick<Vehicles.Upgrades.Cosmetic.Upgrades, Vehicles.Upgrades.Cosmetic.NormalKey>
+    ),
     xenon: {
       active: false,
       color: -1,

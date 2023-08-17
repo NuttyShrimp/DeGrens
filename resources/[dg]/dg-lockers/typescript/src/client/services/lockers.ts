@@ -1,4 +1,4 @@
-import { PolyTarget } from '@dgx/client/classes';
+import { PolyTarget } from '@dgx/client';
 
 const builtIds = new Set<string>();
 

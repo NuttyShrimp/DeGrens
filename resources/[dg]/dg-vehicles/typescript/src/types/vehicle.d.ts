@@ -37,5 +37,6 @@ declare namespace Vehicle {
     wax: number | null;
     nos: number;
     engineSound: string | null;
+    vinscratched: boolean;
   }
 }

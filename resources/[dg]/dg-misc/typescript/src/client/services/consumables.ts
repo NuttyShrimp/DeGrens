@@ -44,16 +44,19 @@ const effects: Record<EffectName, (duration: number) => void> = {
   speed: async duration => {
     const plyId = PlayerId();
     activeDrugs.speed = true;
-    SetPedMoveRateOverride(plyId, 1.3);
+    const overrideThread = setInterval(() => {
+      SetPedMoveRateOverride(plyId, 1.35);
+    }, 0);
     SetRunSprintMultiplierForPlayer(plyId, 1.25);
     SetTimecycleModifier('BarryFadeOut');
     SetTimecycleModifierStrength(0.4);
-    SetPlayerMaxStamina(PlayerId(), 200);
+    SetPlayerMaxStamina(plyId, 200);
     const shakeInterval = setInterval(() => {
       ShakeGameplayCam('VIBRATE_SHAKE', 0.5);
     }, 2000);
     await Util.Delay(duration);
-    SetPlayerMaxStamina(PlayerId(), 100);
+    clearInterval(overrideThread);
+    SetPlayerMaxStamina(plyId, 100);
     SetPedMoveRateOverride(plyId, 1.0);
     SetRunSprintMultiplierForPlayer(plyId, 1);
     clearInterval(shakeInterval);

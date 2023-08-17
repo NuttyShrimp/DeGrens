@@ -41,7 +41,7 @@
   "starterItems": ["phone", "id_card"],
   "containers": {
     "container_weapons": {
-      "size": 10,
+      "size": 20,
       "allowedItems": [
         "weapon_advancedrifle",
         "weapon_appistol",
@@ -60,11 +60,15 @@
         "weapon_sniperrifle",
         "weapon_specialcarbine",
         "weapon_stungun",
-        "weapon_pistol_mk2"
+        "weapon_pistol_mk2",
+        "weapon_revolver_mk2",
+        "weapon_pistol50",
+        "weapon_vintagepistol",
+        "weapon_combatpistol"
       ]
     },
     "container_ammo": {
-      "size": 10,
+      "size": 25,
       "allowedItems": ["pistol_ammo", "smg_ammo", "rifle_ammo", "shotgun_ammo", "sniper_ammo", "taser_cartridge"]
     },
     "container_materials": {
@@ -83,7 +87,7 @@
         "refined_aluminum",
         "refined_steel",
         "advanced_parts",
-        "material_sand"
+        "sand"
       ]
     },
     "container_weedbuds": {

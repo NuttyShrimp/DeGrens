@@ -57,7 +57,7 @@ declare namespace Financials {
     isAtm: boolean;
     canLoadMore: boolean;
     backdrop: boolean;
-    modalComponent: React.ReactElement<any, any> | null;
+    modalComponent: React.ReactNode | null;
   }
 
   interface StateActions {

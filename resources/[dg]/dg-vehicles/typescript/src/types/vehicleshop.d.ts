@@ -10,7 +10,7 @@ declare namespace VehicleShop {
       time: number;
     };
     timeForSale: number;
-    classesThatNeedEmployee: CarClass[];
+    classesThatNeedEmployee: Vehicles.Class[];
     employeePercentage: number;
     quicksell: {
       percentage: number;

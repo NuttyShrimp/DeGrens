@@ -6,7 +6,7 @@ UI.RegisterUICallback('inventory/containers/open', (data: { containerId: string 
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
-UI.RegisterUICallback('inventory/containers/label', async (data: { containerId: string }, cb) => {
+UI.RegisterUICallback('inventory/containers/label', async (data: { containerId: string; label: string }, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 
   const result = await UI.openInput<{ label: string }>({
@@ -16,6 +16,7 @@ UI.RegisterUICallback('inventory/containers/label', async (data: { containerId: 
         type: 'text',
         label: 'Label',
         name: 'label',
+        value: data.label,
       },
     ],
   });

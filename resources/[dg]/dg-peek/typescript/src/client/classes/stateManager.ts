@@ -1,5 +1,5 @@
 import { Hospital, Inventory, Notifications, Police, RayCast, UI, Util } from '@dgx/client';
-import { Export, ExportRegister } from '@dgx/shared';
+import { ExportDecorators } from '@dgx/client';
 
 import { DEFAULT_DISTANCE, DISABLED_KEYS, PEEK_TYPES } from '../cl_constant';
 import { getActiveZones, getCurrentEntity, updateCurrentEntity } from '../helpers/actives';
@@ -8,6 +8,8 @@ import { isEntryDisabled } from '../helpers/entries';
 import { ZoneManager } from './entryManagers/zoneManager';
 import { entryManager } from './entryManager';
 import { clearCachedItems, setCachedItems } from 'helpers/context';
+
+const { ExportRegister, Export } = ExportDecorators<'peek'>();
 
 @ExportRegister()
 class StateManager extends Util.Singleton<StateManager>() {

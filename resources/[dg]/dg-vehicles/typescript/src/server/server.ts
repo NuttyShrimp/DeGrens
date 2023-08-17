@@ -26,7 +26,7 @@ import './modules/mechanic/controller.mechanic';
 import './modules/dev';
 import './services';
 
-setImmediate(() => {
+setImmediate(async () => {
   loadVehicleInfo();
   checkVehicleRestocks();
   vinManager.fetchVins();

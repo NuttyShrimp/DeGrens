@@ -26,8 +26,28 @@ export const generateLogger = (name: string, packageInfo: Record<string, any>, l
   if (mainJSON.production) {
     Sentry.init({
       dsn: SENTRY_DSN,
-      integrations: [new RewriteFrames()],
+      integrations: [
+        new RewriteFrames({
+          iteratee: frame => {
+            frame.in_app = frame.filename?.startsWith('@') || frame.abs_path?.startsWith('@') || frame.in_app;
+            // if (frame.filename) {
+            //   frame.filename = frame.filename.replace(/^@[^/]+/, ".")
+            // }
+            frame.abs_path = `app://${frame.filename}`;
+            return frame;
+          },
+        }),
+      ],
+      beforeSend: e => {
+        if (e.debug_meta?.images) {
+          for (const img of e.debug_meta.images) {
+            img.code_file = `app://${img.code_file}`;
+          }
+        }
+        return e;
+      },
       release: packageInfo.version,
+      attachStacktrace: true,
       environment: mainJSON.production ? 'production' : 'development',
       // Set tracesSampleRate to 1.0 to capture 100%
       // of transactions for performance monitoring.

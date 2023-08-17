@@ -55,7 +55,7 @@ export const attachHook = async (vehToTow: number) => {
 
   const vin = Entity(vehToTow).state?.vin;
   if (vin && vin === jobVin) {
-    finishJob();
+    cleanupJobBlip();
   }
 
   Events.emitNet(
@@ -84,12 +84,15 @@ export const isDoingAJob = (ent: number) => {
   return vin === jobVin;
 };
 
-export const finishJob = () => {
+export const cleanupJobBlip = () => {
   if (DoesBlipExist(jobBlip)) {
     RemoveBlip(jobBlip);
     jobBlip = 0;
-    jobVin = null;
   }
+};
+
+export const cleanupJobVin = () => {
+  jobVin = null;
 };
 
 export const releaseVehicle = async (towVeh: number) => {

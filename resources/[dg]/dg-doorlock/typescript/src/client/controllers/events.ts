@@ -8,6 +8,7 @@ import {
   leaveDoorPolyZone,
   loadDoors,
   tryToDetcordDoor,
+  tryToGateUnlockDoor,
   tryToLockpickDoor,
   tryToThermiteDoor,
 } from 'services/doors';
@@ -30,8 +31,10 @@ Keys.onPressDown('toggleDoor', () => {
   handleToggleKeyPress();
 });
 
-Events.onNet('doorlock:client:changeDoorState', (doorId: number, state: boolean) => {
-  changeDoorState(doorId, state);
+Events.onNet('doorlock:client:changeDoorState', (newStates: { id: number; state: boolean }[]) => {
+  newStates.forEach(d => {
+    changeDoorState(d.id, d.state);
+  });
 });
 
 on('onResourceStop', (resourceName: string) => {
@@ -51,16 +54,9 @@ PolyZone.onLeave<{ id: number }>('doorlock', (_, data) => {
   leaveDoorPolyZone(data.id);
 });
 
-Events.onNet('doorlock:client:useLockpick', () => {
-  tryToLockpickDoor();
-});
-
-Events.onNet('doorlock:client:useThermite', () => {
-  tryToThermiteDoor();
-});
-
-Events.onNet('doorlock:client:useDetcord', () => {
-  tryToDetcordDoor();
-});
+Events.onNet('doorlock:client:useLockpick', tryToLockpickDoor);
+Events.onNet('doorlock:client:useThermite', tryToThermiteDoor);
+Events.onNet('doorlock:client:useDetcord', tryToDetcordDoor);
+Events.onNet('doorlock:client:useGateUnlock', tryToGateUnlockDoor);
 
 Events.onNet('doorlock:client:loadDoors', loadDoors);

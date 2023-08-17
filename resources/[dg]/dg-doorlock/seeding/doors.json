@@ -1244,8 +1244,7 @@
   {
     "description": "Mazebank offices",
     "locked": true,
-    "authorized": {},
-    "distance": 5,
+    "distance": 2,
     "hideInteraction": true,
     "doors": [
       {
@@ -1256,12 +1255,13 @@
           "z": 17.14
         }
       }
-    ]
+    ],
+    "authorized": {},
+    "lockpickable": true
   },
   {
     "description": "Mazebank vault",
     "locked": true,
-    "authorized": {},
     "distance": 5,
     "hideInteraction": true,
     "doors": [
@@ -1273,7 +1273,12 @@
           "z": 17.14
         }
       }
-    ]
+    ],
+    "authorized": {},
+    "thermiteable": {
+      "grid": 6,
+      "amount": 4
+    }
   },
   {
     "description": "Fleeca BP Gate",
@@ -4244,5 +4249,980 @@
     "authorized": {
       "gang": ["nudaveritas"]
     }
+  },
+  {
+    "description": "lostmc gate",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "lost_mc_gate",
+        "coords": {
+          "x": 956.452392578125,
+          "y": -137.8399200439453,
+          "z": 73.57414245605469
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["asphaltrebellions"]
+    },
+    "playSound": true
+  },
+  {
+    "description": "lostmc left building left garagedoor",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "v_ilev_carmod3door",
+        "coords": {
+          "x": 963.1661987304688,
+          "y": -117.32923126220703,
+          "z": 75.29224395751953
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["asphaltrebellions"]
+    },
+    "playSound": true
+  },
+  {
+    "description": "lostmc left building right garagedoor",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "v_ilev_carmod3door",
+        "coords": {
+          "x": 968.7604370117188,
+          "y": -112.10954284667969,
+          "z": 75.29219818115234
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["asphaltrebellions"]
+    },
+    "playSound": true
+  },
+  {
+    "description": "lostmc left building garage door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_ss_door5_r",
+        "coords": {
+          "x": 959.38232421875,
+          "y": -120.45116424560547,
+          "z": 75.16157531738281
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["asphaltrebellions"]
+    }
+  },
+  {
+    "description": "lostmc left building main door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_lostdoor",
+        "coords": {
+          "x": 981.1505126953125,
+          "y": -103.2552490234375,
+          "z": 74.99357604980469
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["asphaltrebellions"]
+    }
+  },
+  {
+    "description": "lostmc right building garagedoor",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "lost_mc_door_01",
+        "coords": {
+          "x": 982.3787841796875,
+          "y": -125.36592102050781,
+          "z": 75.0358657836914
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["asphaltrebellions"]
+    },
+    "playSound": true
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_04a",
+        "coords": {
+          "x": -914.3233032226562,
+          "y": 178.00022888183594,
+          "z": 68.429443359375
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_37"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -1534.178955078125,
+          "y": -42.263004302978516,
+          "z": 57.47746658325195
+        }
+      },
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -1528.8773193359375,
+          "y": -40.91020584106445,
+          "z": 57.474613189697266
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_1"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -1549.6273193359375,
+          "y": -30.78646469116211,
+          "z": 58.0993537902832
+        }
+      },
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -1549.9886474609375,
+          "y": -36.24604415893555,
+          "z": 58.096500396728516
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_2"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -1454.6641845703125,
+          "y": -34.730735778808594,
+          "z": 54.86433792114258
+        }
+      },
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -1452.9033203125,
+          "y": -29.55031967163086,
+          "z": 54.867191314697266
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_3"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -1469.9599609375,
+          "y": -13.796524047851562,
+          "z": 54.89387130737305
+        }
+      },
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -1475.3533935546875,
+          "y": -14.718673706054688,
+          "z": 54.896724700927734
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_4"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_03a",
+        "coords": {
+          "x": -1483.095703125,
+          "y": 46.93427276611328,
+          "z": 53.26295852661133
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_5"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_03a",
+        "coords": {
+          "x": -1452.4248046875,
+          "y": 37.0323600769043,
+          "z": 51.7449951171875
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_6"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_03a",
+        "coords": {
+          "x": -1507.4677734375,
+          "y": 39.164634704589844,
+          "z": 54.41273880004883
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_7"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_02_ld",
+        "coords": {
+          "x": -1533.883544921875,
+          "y": 35.762325286865234,
+          "z": 55.945953369140625
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_8"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_02_ld",
+        "coords": {
+          "x": -1553.332763671875,
+          "y": 33.868438720703125,
+          "z": 57.378963470458984
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_9"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_02_ld",
+        "coords": {
+          "x": -1583.279541015625,
+          "y": 40.141571044921875,
+          "z": 59.330650329589844
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_10"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -1162.0465087890625,
+          "y": 314.3567810058594,
+          "z": 68.71733093261719
+        }
+      },
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -1159.51318359375,
+          "y": 309.5026550292969,
+          "z": 68.71733093261719
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_11"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "bh1_47_gate_1",
+        "coords": {
+          "x": -1091.374267578125,
+          "y": 366.6529846191406,
+          "z": 67.70917510986328
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_12"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "bh1_47_gate_2",
+        "coords": {
+          "x": -1126.067626953125,
+          "y": 388.9789733886719,
+          "z": 69.76715850830078
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_13"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01c_r",
+        "coords": {
+          "x": -1137.0538330078125,
+          "y": 295.5855712890625,
+          "z": 67.18045806884766
+        }
+      },
+      {
+        "model": "prop_lrggate_01c_l",
+        "coords": {
+          "x": -1138.6448974609375,
+          "y": 300.82470703125,
+          "z": 67.18045806884766
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_14"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01c_l",
+        "coords": {
+          "x": -1107.0078125,
+          "y": 289.38372802734375,
+          "z": 64.75601959228516
+        }
+      },
+      {
+        "model": "prop_lrggate_01c_r",
+        "coords": {
+          "x": -1101.6201171875,
+          "y": 290.3619384765625,
+          "z": 64.75601959228516
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_15"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -1039.234375,
+          "y": 329.203125,
+          "z": 68.38643646240234
+        }
+      },
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -1033.776123046875,
+          "y": 328.9544677734375,
+          "z": 68.38643646240234
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_16"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -1065.4317626953125,
+          "y": 313.534912109375,
+          "z": 66.26834106445312
+        }
+      },
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -1064.2921142578125,
+          "y": 318.8785095214844,
+          "z": 66.26834106445312
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_17"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -1017.808837890625,
+          "y": 351.32080078125,
+          "z": 70.66372680664062
+        }
+      },
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -1012.4922485351562,
+          "y": 352.5804443359375,
+          "z": 70.66372680664062
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_18"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -1011.6275024414062,
+          "y": 367.20867919921875,
+          "z": 72.23770141601562
+        }
+      },
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -1006.8895263671875,
+          "y": 364.48712158203125,
+          "z": 72.23770141601562
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_19"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01c_l",
+        "coords": {
+          "x": -852.5468139648438,
+          "y": 299.0097351074219,
+          "z": 86.49998474121094
+        }
+      },
+      {
+        "model": "prop_lrggate_01c_r",
+        "coords": {
+          "x": -855.1950073242188,
+          "y": 303.80462646484375,
+          "z": 86.49998474121094
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_20"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -868.3368530273438,
+          "y": 383.66607666015625,
+          "z": 87.90104675292969
+        }
+      },
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -868.1162719726562,
+          "y": 389.14788818359375,
+          "z": 87.90104675292969
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_21"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "xm_prop_x17_tem_control_01",
+        "coords": {
+          "x": 367.31695556640625,
+          "y": 4846.72900390625,
+          "z": -58.447998046875
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_22"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -953.6570434570312,
+          "y": 124.25611877441406,
+          "z": 57.755470275878906
+        }
+      },
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -948.5164794921875,
+          "y": 122.13055419921875,
+          "z": 57.774269104003906
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_23"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -934.4778442382812,
+          "y": 118.8102798461914,
+          "z": 57.04975128173828
+        }
+      },
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -930.7940673828125,
+          "y": 122.97846984863281,
+          "z": 57.06855010986328
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_24"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -967.8656616210938,
+          "y": 182.73345947265625,
+          "z": 64.95164489746094
+        }
+      },
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -972.5698852539062,
+          "y": 185.70217895507812,
+          "z": 64.93284606933594
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_25"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -1043.986328125,
+          "y": 212.6893310546875,
+          "z": 64.013671875
+        }
+      },
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -1049.476806640625,
+          "y": 211.7963409423828,
+          "z": 63.994873046875
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_26"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_03a",
+        "coords": {
+          "x": -841.2128295898438,
+          "y": 97.75608825683594,
+          "z": 51.804012298583984
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_27"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_03a",
+        "coords": {
+          "x": -846.2274169921875,
+          "y": 119.72998046875,
+          "z": 54.63655471801758
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_28"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_02_ld",
+        "coords": {
+          "x": -880.59423828125,
+          "y": -9.5568208694458,
+          "z": 41.976348876953125
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_29"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_02_ld",
+        "coords": {
+          "x": -893.1578369140625,
+          "y": 8.636805534362793,
+          "z": 43.71112060546875
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_30"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -827.2945556640625,
+          "y": -29.03375244140625,
+          "z": 38.84906005859375
+        }
+      },
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -824.646240234375,
+          "y": -33.83020782470703,
+          "z": 38.841758728027344
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_31"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_03a",
+        "coords": {
+          "x": -924.9678344726562,
+          "y": -9.019359588623047,
+          "z": 43.28407287597656
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_32"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_03a",
+        "coords": {
+          "x": -905.6967163085938,
+          "y": 14.659932136535645,
+          "z": 45.64894485473633
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_33"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01_r",
+        "coords": {
+          "x": -387.9001159667969,
+          "y": 425.05389404296875,
+          "z": 110.90950775146484
+        }
+      },
+      {
+        "model": "prop_lrggate_01_l",
+        "coords": {
+          "x": -383.6267395019531,
+          "y": 428.46563720703125,
+          "z": 110.90950775146484
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_34"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "prop_lrggate_01c_l",
+        "coords": {
+          "x": 203.15794372558594,
+          "y": 773.7232055664062,
+          "z": 205.77952575683594
+        }
+      },
+      {
+        "model": "prop_lrggate_01c_r",
+        "coords": {
+          "x": 208.58958435058594,
+          "y": 774.6777954101562,
+          "z": 205.76963806152344
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_35"
+  },
+  {
+    "description": "villa driveway gate",
+    "locked": false,
+    "distance": 10,
+    "playSound": true,
+    "canUseGateUnlock": true,
+    "doors": [
+      {
+        "model": "bh1_45_gate1",
+        "coords": {
+          "x": -983.8409423828125,
+          "y": 146.77761840820312,
+          "z": 59.742984771728516
+        }
+      }
+    ],
+    "authorized": {},
+    "name": "villa_driveway_gate_36"
   }
 ]

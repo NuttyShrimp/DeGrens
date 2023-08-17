@@ -1,5 +1,5 @@
 import { Events, Jobs, Notifications, Phone, Taskbar, Util, Inventory, Police, Minigames } from '@dgx/server';
-import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/decorators';
+import { DGXEvent, EventListener, RPCEvent, RPCRegister } from '@dgx/server/src/decorators';
 import { mainLogger } from '../sv_logger';
 import { getConfig, getItemsForLootTable, getLocations } from 'services/config';
 
@@ -380,9 +380,12 @@ class StateManager extends Util.Singleton<StateManager>() {
       location,
       locked: true,
       groupId: group.id,
-      failTimeout: setTimeout(() => {
-        this.finishJob(houseId, true);
-      }, timeToFind * 60 * 1000),
+      failTimeout: setTimeout(
+        () => {
+          this.finishJob(houseId, true);
+        },
+        timeToFind * 60 * 1000
+      ),
     });
 
     Events.emitNet('houserobbery:client:activateLocation', -1, houseId, location);
@@ -410,9 +413,12 @@ class StateManager extends Util.Singleton<StateManager>() {
   public finishJobForPly(plyId: number | null, cid: number, failed = false) {
     if (!this.timedOutPlayers.has(cid)) {
       this.timedOutPlayers.add(cid);
-      setTimeout(() => {
-        this.timedOutPlayers.delete(cid);
-      }, getConfig().playerCooldown * 60 * 1000);
+      setTimeout(
+        () => {
+          this.timedOutPlayers.delete(cid);
+        },
+        getConfig().playerCooldown * 60 * 1000
+      );
     }
 
     if (plyId) {

@@ -1,6 +1,5 @@
 import { Events, Jobs, Keys, Peek, Weapons } from '@dgx/client';
-import { getNearestColorFromHex } from '@dgx/shared/helpers/colorNames';
-import { getDataOfGTAColorById } from '@dgx/shared/helpers/gtacolors';
+import { getNearestColorFromHex, getDataOfGTAColorById } from '@dgx/shared';
 import { researchBlood, startEvidenceThread, stopEvidenceThread, takeEvidence } from './service.evidence';
 
 Weapons.onFreeAimStart(itemState => {

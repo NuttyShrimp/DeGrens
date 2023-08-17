@@ -67,7 +67,7 @@ export const createDispatchCall = async (job: 'ambulance' | 'police', call: Omit
     }
     const vehConfig = Vehicles.getConfigByEntity(call.vehicle);
     if (vehConfig) {
-      vehEntryText += ` ${vehConfig.brand} ${vehConfig.name}`;
+      vehEntryText += ` ${vehConfig.brand} ${vehConfig.name} (${vehConfig.class})`;
     }
     if (!call.entries) call.entries = {};
     call.entries['car'] = vehEntryText;

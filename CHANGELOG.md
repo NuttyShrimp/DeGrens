@@ -13,6 +13,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.4.0]
+
+### Added
+
+- Description field voor flyers toegevoegd
+- Je ANG wordt doorzichtig als je met muis op het tablet-frame of erbuiten focused
+- Politie kan nu geconfisceerde items bekijken op dezelfde plek waar je ze kan op halen
+- Een brievenbus voor bij je huis
+- Enkele kofi voertuigen toegevoegd
+- Nieuwe wapens toegevoegd
+- Nieuwe overval toegevoegd
+- Politie kan nu een voertuig vorderen zonder dat ze een lockpick nodig hebben (Via F1 > Politie)
+- Carboosting toegevoegd
+
+### Changed
+
+- Label veranderen van container start nu op oude label ipv volledig leeg
+- Lockers blijven langer open voor je na het invoeren van het paswoord
+- API is herschreven in fastify
+- Ambulance kan nu ook DNA gebruiken om persoon te identificeren
+- Enginesound volumes verlaagd
+- Weedlab timeout minder gezet en loot getweaked
+- Gebundelde files zijn veel kleiner
+- Items om sneller te lopen verbeterd
+
+### Fixed
+
+- Sourcemaps voor onze code is nu werkend, we kunnen nu gemakkelijker errors debuggen
+- Extras van emergency voertuigen worden staan nu standaard aan
+- Custom enginesounds worden nu wel geapplied voor vehicles die in je buurt staan voordat je een character hebt geselecteerd
+- Carrying checket nu closest player op client om mogelijkse server desync te voorkomen
+- Het access systeem van de huizen werkt nu wel treffelijk
+- Mechanics kunnen weer auto's impounden
+- Spikestrips reliability improved
+- Deads worden terug gelogged wanneer screenshot nemen niet lukte
+- Je kunt terug op de elementen achter het contextmenu klikken
+- Tackle reliability verbeterd
+- Vergeten southside tankstation werkt nu wel
+- Synced objects wachten tot collision is geladen voor ze treffelijk op de grond te zetten
+
 ## [1.3.1]
 
 ### Added

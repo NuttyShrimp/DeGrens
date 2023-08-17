@@ -4,6 +4,7 @@ declare namespace Properties {
     enter: Vector3;
     garage?: Vector4;
     locations: PropertyLocations;
+    has_mailbox?: string;
     type: string;
   };
 
@@ -13,10 +14,11 @@ declare namespace Properties {
     clothing?: Vec4;
   };
 
-  type ClientProperty = BaseProperty & {
+  type ClientProperty = Omit<BaseProperty, 'has_mailbox'> & {
     hasKey: boolean;
     owned: boolean;
     accessList?: AccessListEntry[];
+    has_mailbox: boolean;
     locked: boolean;
   };
 

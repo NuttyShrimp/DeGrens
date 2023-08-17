@@ -81,7 +81,7 @@
   },
   {
     "label": "Porsche GT3 Flat 6",
-    "soundHash": "gt3flat6",
+    "soundHash": "tagt3flat6",
     "custom": true
   },
   {
@@ -273,5 +273,20 @@
     "label": "Adder",
     "soundHash": "adder",
     "custom": false
+  },
+  {
+    "label": "BMW S58 B30",
+    "soundHash": "ta122s58",
+    "custom": true
+  },
+  {
+    "label": "Vulcar Zodiac",
+    "soundHash": "zodiac",
+    "custom": true
+  },
+  {
+    "label": "Maibatsu Sunrise R",
+    "soundHash": "sunrise",
+    "custom": true
   }
 ]

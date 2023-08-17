@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "noImplicitAny": true,
+    "module": "ESNext",
+    "target": "es2021",
+    "allowJs": true,
+    "lib": ["es2021"],
+    "types": ["@citizenfx/server", "@types/node"],
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "./src/**/*",
+    "../shared/src/types/**/*",
+    "../../../../../types",
+    "../../../../../**/*/exports.d.ts",
+    "../client/src/helpers/asyncExports.ts",
+    "../../../../**/types/exports.d.ts",
+    "../../typescript/src/server/helpers/cmds.ts"
+  ],
+  "exclude": ["**/node_modules", "**/__tests__/*"]
+}

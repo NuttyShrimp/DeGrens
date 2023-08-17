@@ -1,12 +1,79 @@
-import { Keys, UI, Util } from '@dgx/client';
-import { Vector3 } from '@dgx/shared';
+import { Keys, RayCast, UI, Util } from '@dgx/client';
+import { Thread, Vector3 } from '@dgx/shared';
 
 let ghostEnt: number | null = null;
-let ghostCoords: Vec3 | null = null;
+let raycastCoords: Vec3 | null = null;
 let placeTick: number | null = null;
 let rotation: number = 0;
 let groundObject: boolean = true;
 let resolver: ((res: { coords: Vec3; rot: Vec3 } | null) => void) | null = null;
+
+let ghostThread: Thread = new Thread(
+  () => {
+    const entity = ghostThread.data.entity;
+    const ped = PlayerPedId();
+    const raycastCoords = RayCast.doRaycast(ghostThread?.data.maxDistance * 2, -1, entity).coords;
+    const offset: Vec3 | undefined = ghostThread.data.offset;
+    if (!raycastCoords) {
+      if (IsEntityVisible(entity)) {
+        SetEntityVisible(entity, false, false);
+      }
+      return;
+    }
+
+    SetEntityCoords(
+      ghostThread.data.entity,
+      raycastCoords.x,
+      raycastCoords.y,
+      raycastCoords.z,
+      false,
+      false,
+      false,
+      false
+    );
+    PlaceObjectOnGroundProperly(ghostThread.data.entity);
+    const newPos = Util.getEntityCoords(ghostThread.data.entity);
+    SetEntityCoords(
+      ghostThread.data.entity,
+      newPos.x + (offset?.x ?? 0),
+      newPos.y + (offset?.y ?? 0),
+      newPos.z + (offset?.z ?? 0),
+      false,
+      false,
+      false,
+      false
+    );
+
+    const inDistance = Util.getPlyCoords().distance(raycastCoords) < ghostThread?.data.maxDistance;
+    const isValidPedLocation = !IsEntityInWater(ped) && !IsEntityInAir(ped);
+    const isValidMaterial = ghostThread?.data.acceptedMaterials
+      ? ghostThread?.data.acceptedMaterials.includes(Util.getGroundMaterial(raycastCoords, entity))
+      : true;
+
+    if (ghostThread.data.rotation) {
+      const rot = GetEntityRotation(entity, 2);
+      SetEntityRotation(entity, rot[0], rot[1], rot[2] + ghostThread.data.rotation, 2, true);
+      ghostThread.data.rotation = 0;
+    }
+
+    const isValidLocation = inDistance && isValidPedLocation && isValidMaterial;
+    if (!!IsEntityVisible(entity) !== isValidLocation) {
+      SetEntityVisible(entity, isValidLocation, false);
+      ghostThread!.data.validLocation = isValidLocation;
+    }
+
+    if (IsControlJustPressed(0, 200)) {
+      ghostThread.stop();
+      DeleteEntity(ghostThread.data.entity);
+    }
+  },
+  0,
+  'tick'
+);
+
+ghostThread.addHook('preStart', () => {
+  ghostThread.data.validLocation = true;
+});
 
 const createGhostObject = (model: string) => {
   const playerPos = Util.getPlyCoords();
@@ -46,14 +113,14 @@ const updateGhostPosition = () => {
   const hitCoords = Util.ArrayToVector3(endCoords);
   if (hit > 0) {
     SetEntityAlpha(ghostEnt, 200, false);
-    ghostCoords = hitCoords;
+    raycastCoords = hitCoords;
   }
 };
 
 const positionGhostObject = () => {
   updateGhostPosition();
-  if (ghostCoords && ghostEnt) {
-    SetEntityCoords(ghostEnt, ghostCoords.x, ghostCoords.y, ghostCoords.z, false, false, false, false);
+  if (raycastCoords && ghostEnt) {
+    SetEntityCoords(ghostEnt, raycastCoords.x, raycastCoords.y, raycastCoords.z, false, false, false, false);
     SetEntityRotation(ghostEnt, 0.0, 0.0, rotation, 2, false);
     if (groundObject) {
       PlaceObjectOnGroundProperly(ghostEnt);
@@ -79,7 +146,7 @@ const cleanupPlacer = () => {
   UI.hideInteraction();
 };
 
-export const startObjectPlacement = async (model: string): Promise<{ coords: Vec3; rot: Vec3 } | null> => {
+export const startGizmoPlacement = async (model: string): Promise<{ coords: Vec3; rot: Vec3 } | null> => {
   if (resolver) {
     resolver(null);
   }
@@ -131,8 +198,44 @@ export const startObjectPlacement = async (model: string): Promise<{ coords: Vec
   });
 };
 
+const createGhostThread = async (model: string, maxDistance = 5, acceptedMaterials?: string[], offset?: Vec3) => {
+  const modelHash = GetHashKey(model);
+  await Util.loadModel(modelHash);
+  const entity = CreateObject(modelHash, 0, 0, 0, false, false, false);
+  await Util.awaitEntityExistence(entity);
+  FreezeEntityPosition(entity, true);
+  SetEntityAsMissionEntity(entity, true, true);
+  SetEntityCompletelyDisableCollision(entity, false, false);
+
+  ghostThread.data.model = model;
+  ghostThread.data.entity = entity;
+  ghostThread.data.maxDistance = maxDistance;
+  ghostThread.data.acceptedMaterials = acceptedMaterials;
+  ghostThread.data.rotation = 0;
+  ghostThread.data.offset = offset;
+  ghostThread.start();
+};
+
+export const startGhostPlacement = async (
+  model: string,
+  maxDistance = 5,
+  acceptedMaterials?: string[],
+  offset?: Vec3
+): Promise<{ coords: Vec3; rotation: Vec3 } | null> => {
+  createGhostThread(model, maxDistance, acceptedMaterials, offset);
+
+  const promise = new Promise<{ coords: Vec3; rotation: Vec3 } | null>(res => {
+    if (!ghostThread) {
+      throw new Error('Ghost thread not created');
+    }
+    ghostThread.data.res = res;
+  });
+
+  return promise;
+};
+
 Keys.onPressDown('GeneralUse', () => {
-  if (!ghostCoords || !resolver || !ghostEnt) {
+  if (!raycastCoords || !resolver || !ghostEnt) {
     return;
   }
   resolver({ coords: Util.getEntityCoords(ghostEnt), rot: Util.getEntityRotation(ghostEnt) });
@@ -144,3 +247,28 @@ Keys.onPressDown('object-toggle-ground', () => {
 });
 
 Keys.register('object-toggle-ground', '(editor) Toggle ground sticky', 'Z');
+
+Keys.onPressDown('object-rotate-left', () => {
+  if (!ghostThread || !ghostThread.isActive) return;
+  ghostThread.data.rotation += Keys.isModPressed() ? 1 : 15;
+});
+
+Keys.onPressDown('object-rotate-right', () => {
+  if (!ghostThread || !ghostThread.isActive) return;
+  ghostThread.data.rotation -= Keys.isModPressed() ? 1 : 15;
+});
+
+Keys.onPressDown('object-place', () => {
+  if (!ghostThread || !ghostThread.isActive) return;
+  ghostThread.stop();
+  const coords = Util.getEntityCoords(ghostThread.data.entity);
+  const rotation = Util.getEntityRotation(ghostThread.data.entity);
+  ghostThread.data.res(ghostThread.data.validLocation ? { coords, rotation } : null);
+  DeleteEntity(ghostThread.data.entity);
+});
+
+Keys.register('object-rotate-left', '(editor) Rotate left', 'IOM_WHEEL_DOWN', 'MOUSE_WHEEL');
+Keys.register('object-rotate-right', '(editor) Rotate right', 'IOM_WHEEL_UP', 'MOUSE_WHEEL');
+Keys.register('object-place', '(editor) place Object', 'ENTER', 'KEYBOARD');
+
+global.exports('startGhostPlacement', startGhostPlacement);

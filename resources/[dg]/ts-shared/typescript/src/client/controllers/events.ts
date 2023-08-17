@@ -1,4 +1,4 @@
-import { RPC, Events, UI, Util, Minigames } from '../index';
+import { RPC, Events, UI, Util, Minigames } from '@dgx/client';
 
 if (GetCurrentResourceName() === 'ts-shared') {
   // Util RPC to be used from server
@@ -46,6 +46,10 @@ if (GetCurrentResourceName() === 'ts-shared') {
         case 'vision': {
           // @ts-ignore
           return Minigames.visiongame(...data);
+        }
+        case 'binarysudoku': {
+          // @ts-ignore
+          return Minigames.binarysudoku(...data);
         }
         case 'keygameCustom': {
           // @ts-ignore

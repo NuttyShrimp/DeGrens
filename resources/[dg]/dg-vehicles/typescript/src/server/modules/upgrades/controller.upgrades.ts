@@ -1,4 +1,4 @@
-import { Inventory } from '@dgx/server';
+import { Inventory, Util } from '@dgx/server';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { TUNE_PARTS } from '../../../shared/upgrades/constants.upgrades';
 import upgradesManager from './classes/manager.upgrades';
@@ -18,4 +18,18 @@ Inventory.onInventoryUpdate('tunes', async (vin: string) => {
   if (!performanceUpgrades) return;
 
   upgradesManager.apply(vehicle, performanceUpgrades);
+});
+
+global.exports('addMaxPerformanceTunesForVin', async (vin: string, vehicleClass: Vehicles.Class) => {
+  for (const tune of Object.values(TUNE_PARTS)) {
+    const [itemId] = await Inventory.addItemToInventory('tunes', vin, tune.itemName, 1, {
+      class: vehicleClass,
+      stage: tune.amount,
+    });
+    if (!itemId) {
+      console.error(`Failed to add tune ${tune.itemName} to vin ${vin}`);
+      continue;
+    }
+    Inventory.setQualityOfItem(itemId, () => Util.getRndInteger(40, 80));
+  }
 });

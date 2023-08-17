@@ -1,9 +1,15 @@
 import { Events, Jobs } from '@dgx/server';
 import { trackersLogger } from './logger.trackers';
-import { addTrackerToVehicle, getAmountOfActiveTrackers, removeTrackerFromVehicle } from './service.trackers';
+import {
+  addTrackerToVehicle,
+  changeVehicleTrackerDelay,
+  getAmountOfActiveTrackers,
+  removeTrackerFromVehicle,
+} from './service.trackers';
 
 global.exports('addTrackerToVehicle', addTrackerToVehicle);
 global.exports('removeTrackerFromVehicle', removeTrackerFromVehicle);
+global.exports('changeVehicleTrackerDelay', changeVehicleTrackerDelay);
 
 Events.onNet('police:trackers:disable', (plyId: number, trackerId: number) => {
   const job = Jobs.getCurrentJob(plyId);

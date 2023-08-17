@@ -23,7 +23,7 @@ const emitNotificationEvent = (event: string, isAccept: boolean, eventData: unkn
 // Adds notification to phone (normally stays for 8 seconds
 // if action is needed time will be extended to 30 seconds)
 const addNotification = (notification: Phone.Notification) => {
-  if (!getState('hasPhone')) {
+  if (!notification.skipHasPhoneCheck && !getState('hasPhone')) {
     // if player doesn't have phone, auto decline
     if (notification.onDecline) {
       emitNotificationEvent(notification.onDecline, false, {});

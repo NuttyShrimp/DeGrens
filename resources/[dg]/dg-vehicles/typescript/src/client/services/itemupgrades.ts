@@ -6,6 +6,8 @@ import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
 let controllerMenuOpen = false;
 let inZone = false;
 
+export const isInItemUpgradesZone = () => inZone;
+
 Peek.addGlobalEntry('vehicle', {
   options: [
     {

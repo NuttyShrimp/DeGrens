@@ -1,0 +1,19 @@
+{
+  "name": "@dgx/client",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "type": "module",
+  "types": "src/index.ts",
+  "version": "1.4.0",
+  "devDependencies": {
+    "@types/core-js": "^2.5.5",
+    "rimraf": "^5.0.1",
+    "tsup": "^7.0.0"
+  },
+  "dependencies": {
+    "@dgx/shared": "workspace:*",
+    "core-js": "^3.32.0",
+    "reflect-metadata": "^0.1.13",
+    "typescript": "^5.1.6"
+  }
+}

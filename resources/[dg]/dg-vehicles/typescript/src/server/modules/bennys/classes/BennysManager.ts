@@ -2,12 +2,11 @@ import { Financials, TaxIds, Util } from '@dgx/server';
 import {
   DGXEvent,
   EventListener,
-  Export,
-  ExportRegister,
+  ExportDecorators,
   LocalEvent,
   RPCEvent,
   RPCRegister,
-} from '@dgx/server/decorators';
+} from '@dgx/server/src/decorators';
 import { getVinForVeh } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
 import { getConfigByEntity } from 'modules/info/service.info';
@@ -17,6 +16,8 @@ import { mainLogger } from 'sv_logger';
 import winston from 'winston';
 
 import { handleStanceOnCosmeticChange, loadStance } from 'modules/stances/service.stances';
+
+const { ExportRegister, Export } = ExportDecorators<'vehicles'>();
 
 @RPCRegister()
 @EventListener()
@@ -275,9 +276,9 @@ class BennysManager extends Util.Singleton<BennysManager>() {
   };
 
   @Export('blockVinInBennys')
-  private blockVinInBennys = (vin: string) => {
+  private blockVinInBennys(vin: string) {
     this.blockedVins.add(vin);
-  };
+  }
 }
 
 const bennysManager = BennysManager.getInstance();

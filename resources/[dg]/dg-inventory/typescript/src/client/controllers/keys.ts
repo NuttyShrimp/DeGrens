@@ -3,7 +3,9 @@ import contextManager from 'classes/contextmanager';
 import { canOpenInventory } from '../util';
 
 Keys.register('inventory:open', 'Open Inventory', 'TAB');
-Keys.onPressUp('inventory:open', contextManager.openInventory);
+Keys.onPressUp('inventory:open', () => {
+  contextManager.openInventory();
+});
 
 for (let i = 1; i <= 5; i++) {
   const keyEventName = `inventory:hotkey:${i}`;

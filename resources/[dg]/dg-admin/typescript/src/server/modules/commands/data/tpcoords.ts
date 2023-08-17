@@ -15,35 +15,30 @@ export const tpcoords: CommandData = {
   target: [],
   role: 'developer',
   handler: (caller, data: TPCoordsData) => {
+    let x: string, y: string, z: string;
+
     if (data.vector3) {
-      const [x, y, z] = data.vector3.split(',');
+      [x, y, z] = data.vector3.split(',');
       if (!x || !y || !z) {
         Notifications.add(caller.source, 'Invalid vector entered (should be comma seperated)', 'error');
         return;
       }
-      try {
-        const coords = {
-          x: parseInt(x.replace(/.*((\d|\.)+.*/, '$1').trim()),
-          y: parseInt(y.replace(/.*((\d|\.)+.*/, '$1').trim()),
-          z: parseInt(z.replace(/.*((\d|\.)+.*/, '$1').trim()),
-        };
-        Events.emitNet('admin:util:setPedCoordsKeepVehicle', caller.source, coords);
-      } catch (e) {
-        console.error(e);
-        Notifications.add(caller.source, 'Failed to teleport, Could the vector be invalid?', 'error');
-      }
-      return;
+    } else {
+      x = data.x;
+      y = data.y;
+      z = data.z;
     }
+
     try {
       const coords = {
-        x: parseInt(data.x.trim()),
-        y: parseInt(data.y.trim()),
-        z: parseInt(data.z.trim()),
+        x: +x.replace(/[^0-9.-]*/, ''),
+        y: +y.replace(/[^0-9.-]*/, ''),
+        z: +z.replace(/[^0-9.-]*/, ''),
       };
       Events.emitNet('admin:util:setPedCoordsKeepVehicle', caller.source, coords);
     } catch (e) {
       console.error(e);
-      Notifications.add(caller.source, 'Failed to teleport, Could the vector be invalid?', 'error');
+      Notifications.add(caller.source, 'Failed to teleport, could the values be invalid?', 'error');
     }
   },
   UI: {
