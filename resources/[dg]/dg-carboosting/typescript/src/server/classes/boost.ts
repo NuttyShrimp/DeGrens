@@ -214,7 +214,7 @@ export default class Boost {
     );
   };
 
-  public finish = () => {
+  public finish = (skipReputation = false) => {
     if (this.flags.finished) return;
     this.flags.finished = true;
 
@@ -228,7 +228,7 @@ export default class Boost {
       });
     }
 
-    if (!this.flags.droppedOff) {
+    if (!skipReputation && !this.flags.droppedOff) {
       const repDecrease = this.getClassConfig().reputation.decrease;
       const groupMemberRepDecrease = Math.round(repDecrease * config.contracts.groupReputationPercentage);
       this.initialMembers.forEach(mCid => {
@@ -357,7 +357,7 @@ export default class Boost {
     });
     if (!spawnedVehicle) {
       this.log('failedToSpawnVehicle', 'error', `Failed to spawn vehicle`, {}, true);
-      this.finish();
+      this.finish(true);
       return;
     }
 
