@@ -14,8 +14,8 @@ import { tokenRouter } from 'routes/token';
 import { adminRouter } from 'routes/admin';
 import { businessRouter } from 'routes/business';
 import { financialsRouter } from 'routes/financials';
-import { PassThrough } from 'stream';
 import { PinoLoggerOptions } from 'fastify/types/logger';
+import { inventoryRouter } from 'routes/inventory';
 
 const apiConfig = Config.getModuleConfig('api');
 
@@ -62,6 +62,7 @@ setImmediate(async () => {
   server.register(adminRouter, { prefix: '/admin' });
   server.register(businessRouter, { prefix: '/business' });
   server.register(financialsRouter, { prefix: '/financials' });
+  server.register(inventoryRouter, { prefix: '/inventory' });
 
   server.ready(err => {
     if (err) {

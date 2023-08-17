@@ -751,7 +751,6 @@ model flyer_request {
   link        String     @db.LongText
   description String     @default("") @db.Text
   approved    Boolean    @default(false)
-  retrieved   Boolean    @default(false)
   characters  characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_flyer_request_cid")
 }
 
