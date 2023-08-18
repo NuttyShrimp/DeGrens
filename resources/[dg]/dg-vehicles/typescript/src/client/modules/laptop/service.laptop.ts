@@ -34,5 +34,6 @@ export const createPickupZone = (loc: Laptop.Bennys.PickUp) => {
     if (DoesBlipExist(pickupBlip)) {
       RemoveBlip(pickupBlip);
     }
+    PolyZone.removeZone('bennys-order-pickup');
   });
 };
