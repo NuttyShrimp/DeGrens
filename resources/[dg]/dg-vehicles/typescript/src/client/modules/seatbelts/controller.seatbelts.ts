@@ -1,5 +1,4 @@
 import { HUD, Keys, Statebags } from '@dgx/client';
-import { getCurrentVehicle } from '@helpers/vehicle';
 
 import {
   getHarnessUses,
@@ -10,7 +9,7 @@ import {
   toggleSeatbelt,
 } from './service.seatbelts';
 
-HUD.addEntry('harness-uses', 'user-slash', '#11A156', () => getHarnessUses() / 10, 3, 100, false);
+HUD.addEntry('harness-uses', 'user-slash', '#11A156', () => getHarnessUses(), 3, 100, false);
 
 Keys.register('toggleseatbelt', 'Toggle Seatbelt', 'G');
 Keys.onPressDown('toggleseatbelt', () => {
