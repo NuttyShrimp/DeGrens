@@ -2,7 +2,7 @@ import { Admin, Events } from '@dgx/server';
 import { FastifyPluginAsync } from 'fastify';
 
 export const reportRouter: FastifyPluginAsync = async server => {
-  server.post<{ Body: { id: number; receivers: string[] } }>('/admin/report/announce', async (req, res) => {
+  server.post<{ Body: { id: number; receivers: string[] } }>('/announce', async (req, res) => {
     if (!req.body.id) {
       return res.code(400).send({
         message: 'missing report id in body',
