@@ -2532,7 +2532,7 @@
     "price": 57500,
     "shop": "nfs",
     "type": "land",
-    "inCarboostPool": true
+    "inCarboostPool": false
   },
   {
     "category": "compacts",
@@ -4547,7 +4547,7 @@
     "price": 159000,
     "shop": "nfs",
     "type": "land",
-    "inCarboostPool": true
+    "inCarboostPool": false
   },
   {
     "category": "sports",
