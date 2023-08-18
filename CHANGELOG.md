@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Extra hulpmiddelen toegevoegd om despawnen van voertuigen te onderzoeken
+
 ### Changed
 
 - Je kan racegordel aandoen/uittrekken nu annuleren

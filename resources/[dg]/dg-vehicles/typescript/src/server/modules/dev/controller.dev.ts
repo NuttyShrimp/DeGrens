@@ -1,5 +1,5 @@
 import { Chat } from '@dgx/server';
-import { startVehicleExistenceThread } from './service.dev';
+import devModule from './service.dev';
 
 Chat.registerCommand(
   'startExistenceThread',
@@ -7,6 +7,6 @@ Chat.registerCommand(
   [],
   'developer',
   plyId => {
-    startVehicleExistenceThread(plyId);
+    devModule.startVehicleExistenceThread(plyId);
   }
 );
