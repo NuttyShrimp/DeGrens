@@ -39,6 +39,7 @@ export const toggleSeatbelt = async () => {
         cancelOnDeath: true,
       });
       if (wasCanceled) return;
+      if (getCurrentVehicle() !== veh) return;
     }
 
     setCurrentSeatbelt('none');
@@ -54,6 +55,7 @@ export const toggleSeatbelt = async () => {
       cancelOnDeath: true,
     });
     if (wasCanceled) return;
+    if (getCurrentVehicle() !== veh) return;
     Events.emitNet('vehicles:seatbelts:decreaseHarness', NetworkGetNetworkIdFromEntity(veh));
   }
 

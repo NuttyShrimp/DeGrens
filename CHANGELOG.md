@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Pickup zones van benny-app order worden nu wel opgekuist
 - Reputatie van offline player kan nu wel veranderd worden
+- Racegordels checken nu of je na taskbar nog in voertuig zit
 
 ## [1.4.1]
 
