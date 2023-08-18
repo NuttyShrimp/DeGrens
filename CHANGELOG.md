@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Pickup zones van benny-app order worden nu wel opgekuist
+- Reputatie van offline player kan nu wel veranderd worden
 
 ## [1.4.1]
 
