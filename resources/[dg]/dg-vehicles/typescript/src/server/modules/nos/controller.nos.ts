@@ -81,15 +81,5 @@ Events.onNet('vehicles:nos:save', (src: number, netId: number, amount: number) =
   setVehicleNosAmount(veh, amount);
   updateVehicleNos(vin, amount);
 
-  nosLogger.info(`NOS for ${vin} has been updated to ${amount}`);
-  Util.Log(
-    'vehicles:nos:saved',
-    {
-      src,
-      vin,
-      amount,
-    },
-    `NOS for vehicle (${vin}) has been updated to ${amount}`,
-    src
-  );
+  nosLogger.debug(`NOS for ${vin} has been updated to ${amount}`);
 });
