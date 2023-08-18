@@ -12,13 +12,13 @@ export const tokenRouter: FastifyPluginAsync = async server => {
     return res.code(200).send({});
   });
 
-  server.get<{ Params: { token: string } }>('/:token/info', async (req, res) => {
-    if (!req.params.token) {
+  server.get<{ Querystring: { token: string } }>('/info', async (req, res) => {
+    if (!req.query.token) {
       return res.code(400).send({
         message: 'No token found to check',
       });
     }
-    const steamId: string | null = global.exports['dg-auth'].getSteamIdFromPanelToken(req.params.token);
+    const steamId: string | null = global.exports['dg-auth'].getSteamIdFromPanelToken(req.query.token);
     if (!steamId) {
       return res.code(404).send({
         message: 'No valid steamId found in token',

@@ -13,6 +13,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.4.1]
+
+### Added
+
+- Systeem waarmee je je positie behoud als je de queue verlaat en direct terug komt
+
+### Changed
+
+- Queue systeem laat nu grotere groepen mensen toe als er ruimte is op de server
+
+### Fixed
+
+- Alle autos kunnen terug in bennys
+- Core probeerd spelers met temporary id niet meer op te slaan
+- Politie barriers werken weer
+- Locker toegestane tijd wordt nu correct weergegeven
+- Enkele scuffed voertuigen uit carboostpool verwijderd
+- Report systeem werkt weer
+- De `module is not defined` error bij het joinen van de server is weggehaald
+- Queue boost werkt nu wel (for real this time)
+
 ## [1.4.0]
 
 ### Added

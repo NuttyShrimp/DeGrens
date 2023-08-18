@@ -292,7 +292,7 @@ function esbuildDebugIdInjectionPlugin() {
     name: pluginName,
     setup({ onLoad, onResolve }) {
       onResolve({ filter: /.*/ }, args => {
-        if (args.kind !== 'entry-point') {
+        if (args.kind !== 'entry-point' || args.path.includes('/client.ts')) {
           return;
         } else {
           return {
@@ -326,8 +326,6 @@ function esbuildDebugIdInjectionPlugin() {
           // We need to use JSON.stringify below so that any escape backslashes stay escape backslashes, in order not to break paths on windows
           contents: `
             import "_sentry-debug-id-injection-stub";
-            import * as OriginalModule from ${JSON.stringify(originalPath)};
-            export default OriginalModule.default;
             export * from ${JSON.stringify(originalPath)};`,
           resolveDir: originalResolveDir,
         };

@@ -38,13 +38,12 @@ const moveBuildedFiles = (source, target) => {
 const getOptions = opts => {
   const resName = findResourceName(path.resolve('.'));
   const ENV = opts.env?.NODE_ENV || 'development';
-  const IS_PROD = ENV === 'production';
   const baseConfig = {
     name: resName,
     splitting: false,
     clean: true, // clean up the dist folder
     format: 'cjs',
-    minify: IS_PROD,
+    minify: false,
     bundle: true,
     skipNodeModulesBundle: false,
     shims: true,

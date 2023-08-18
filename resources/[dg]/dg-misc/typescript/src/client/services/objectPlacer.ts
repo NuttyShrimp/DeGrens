@@ -206,6 +206,7 @@ const createGhostThread = async (model: string, maxDistance = 5, acceptedMateria
   FreezeEntityPosition(entity, true);
   SetEntityAsMissionEntity(entity, true, true);
   SetEntityCompletelyDisableCollision(entity, false, false);
+  SetEntityAlpha(entity, 200, false);
 
   ghostThread.data.model = model;
   ghostThread.data.entity = entity;
@@ -269,6 +270,6 @@ Keys.onPressDown('object-place', () => {
 
 Keys.register('object-rotate-left', '(editor) Rotate left', 'IOM_WHEEL_DOWN', 'MOUSE_WHEEL');
 Keys.register('object-rotate-right', '(editor) Rotate right', 'IOM_WHEEL_UP', 'MOUSE_WHEEL');
-Keys.register('object-place', '(editor) place Object', 'ENTER', 'KEYBOARD');
+Keys.register('object-place', '(editor) Place Object', 'ENTER', 'KEYBOARD');
 
 global.exports('startGhostPlacement', startGhostPlacement);

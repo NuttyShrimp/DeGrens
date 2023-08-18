@@ -4976,7 +4976,7 @@
     "price": 18500,
     "shop": "pdm",
     "type": "land",
-    "inCarboostPool": true
+    "inCarboostPool": false
   },
   {
     "category": "motorcycles",
@@ -5470,7 +5470,7 @@
     "price": 20000,
     "shop": "nfs",
     "type": "sea",
-    "inCarboostPool": true
+    "inCarboostPool": false
   },
   {
     "category": "offroad",
@@ -11254,6 +11254,7 @@
     "restockTime": 14,
     "price": 890000,
     "shop": "nfs",
+    "type": "land",
     "inCarboostPool": true
   },
   {
@@ -11331,6 +11332,7 @@
     "restockTime": 15,
     "price": 475000,
     "shop": "nfs",
+    "type": "land",
     "inCarboostPool": true
   },
   {

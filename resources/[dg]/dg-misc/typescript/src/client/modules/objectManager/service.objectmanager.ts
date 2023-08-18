@@ -69,7 +69,7 @@ const createObject = async (id: string) => {
   Entity(entity).state.set('objId', id, false);
   if (data.flags) {
     if (!flagThread[id]) {
-      flagThread[id];
+      flagThread[id] = [];
     }
     for (const [key, value] of Object.entries(data.flags)) {
       switch (key) {

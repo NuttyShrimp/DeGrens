@@ -15,6 +15,8 @@ class QueueManager {
   private queueInterval: Map<string, NodeJS.Timer> = new Map();
   private power: Record<string, number> = {};
   private tempPower: Record<string, number> = {};
+  private queueGrace: Record<string, number> = {};
+  private graceThreads: Record<string, NodeJS.Timeout> = {};
   private logger: Logger;
   private serverSize: number;
   private userModule: UserModule | null;
@@ -33,15 +35,15 @@ class QueueManager {
   }
 
   private async getStartPosition(steamId: string) {
-    let power = this.queueEntryInfo.get(steamId)?.power ?? 0;
-    let position = this.queue.length;
+    let power = Number(this.queueEntryInfo.get(steamId)?.power ?? 0);
+    let position = 0;
     for (let ply of this.queue) {
       let plyInfo = this.queueEntryInfo.get(ply);
-      let plyPower = plyInfo?.power ?? 0;
-      if (power <= plyPower) {
+      let plyPower = Number(plyInfo?.power ?? 0);
+      if (power > plyPower) {
         return position;
       }
-      position--;
+      position++;
     }
   }
 
@@ -57,10 +59,22 @@ class QueueManager {
     if (qInfo) {
       this.userModule?.onPlayerDropped(qInfo?.source);
     }
+    if (this.graceThreads[steamId]) {
+      clearTimeout(this.graceThreads[steamId]);
+    }
+    let graceRemover = setTimeout(
+      () => {
+        if (this.queueGrace[steamId]) {
+          delete this.queueGrace[steamId];
+        }
+      },
+      3 * 60 * 1000
+    );
+    this.graceThreads[steamId] = graceRemover;
   }
 
-  private isSlotAvailable() {
-    return this.serverSize - GetNumPlayerIndices() > 0;
+  private slotsAvailable() {
+    return this.serverSize - GetNumPlayerIndices();
   }
 
   getQueuedPlayers() {
@@ -119,7 +133,9 @@ class QueueManager {
     }
     queueInfo.power = (await this.getCurrentBoost(steamId)) ?? 0;
 
-    this.cleanupSteamId(steamId);
+    if (this.graceThreads[steamId]) {
+      clearTimeout(this.graceThreads[steamId]);
+    }
 
     const startPos = await this.getStartPosition(steamId);
     this.setPosition(steamId, startPos ?? this.queue.length);
@@ -131,16 +147,20 @@ class QueueManager {
       const pos = this.queue.findIndex(s => s === steamId);
       if (pos === -1) {
         clearInterval(qInterval);
+        this.cleanupSteamId(steamId);
+        return;
       }
+      this.queueGrace[steamId] = pos;
       const endpoint = GetPlayerEndpoint(String(src));
       if (!endpoint) {
-        this.quitQueue(steamId);
+        this.cleanupSteamId(steamId);
       }
       showCard(
-        `Your position: ${pos + 1}/${this.queue.length} | ${Emojis[Util.getRndInteger(0, Emojis.length)]}${Emojis[Util.getRndInteger(0, Emojis.length)]
+        `Your position: ${pos + 1}/${this.queue.length} | ${Emojis[Util.getRndInteger(0, Emojis.length)]}${
+          Emojis[Util.getRndInteger(0, Emojis.length)]
         }${Emojis[Util.getRndInteger(0, Emojis.length)]} | 🕒 ${timeInQ.format('HH:mm:ss')}`
       );
-      if (pos === 0 && this.isSlotAvailable()) {
+      if (pos < this.slotsAvailable()) {
         deferrals.done();
       }
       timeInQ = timeInQ.add(1, 's');
@@ -156,16 +176,12 @@ class QueueManager {
       return;
     }
     this.cleanupSteamId(steamId);
-  }
-
-  quitQueue(steamId: string) {
-    this.cleanupSteamId(steamId);
-    this.giveTempBoost(steamId);
-    setTimeout(() => {
-      if (!this.isInQueue(steamId)) {
-        this.giveTempBoost(steamId, 0);
-      }
-    }, 5 * 60000);
+    if (this.graceThreads[steamId]) {
+      clearTimeout(this.graceThreads[steamId]);
+    }
+    if (this.queueGrace[steamId]) {
+      delete this.queueGrace[steamId];
+    }
   }
 
   async giveTempBoost(steamId: string, power = queueGracePower) {
