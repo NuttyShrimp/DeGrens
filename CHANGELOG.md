@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.4.1]
+
+### Added
+
 - Systeem waarmee je je positie behoud als je de queue verlaat en direct terug komt
 
 ### Changed
