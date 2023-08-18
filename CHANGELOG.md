@@ -18,10 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Systeem waarmee je je positie behoud als je de queue verlaat en direct terug komt
+- MC vesten
+- Lege livery voor R33 toegevoegd
 
 ### Changed
 
 - Queue systeem laat nu grotere groepen mensen toe als er ruimte is op de server
+- Scuffed vrouwen kleding weggehaald
+- Politie M5 federale livery gefinetuned
 
 ### Fixed
 
