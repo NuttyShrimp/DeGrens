@@ -4820,7 +4820,7 @@
     "price": 20000,
     "shop": "nfs",
     "type": "land",
-    "inCarboostPool": true
+    "inCarboostPool": false
   },
   {
     "category": "motorcycles",
@@ -4833,7 +4833,7 @@
     "price": 20000,
     "shop": "nfs",
     "type": "land",
-    "inCarboostPool": true
+    "inCarboostPool": false
   },
   {
     "category": "motorcycles",
@@ -4846,7 +4846,7 @@
     "price": 20000,
     "shop": "nfs",
     "type": "land",
-    "inCarboostPool": true
+    "inCarboostPool": false
   },
   {
     "category": "motorcycles",

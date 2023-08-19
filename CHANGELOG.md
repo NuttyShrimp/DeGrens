@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Problemen opgelost ivm syncen van het weer
 - PostOP bus spawned nu met de juiste extras enabled
 - Je kan nu wel meerdere items tegelijk kopen in de Bennys App
+- Wapenupgrades op hopelijk alle voertuigen gedisabled
 
 ## [1.4.1]
 

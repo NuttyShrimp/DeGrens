@@ -85,9 +85,8 @@ UI.RegisterUICallback('bennys:getActiveMenus', (_, cb) => {
         !categories.some(key => {
           let amount = possibilities[key as keyof typeof possibilities] ?? 0;
           if (typeof amount !== 'number') amount = 1;
-          const min = key === 'extras' ? 0 : 1;
           amount -= getBlockedUpgrades()?.[key]?.length ?? 0;
-          return amount > min;
+          return amount > 0;
         })
       )
         return;
@@ -122,6 +121,7 @@ UI.RegisterUICallback('bennys:getGenericData', (data: { type: 'interior' | 'exte
       if ('componentNames' in entry) {
         // Filter names based on blocked ids
         entry.componentNames = entry.componentNames.filter((_, i) => !blockedIds.includes(i));
+        console.log(entry.componentNames);
       }
       if ('componentNames' in entry && entry.componentNames.length < 2) return;
       entries.push(entry);

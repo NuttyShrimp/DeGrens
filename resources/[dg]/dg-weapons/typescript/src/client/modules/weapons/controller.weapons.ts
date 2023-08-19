@@ -1,4 +1,4 @@
-import { BaseEvents, Events, RPC, UI, Util } from '@dgx/client';
+import { BaseEvents, Events, Notifications, RPC, UI, Util } from '@dgx/client';
 import { holsterWeapon, unholsterWeapon, forceRemoveWeapon } from './helpers.weapons';
 import {
   getCurrentWeaponData,
@@ -29,6 +29,14 @@ Events.onNet('weapons:client:useWeapon', async (weaponData: Weapons.WeaponItem) 
   }
 
   if (isAwaitingAnim) return;
+
+  const vehicle = GetVehiclePedIsIn(PlayerPedId(), false);
+  if (vehicle && DoesEntityExist(vehicle)) {
+    if (DoesVehicleHaveWeapons(vehicle)) {
+      Notifications.add('Je kan geen wapen nemen in dit voertuig', 'error');
+      return;
+    }
+  }
 
   if (isAnimationBusy()) {
     isAwaitingAnim = true;

@@ -11,6 +11,49 @@
     },
     "prago": {
       "extras": [1, 2, 3]
+    },
+    "granger2": {
+      "tank": [0]
+    },
+    "omnisegt": {
+      "trimB": [0, 1]
+    },
+    "greenwood": {
+      "trimB": [0, 1]
+    },
+    "patriot3": {
+      "tank": [0]
+    },
+    "jubilee": {
+      "tank": [0],
+      "trimB": [0, 1]
+    },
+    "deity": {
+      "tank": [0],
+      "trimB": [0, 1]
+    },
+    "champion": {
+      "tank": [0],
+      "trimB": [0, 1]
+    },
+    "buffalo4": {
+      "tank": [0],
+      "trimB": [0, 1]
+    },
+    "jb7002": {
+      "roof": [0]
+    },
+    "revolter": {
+      "roof": [0]
+    },
+    "viseris": {
+      "roof": [0]
+    },
+    "savestra": {
+      "roof": [0]
+    },
+    "comet4": {
+      "roof": [0]
     }
   }
 }
