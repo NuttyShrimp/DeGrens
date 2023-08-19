@@ -15,7 +15,7 @@ Keys.onPressDown(
 );
 
 RPC.register('police:interactions:getCarryTarget', async (timeout: number) => {
-  const closestPlayerAtStart = Util.getClosestPlayerInDistanceAndOutsideVehicle(1.5);
+  const closestPlayerAtStart = Util.getClosestPlayer({ range: 1.5, skipInVehicle: true });
   if (!closestPlayerAtStart) {
     Notifications.add('Er is niemand in de buurt', 'error');
     return;
@@ -23,7 +23,7 @@ RPC.register('police:interactions:getCarryTarget', async (timeout: number) => {
 
   await Util.Delay(timeout);
 
-  const closestPlayer = Util.getClosestPlayerInDistanceAndOutsideVehicle(2);
+  const closestPlayer = Util.getClosestPlayer({ range: 2, skipInVehicle: true });
   if (!closestPlayer) return;
 
   return GetPlayerServerId(closestPlayer);

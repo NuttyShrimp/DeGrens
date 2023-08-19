@@ -159,10 +159,10 @@ class RayCast {
   }
 
   /**
-   * Get last coord from internal loop
+   * Get last result from internal loop
    */
-  getLastHitCoord = (): Vec3 | undefined => {
-    return global.exports['dg-lib'].getLastRaycastHitCoord();
+  getLastHitResult = (): RayCastHit => {
+    return global.exports['dg-lib'].getLastHitResult();
   };
 }
 

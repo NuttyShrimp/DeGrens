@@ -9,7 +9,7 @@ toggleLaser = function(type)
 
         local ped = PlayerPedId()
         while activeLaser do
-            local coords = DGX.RayCast.getLastHitCoord()
+            local coords = DGX.RayCast.getLastHitResult().coords;
 
             if coords then
                 local position = GetEntityCoords(ped)

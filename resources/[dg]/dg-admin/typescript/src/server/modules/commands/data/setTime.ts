@@ -10,8 +10,8 @@ export const setTime: CommandData = {
     let time: number | undefined = data.time !== undefined ? parseInt(data.time) : undefined;
     time = time !== undefined && isNaN(time) ? undefined : time;
 
-    if (data.freeze !== undefined && Weather.isTimeFrozen() !== data.freeze) {
-      Weather.freezeTime(data.freeze, time);
+    if (Weather.isTimeFrozen() !== !!data.freeze) {
+      Weather.freezeTime(!!data.freeze, time);
       Notifications.add(caller.source, `Time is now ${data.freeze ? 'frozen' : 'unfrozen'}`, 'error');
       return;
     }

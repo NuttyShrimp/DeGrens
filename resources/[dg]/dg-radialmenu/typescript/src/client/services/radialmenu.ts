@@ -59,7 +59,7 @@ const generateEntries = async () => {
     currentVehicle: vehicle,
     raycastEntity: entity,
     items,
-    closestPlayerDistance: Util.getDistanceToClosestPlayerOutsideVehicle(),
+    closestPlayerDistance: Util.getDistanceToClosestPlayer({ skipInVehicle: true }),
   };
 
   const entries = await getEnabledEntries(startMenuName, context);

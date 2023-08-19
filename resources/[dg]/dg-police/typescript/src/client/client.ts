@@ -16,4 +16,5 @@ import './services/ang';
 import './services/camera';
 import './services/sirenToggle';
 import './services/barriers';
+import './services/pullfromvehicle';
 import '@shared/services/vehicles';

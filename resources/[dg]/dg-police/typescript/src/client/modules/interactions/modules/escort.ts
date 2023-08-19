@@ -7,7 +7,7 @@ let gettingEscorted = false;
 export const getIsEscorting = () => isEscorting;
 
 const getPlayerToEscort = async () => {
-  const closestPly = Util.getClosestPlayerInDistanceAndOutsideVehicle(2);
+  const closestPly = Util.getClosestPlayer({ range: 2, skipInVehicle: true });
   if (!closestPly) return;
   const target = GetPlayerServerId(closestPly);
   const canEscort = await RPC.execute<boolean>('police:interactions:canEscortPlayer', target);

@@ -49,7 +49,7 @@ Peek.addGlobalEntry('vehicle', {
         return (
           !IsVehicleSeatFree(ent, -1) ||
           GetVehicleNumberOfPassengers(ent) > 0 ||
-          Util.isAnyPlayerCloseAndOutsideVehicle(3)
+          Util.isAnyPlayerClose({ range: 2, skipInVehicle: true })
         );
       },
     },

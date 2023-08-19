@@ -43,7 +43,7 @@ export const setCornersellEnabled = (enabled: boolean) => {
 export const findBuyer = async () => {
   if (!cornersellEnabled || buyerPed !== null) return;
 
-  const targetPed = Util.getClosestNpcInRange(10, pedsSoldTo);
+  const targetPed = Util.getClosestNpc(10, pedsSoldTo);
   if (targetPed) {
     pedsSoldTo.push(targetPed);
   }

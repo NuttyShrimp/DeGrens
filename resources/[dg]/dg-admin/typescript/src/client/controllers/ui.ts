@@ -165,7 +165,7 @@ RegisterUICallback('openCoordsSelector', async (_, cb) => {
 
   const selectedCoords = await new Promise<Vec3>(res => {
     const thread = setInterval(() => {
-      const coords = RayCast.getLastHitCoord();
+      const coords = RayCast.getLastHitResult().coords;
       if (coords) {
         const plyCoords = Util.getPlyCoords();
         DrawLine(plyCoords.x, plyCoords.y, plyCoords.z, coords.x, coords.y, coords.z, 0, 0, 255, 255);

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Extra hulpmiddelen toegevoegd om despawnen van voertuigen te onderzoeken
 - Mogelijkheid om tijd serverside te freezen
+- Politie kan nu mensen uit een voertuig trekken (mbv wapenstok)
 
 ### Changed
 

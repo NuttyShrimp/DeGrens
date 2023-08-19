@@ -32,7 +32,7 @@ const tryToCuff = () => {
     return;
   }
 
-  const closestPly = Util.getClosestPlayerInDistanceAndOutsideVehicle(1);
+  const closestPly = Util.getClosestPlayer({ range: 1, skipInVehicle: true });
   if (!closestPly) {
     Notifications.add('Er is niemand in de buurt', 'error');
     return;
@@ -103,9 +103,12 @@ RPC.register('police:interactions:getCuffed', async (coords: Vec4, canBreakOut: 
     const success = await Minigames.keygame(1, cuffSpeed, 10);
     if (success) {
       cuffSpeed = Math.min(30, cuffSpeed + 3);
-      setTimeout(() => {
-        cuffSpeed = Math.max(10, cuffSpeed - 3);
-      }, 10 * 60 * 1000);
+      setTimeout(
+        () => {
+          cuffSpeed = Math.max(10, cuffSpeed - 3);
+        },
+        10 * 60 * 1000
+      );
       ClearPedTasks(PlayerPedId());
       return false;
     }
