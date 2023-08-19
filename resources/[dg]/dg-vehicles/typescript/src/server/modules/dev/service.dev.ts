@@ -38,6 +38,10 @@ class DevModule {
   };
 
   public unregisterSpawnedVehicle = (vehicle: number) => {
+    const data = this.spawnedVehicles.get(vehicle);
+    if (!data) return;
+
+    clearInterval(data.thread);
     this.spawnedVehicles.delete(vehicle);
   };
 
