@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Flikkeren van skybox op bepaald moment van ingame dag is opgelost
 - Problemen opgelost ivm syncen van het weer
 - PostOP bus spawned nu met de juiste extras enabled
+- Je kan nu wel meerdere items tegelijk kopen in de Bennys App
 
 ## [1.4.1]
 

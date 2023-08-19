@@ -33,8 +33,8 @@ export const loadConfigInfo = async () => {
 };
 
 export const doPurchase = async (src: number, items: Record<string, number>) => {
-  const totalPrice = Object.keys(items).reduce<number>(
-    (curTotal, itemName) => curTotal + (storeItems?.find(i => i.item === itemName)?.price ?? 0),
+  const totalPrice = Object.entries(items).reduce<number>(
+    (curTotal, [itemName, amount]) => curTotal + amount * (storeItems?.find(i => i.item === itemName)?.price ?? 0),
     0
   );
   const purchaseComplete = await Financials.cryptoRemove(src, 'Suliro', totalPrice);
@@ -56,6 +56,7 @@ export const doPurchase = async (src: number, items: Record<string, number>) => 
     }
     pendingPickups[cid].items[itemName] += items[itemName];
   }
+  Util.Log(`vehicles:bennysapp:bought`, { items }, `${Util.getName(src)}(${src}) has bought items from bennysapp`, src);
   return true;
 };
 
