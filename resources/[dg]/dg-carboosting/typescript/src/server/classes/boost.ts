@@ -192,7 +192,11 @@ export default class Boost {
     const vehicleLocation = this.getVehicleLocation().vehicle;
     const radiusBlipSize = this.getClassConfig().radiusBlipSize;
 
-    this.addMail(this.owner.serverId, 'Je hebt het contract gestart. Locatie staat gemarkeerd op je GPS');
+    this.addMail(
+      this.owner.serverId,
+      'Je hebt het contract gestart. Locatie staat gemarkeerd op je GPS',
+      this.radiusBlipLocation
+    );
 
     const clientActionData: Carboosting.ClientActionData = {
       vehicleLocation,
