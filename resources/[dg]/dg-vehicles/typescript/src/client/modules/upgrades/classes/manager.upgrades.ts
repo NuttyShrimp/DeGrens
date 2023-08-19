@@ -1,5 +1,6 @@
 import { Util } from '@dgx/client';
 import { AMOUNT_KEYS, KEYS_BY_TYPE, STANDARD_EXTRA_UPGRADES, UPGRADES } from '../constants.upgrades';
+import { OVERRIDE_MODEL_STANDARD_EXTRA_UPGRADES } from '@shared/upgrades/constants.upgrades';
 
 class UpgradesManager extends Util.Singleton<UpgradesManager>() {
   constructor() {
@@ -78,6 +79,11 @@ class UpgradesManager extends Util.Singleton<UpgradesManager>() {
   };
 
   public doesVehicleHaveDefaultExtras = (vehicle: number): boolean => {
+    const modelHash = GetEntityModel(vehicle) >>> 0;
+    if (OVERRIDE_MODEL_STANDARD_EXTRA_UPGRADES[modelHash] !== undefined) {
+      return OVERRIDE_MODEL_STANDARD_EXTRA_UPGRADES[modelHash];
+    }
+
     const vehicleClass = GetVehicleClass(vehicle);
     return STANDARD_EXTRA_UPGRADES.includes(vehicleClass);
   };

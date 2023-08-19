@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clock op je telefoon veranderd nu niet meer naar 0 wanneer je in een huis/appartement zit
 - Flikkeren van skybox op bepaald moment van ingame dag is opgelost
 - Problemen opgelost ivm syncen van het weer
+- PostOP bus spawned nu met de juiste extras enabled
 
 ## [1.4.1]
 
