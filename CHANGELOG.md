@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PostOP bus spawned nu met de juiste extras enabled
 - Je kan nu wel meerdere items tegelijk kopen in de Bennys App
 - Wapenupgrades op hopelijk alle voertuigen gedisabled
+- Probleem opgelost waardoor je geen crypto kon transferen
 
 ## [1.4.1]
 
