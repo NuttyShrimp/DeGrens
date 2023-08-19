@@ -20,10 +20,10 @@ declare namespace WeatherSync {
     windSpeed: number;
     windDirection: number;
     rainLevel?: number;
-    temperature: number;
   }
 
-  interface WeatherStateBag extends Weather {
+  type WeatherStateBag = {
+    weather: Weather;
     skipTransition: boolean;
-  }
+  };
 }

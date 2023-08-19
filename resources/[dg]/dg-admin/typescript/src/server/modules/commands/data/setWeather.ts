@@ -1,4 +1,4 @@
-import { Weather } from '@dgx/server';
+import { Notifications, Util, Weather } from '@dgx/server';
 import { Inputs } from '../../../enums/inputs';
 
 interface SetWeatherData {
@@ -11,8 +11,14 @@ export const setWeather: CommandData = {
   log: 'has set weather',
   target: false,
   isClientCommand: false,
-  handler: (_, args: SetWeatherData) => {
+  handler: (caller, args: SetWeatherData) => {
     if (!args.WeatherType.name) return;
+
+    if (!Util.debounce('admin-weather-change', 10000)) {
+      Notifications.add(caller.source, 'Het weer wordt momenteel al aangepast', 'error');
+      return;
+    }
+
     Weather.setCurrentWeather(args.WeatherType.name);
   },
   UI: {
