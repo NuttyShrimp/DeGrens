@@ -5065,9 +5065,9 @@
     "defaultStock": 10,
     "restockTime": 15,
     "price": 39000,
-    "shop": "pdm",
+    "shop": "nfs",
     "type": "land",
-    "inCarboostPool": true
+    "inCarboostPool": false
   },
   {
     "category": "motorcycles",
