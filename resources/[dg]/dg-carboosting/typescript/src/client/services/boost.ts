@@ -41,6 +41,7 @@ export const doClientAction = (boostId: string, data: Carboosting.ClientActionDa
       color: 38,
       sprite: 225,
       scale: 1.3,
+      text: 'Aflever Locatie',
     });
     PolyZone.addBoxZone(`carboosting_dropoff`, data.dropoff.coords, 10, 10, {
       heading: data.dropoff.coords.w,
