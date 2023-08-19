@@ -1,8 +1,8 @@
 {
   "reputation": {
-    "required": 285,
-    "increase": 12,
-    "decrease": 15
+    "required": 390,
+    "increase": 15,
+    "decrease": 25
   },
   "contractType": "personal",
   "chances": {
@@ -13,8 +13,8 @@
     "contract": 0.2
   },
   "price": {
-    "boost": 50,
-    "scratch": 200
+    "boost": 75,
+    "scratch": 300
   },
   "expirationTime": 30,
   "radiusBlipSize": 150,

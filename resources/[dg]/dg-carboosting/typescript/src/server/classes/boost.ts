@@ -698,11 +698,14 @@ export default class Boost {
       return;
     }
 
-    const repIncrease = this.getClassConfig().reputation.increase * healthPercentage;
-    const groupMemberRepIncrease = Math.round(repIncrease * config.contracts.groupReputationPercentage);
-    group.members.forEach(m => {
-      contractManager.updateReputation(m.cid, m.cid === this.owner.cid ? repIncrease : groupMemberRepIncrease);
-    });
+    // dont give rep if they scratched the bitch
+    if (this.type === 'boost') {
+      const repIncrease = this.getClassConfig().reputation.increase * healthPercentage;
+      const groupMemberRepIncrease = Math.round(repIncrease * config.contracts.groupReputationPercentage);
+      group.members.forEach(m => {
+        contractManager.updateReputation(m.cid, m.cid === this.owner.cid ? repIncrease : groupMemberRepIncrease);
+      });
+    }
 
     this.log(
       'dropoff',
