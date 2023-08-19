@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Extra hulpmiddelen toegevoegd om despawnen van voertuigen te onderzoeken
+- Mogelijkheid om tijd serverside te freezen
 
 ### Changed
 
@@ -20,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pickup zones van benny-app order worden nu wel opgekuist
 - Reputatie van offline player kan nu wel veranderd worden
 - Racegordels checken nu of je na taskbar nog in voertuig zit
+- Clock op je telefoon veranderd nu niet meer naar 0 wanneer je in een huis/appartement zit
+- Flikkeren van skybox op bepaald moment van ingame dag is opgelost
 
 ## [1.4.1]
 

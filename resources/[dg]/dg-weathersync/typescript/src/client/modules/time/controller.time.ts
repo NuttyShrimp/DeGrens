@@ -1,7 +1,7 @@
-import { freezeTime, setGameTime } from './service.time';
+import { freezeTime, setGlobalTime } from './service.time';
 
-AddStateBagChangeHandler('time', 'global', (bagName: string, keyName: string, value: number) => {
-  setGameTime(Number(value));
+AddStateBagChangeHandler('time', 'global', (_: string, __: string, value: number) => {
+  setGlobalTime(+value);
 });
 
 global.exports('freezeTime', freezeTime);

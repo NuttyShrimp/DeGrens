@@ -1,46 +1,43 @@
-let currentTime = 0;
+import { calculateHoursAndMinutes } from './helpers.time';
+
+let globalTime = 0;
 let timeFrozen = false;
 
-export const setGameTime = (time: number) => {
-  if (timeFrozen) return;
-  currentTime = time;
-  const { hour, minute } = calculateHoursAndMinutes(time);
-  emit('weathersync:timeUpdated', hour, minute);
-};
-
 export const startGameTimeThread = () => {
-  syncTime();
+  NetworkOverrideClockMillisecondsPerGameMinute(0); // this pauses native time cycle
 
-  // Set time every 0.1 second, otherwise moon/suncycle will look scuffed
-  setInterval(() => {
-    const { hour, minute } = calculateHoursAndMinutes(currentTime);
-    NetworkOverrideClockTime(hour, minute, 0);
-  }, 100);
+  let stateTime: number | undefined = GlobalState.time;
+  if (stateTime == undefined) {
+    console.error('Failed to get time from globalstate');
+    stateTime = 0;
+  }
+  setGlobalTime(stateTime);
 };
 
 export const freezeTime = (freeze: boolean, atMinutes?: number) => {
   if (!freeze) {
     timeFrozen = false;
-    syncTime();
-  } else {
-    if (atMinutes != undefined) {
-      setGameTime(atMinutes);
-    }
-    timeFrozen = true;
+    setNativeTime(globalTime);
+    return;
+  }
+
+  timeFrozen = true;
+  if (atMinutes !== undefined) {
+    setNativeTime(atMinutes);
   }
 };
 
-const syncTime = () => {
-  const stateTime = GlobalState.time as number;
-  if (stateTime == undefined) {
-    console.error('Failed to get time from globalstate');
+export const setGlobalTime = (time: number) => {
+  globalTime = time;
+  if (!timeFrozen) {
+    setNativeTime(globalTime);
   }
-  setGameTime(stateTime);
+
+  const { hour, minute } = calculateHoursAndMinutes(time);
+  emit('weathersync:timeUpdated', hour, minute);
 };
 
-const calculateHoursAndMinutes = (time: number) => {
-  return {
-    hour: Math.floor(time / 60),
-    minute: time % 60,
-  };
+const setNativeTime = (time: number) => {
+  const { hour, minute } = calculateHoursAndMinutes(time);
+  NetworkOverrideClockTime(hour, minute, 0);
 };
