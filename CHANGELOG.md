@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Je kan racegordel aandoen/uittrekken nu annuleren
 - Prison zone vergroot om false alarms tegen te gaan
+- Methrun wordt nu gecanceled als voertuig niet meer bestaat
 
 ### Fixed
 

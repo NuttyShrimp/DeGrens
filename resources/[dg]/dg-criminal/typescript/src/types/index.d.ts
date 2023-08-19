@@ -170,6 +170,7 @@ declare namespace Criminal {
       itemId: string | null;
       playersInVehicleZone: Map<number>;
       vehicle: {
+        vehicle: number | null;
         vin: string | null;
         trackerId: number | null;
       };
