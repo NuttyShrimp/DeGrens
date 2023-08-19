@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan nu wel meerdere items tegelijk kopen in de Bennys App
 - Wapenupgrades op hopelijk alle voertuigen gedisabled
 - Probleem opgelost waardoor je geen crypto kon transferen
+- Windowtint reset niet langer wanneer je het applied
 
 ## [1.4.1]
 
