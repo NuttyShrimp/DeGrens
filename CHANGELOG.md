@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Enkele scuffed carboost voertuiglocaties verplaatst
+- Probleem opgelost waardoor synced objects soms terugkwamen na deze te deleten
 
 ## [1.4.2]
 

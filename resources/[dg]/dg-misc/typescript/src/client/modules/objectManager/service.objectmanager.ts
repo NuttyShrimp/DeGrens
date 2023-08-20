@@ -195,9 +195,9 @@ export const removeObject = async (ids: string | string[]) => {
       const data = objectStore[id];
       if (!data) continue;
       destroyObject(id);
-      await Util.Delay(50);
       chunksToCheck.add(data.chunk);
       delete objectStore[id];
+      await Util.Delay(50);
     }
     chunksToCheck.forEach(chunk => {
       if (!chunkMap[chunk]) {
