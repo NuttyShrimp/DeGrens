@@ -12,11 +12,11 @@ export const SERVICE_CONDITIONS = [
   },
   {
     label: 'Good',
-    percentage: 50,
+    percentage: 60,
   },
   {
     label: 'Bad',
-    percentage: 20,
+    percentage: 40,
   },
   {
     label: 'Terrible',
