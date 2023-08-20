@@ -1169,6 +1169,9 @@ importers:
 
   resources/[dg]/dg-misc/typescript:
     dependencies:
+      axios:
+        specifier: ^1.4.0
+        version: 1.4.0
       image-type:
         specifier: ^5.2.0
         version: 5.2.0

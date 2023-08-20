@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wapenupgrades op hopelijk alle voertuigen gedisabled
 - Probleem opgelost waardoor je geen crypto kon transferen
 - Windowtint reset niet langer wanneer je het applied
+- Imgur links zouden nu terug moeten werken voor flyers
 
 ## [1.4.1]
 
