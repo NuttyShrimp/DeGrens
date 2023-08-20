@@ -1,17 +1,17 @@
-import { EventListener, LocalEvent, Notifications, Util } from '@dgx/server';
-import { getVinForVeh } from 'helpers/vehicle';
+import { EventListener, LocalEvent, Util } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
-
-type Event = {
-  message: string;
-  timestamp: string;
-};
 
 type SpawnedVehicleData = {
   vin: string;
   thread: NodeJS.Timer;
   owner: number;
+  events: Event[];
+};
+
+type Event = {
+  message: string;
+  timestamp: string;
 };
 
 @EventListener()
@@ -22,16 +22,31 @@ class DevModule {
   constructor() {
     this.logger = mainLogger.child({ module: 'Dev' });
     this.spawnedVehicles = new Map();
-
-    setInterval(() => {}, 100);
   }
 
+  private getDate = () => {
+    const date = new Date();
+    return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()}`;
+  };
+
   public registerSpawnedVehicle = (vehicle: number, vin: string) => {
-    const data = {
+    const data: SpawnedVehicleData = {
       vin,
-      owner: NetworkGetEntityOwner(vehicle),
+      owner: -1,
+      events: [
+        {
+          message: `Vehicle has been created`,
+          timestamp: this.getDate(),
+        },
+      ],
       thread: setInterval(() => {
-        data.owner = NetworkGetEntityOwner(vehicle);
+        const owner = NetworkGetEntityOwner(vehicle);
+        if (data.owner === owner) return;
+        data.events.push({
+          message: `${owner} took ownership from ${data.owner}`,
+          timestamp: this.getDate(),
+        });
+        data.owner = owner;
       }, 100),
     };
     this.spawnedVehicles.set(vehicle, data);
@@ -53,72 +68,23 @@ class DevModule {
     clearInterval(data.thread);
     this.spawnedVehicles.delete(entity);
 
-    const logMsg = `Scriptspawned vehicle ${entity} (${data.vin}) has been deleted | Owner: ${data.owner}`;
+    data.events.push({
+      message: `Vehicle has been deleted`,
+      timestamp: this.getDate(),
+    });
+
+    const logMsg = `Scriptspawned vehicle ${entity} (${data.vin}) has been deleted | Last Owner: ${data.owner}`;
     this.logger.warn(logMsg);
     Util.Log(
       'vehicles:dev:vehicleDeleted',
       {
         vin: data.vin,
-        owner: data.owner,
+        events: data.events,
       },
       logMsg,
       data.owner,
       true
     );
-  };
-
-  public startVehicleExistenceThread = (plyId: number) => {
-    const ped = GetPlayerPed(String(plyId));
-    const vehicle = GetVehiclePedIsIn(ped, false);
-    if (!vehicle || !DoesEntityExist(vehicle)) {
-      Notifications.add(plyId, 'You are not in a vehicle', 'error');
-      return;
-    }
-
-    const netId = NetworkGetNetworkIdFromEntity(vehicle);
-    const vin = getVinForVeh(vehicle);
-    let lastOwner = NetworkGetEntityOwner(vehicle);
-
-    const events: Event[] = [];
-
-    const insertEvent = (message: string, isError = false) => {
-      const event = {
-        message,
-        timestamp: new Date().toLocaleTimeString(),
-      };
-      events.push(event);
-      this.logger[isError ? 'error' : 'info'](`${vin}: ${event.message} | Timestamp: ${event.timestamp}`);
-    };
-
-    insertEvent(
-      `Started existence thread for vehicle ${vehicle} | VIN: ${vin} | netId: ${netId} | owner: ${lastOwner}`
-    );
-
-    const thread = setInterval(() => {
-      if (!DoesEntityExist(vehicle)) {
-        clearInterval(thread);
-
-        insertEvent('Vehicle has been deleted', true);
-        Util.Log(
-          'vehicles:dev:existenceThreadResult',
-          {
-            events,
-            vin,
-          },
-          `Finished ${vin} existence thread`,
-          plyId,
-          true
-        );
-
-        return;
-      }
-
-      const currentOwner = NetworkGetEntityOwner(vehicle);
-      if (currentOwner !== lastOwner) {
-        insertEvent(`${currentOwner} has taken ownership of vehicle `);
-        lastOwner = currentOwner;
-      }
-    }, 100);
   };
 }
 
