@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Enkele scuffed carboost voertuiglocaties verplaatst
+
 ## [1.4.2]
 
 ### Added
