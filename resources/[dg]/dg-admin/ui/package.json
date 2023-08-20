@@ -1,6 +1,6 @@
 {
   "name": "dg-admin-ui",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "license": "MIT",
   "scripts": {
     "dev": "vite",

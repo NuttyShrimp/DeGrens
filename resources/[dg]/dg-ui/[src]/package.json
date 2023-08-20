@@ -1,6 +1,6 @@
 {
   "name": "dg-ui",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "license": "MIT",
   "scripts": {
     "start": "vite --mode development",
