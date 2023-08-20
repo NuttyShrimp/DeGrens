@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Probleem opgelost waardoor je geen crypto kon transferen
 - Windowtint reset niet langer wanneer je het applied
 - Imgur links zouden nu terug moeten werken voor flyers
+- Extra checks in apartment invite code om nil values in Player object tegen te gaan
 
 ## [1.4.1]
 
