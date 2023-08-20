@@ -1,6 +1,6 @@
 import { Peek, Events } from '@dgx/client';
 
-Peek.addFlagEntry('placeableObjectItem', {
+Peek.addFlagEntry('placeableObjectItemId', {
   options: [
     {
       label: 'Oppakken',
@@ -9,9 +9,9 @@ Peek.addFlagEntry('placeableObjectItem', {
         if (!ent || !DoesEntityExist(ent)) return;
         const entState = Entity(ent).state;
         const objId: string | undefined = entState?.objId;
-        const itemName: string | undefined = entState?.placeableObjectItem;
-        if (!objId || !itemName) return;
-        Events.emitNet('misc:placeableObjectItems:pickup', objId, itemName);
+        const itemId: string | undefined = entState?.placeableObjectItemId;
+        if (!objId || !itemId) return;
+        Events.emitNet('misc:placeableObjectItems:pickup', objId, itemId);
       },
     },
   ],
