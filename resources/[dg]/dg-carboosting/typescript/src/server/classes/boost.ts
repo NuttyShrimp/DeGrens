@@ -194,7 +194,7 @@ export default class Boost {
 
     this.addMail(
       this.owner.serverId,
-      'Je hebt het contract gestart. Locatie staat gemarkeerd op je GPS',
+      `Je hebt het contract gestart voor een ${this.vehicleModel}(${this.vehicleClass}). Locatie staat gemarkeerd op je GPS`,
       this.radiusBlipLocation
     );
 

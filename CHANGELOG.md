@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prison zone vergroot om false alarms tegen te gaan
 - Methrun wordt nu gecanceled als voertuig niet meer bestaat
 - Reputatie requirements en prijzen van hogere carboost classes aangepast
+- Het voertuig model en klasse staat nu ook in de mail als je een boost contract start
 
 ### Fixed
 
