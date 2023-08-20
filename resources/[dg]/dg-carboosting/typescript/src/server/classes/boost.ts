@@ -191,10 +191,13 @@ export default class Boost {
 
     const vehicleLocation = this.getVehicleLocation().vehicle;
     const radiusBlipSize = this.getClassConfig().radiusBlipSize;
+    const vehicleInfo = Vehicles.getConfigByModel(this.vehicleModel);
 
     this.addMail(
       this.owner.serverId,
-      `Je hebt het contract gestart voor een ${this.vehicleModel}(${this.vehicleClass}). Locatie staat gemarkeerd op je GPS`,
+      `Je hebt het contract gestart voor een ${
+        vehicleInfo ? `${vehicleInfo.brand} ${vehicleInfo.name}` : this.vehicleModel
+      }(${this.vehicleClass}). Locatie staat gemarkeerd op je GPS`,
       this.radiusBlipLocation
     );
 
