@@ -51,8 +51,14 @@ const addMail = (plyId: number, mailData: Phone.Mails.MailData) => {
     date: Date.now(),
   };
 
-  const cid = Util.getCID(plyId);
-  registerMailToCid(cid, mail);
+  if (plyId === -1) {
+    for (const ply of Object.values(charModule.getAllPlayers())) {
+      registerMailToCid(ply.citizenid, mail);
+    }
+  } else {
+    const cid = Util.getCID(plyId);
+    registerMailToCid(cid, mail);
+  }
 
   Events.emitNet('phone:mails:add', plyId, mail);
 };
