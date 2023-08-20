@@ -105,6 +105,7 @@ const startMethRun = async (plyId: number) => {
     state: generateMethRunDefaultState(),
     playersInVehicleZone: new Set(),
     vehicle: {
+      vehicle: null,
       vin: null,
       trackerId: null,
     },
@@ -185,16 +186,19 @@ export const confirmMethRunDropOff = (plyId: number) => {
     methAmount: activeRun.methAmount,
   });
 
-  setTimeout(() => {
-    if (!activeRun) return;
-    Npcs.remove('methrun_dropoff');
-    buildVehicleZone();
-    sendMethRunMail(
-      [Util.getCID(plyId), activeRun.startCID],
-      'De spullen die je me gegeven hebt zijn verwerkt. Op de GPS locatie dat bij dit bericht zit staat een voertuig te wachten met het verwerkt materiaal in de kofferbak.',
-      activeRun.vehicleLocation.spawn
-    );
-  }, (Util.isDevEnv() ? 1 : config.methrun.delayAfterDropOff) * 1000);
+  setTimeout(
+    () => {
+      if (!activeRun) return;
+      Npcs.remove('methrun_dropoff');
+      buildVehicleZone();
+      sendMethRunMail(
+        [Util.getCID(plyId), activeRun.startCID],
+        'De spullen die je me gegeven hebt zijn verwerkt. Op de GPS locatie dat bij dit bericht zit staat een voertuig te wachten met het verwerkt materiaal in de kofferbak.',
+        activeRun.vehicleLocation.spawn
+      );
+    },
+    (Util.isDevEnv() ? 1 : config.methrun.delayAfterDropOff) * 1000
+  );
 };
 
 const buildVehicleZone = () => {
@@ -257,6 +261,7 @@ const spawnMethRunVehicle = async (plyId: number) => {
     return;
   }
 
+  activeRun.vehicle.vehicle = spawnedVehicle.vehicle;
   activeRun.vehicle.vin = spawnedVehicle.vin;
   Vehicles.blockVinInBennys(spawnedVehicle.vin);
   Vehicles.setVehicleCannotBeLockpicked(spawnedVehicle.vin, true, 'Het is nog niet veilig genoeg');
@@ -371,9 +376,12 @@ export const handleLockpickMethRunVehicle = (plyId: number, vehicle: number) => 
 
   methrunLoggerWrapper(plyId, 'info', 'lockpick', `has lockpicked the methrun vehicle`, { vin: activeRun.vehicle.vin });
 
-  setTimeout(() => {
-    removeMethRunVehicleTracker();
-  }, (Util.isDevEnv() ? 1 : config.methrun.trackerTime) * 60 * 1000);
+  setTimeout(
+    () => {
+      removeMethRunVehicleTracker();
+    },
+    (Util.isDevEnv() ? 1 : config.methrun.trackerTime) * 60 * 1000
+  );
 };
 
 const removeMethRunVehicleTracker = () => {
@@ -384,6 +392,7 @@ const removeMethRunVehicleTracker = () => {
 
   if (activeRun.vehicle.trackerId) {
     Police.removeTrackerFromVehicle(activeRun.vehicle.trackerId);
+    activeRun.vehicle.trackerId = null;
   }
 
   activeRun.state.trackerRemoved = true;
@@ -488,13 +497,7 @@ export const finishMethRun = async (plyId: number) => {
   });
 
   activeRun = null;
-  inTimeout = true;
-
-  setTimeout(() => {
-    inTimeout = false;
-    Npcs.remove('methrun_finish');
-    methrunLoggerWrapper(undefined, 'info', 'reset', `methrun timeout has been reset`);
-  }, (Util.isDevEnv() ? config.methrun.timeoutBetweenRuns * 60 : 10) * 1000);
+  startMethrunTimeout();
 };
 
 export const initMethRunForPlayer = (plyId: number) => {
@@ -503,4 +506,52 @@ export const initMethRunForPlayer = (plyId: number) => {
   if (activeRun.state.vehicleZoneBuilt) {
     Events.emitNet('criminal:methrun:buildVehicleZone', plyId, activeRun.vehicleLocation.zone);
   }
+};
+
+const startMethrunTimeout = () => {
+  inTimeout = true;
+
+  setTimeout(
+    () => {
+      inTimeout = false;
+      Npcs.remove('methrun_finish');
+      methrunLoggerWrapper(undefined, 'info', 'reset', `methrun timeout has been reset`);
+    },
+    (Util.isDevEnv() ? 10 : config.methrun.timeoutBetweenRuns * 60) * 1000
+  );
+};
+
+export const handleEntityRemovalForMethrunVehicle = (vehicle: number) => {
+  if (activeRun?.vehicle.vehicle !== vehicle) return;
+  failMethRun();
+};
+
+const failMethRun = () => {
+  if (!activeRun) return;
+
+  if (activeRun.vehicle.vin && activeRun.itemId) {
+    Inventory.removeItemByIdFromInventory('trunk', activeRun.vehicle.vin, activeRun.itemId);
+  }
+
+  if (activeRun.vehicle.trackerId) {
+    Police.removeTrackerFromVehicle(activeRun.vehicle.trackerId);
+    activeRun.vehicle.trackerId = null;
+  }
+
+  if (activeRun.vehicle.vin) {
+    const ent = Vehicles.getVehicleOfVin(activeRun.vehicle.vin);
+    if (ent && DoesEntityExist(ent)) {
+      Vehicles.deleteVehicle(ent);
+    }
+  }
+
+  Npcs.remove('methrun_dropoff');
+  destroyVehicleZone();
+  stopGuardSpawningThread();
+
+  sendMethRunMail([activeRun.startCID], `De opdracht is mislukt`);
+  Inventory.clearInventory('stash', 'methrun_backup');
+
+  activeRun = null;
+  startMethrunTimeout();
 };

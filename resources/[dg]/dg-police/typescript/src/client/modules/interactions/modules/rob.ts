@@ -1,7 +1,7 @@
 import { Events, RPC, Taskbar, Util } from '@dgx/client';
 
 const getPlayerToRob = async () => {
-  const closestPly = Util.getClosestPlayerInDistanceAndOutsideVehicle(2);
+  const closestPly = Util.getClosestPlayer({ range: 2, skipInVehicle: true });
   if (!closestPly) return;
   const target = GetPlayerServerId(closestPly);
   const canRob = await RPC.execute<Police.CanRob>('police:interactions:canRobPlayer', target);

@@ -1,8 +1,8 @@
 {
   "reputation": {
-    "required": 855,
+    "required": 1590,
     "increase": 1,
-    "decrease": 50
+    "decrease": 100
   },
   "contractType": "global",
   "chances": {
@@ -13,8 +13,8 @@
     "contract": 0.1
   },
   "price": {
-    "boost": 250,
-    "scratch": 1250
+    "boost": 500,
+    "scratch": 5000
   },
   "expirationTime": 60,
   "timeoutAfterAccepting": 90,

@@ -22,6 +22,10 @@ class Weapons {
   public onShotFired = (handler: (weaponItem: Inventory.ItemState) => void) => {
     on('weapons:shotWeapon', handler);
   };
+
+  public onWeaponChanged = (handler: (newWeapon: string | null) => void) => {
+    on('weapons:currentWeaponChanged', handler);
+  };
 }
 
 export default {

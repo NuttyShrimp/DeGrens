@@ -1,7 +1,7 @@
 import { Events, Inventory, Jobs, Notifications, SQL, UI, Util } from '@dgx/server';
 import { charModule } from 'helpers/core';
 import imageType, { minimumBytes } from 'image-type';
-import https from 'node:https';
+import axios from 'axios';
 
 const blocked_cids: number[] = [];
 
@@ -23,34 +23,27 @@ Events.onNet('misc:flyers:requestFlyer', async (src, link: string, description: 
     return;
   }
 
+  let strippedLink = new URL(link);
+  strippedLink.search = '';
+
   try {
-    https
-      .get(link, res => {
-        setImmediate(() => {
-          res.on('readable', () => {
-            (async () => {
-              const chunk = res.read(minimumBytes);
-              res.destroy();
-              const type = await imageType(chunk);
-              if (!type) {
-                Notifications.add(src, 'Deze link wijst niet naar een afbeelding!', 'error');
-                return;
-              }
-              await SQL.query('INSERT INTO flyer_request (cid, link, description) VALUES (?,?,?)', [
-                cid,
-                link,
-                description,
-              ]);
-              Notifications.add(src, 'Flyer requested!');
-            })();
-          });
-        });
-      })
-      .on('error', err => {
-        Notifications.add(src, 'Deze link is niet bereikbaar voor ons!', 'error');
-        return;
-      });
+    const res = await axios.get(strippedLink.toString(), {
+      responseType: 'arraybuffer',
+    });
+    const imgBuffer = Buffer.from(res.data, 'utf-8');
+    const type = await imageType(imgBuffer);
+    if (!type) {
+      Notifications.add(src, 'Deze link wijst niet naar een afbeelding!', 'error');
+      return;
+    }
+    await SQL.query('INSERT INTO flyer_request (cid, link, description) VALUES (?,?,?)', [
+      cid,
+      strippedLink.toString(),
+      description,
+    ]);
+    Notifications.add(src, 'Flyer requested!');
   } catch (e) {
+    console.error(`Failed to fetch a flyer image`, e);
     Notifications.add(src, 'Deze link is niet bereikbaar voor ons!', 'error');
     return;
   }

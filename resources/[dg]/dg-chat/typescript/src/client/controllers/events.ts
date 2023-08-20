@@ -1,4 +1,4 @@
-import { Events, Keys } from '@dgx/client';
+import { Events, Keys, Util } from '@dgx/client';
 import { closeChat, forceClose, openChat, peekChat } from 'helpers/chat';
 
 import { addOldMessage, addOldSuggestion, getOldSuggestions } from '../helpers/backwards';
@@ -87,3 +87,13 @@ Keys.register('peekChat', 'open chat venster w/e focus', 'RETURN');
 
 global.exports('closeChat', closeChat);
 global.exports('forceClose', forceClose);
+
+onNet('chat:dice:playAnim', async (timeout: number) => {
+  await Util.loadAnimDict('anim@mp_player_intcelebrationmale@wank');
+
+  const ped = PlayerPedId();
+  TaskPlayAnim(ped, 'anim@mp_player_intcelebrationmale@wank', 'wank', 8.0, -8.0, -1, 49, 0, false, false, false);
+  setTimeout(() => {
+    ClearPedTasks(ped);
+  }, timeout);
+});

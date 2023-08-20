@@ -70,7 +70,7 @@ const drawText = (text: string, coords: Vec3) => {
 
 export const takeEvidence = async () => {
   if (evidenceThread === null) return;
-  const coords = RayCast.getLastHitCoord();
+  const coords = RayCast.getLastHitResult().coords;
   if (!coords) return;
 
   const coordsVector = Vector3.create(coords);

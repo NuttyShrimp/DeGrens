@@ -2,7 +2,7 @@
   "reputation": {
     "required": 145,
     "increase": 7,
-    "decrease": 7
+    "decrease": 15
   },
   "contractType": "personal",
   "chances": {
@@ -13,8 +13,8 @@
     "contract": 0.4
   },
   "price": {
-    "boost": 20,
-    "scratch": 100
+    "boost": 30,
+    "scratch": 150
   },
   "expirationTime": 20,
   "radiusBlipSize": 100,

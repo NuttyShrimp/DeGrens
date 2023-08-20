@@ -55,8 +55,8 @@ DGX.RPC.register('lib:doRaycast', function(pDistance, pFlag, pIgnore)
   return retval
 end)
 
-exports('getLastRaycastHitCoord', function()
-  return lastHit.coords
+exports('getLastHitResult', function()
+  return lastHit
 end)
 
 Citizen.CreateThread(function()

@@ -93,3 +93,11 @@ export const PERFORMANCE_KEYS_TO_ID: Record<Vehicles.Upgrades.Performance.Extend
   ...NORMAL_PERFORMANCE_KEYS_TO_ID,
   turbo: 18,
 };
+
+export const OVERRIDE_MODEL_STANDARD_EXTRA_UPGRADES = Object.entries({
+  mule: false,
+  mule2: false,
+}).reduce<Record<number, boolean>>((acc, [key, value]) => {
+  acc[GetHashKey(key) >>> 0] = value;
+  return acc;
+}, {});

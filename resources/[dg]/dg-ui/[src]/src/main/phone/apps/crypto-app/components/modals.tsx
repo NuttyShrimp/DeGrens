@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Input } from '../../../../../components/inputs';
 import { SimpleForm } from '../../../../../components/simpleform';
 import { nuiAction } from '../../../../../lib/nui-comms';
-import { showCheckmarkModal, showLoadModal } from '../../../lib';
+import { showCheckmarkModal, showLoadModal, showWarningModal } from '../../../lib';
 import { useCryptoAppStore } from '../stores/useCryptoAppStore';
 
 const setDirty = () => {
@@ -27,8 +27,8 @@ export const ExchangeModal: FC<React.PropsWithChildren<{ coin: Phone.Crypto.Coin
       vals.amount = parseInt(vals.amount as string);
       if (vals.amount <= 0 || vals.amount > coin.wallet.amount || isNaN(vals.amount)) return;
       showLoadModal();
-      await nuiAction('phone/crypto/transfer', { ...vals, coin: coin.crypto_name });
-      showCheckmarkModal(setDirty);
+      const success: boolean = await nuiAction('phone/crypto/transfer', { ...vals, coin: coin.crypto_name });
+      (success ? showCheckmarkModal : showWarningModal)(setDirty);
     }}
   />
 );
@@ -45,8 +45,8 @@ export const PurchaseModal: FC<React.PropsWithChildren<{ coin: Phone.Crypto.Coin
       vals.amount = parseInt(vals.amount as string);
       if (vals.amount <= 0 || isNaN(vals.amount)) return;
       showLoadModal();
-      await nuiAction('phone/crypto/purchase', { ...vals, coin: coin.crypto_name });
-      showCheckmarkModal(setDirty);
+      const success: boolean = await nuiAction('phone/crypto/purchase', { ...vals, coin: coin.crypto_name });
+      (success ? showCheckmarkModal : showWarningModal)(setDirty);
     }}
   />
 );

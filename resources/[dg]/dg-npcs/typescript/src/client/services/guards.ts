@@ -32,7 +32,7 @@ export const setupGuard = (ped: number, guardId: string, guardData: NPCs.Guard) 
 
 export const startDeathCheck = (ped: number, guardId: string) => {
   const deathThread = setInterval(() => {
-    if (!DoesEntityExist(ped) || NetworkGetEntityOwner(ped) !== PlayerId()) {
+    if (!DoesEntityExist(ped)) {
       Events.emitNet('npcs:guards:transferDeathCheck', guardId);
       clearInterval(deathThread);
     }

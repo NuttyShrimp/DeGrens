@@ -26,6 +26,14 @@ class Weather {
   public getCurrentWeather = (): number => {
     return global.exports['dg-weathersync'].getCurrentWeather();
   };
+
+  public freezeTime = (freeze: boolean, atMinutes?: number) => {
+    global.exports['dg-weathersync'].freezeTime(freeze, atMinutes);
+  };
+
+  public isTimeFrozen = (): boolean => {
+    return global.exports['dg-weathersync'].isTimeFrozen();
+  };
 }
 
 export default {

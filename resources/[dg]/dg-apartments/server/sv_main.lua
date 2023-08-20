@@ -247,16 +247,22 @@ DGX.RPC.register('dg-apartments:server:getApartmentInvites', function(src)
   local apartment = getCurrentApartment(src)
   local invites = getApartmentInvites(apartment.id, src)
   local menu = {}
-  for k, v in pairs(invites) do
-    local Player = exports['dg-core']:getPlayer(tonumber(v))
-    menu[#menu + 1] = {
-      title = ('%s %s(%s)'):format(Player.charinfo.firstname, Player.charinfo.lastname, v),
-      description = "Uitnodiging verwijderen",
-      callbackURL = "dg-apartments:client:removeInvite",
-      data = {
-        id = v
+  if invites ~= nil then
+    for _, v in pairs(invites) do
+      local Player = exports['dg-core']:getPlayer(tonumber(v))
+      if Player == nil then
+        goto continue
+      end
+      menu[#menu + 1] = {
+        title = ('%s %s(%s)'):format(Player.charinfo.firstname, Player.charinfo.lastname, v),
+        description = "Uitnodiging verwijderen",
+        callbackURL = "dg-apartments:client:removeInvite",
+        data = {
+          id = v
+        }
       }
-    }
+      ::continue::
+    end
   end
   if (#menu < 1) then
     menu[#menu + 1] = {

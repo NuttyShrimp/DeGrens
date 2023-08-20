@@ -88,51 +88,36 @@ class Util extends UtilShared {
     }
   };
 
-  /**
-   * @returns playerId (not serverId)
-   */
-  getFirstPlayerInDistanceAndOutsideVehicle = (distance: number) => {
-    const players: number[] = GetActivePlayers();
-    const ownPed = PlayerPedId();
-    const ownCoords = this.getPlyCoords();
-
-    for (const plyId of players) {
-      const ped = GetPlayerPed(plyId);
-      if (ped === ownPed) continue;
-      if (IsPedInAnyVehicle(ped, true)) continue;
-
-      const maxDistance = IsPedRagdoll(ped) ? distance + 0.5 : distance;
-      const [x, y, z] = GetEntityCoords(ped, false);
-      if (ownCoords.distance({ x, y, z }) < maxDistance) {
-        return plyId;
-      }
-    }
-  };
-
-  isAnyPlayerCloseAndOutsideVehicle = (maxDistance = 2) => {
-    return this.getFirstPlayerInDistanceAndOutsideVehicle(maxDistance) != undefined;
+  isAnyPlayerClose = (options: { range: number; skipInVehicle?: boolean }) => {
+    return this.getClosestPlayer({ ...options, getFirstInRange: true }) != undefined;
   };
 
   /**
    * @returns playerId (not serverId)
    */
-  getClosestPlayerInDistanceAndOutsideVehicle = (distance = 999999) => {
+  getClosestPlayer = (options: { range: number; skipInVehicle?: boolean; getFirstInRange?: boolean }) => {
     const players: number[] = GetActivePlayers();
     const ownPed = PlayerPedId();
-    const ownCoords = this.getPlyCoords();
+    const ownCoords = this.getEntityCoords(ownPed);
 
-    let closestDistance = distance;
+    let closestDistance = options.range ?? 9999;
     let closestPly: number | undefined = undefined;
 
     for (const plyId of players) {
       const ped = GetPlayerPed(plyId);
-      if (ped === ownPed) continue;
-      if (IsPedInAnyVehicle(ped, true)) continue;
+      if (ped === ownPed || !DoesEntityExist(ped)) continue;
+      if (options.skipInVehicle && IsPedInAnyVehicle(ped, true)) continue;
 
-      const [x, y, z] = GetEntityCoords(ped, false);
-      let distance = ownCoords.distance({ x, y, z });
-      distance = IsPedRagdoll(ped) ? Math.max(0, distance - 0.5) : distance;
+      const coords = this.getEntityCoords(ped);
+      let distance = ownCoords.distance(coords);
+
+      if (IsPedRagdoll(ped)) {
+        distance = Math.max(0, distance - 0.5);
+      }
       if (distance > closestDistance) continue;
+
+      // dont care if closest, just return any player in range
+      if (options.getFirstInRange) return plyId;
 
       closestDistance = distance;
       closestPly = plyId;
@@ -141,9 +126,12 @@ class Util extends UtilShared {
     return closestPly;
   };
 
-  getDistanceToClosestPlayerOutsideVehicle = () => {
+  getDistanceToClosestPlayer = (options: { skipInVehicle?: boolean }) => {
     const maxDistance = 999999;
-    const closestPly = this.getClosestPlayerInDistanceAndOutsideVehicle(maxDistance);
+    const closestPly = this.getClosestPlayer({
+      range: maxDistance,
+      skipInVehicle: options.skipInVehicle,
+    });
     if (!closestPly) return maxDistance;
 
     const ped = GetPlayerPed(closestPly);
@@ -192,7 +180,7 @@ class Util extends UtilShared {
     Events.emitNet('dgx:deleteEntity', netId);
   };
 
-  getClosestNpcInRange = (range: number, pedsToIgnore: number[] = []): number | undefined => {
+  getClosestNpc = (range: number, pedsToIgnore: number[] = []): number | undefined => {
     const plyCoords = this.getPlyCoords();
     const peds: number[] = GetGamePool('CPed');
 

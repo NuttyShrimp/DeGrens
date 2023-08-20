@@ -30,11 +30,6 @@ export const loadPlayerReputation = async (cid: number, alreadyInsertedDefaults 
   reputationLogger.silly(`Reputations for CID ${cid} have been loaded`);
 };
 
-export const unloadPlayerReputation = (cid: number) => {
-  playerReputations.delete(cid);
-  reputationLogger.silly(`Reputations for CID ${cid} have been unloaded`);
-};
-
 export const getReputation = (cid: number, type: ReputationType) => {
   const reputations = playerReputations.get(cid);
   if (!reputations) {
@@ -50,10 +45,26 @@ export const getReputation = (cid: number, type: ReputationType) => {
   return rep;
 };
 
-export const setReputation = (cid: number, type: ReputationType, cb: (old: number) => number) => {
-  const oldRep = getReputation(cid, type);
-  if (oldRep === undefined) return; // logging happens in getReputation
+export const setReputation = async (
+  cid: number,
+  type: ReputationType,
+  cb: (old: number) => number,
+  tryLoading = true
+) => {
+  // if rep not loaded (player not in server), we load it before setting
+  const oldRep = playerReputations.get(cid)?.get(type);
+  if (oldRep === undefined) {
+    if (tryLoading) {
+      await loadPlayerReputation(cid, false);
+      setReputation(cid, type, cb, false);
+      return;
+    } else {
+      reputationLogger.error(`Failed to update ${type} reputation for CID ${cid}`);
+      return;
+    }
+  }
+
   const newRep = cb(oldRep);
-  playerReputations.get(cid)!.set(type, newRep); // undefined gets check in getReputation
+  playerReputations.get(cid)!.set(type, newRep);
   updateReputationForCid(cid, type, newRep);
 };

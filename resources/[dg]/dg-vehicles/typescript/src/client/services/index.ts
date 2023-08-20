@@ -15,3 +15,4 @@ import './enginesounds';
 import './holdbmx';
 import './bulletprooftires';
 import './vinscratch';
+import './missionentity';

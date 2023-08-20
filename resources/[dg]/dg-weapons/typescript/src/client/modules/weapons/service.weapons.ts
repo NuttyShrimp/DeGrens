@@ -24,6 +24,8 @@ export const setCurrentWeaponData = (data: typeof currentWeaponData) => {
   if (data !== null) {
     startWeaponThread();
   }
+
+  emit('weapons:currentWeaponChanged', currentWeaponData?.name ?? null);
 };
 
 const startWeaponThread = () => {

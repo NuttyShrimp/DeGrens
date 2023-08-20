@@ -1,51 +1,51 @@
 import { Util } from '@dgx/server';
-import { mainLogger } from 'sv_logger';
-import { WEATHERS } from './constants.weather';
-
-const weatherLogger = mainLogger.child({ module: 'WeatherLogger' });
+import { DEFAULT_DURATION, WEATHERS } from './constants.weather';
+import { weatherLogger } from './logger.weather';
+import { getRandomWindDirection } from './helpers.weather';
 
 let currentWeather: WeatherSync.Weather;
 let scheduledChange: NodeJS.Timeout;
 
 export const getCurrentWeather = () => currentWeather;
-export const setCurrentWeather = (weather: WeatherSync.Weather, skipTransition = false) => {
+const setCurrentWeather = (weather: WeatherSync.Weather, skipTransition = false) => {
   currentWeather = weather;
-  GlobalState.weather = { ...weather, skipTransition } satisfies WeatherSync.WeatherStateBag;
+  GlobalState.weather = { weather, skipTransition } satisfies WeatherSync.WeatherStateBag;
 
-  weatherLogger.silly(
-    `${weather.type} | ${weather.temperature}F | ${(weather.windSpeed * 3.6).toFixed(2)}kph wind | ${
-      (weather.rainLevel ?? 0) * 100
-    }% rain`
+  weatherLogger.info(
+    `${weather.type} | ${(weather.windSpeed * 3.6).toFixed(2)}kph wind | ${(weather.rainLevel ?? 0) * 100}% rain`
   );
 };
 
 export const startWeatherScheduling = () => {
   const startType = getStartType();
-  const startWeather = generateWeatherData(startType);
-  setCurrentWeather(startWeather, true);
+  const { weather, duration } = buildWeatherData(startType);
 
-  scheduleWeatherChange(startWeather.minutes);
+  setCurrentWeather(weather, true);
+  scheduleWeatherChange(duration);
 };
 
 const scheduleWeatherChange = (minutes: number) => {
-  scheduledChange = setTimeout(() => {
-    const nextType = chooseTransitionForType(currentWeather.type);
-    const nextWeather = generateWeatherData(nextType);
-    setCurrentWeather(nextWeather);
-
-    scheduleWeatherChange(nextWeather.minutes);
-  }, minutes * 60 * 1000);
+  scheduledChange = setTimeout(
+    () => {
+      const nextType = chooseTransitionForType(currentWeather.type);
+      const { weather, duration } = buildWeatherData(nextType);
+      setCurrentWeather(weather);
+      scheduleWeatherChange(duration);
+    },
+    minutes * 60 * 1000
+  );
 };
 
-export const generateWeatherData = (type: WeatherSync.Type) => {
-  const nextData = WEATHERS[type];
+export const buildWeatherData = (type: WeatherSync.Type): { duration: number; weather: WeatherSync.Weather } => {
+  const data = WEATHERS[type];
   return {
-    type: type,
-    windSpeed: Math.round(nextData.windSpeed * (Util.getRndInteger(75, 126) / 100)), // between 75% and 125% of config value
-    windDirection: generateWindDirection(),
-    rainLevel: nextData.rainLevel,
-    temperature: Util.getRndInteger(...nextData.temperatureRange),
-    minutes: nextData.minutes ?? 20,
+    duration: data.duration ?? DEFAULT_DURATION,
+    weather: {
+      type: type,
+      windSpeed: Math.round(data.windSpeed * (Util.getRndInteger(75, 126) / 100)), // between 75% and 125% of config value
+      windDirection: getRandomWindDirection(),
+      rainLevel: data.rainLevel,
+    },
   };
 };
 
@@ -75,19 +75,10 @@ const chooseTransitionForType = (type: WeatherSync.Type) => {
 const isTypeEnabled = (type: WeatherSync.Type) => WEATHERS[type].enabled;
 
 const getStartType = () => {
-  const enabledTypes = Object.entries(WEATHERS).reduce<WeatherSync.Type[]>((acc, [type, data]) => {
-    if (data.enabled && !data.cannotBeFirst) {
-      acc.push(type as WeatherSync.Type);
-    }
-    return acc;
-  }, []);
+  const enabledTypes = (Object.entries(WEATHERS) as ObjEntries<typeof WEATHERS>)
+    .filter(([_, w]) => w.enabled && !w.cannotBeFirst)
+    .map(([t, _]) => t);
   return enabledTypes[Math.floor(Math.random() * enabledTypes.length)];
-};
-
-// Wind dir is in radians
-const generateWindDirection = () => {
-  const rng = Util.getRndDecimal(0, 2);
-  return rng * Math.PI;
 };
 
 export const overideCurrentWeather = (type: string) => {
@@ -96,10 +87,10 @@ export const overideCurrentWeather = (type: string) => {
     return;
   }
 
-  const weather = generateWeatherData(type as WeatherSync.Type);
-
-  clearTimeout(scheduledChange);
-  scheduleWeatherChange(weather.minutes);
+  const { weather, duration } = buildWeatherData(type as WeatherSync.Type);
 
   setCurrentWeather(weather);
+
+  clearTimeout(scheduledChange);
+  scheduleWeatherChange(duration);
 };

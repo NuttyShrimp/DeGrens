@@ -158,9 +158,13 @@ const baseCommands: Server.Command[] = [
       amount = Math.min(amount, 20);
       const results: string[] = [];
       for (let i = 0; i < amount; i++) {
-        results.push(`${Util.getRndInteger(1, sides)}/${sides}`);
+        results.push(`${Util.getRndInteger(1, sides + 1)}/${sides}`);
       }
-      Sync.show3dText(src, `Roll: ${results.join(' ')}`);
+
+      emitNet('chat:dice:playAnim', src, 2400);
+      setTimeout(() => {
+        Sync.show3dText(src, `Roll: ${results.join(' ')}`);
+      }, 2400);
     },
   },
 ];

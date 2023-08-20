@@ -27,7 +27,7 @@ local function addToTargetZone(zone)
   else
     targetZone = ComboZone:Create({ zone }, { name = "dg-polytarget" })
     targetZone:onPointInOutExhaustive(function()
-      local coords = DGX.RayCast.getLastHitCoord()
+      local coords = DGX.RayCast.getLastHitResult().coords;
       if not coords then
         return vector3(0, 0, 0)
       end

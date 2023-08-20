@@ -1,67 +1,80 @@
 import { RPC, Util } from '@dgx/client';
-import { TRANSITION_TIME } from './constants.weather';
+import { DEFAULT_WEATHER, TRANSITION_TIME } from './constants.weather';
 
+let globalWeather: WeatherSync.Weather = { ...DEFAULT_WEATHER };
 let weatherFrozen = false;
 
-let currentWeather: WeatherSync.Weather = {
-  type: 'CLEAR',
-  windSpeed: 0,
-  windDirection: 0,
-  temperature: 80,
-};
+let currentWeather: WeatherSync.Weather = { ...DEFAULT_WEATHER };
+let changeResolver: ((val: boolean) => void) | null = null;
 
 export const initializeWeather = () => {
-  syncWeather();
+  let stateWeather = (GlobalState.weather as WeatherSync.WeatherStateBag).weather;
+  if (stateWeather == undefined) {
+    console.error('Failed to get weather from globalstate');
+    stateWeather = { ...DEFAULT_WEATHER };
+  }
+  setGlobalWeather(stateWeather, true);
 };
 
 export const freezeWeather = (freeze: boolean, type?: WeatherSync.Type) => {
   if (!freeze) {
     weatherFrozen = false;
-    syncWeather();
-  } else {
-    if (type != undefined) {
-      RPC.execute<WeatherSync.Weather>('weathersync:weather:buildWeather', type).then(weather => {
-        if (!weather) return;
-        setGameWeather(weather, true);
-        weatherFrozen = true;
-      });
-    } else {
-      weatherFrozen = true;
-    }
+    setGameWeather(globalWeather, true);
+    return;
+  }
+
+  weatherFrozen = true;
+  if (type != undefined) {
+    RPC.execute<WeatherSync.Weather>('weathersync:weather:buildWeather', type).then(weather => {
+      if (!weather) return;
+      setGameWeather(weather, true);
+    });
   }
 };
 
-const syncWeather = () => {
-  const stateTime = GlobalState.weather as WeatherSync.Weather;
-  if (stateTime == undefined) {
-    console.error('Failed to get weather from globalstate');
+const setGameWeather = async (weather: WeatherSync.Weather, skipTransition = false) => {
+  if (changeResolver !== null) {
+    changeResolver(false);
+    console.log('Canceling change');
   }
-  setGameWeather(stateTime, true);
-};
-
-export const setGameWeather = async (weather: WeatherSync.Weather, skipTransition = false) => {
-  if (weatherFrozen) return;
 
   if (currentWeather.type !== weather.type) {
-    const time = skipTransition ? 0 : TRANSITION_TIME;
-    SetWeatherTypeOvertimePersist(weather.type, time);
-    await Util.Delay(time * 1000);
+    if (!skipTransition) {
+      SetWeatherTypeOvertimePersist(weather.type, TRANSITION_TIME);
 
-    currentWeather = weather;
+      const continueChange = await new Promise<boolean>(res => {
+        changeResolver = res;
+        setTimeout(() => {
+          res(true);
+        }, TRANSITION_TIME * 1000);
+      });
+      changeResolver = null;
+      if (!continueChange) return;
+    }
+
     ClearOverrideWeather();
     SetWeatherTypePersist(weather.type);
     SetWeatherTypeNow(weather.type);
     SetWeatherTypeNowPersist(weather.type);
-
-    emit('weathersync:weatherUpdated', weather.type);
   }
 
   SetWindSpeed(weather.windSpeed);
   SetWindDirection(weather.windDirection);
 
-  if (weather.rainLevel) {
+  if (weather.rainLevel !== undefined) {
     SetRainLevel(weather.rainLevel);
   } else {
     SetRainLevel(-1);
+  }
+
+  currentWeather = weather;
+};
+
+export const setGlobalWeather = (weather: WeatherSync.Weather, skipTransition: boolean) => {
+  globalWeather = weather;
+  emit('weathersync:weatherUpdated', weather.type);
+
+  if (!weatherFrozen) {
+    setGameWeather(weather, skipTransition);
   }
 };

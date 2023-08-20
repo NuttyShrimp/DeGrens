@@ -191,8 +191,15 @@ export default class Boost {
 
     const vehicleLocation = this.getVehicleLocation().vehicle;
     const radiusBlipSize = this.getClassConfig().radiusBlipSize;
+    const vehicleInfo = Vehicles.getConfigByModel(this.vehicleModel);
 
-    this.addMail(this.owner.serverId, 'Je hebt het contract gestart. Locatie staat gemarkeerd op je GPS');
+    this.addMail(
+      this.owner.serverId,
+      `Je hebt het contract gestart voor een ${
+        vehicleInfo ? `${vehicleInfo.brand} ${vehicleInfo.name}` : this.vehicleModel
+      }(${this.vehicleClass}). Locatie staat gemarkeerd op je GPS`,
+      this.radiusBlipLocation
+    );
 
     const clientActionData: Carboosting.ClientActionData = {
       vehicleLocation,
@@ -694,11 +701,14 @@ export default class Boost {
       return;
     }
 
-    const repIncrease = this.getClassConfig().reputation.increase * healthPercentage;
-    const groupMemberRepIncrease = Math.round(repIncrease * config.contracts.groupReputationPercentage);
-    group.members.forEach(m => {
-      contractManager.updateReputation(m.cid, m.cid === this.owner.cid ? repIncrease : groupMemberRepIncrease);
-    });
+    // dont give rep if they scratched the bitch
+    if (this.type === 'boost') {
+      const repIncrease = this.getClassConfig().reputation.increase * healthPercentage;
+      const groupMemberRepIncrease = Math.round(repIncrease * config.contracts.groupReputationPercentage);
+      group.members.forEach(m => {
+        contractManager.updateReputation(m.cid, m.cid === this.owner.cid ? repIncrease : groupMemberRepIncrease);
+      });
+    }
 
     this.log(
       'dropoff',

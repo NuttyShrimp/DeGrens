@@ -27,7 +27,7 @@ Peek.addGlobalEntry('vehicle', {
         if (!vehicle || !NetworkGetEntityIsNetworked(vehicle)) return false;
         if (IsPedInAnyVehicle(PlayerPedId(), true)) return false;
         if (!AreAnyVehicleSeatsFree(vehicle)) return false;
-        return Util.isAnyPlayerCloseAndOutsideVehicle();
+        return Util.isAnyPlayerClose({ range: 2, skipInVehicle: true });
       },
     },
   ],

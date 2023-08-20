@@ -4,49 +4,49 @@
       {
         "item": "xenon_lights",
         "label": "Xenon lamp",
-        "price": "40"
+        "price": 75
       },
       {
         "item": "neon_strip",
         "label": "Neon Strip",
-        "price": "20"
+        "price": 125
       },
       {
         "item": "rgb_controller",
         "label": "RGB Controller",
-        "price": "10"
+        "price": 10
       },
       {
         "item": "harness",
         "label": "Harnas",
-        "price": "40"
+        "price": 50
       },
       {
         "item": "cleaning_kit",
         "label": "Schoonmaakset",
-        "price": "10"
+        "price": 5
       },
       {
         "item": "vehicle_wax",
         "label": "Voertuig Wax",
-        "price": "25"
+        "price": 100
       }
     ],
     "illegal": [
       {
         "item": "fakeplate",
         "label": "Fake Plate",
-        "price": "200"
+        "price": 250
       },
       {
         "item": "window_tint",
         "label": "Tint Folie",
-        "price": "60"
+        "price": 75
       },
       {
         "item": "nos",
         "label": "NOS",
-        "price": "50"
+        "price": 50
       }
     ]
   },

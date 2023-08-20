@@ -22,6 +22,9 @@ import {
 import { setVehicleEngineSound } from 'services/enginesounds';
 import { setVehicleAsVinScratched } from 'services/vinscratch';
 import { setVehicleDoorsLocked } from 'modules/keys/service.keys';
+import devModule from 'modules/dev/service.dev';
+import { startMissionEntityEnforcingThread } from 'services/missionentity';
+import { charModule } from './core';
 
 /**
  * Spawn a vehicle
@@ -43,14 +46,15 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   }
 
   // First we check model if model is vehicle on client
-  const modelCheckPlayer = +GetPlayerFromIndex(0);
+  // we use core to make sure player is loaded to avoid getting players in loadingscreen
+  const modelCheckPlayer = Object.keys(charModule.getAllPlayers())[0];
   if (!modelCheckPlayer) {
     mainLogger.error(`No players available to check model for 'spawnVehicle'`);
     return;
   }
 
   // We keep this RPC to check if model is valid even tho we dont really need to modeltype anymore if not using CREATE_VEHICLE_SERVER_SETTER
-  const modelType = await RPC.execute<string | undefined>('vehicles:getModelType', modelCheckPlayer, data.model);
+  const modelType = await RPC.execute<string | undefined>('vehicles:getModelType', +modelCheckPlayer, data.model);
   if (!modelType) {
     mainLogger.error(`Spawn vehicle: invalid model ${data.model}`);
     return;
@@ -76,6 +80,9 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     return;
   }
 
+  const vin = data.vin ?? vinManager.generateVin();
+  devModule.registerSpawnedVehicle(vehicle, vin);
+
   // CREATE_VEHICLE is an RPC native, first owner will ALWAYS be a player. If that owning ply is far away (450m) we wait a max of 500ms for the owner to change back to server
   const owner = NetworkGetEntityOwner(vehicle);
   if (Util.getPlyCoords(owner).distance(position) > 450) {
@@ -83,7 +90,6 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   }
 
   // setting vin
-  const vin = data.vin ?? vinManager.generateVin();
   vinManager.attachEntityToVin(vin, vehicle);
 
   // setting plate
@@ -140,6 +146,8 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   mainLogger.debug(
     `Spawned vehicle | model: ${data.model} | entity: ${vehicle} | netId: ${netId} | vin: ${vin} | plate: ${plate}`
   );
+
+  startMissionEntityEnforcingThread(vehicle);
 
   return {
     vehicle,
@@ -208,6 +216,7 @@ export const spawnOwnedVehicle = async (
 
 export const deleteVehicle = (veh: number) => {
   if (!DoesEntityExist(veh)) return;
+  devModule.unregisterSpawnedVehicle(veh);
   DeleteEntity(veh);
 };
 

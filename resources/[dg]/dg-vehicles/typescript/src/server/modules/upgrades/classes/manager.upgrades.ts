@@ -1,5 +1,5 @@
 import { Util, Inventory, Financials, Config, TaxIds, Sync, SQL } from '@dgx/server';
-import { TUNE_PARTS } from '@shared/upgrades/constants.upgrades';
+import { OVERRIDE_MODEL_STANDARD_EXTRA_UPGRADES, TUNE_PARTS } from '@shared/upgrades/constants.upgrades';
 import {
   generateBaseCosmeticUpgrades,
   generateBasePerformanceUpgrades,
@@ -141,7 +141,12 @@ class UpgradesManager extends Util.Singleton<UpgradesManager>() {
   };
 
   public doesModelHaveDefaultExtras = (model: string | number): boolean => {
-    const modelConfig = getConfigByModel(model);
+    const modelHash = typeof model === 'string' ? GetHashKey(model) >>> 0 : model;
+    if (OVERRIDE_MODEL_STANDARD_EXTRA_UPGRADES[modelHash] !== undefined) {
+      return OVERRIDE_MODEL_STANDARD_EXTRA_UPGRADES[modelHash];
+    }
+
+    const modelConfig = getConfigByModel(modelHash);
     if (!modelConfig) return false;
     if (modelConfig.type !== 'land') return true;
     return STANDARD_EXTRA_UPGRADES.includes(modelConfig.category);

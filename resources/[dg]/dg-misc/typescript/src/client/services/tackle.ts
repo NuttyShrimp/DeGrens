@@ -15,7 +15,7 @@ Events.onNet('misc:tackle:do', () => {
 const tackleInit = async () => {
   if (!canTackle()) return;
 
-  const closestPlayer = Util.getClosestPlayerInDistanceAndOutsideVehicle(2);
+  const closestPlayer = Util.getClosestPlayer({ range: 2, skipInVehicle: true });
   if (!closestPlayer) return;
 
   Events.emitNet('misc:tackle:server', GetPlayerServerId(closestPlayer));

@@ -57,7 +57,7 @@ RPC.register(
     if (!targetCid) return false;
 
     const wallet = cryptoManager.getWallet(Player.citizenid, data.coin) as CryptoWallet;
-    const success = await wallet.transfer(src, data.target, data.amount);
+    const success = await wallet.transfer(src, targetCid, data.amount);
     cryptoLogger.silly(`Callback: transfer: success: ${success}`);
     return success;
   }

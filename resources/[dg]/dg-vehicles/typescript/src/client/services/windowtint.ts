@@ -73,6 +73,7 @@ UI.RegisterUICallback('windowtint/apply', async (_, cb) => {
   const windowTint = upgradesManager.getByKeys(vehicle, ['windowTint'])?.windowTint;
   if (windowTint === undefined) return;
   Events.emitNet('vehicles:windowtint:save', windowTint);
+  originalWindowTint = null;
 
   cb({ data: {}, meta: { ok: true, message: '' } });
 });

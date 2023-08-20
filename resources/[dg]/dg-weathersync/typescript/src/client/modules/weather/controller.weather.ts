@@ -1,11 +1,7 @@
-import { freezeWeather, setGameWeather } from './service.weather';
+import { freezeWeather, setGlobalWeather } from './service.weather';
 
-AddStateBagChangeHandler(
-  'weather',
-  'global',
-  (bagName: string, keyName: string, weather: WeatherSync.WeatherStateBag) => {
-    setGameWeather(weather, weather.skipTransition);
-  }
-);
+AddStateBagChangeHandler('weather', 'global', (_: string, __: string, state: WeatherSync.WeatherStateBag) => {
+  setGlobalWeather(state.weather, state.skipTransition);
+});
 
 global.exports('freezeWeather', freezeWeather);

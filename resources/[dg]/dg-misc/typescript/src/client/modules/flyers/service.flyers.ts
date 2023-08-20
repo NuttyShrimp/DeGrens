@@ -12,7 +12,7 @@ export const openCreationMenu = async () => {
       {
         name: 'description',
         type: 'text',
-        label: 'Flyer description',
+        label: 'Flyer description (required)',
       },
       {
         name: 'info',

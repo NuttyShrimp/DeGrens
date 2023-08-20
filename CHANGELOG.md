@@ -13,6 +13,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.4.2]
+
+### Added
+
+- Extra hulpmiddelen toegevoegd om despawnen van voertuigen te onderzoeken
+- Mogelijkheid om tijd serverside te freezen
+- Politie kan nu mensen uit een voertuig trekken (mbv wapenstok)
+- Dice command heeft nu bijhorende animatie
+
+### Changed
+
+- Je kan racegordel aandoen/uittrekken nu annuleren
+- Prison zone vergroot om false alarms tegen te gaan
+- Methrun wordt nu gecanceled als voertuig niet meer bestaat
+- Reputatie requirements en prijzen van hogere carboost classes aangepast
+- Het voertuig model en klasse staat nu ook in de mail als je een boost contract start
+
+### Fixed
+
+- Pickup zones van benny-app order worden nu wel opgekuist
+- Reputatie van offline player kan nu wel veranderd worden
+- Racegordels checken nu of je na taskbar nog in voertuig zit
+- Clock op je telefoon veranderd nu niet meer naar 0 wanneer je in een huis/appartement zit
+- Flikkeren van skybox op bepaald moment van ingame dag is opgelost
+- Problemen opgelost ivm syncen van het weer
+- PostOP bus spawned nu met de juiste extras enabled
+- Je kan nu wel meerdere items tegelijk kopen in de Bennys App
+- Wapenupgrades op hopelijk alle voertuigen gedisabled
+- Probleem opgelost waardoor je geen crypto kon transferen
+- Windowtint reset niet langer wanneer je het applied
+- Imgur links zouden nu terug moeten werken voor flyers
+- Extra checks in apartment invite code om nil values in Player object tegen te gaan
+
 ## [1.4.1]
 
 ### Added

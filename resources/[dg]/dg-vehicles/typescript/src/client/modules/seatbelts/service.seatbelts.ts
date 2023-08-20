@@ -35,10 +35,11 @@ export const toggleSeatbelt = async () => {
   if (currentSeatbelt !== 'none') {
     if (currentSeatbelt === 'harness') {
       const [wasCanceled] = await Taskbar.create('person-seat-reclined', 'Taking off harness', 5000, {
-        canCancel: false,
+        canCancel: true,
         cancelOnDeath: true,
       });
       if (wasCanceled) return;
+      if (getCurrentVehicle() !== veh) return;
     }
 
     setCurrentSeatbelt('none');
@@ -50,10 +51,11 @@ export const toggleSeatbelt = async () => {
 
   if (uses > 0) {
     const [wasCanceled] = await Taskbar.create('person-seat-reclined', 'Putting on harness', 5000, {
-      canCancel: false,
+      canCancel: true,
       cancelOnDeath: true,
     });
     if (wasCanceled) return;
+    if (getCurrentVehicle() !== veh) return;
     Events.emitNet('vehicles:seatbelts:decreaseHarness', NetworkGetNetworkIdFromEntity(veh));
   }
 
