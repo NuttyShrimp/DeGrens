@@ -23,8 +23,11 @@ Events.onNet('misc:flyers:requestFlyer', async (src, link: string, description: 
     return;
   }
 
+  let strippedLink = new URL(link);
+  strippedLink.search = '';
+
   try {
-    const res = await axios.get(link, {
+    const res = await axios.get(strippedLink.toString(), {
       responseType: 'arraybuffer',
     });
     const imgBuffer = Buffer.from(res.data, 'utf-8');
@@ -33,7 +36,11 @@ Events.onNet('misc:flyers:requestFlyer', async (src, link: string, description: 
       Notifications.add(src, 'Deze link wijst niet naar een afbeelding!', 'error');
       return;
     }
-    await SQL.query('INSERT INTO flyer_request (cid, link, description) VALUES (?,?,?)', [cid, link, description]);
+    await SQL.query('INSERT INTO flyer_request (cid, link, description) VALUES (?,?,?)', [
+      cid,
+      strippedLink.toString(),
+      description,
+    ]);
     Notifications.add(src, 'Flyer requested!');
   } catch (e) {
     console.error(`Failed to fetch a flyer image`, e);
