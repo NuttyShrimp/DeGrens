@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enkele scuffed carboost voertuiglocaties verplaatst
 - Probleem opgelost waardoor synced objects soms terugkwamen na deze te deleten
 - Probleem opgelost waardoor je sommige plaatsbare items meerdere keren kan oppakken
+- Vinscratched autos worden nu wel uit maintenance fees gefiltered
 
 ## [1.4.2]
 
