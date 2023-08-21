@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Politie radar opent nu terug als je terug instapt en deze voorheen aan stond
 - Dispatch blips van eigen job zijn niet langer gegroepeerd
+- Sticky notification gaan altijd zichtbaar zijn, ook als je phone gemute is
 
 ### Fixed
 
@@ -28,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dispatch blips van mensen in helicopters werkt nu (hopelijk) wel goed
 - ANG reset niet meer na het heropenen van de tablet
 - Maintenance fees werken terug (Bedankt voor de reports hierover! :kapp:)
+- Recent called list is niet meer cursed AF
+- Timer van phone notifications die optelde werken nu terug treffelijk
 
 ## [1.4.2]
 

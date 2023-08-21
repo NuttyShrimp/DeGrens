@@ -195,7 +195,7 @@ export const addNotification = (
     list: [...s.list, notification as Phone.Notifications.Notification].sort(sortNotification),
   }));
   const phoneState = usePhoneStore.getState();
-  if (!phoneState.isSilent) {
+  if (!phoneState.isSilent || notification.sticky) {
     useVisibleStore.getState().toggleApp('phone', true);
     usePhoneStore.setState({
       animating: phoneState.animating === 'open' ? 'open' : 'peek',
@@ -203,20 +203,7 @@ export const addNotification = (
     });
   }
 
-  if (notification.sticky) return;
-  let cd = notification?.timer && notification.timer > 0 ? notification.timer * 1000 : 8000;
-  if ((notification.onAccept || notification.onDecline) && !((notification?.timer ?? 0) > 0)) {
-    cd = 30000;
-  }
-  if (notification.timer !== undefined) {
-    startNotificationTimer(notification.id, notification.timer);
-  }
-  setTimeout(() => {
-    removeNotification(notification.id);
-    if (notification?.onDecline) {
-      (notification.onDecline as Function)(notification._data);
-    }
-  }, cd);
+  initNotificationTimerLogic(notification);
 };
 
 export const removeNotification = (id: string) => {
@@ -289,6 +276,30 @@ export const updateNotification = (id: string, notification: Partial<Phone.Notif
   usePhoneNotiStore.setState({
     list: notificationList.sort(sortNotification),
   });
+
+  if (notification.timer !== undefined) {
+    initNotificationTimerLogic(notificationList[index]);
+  }
+};
+
+const initNotificationTimerLogic = (
+  notification: Omit<Phone.Notifications.Notification, 'icon'> & { icon: string | Phone.Notifications.Icon }
+) => {
+  if (notification.timer !== undefined) {
+    startNotificationTimer(notification.id, notification.timer);
+  }
+
+  if (notification.sticky) return;
+  let cd = notification?.timer && notification.timer > 0 ? notification.timer * 1000 : 8000;
+  if ((notification.onAccept || notification.onDecline) && !((notification?.timer ?? 0) > 0)) {
+    cd = 30000;
+  }
+  setTimeout(() => {
+    removeNotification(notification.id);
+    if (notification?.onDecline) {
+      (notification.onDecline as Function)(notification._data);
+    }
+  }, cd);
 };
 
 const startNotificationTimer = (id: string, timer: number) => {

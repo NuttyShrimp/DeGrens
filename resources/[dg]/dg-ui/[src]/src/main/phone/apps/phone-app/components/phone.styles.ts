@@ -2,10 +2,11 @@ import { makeStyles } from '@mui/styles';
 
 export const styles = makeStyles({
   list: {
+    paddingTop: '.5vh',
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    justifyContent: 'center',
+    overflow: 'auto',
   },
   dialerRoot: {
     display: 'flex',
