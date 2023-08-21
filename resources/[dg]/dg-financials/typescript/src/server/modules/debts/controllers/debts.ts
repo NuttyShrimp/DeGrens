@@ -19,12 +19,7 @@ global.exports(
     debtManager.addDebt(cid, target_account, fine, reason, origin_name, metadata);
   }
 );
-global.exports(
-  'addMaintentenanceFee',
-  (cid: number, target_account: string, fine: number, reason: string, origin_name: string) => {
-    debtManager.addDebt(cid, target_account, fine, reason, origin_name, undefined, 'maintenance');
-  }
-);
+
 global.exports('removeMaintenanceFees', (src: number) => removeMaintenanceFees(src));
 global.asyncExports('removeDebt', async (debtId: number | number[]) => {
   if (!Array.isArray(debtId)) {

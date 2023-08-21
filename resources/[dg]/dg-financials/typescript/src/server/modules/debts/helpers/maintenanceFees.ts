@@ -93,9 +93,15 @@ const registerMaintenanceFees = async () => {
   const fees = await calculateMaintenceFees();
 
   // Check if fees for debts[].reason exist
-  const feeIds = await SQL.query('SELECT id FROM debts WHERE reason IN (?)', [fees.map(f => f.reason).join(',')]);
+  const feeIds = await SQL.query('SELECT id FROM debts WHERE reason IN (?) AND type = "maintenance"', [
+    fees.map(f => f.reason).join(','),
+  ]);
   if (feeIds > 0) {
     await debtManager.removeDebts(feeIds);
+  }
+
+  for (const fee of fees) {
+    debtManager.addDebt(fee.cid, fee.target_account, fee.debt, fee.reason, fee.origin, undefined, 'maintenance');
   }
 
   await SQL.query(`
