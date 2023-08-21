@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Politie radar opent nu terug als je terug instapt en deze voorheen aan stond
+
 ### Fixed
 
 - Enkele scuffed carboost voertuiglocaties verplaatst

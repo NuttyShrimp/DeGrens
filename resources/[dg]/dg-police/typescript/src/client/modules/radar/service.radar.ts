@@ -2,7 +2,8 @@ import { Util, UI, Notifications, RPC, Sounds, Events } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { isPoliceVehicle } from '@shared/services/vehicles';
 
-let radarActive = false;
+let radarEnabled = false; // Keeps key state, does not reflect actual radar visiblity
+let radarActive = false; // Reflects visiblity state of radar
 let radarThread: NodeJS.Timer | null = null;
 
 let lockedPlate: string | null = null;
@@ -12,7 +13,6 @@ const activeData = {
   topSpeed: 0,
   plate: '--------',
   flagged: false,
-  locked: false,
   veh: 0,
 };
 
@@ -23,28 +23,45 @@ const updateDataToUI = () => {
   UI.SendAppEvent('policeradar', { ...activeData, locked });
 };
 
+export const isRadarEnabled = () => radarEnabled;
+export const setRadarEnabled = (enabled: boolean) => {
+  const success = setRadarActive(enabled);
+  if (!success) return;
+
+  radarEnabled = enabled;
+};
+
 export const isRadarActive = () => radarActive;
-export const setRadarActive = (active: boolean) => {
-  if (active) {
-    const vehicle = GetVehiclePedIsIn(PlayerPedId(), false);
-    if (vehicle === 0) {
-      Notifications.add('Je zit niet in een voertuig', 'error');
-      return;
-    }
-    if (!isPoliceVehicle(vehicle)) {
-      Notifications.add('Dit is geen politievoertuig', 'error');
-      return;
-    }
-    if (!GetIsVehicleEngineRunning(vehicle)) {
-      Notifications.add('De motor staat niet aan', 'error');
-      return;
-    }
-    startRadarThread();
-    radarActive = true;
-  } else {
+export const setRadarActive = (active: boolean, skipNotifications = false) => {
+  if (!active) {
     clearRadarThread();
     radarActive = false;
+    return true;
   }
+
+  const vehicle = GetVehiclePedIsIn(PlayerPedId(), false);
+  if (!vehicle || !DoesEntityExist(vehicle)) {
+    if (!skipNotifications) {
+      Notifications.add('Je zit niet in een voertuig', 'error');
+    }
+    return false;
+  }
+  if (!isPoliceVehicle(vehicle)) {
+    if (!skipNotifications) {
+      Notifications.add('Dit is geen politievoertuig', 'error');
+    }
+    return false;
+  }
+  if (!GetIsVehicleEngineRunning(vehicle)) {
+    if (!skipNotifications) {
+      Notifications.add('De motor staat niet aan', 'error');
+    }
+    return false;
+  }
+
+  startRadarThread();
+  radarActive = true;
+  return true;
 };
 
 const clearRadarThread = () => {
