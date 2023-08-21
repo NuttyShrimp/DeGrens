@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Gebruiken van kogelbewijsmateriaal kopieert de serienummer nu naar je clipboard
+
 ### Changed
 
 - Politie radar opent nu terug als je terug instapt en deze voorheen aan stond
