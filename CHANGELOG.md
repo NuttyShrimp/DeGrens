@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Probleem opgelost waardoor je sommige plaatsbare items meerdere keren kan oppakken
 - Vinscratched autos worden nu wel uit maintenance fees gefiltered
 - Probleem opgelost waardoor politie cufflogs altijd leeg waren
+- VIN van nieuwe voertuigen wordt nu correct gevalidate
 
 ## [1.4.2]
 
