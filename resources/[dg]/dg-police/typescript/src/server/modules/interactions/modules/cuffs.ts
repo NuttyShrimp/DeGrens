@@ -5,7 +5,7 @@ import { forceStopInteractions, isPlayerInActiveInteraction } from '../service.i
 // Key: server id
 const cuffedPlayers = new Map<number, Police.CuffType>();
 // Key: cid
-const cuffLogs = new Map<number, { time: number; name: string }[]>();
+const cuffLogs = new Map<number, { time: string; name: string }[]>();
 
 const playersInCuffAction = new Set<number>();
 
@@ -31,11 +31,16 @@ const setCuffState = async (plyId: number, state: Police.CuffType | null, replic
 const insertCuffLog = async (cuffedPlayer: number, cuffingPlayer: number) => {
   if (Jobs.getCurrentJob(cuffingPlayer) !== 'police') return;
 
-  const cid = Util.getCID(cuffedPlayer);
-  const name = await Util.getCharName(Util.getCID(cuffingPlayer));
-  const logs = cuffLogs.get(cid) ?? [];
-  logs.push({ time: Date.now(), name });
-  cuffLogs.set(cid, logs);
+  const cuffedCid = Util.getCID(cuffedPlayer);
+  const cuffingCid = Util.getCID(cuffingPlayer);
+  const name = await Util.getCharName(cuffingCid);
+  const logs = cuffLogs.get(cuffedCid) ?? [];
+  const date = new Date();
+  logs.push({
+    name,
+    time: `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`,
+  });
+  cuffLogs.set(cuffedCid, logs);
 };
 
 global.exports('isCuffed', isPlayerCuffed);
@@ -89,7 +94,7 @@ Events.onNet('police:interactions:tryToCuff', async (src: number, target: number
       Util.Log(
         'police:interactions:uncuff',
         { target, newCuffState },
-        `${Util.getName(src)}(${src}) has uncuffed a player once`,
+        `${Util.getName(src)}(${src}) has uncuffed ${Util.getName(target)}(${target}) once`,
         src
       );
       return;
@@ -116,7 +121,12 @@ Events.onNet('police:interactions:tryToCuff', async (src: number, target: number
 
     setCuffState(target, 'hard');
     insertCuffLog(target, src);
-    Util.Log('police:interactions:cuff', { target }, `${Util.getName(src)}(${src}) has cuffed a player`, src);
+    Util.Log(
+      'police:interactions:cuff',
+      { target },
+      `${Util.getName(src)}(${src}) has cuffed ${Util.getName(target)}(${target})`,
+      src
+    );
   }, timeout);
 });
 
@@ -129,7 +139,7 @@ Events.onNet('police:interactions:showCuffLogs', (src: number) => {
     return;
   }
 
-  const targetCid = Util.getCID(src);
+  const targetCid = Util.getCID(closestPlayer);
   const logs = cuffLogs.get(targetCid) ?? [];
   const menu: ContextMenu.Entry[] = [
     {
@@ -140,11 +150,10 @@ Events.onNet('police:interactions:showCuffLogs', (src: number) => {
   ];
 
   logs.forEach(log => {
-    const date = new Date(log.time);
     menu.push({
       title: log.name,
       disabled: true,
-      description: `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`,
+      description: log.time,
     });
   });
 
