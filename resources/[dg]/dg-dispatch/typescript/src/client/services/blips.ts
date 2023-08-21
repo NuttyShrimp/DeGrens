@@ -1,4 +1,4 @@
-import { BlipManager, Sync } from '@dgx/client';
+import { BlipManager, Jobs, Sync } from '@dgx/client';
 
 const playersWithBlips = new Set<number>();
 let blipsEnabled = false;
@@ -6,12 +6,13 @@ let blipsEnabled = false;
 export const areBlipsEnabled = () => blipsEnabled;
 
 const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
+  const ownJob = Jobs.getCurrentJob().name;
   if (info.job === 'police') {
     return {
       color: 3,
       heading: true,
       text: info.text,
-      category: 10,
+      category: ownJob === 'police' ? 7 : 10,
     };
   }
   if (info.job === 'ambulance') {
@@ -19,7 +20,7 @@ const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
       color: 23,
       heading: true,
       text: info.text,
-      category: 11,
+      category: ownJob === 'ambulance' ? 7 : 11,
     };
   }
   return {};
