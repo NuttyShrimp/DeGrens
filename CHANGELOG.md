@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VIN van nieuwe voertuigen wordt nu correct gevalidate
 - Juwelier reset nu wel als politie de deuren opent
 - Dispatch blips van mensen in helicopters werkt nu (hopelijk) wel goed
+- ANG reset niet meer na het heropenen van de tablet
 
 ## [1.4.2]
 
