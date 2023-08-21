@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vinscratched autos worden nu wel uit maintenance fees gefiltered
 - Probleem opgelost waardoor politie cufflogs altijd leeg waren
 - VIN van nieuwe voertuigen wordt nu correct gevalidate
+- Juwelier reset nu wel als politie de deuren opent
 
 ## [1.4.2]
 

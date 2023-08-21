@@ -309,11 +309,11 @@ export class JewelryManager implements Heists.TypeManager {
     );
 
     if (this.state.alarmOverridden) {
-      this.awaitingEmptyLocation = true;
       this.log(plyId, 'info', 'hackedLaptop', `has opened jewelry doors when alarm was overridden`);
       return;
     }
 
+    this.awaitingEmptyLocation = true;
     this.sendMail(plyId, `De code die je nodig zal hebben is '${this.pinCode}'`);
 
     const doorOpenTime = config.jewelry.doorOpenTime;
@@ -441,13 +441,12 @@ export class JewelryManager implements Heists.TypeManager {
 
     if (this.emptyLocationTimeout) clearTimeout(this.emptyLocationTimeout);
 
-    const timeout = config.jewelry.emptyLocationRequirementTime;
     this.emptyLocationTimeout = setTimeout(
       () => {
         this.emptyLocationTimeout = null;
         this.startResetTimeout();
       },
-      timeout * 60 * 1000
+      config.jewelry.emptyLocationRequirementTime * 60 * 1000
     );
   };
 
