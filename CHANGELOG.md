@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Politie radar opent nu terug als je terug instapt en deze voorheen aan stond
+- Dispatch blips van eigen job zijn niet langer gegroepeerd
 
 ### Fixed
 
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Probleem opgelost waardoor politie cufflogs altijd leeg waren
 - VIN van nieuwe voertuigen wordt nu correct gevalidate
 - Juwelier reset nu wel als politie de deuren opent
+- Dispatch blips van mensen in helicopters werkt nu (hopelijk) wel goed
 
 ## [1.4.2]
 

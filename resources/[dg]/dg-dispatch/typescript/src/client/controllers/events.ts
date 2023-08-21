@@ -16,26 +16,25 @@ UI.onLoad(() => {
   seedUICams();
 });
 
-BaseEvents.onEnteredVehicle((vehicle, seat) => {
+BaseEvents.onEnteredVehicle(vehicle => {
   if (!areBlipsEnabled()) return;
 
   const vehicleClass = GetVehicleClass(vehicle);
-  if (vehicleClass !== 15 || (seat !== -1 && seat !== 0)) return;
+  if (vehicleClass !== 15) return;
 
   Events.emitNet('dg-dispatch:updateBlipSprite', 43);
 });
 
-BaseEvents.onLeftVehicle((vehicle, seat) => {
+BaseEvents.onLeftVehicle(vehicle => {
   if (!areBlipsEnabled()) return;
 
   const vehicleClass = GetVehicleClass(vehicle);
-  if (vehicleClass !== 15 || (seat !== -1 && seat !== 0)) return;
+  if (vehicleClass !== 15) return;
 
-  Events.emitNet('dg-dispatch:updateBlipSprite', 0);
+  Events.emitNet('dg-dispatch:updateBlipSprite', 1);
 });
 
-on('onResourceStop', (res: string) => {
-  if (res !== GetCurrentResourceName()) return;
+BaseEvents.onResourceStop(() => {
   UI.SendAppEvent('dispatch', {
     action: 'addCalls',
     calls: [],

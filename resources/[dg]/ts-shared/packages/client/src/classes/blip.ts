@@ -124,6 +124,9 @@ export class EntityBlip {
 
     if (this.handle && DoesBlipExist(this.handle)) {
       SetBlipSprite(this.handle, sprite);
+      if (this.settings.color !== undefined) {
+        SetBlipColour(this.handle, this.settings.color);
+      }
     }
   }
 

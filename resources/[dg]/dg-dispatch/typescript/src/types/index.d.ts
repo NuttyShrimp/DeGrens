@@ -34,6 +34,7 @@ declare namespace Dispatch {
   interface BlipInfo {
     text: string;
     job: string;
+    sprite?: number;
   }
 
   namespace Cams {

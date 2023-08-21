@@ -7,23 +7,29 @@ export const areBlipsEnabled = () => blipsEnabled;
 
 const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
   const ownJob = Jobs.getCurrentJob().name;
-  if (info.job === 'police') {
-    return {
-      color: 3,
-      heading: true,
-      text: info.text,
-      category: ownJob === 'police' ? 7 : 10,
-    };
+
+  const settings: NBlip.Settings = {
+    heading: true,
+    text: info.text,
+    sprite: info.sprite ?? 1,
+  };
+
+  switch (info.job) {
+    case 'police':
+      settings.color = 3;
+      if (ownJob !== 'police') {
+        settings.category = 10;
+      }
+      break;
+    case 'ambulance':
+      settings.color = 7;
+      if (ownJob !== 'police') {
+        settings.category = 11;
+      }
+      break;
   }
-  if (info.job === 'ambulance') {
-    return {
-      color: 23,
-      heading: true,
-      text: info.text,
-      category: ownJob === 'ambulance' ? 7 : 11,
-    };
-  }
-  return {};
+
+  return settings;
 };
 
 const addBlip = (plyId: number, info: Dispatch.BlipInfo) => {

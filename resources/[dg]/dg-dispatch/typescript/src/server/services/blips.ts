@@ -2,7 +2,8 @@ import { Events, Jobs } from '@dgx/server';
 import { charModule } from 'helpers/core';
 
 let blipPlys: number[] = [];
-let disabledPlys: Set<number> = new Set();
+const disabledPlys: Set<number> = new Set();
+const overrideSprites = new Map<number, number>();
 
 export const syncBlips = () => {
   const policePlys = Jobs.getPlayersForJob('police');
@@ -24,6 +25,7 @@ export const syncBlips = () => {
     blipInfo[ply] = {
       job,
       text: `${jobLabel} | [${player.metadata.callsign}] - ${plyName}`,
+      sprite: overrideSprites.get(ply),
     };
   });
   blipPlys.forEach(ply => {
@@ -36,6 +38,7 @@ export const syncBlips = () => {
 };
 
 export const updateSprite = (src: number, sprite: number) => {
+  overrideSprites.set(src, sprite);
   blipPlys.forEach(ply => {
     Events.emitNet('dispatch:updateSprite', ply, src, sprite);
   });
