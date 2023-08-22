@@ -123,8 +123,8 @@ class Gangs {
     return global.exports['dg-gangs'].removeGang(name);
   };
 
-  public addMemberToGang = (name: string, targetCid: number): Promise<boolean> => {
-    return global.exports['dg-gangs'].addMemberToGang(name, targetCid);
+  public addMemberToGang = (triggerServerId: number, name: string, targetCid: number): Promise<boolean> => {
+    return global.exports['dg-gangs'].addMemberToGang(triggerServerId, name, targetCid);
   };
 }
 

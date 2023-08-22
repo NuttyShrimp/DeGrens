@@ -38,7 +38,7 @@ export const addMemberToGang: CommandData = {
       return;
     }
 
-    const success = await Gangs.addMemberToGang(gangName, targetCid);
+    const success = await Gangs.addMemberToGang(caller.source, gangName, targetCid);
     Notifications.add(
       caller.source,
       success ? 'Persoon toegevoegd aan gang' : 'Kon persoon niet toevoegen aan gang',
