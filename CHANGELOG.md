@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Gebruiken van kogelbewijsmateriaal kopieert de serienummer nu naar je clipboard
+- Staff kan nu actieve boosts cancellen bij scuff om Suliro en reputation te refunden
 
 ### Changed
 

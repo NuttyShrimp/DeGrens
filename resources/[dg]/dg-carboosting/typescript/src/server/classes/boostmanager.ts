@@ -3,9 +3,12 @@ import winston from 'winston';
 import Boost from './boost';
 import config, { getLocationsForClass } from 'helpers/config';
 import { Jobs, Notifications, Util } from '@dgx/server';
-import { DGXEvent, EventListener, LocalEvent } from '@dgx/server/src/decorators';
+import { DGXEvent, EventListener, LocalEvent, ExportDecorators } from '@dgx/server/src/decorators';
+
+const { Export, ExportRegister } = ExportDecorators<'carboosting'>();
 
 @EventListener()
+@ExportRegister()
 class BoostManager {
   private readonly logger: winston.Logger;
   private nextBoostId: number;
@@ -195,6 +198,15 @@ class BoostManager {
   public finishAllBoosts = () => {
     this.boosts.forEach(b => b.finish());
   };
+
+  @Export('adminCancelBoost')
+  private _adminCancelBoost(cid: number) {
+    const group = Jobs.getGroupByCid(cid);
+    if (!group) return;
+    const boost = this.getBoostByGroupId(group.id);
+    if (!boost) return;
+    boost.finish('Admin Cancel');
+  }
 }
 
 const boostManager = new BoostManager();
