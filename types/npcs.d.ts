@@ -32,6 +32,7 @@ declare namespace NPCs {
       movement?: number; // https://docs.fivem.net/natives/?_0x4D9CA1009AFBD057 DEFAULT = 2
       range?: number; // https://docs.fivem.net/natives/?_0x3C606747B23E497B DEFAULT = 2
     };
+    doCombatTaskOnSpawn?: boolean; // DEFAULT = TRUE
     onDeath?: () => void;
   };
 }
