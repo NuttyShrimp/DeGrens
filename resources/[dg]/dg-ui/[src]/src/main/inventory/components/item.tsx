@@ -43,6 +43,12 @@ export const Item: FC<{ itemId: string; cellSize: number }> = ({ itemId, cellSiz
         if (itemState.amount === undefined) return true;
         return itemState.amount > 0;
       },
+      end: (i, monitor) => {
+        if (monitor.didDrop()) return;
+        // if did not drop, it means was released outside dropzone
+        // if that happens we manually reset rotation to originalRotaito
+        toggleItemRotation(i.id, i.originalRotated);
+      },
     }),
     [itemState.amount, itemState.rotated, holdingSelector]
   );

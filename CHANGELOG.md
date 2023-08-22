@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maintenance fees werken terug (Bedankt voor de reports hierover! :kapp:)
 - Recent called list is niet meer cursed AF
 - Timer van phone notifications die optelde werken nu terug treffelijk
+- Items resetten nu terug naar originele rotatie wanneer je ze loslaat buiten de toegestane grid
 
 ## [1.4.2]
 
