@@ -1,4 +1,4 @@
-import { Events, UI } from '@dgx/client';
+import { Events, Notifications, UI } from '@dgx/client';
 
 export const openCreationMenu = async () => {
   const fields = await UI.openInput<{ image: string; description: string }>({
@@ -24,11 +24,11 @@ export const openCreationMenu = async () => {
     ],
   });
 
-  if (!fields.accepted || !fields.values?.image?.length || !fields.values?.description?.length) {
+  if (!fields.accepted) return;
+  if (!fields.values?.image?.length || !fields.values?.description?.length) {
+    Notifications.add('Je hebt niet alle velden ingevuld', 'error');
     return;
   }
 
   Events.emitNet('misc:flyers:requestFlyer', fields.values.image, fields.values.description);
 };
-
-export const openList = async () => {};
