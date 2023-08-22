@@ -162,7 +162,9 @@ asyncExports('requestClientMinioScreenshot', async (player: string | number, met
         throw Error(err || 'unknown error');
       }
 
-      await minioClient.putObject(MINIO_BUCKET_ID, `${date}/${fileName}`, fBuffer!);
+      await minioClient.putObject(MINIO_BUCKET_ID, `${date}/${fileName}`, fBuffer!, {
+        'Content-Type': 'image/png',
+      });
       const filePath = `https://minioserver.nuttyshrimp.me/dg-image-storage/${date}/${fileName}`;
       res(filePath);
     };
