@@ -34,7 +34,7 @@ Events.onNet('hospital:down:playerDied', async (src: number, cause: string, kill
       killerName,
       timeOfDead,
     },
-    `${Util.getName(src)}(${src}) has died by ${killerName}${killer} (${cause})`,
+    `${Util.getName(src)}(${src}) has died by ${killerName}(${killer}) | Cause: (${cause})`,
     src
   );
 });
