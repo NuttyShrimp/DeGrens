@@ -19,8 +19,8 @@ class Weather {
     return global.exports['dg-weathersync'].getWeatherTypes();
   };
 
-  public setCurrentWeather = (type: string) => {
-    global.exports['dg-weathersync'].setCurrentWeather(type);
+  public setCurrentWeather = (type: string, skipTransition: boolean) => {
+    global.exports['dg-weathersync'].setCurrentWeather(type, skipTransition);
   };
 
   public getCurrentWeather = (): number => {

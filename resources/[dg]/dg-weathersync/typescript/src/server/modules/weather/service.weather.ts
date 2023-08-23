@@ -81,7 +81,7 @@ const getStartType = () => {
   return enabledTypes[Math.floor(Math.random() * enabledTypes.length)];
 };
 
-export const overideCurrentWeather = (type: string) => {
+export const overideCurrentWeather = (type: string, skipTransition: boolean) => {
   if (!(type in WEATHERS)) {
     console.error(`${type} is not a valid weathertype`);
     return;
@@ -89,7 +89,7 @@ export const overideCurrentWeather = (type: string) => {
 
   const { weather, duration } = buildWeatherData(type as WeatherSync.Type);
 
-  setCurrentWeather(weather);
+  setCurrentWeather(weather, skipTransition);
 
   clearTimeout(scheduledChange);
   scheduleWeatherChange(duration);

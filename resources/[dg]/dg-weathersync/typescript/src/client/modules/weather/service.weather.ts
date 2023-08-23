@@ -35,22 +35,20 @@ export const freezeWeather = (freeze: boolean, type?: WeatherSync.Type) => {
 const setGameWeather = async (weather: WeatherSync.Weather, skipTransition = false) => {
   if (changeResolver !== null) {
     changeResolver(false);
-    console.log('Canceling change');
   }
 
   if (currentWeather.type !== weather.type) {
-    if (!skipTransition) {
-      SetWeatherTypeOvertimePersist(weather.type, TRANSITION_TIME);
+    const transitionTime = skipTransition ? 1 : TRANSITION_TIME;
+    SetWeatherTypeOvertimePersist(weather.type, transitionTime);
 
-      const continueChange = await new Promise<boolean>(res => {
-        changeResolver = res;
-        setTimeout(() => {
-          res(true);
-        }, TRANSITION_TIME * 1000);
-      });
-      changeResolver = null;
-      if (!continueChange) return;
-    }
+    const continueChange = await new Promise<boolean>(res => {
+      changeResolver = res;
+      setTimeout(() => {
+        res(true);
+      }, transitionTime * 1000);
+    });
+    changeResolver = null;
+    if (!continueChange) return;
 
     ClearOverrideWeather();
     SetWeatherTypePersist(weather.type);

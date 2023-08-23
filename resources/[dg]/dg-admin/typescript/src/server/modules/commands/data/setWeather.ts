@@ -3,6 +3,7 @@ import { Inputs } from '../../../enums/inputs';
 
 interface SetWeatherData {
   WeatherType: UI.Weather;
+  skipTransition?: boolean;
 }
 
 export const setWeather: CommandData = {
@@ -19,12 +20,13 @@ export const setWeather: CommandData = {
       return;
     }
 
-    Weather.setCurrentWeather(args.WeatherType.name);
+    Weather.setCurrentWeather(args.WeatherType.name, !!args.skipTransition);
   },
   UI: {
     title: 'Set Weather',
     info: {
       inputs: [Inputs.Weather],
+      checkBoxes: ['skipTransition'],
     },
   },
 };
