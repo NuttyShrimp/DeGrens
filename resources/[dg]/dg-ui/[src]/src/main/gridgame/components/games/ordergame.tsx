@@ -43,18 +43,22 @@ export const OrderGame: FC<Gridgame.OrderGameData & Gridgame.GameComponentProps>
         })
       );
 
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setCurrentPhase('input');
       }, props.displayTime * 1000);
-      return;
+      return () => {
+        clearTimeout(timeout);
+      };
     }
 
     if (currentPhase === 'input') {
       setLabelsVisible(false);
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setTimedOut(cycle);
       }, props.inputTime * 1000);
-      return;
+      return () => {
+        clearTimeout(timeout);
+      };
     }
   }, [currentPhase]);
 

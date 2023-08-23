@@ -40,9 +40,12 @@ export const VisionGame: FC<Gridgame.VisionGameData & Gridgame.GameComponentProp
         data: { cantClick: c.type === 'color' || c.type === 'active' },
       }))
     );
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setTimedOut(true);
     }, props.time * 1000);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [puzzle]);
 
   useEffect(() => {

@@ -35,7 +35,7 @@ export const SequenceGame: FC<Gridgame.SequenceGameData & Gridgame.GameComponent
 
     const showNext = displaySequenceItem !== props.length - 1;
 
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setCellKey(sequence[displaySequenceItem], 'active', false);
       if (showNext) {
         setDisplaySequenceItem(displaySequenceItem + 1);
@@ -46,6 +46,9 @@ export const SequenceGame: FC<Gridgame.SequenceGameData & Gridgame.GameComponent
         }, props.inputTime * 1000);
       }
     }, 750);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [displaySequenceItem]);
 
   useEffect(() => {

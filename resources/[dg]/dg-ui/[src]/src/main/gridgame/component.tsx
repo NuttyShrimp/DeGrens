@@ -61,7 +61,7 @@ const Component: AppFunction = props => {
         color: success ? baseStyle.primary.normal : baseStyle.tertiary.dark,
       });
       setTimeout(() => {
-        nuiAction('gridgame/finished', { id: id, success });
+        nuiAction('gridgame/finished', { id, success });
         closeApplication('gridgame');
       }, 3000);
     },
@@ -82,6 +82,21 @@ const Component: AppFunction = props => {
         return null;
     }
   }, [active]);
+
+  const handleKeyPress = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key !== 'Escape' || infoDisplay !== null) return;
+      finishGame(false);
+    },
+    [infoDisplay]
+  );
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   return (
     <AppWrapper appName={config.name} onShow={handleShow} onHide={handleHide} full center>
