@@ -59,11 +59,12 @@ const setGameWeather = async (weather: WeatherSync.Weather, skipTransition = fal
   SetWindSpeed(weather.windSpeed);
   SetWindDirection(weather.windDirection);
 
-  if (weather.rainLevel !== undefined) {
-    SetRainLevel(weather.rainLevel);
-  } else {
-    SetRainLevel(-1);
-  }
+  // TODO: Investigate why this always creates wet clothes and puddle noises in dry weather
+  // if (weather.rainLevel !== undefined) {
+  //   SetRainLevel(weather.rainLevel);
+  // } else {
+  //   SetRainLevel(-1);
+  // }
 
   currentWeather = weather;
 };

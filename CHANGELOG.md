@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Timer van phone notifications die optelde werken nu terug treffelijk
 - Items resetten nu terug naar originele rotatie wanneer je ze loslaat buiten de toegestane grid
 - Je kan weer flyers aanvragen
+- Tijdelijk rainlevels gedisabled om wetness van kledij/puddle noises te fixen
 
 ## [1.4.2]
 
