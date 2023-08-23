@@ -47,6 +47,11 @@ if (GetCurrentResourceName() === 'ts-shared') {
   Events.onNet('dgx:deleteEntity', (plyId, netId: number) => {
     const entity = NetworkGetEntityFromNetworkId(netId);
     if (!entity || !DoesEntityExist(entity)) return;
-    DeleteEntity(entity);
+
+    if (GetEntityType(entity) === 2) {
+      Vehicles.deleteVehicle(entity);
+    } else {
+      DeleteEntity(entity);
+    }
   });
 }

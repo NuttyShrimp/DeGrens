@@ -1,3 +1,4 @@
+import { Vehicles } from '@dgx/server';
 import { BLACKLISTED_MODELS } from '../constants';
 
 const isModelBlacklisted = (entity: number) => {
@@ -21,5 +22,10 @@ on('entityCreating', (entity: number) => {
 on('entityCreated', (entity: number) => {
   const blacklisted = isModelBlacklisted(entity);
   if (!blacklisted) return;
-  DeleteEntity(entity);
+
+  if (GetEntityType(entity) === 2) {
+    Vehicles.deleteVehicle(entity);
+  } else {
+    DeleteEntity(entity);
+  }
 });

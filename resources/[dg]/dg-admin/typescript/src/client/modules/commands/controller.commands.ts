@@ -31,7 +31,7 @@ on('admin:commands:deleteEntity', (ent: number) => {
     DeleteEntity(ent);
     return;
   }
-  Events.emitNet('admin:server:deleteEntity', NetworkGetNetworkIdFromEntity(ent));
+  Util.deleteEntity(ent);
 });
 on('admin:commands:toggleFreezeEntity', (ent: number) => {
   const entity = Number(ent);
@@ -260,8 +260,11 @@ Events.onNet('admin:commands:addEventBlip', (coords: Vec3, time: number) => {
   AddTextComponentString('Evenement');
   EndTextCommandSetBlipName(blip);
 
-  setTimeout(() => {
-    if (!DoesBlipExist(blip)) return;
-    RemoveBlip(blip);
-  }, time * 60 * 1000);
+  setTimeout(
+    () => {
+      if (!DoesBlipExist(blip)) return;
+      RemoveBlip(blip);
+    },
+    time * 60 * 1000
+  );
 });
