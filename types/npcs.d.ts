@@ -25,14 +25,14 @@ declare namespace NPCs {
     weapon?: string | number;
     criticalHits?: boolean; // DEFAULTS = TRUE
     deleteTime?: {
-      dead?: number; // DEFAULT = 60 SECONDS
-      alive?: number; // DEFAULT = 600 SECONDS
+      dead?: number; // DEFAULT = 10 SECONDS
+      alive?: number; // DEFAULT = 300 SECONDS
     };
     combat?: {
       movement?: number; // https://docs.fivem.net/natives/?_0x4D9CA1009AFBD057 DEFAULT = 2
       range?: number; // https://docs.fivem.net/natives/?_0x3C606747B23E497B DEFAULT = 2
     };
     doCombatTaskOnSpawn?: boolean; // DEFAULT = TRUE
-    onDeath?: () => void;
+    onDeath?: (killerServerId?: number) => void; // DEFAULT = -1
   };
 }

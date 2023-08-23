@@ -1,5 +1,3 @@
-import { Events } from '@dgx/client';
-
 export const setupGuard = (ped: number, guardId: string, guardData: NPCs.Guard) => {
   SetPedRelationshipGroupHash(ped, GetHashKey('ATTACK_ALL_PLAYERS'));
   SetPedDropsWeaponsWhenDead(ped, false);
@@ -29,21 +27,4 @@ export const setupGuard = (ped: number, guardId: string, guardData: NPCs.Guard) 
   if (doCombatTaskOnSpawn) {
     TaskCombatPed(ped, PlayerPedId(), 0, 16);
   }
-
-  startDeathCheck(ped, guardId);
-};
-
-export const startDeathCheck = (ped: number, guardId: string) => {
-  const deathThread = setInterval(() => {
-    if (!DoesEntityExist(ped)) {
-      Events.emitNet('npcs:guards:transferDeathCheck', guardId);
-      clearInterval(deathThread);
-      return;
-    }
-
-    if (IsPedInjured(ped)) {
-      Events.emitNet('npcs:guards:died', guardId);
-      clearInterval(deathThread);
-    }
-  }, 500);
 };
