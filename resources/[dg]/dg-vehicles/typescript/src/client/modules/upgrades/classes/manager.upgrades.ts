@@ -32,6 +32,7 @@ class UpgradesManager extends Util.Singleton<UpgradesManager>() {
     SetVehicleModKit(vehicle, 0);
 
     for (const [key, value] of Object.entries(upgrades) as ObjEntries<Vehicles.Upgrades.Upgrades>) {
+      if (value == undefined) continue; // Partial<T> still allows setting a key to undefined so we need to catch that
       this.setByKey(vehicle, key, value, true);
     }
   };

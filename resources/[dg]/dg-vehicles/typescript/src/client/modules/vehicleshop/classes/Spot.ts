@@ -67,7 +67,7 @@ export class Spot {
     this.vehicle = await spawnLocalVehicle({
       model: modelToSpawn,
       position: { w: this.heading, ...this.position },
-      plate: `PDMSPOT${this.id}`,
+      plate: `PDMSPOT${this.id + 1}`,
       doorLockState: 3,
       invincible: true,
       frozen: true,

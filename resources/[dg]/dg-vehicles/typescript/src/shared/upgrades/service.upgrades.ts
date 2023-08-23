@@ -21,11 +21,13 @@ const RANDOM_COLORS = [
   102,
 ];
 
-export const generateBaseCosmeticUpgrades = (
-  randomColor = false,
+export const generateBaseCosmeticUpgrades: {
+  (includePrimaryColor: true, enableExtras?: boolean): Vehicles.Upgrades.Cosmetic.Upgrades;
+  (includePrimaryColor?: false, enableExtras?: boolean): Omit<Vehicles.Upgrades.Cosmetic.Upgrades, 'primaryColor'>;
+} = <T extends Vehicles.Upgrades.Cosmetic.Upgrades | Omit<Vehicles.Upgrades.Cosmetic.Upgrades, 'primaryColor'>>(
+  includeColors = false,
   enableExtras = false
-): Vehicles.Upgrades.Cosmetic.Upgrades => {
-  const primaryColor = randomColor ? RANDOM_COLORS[Math.floor(Math.random() * RANDOM_COLORS.length)] : 0;
+): T => {
   return {
     ...(Object.keys(NORMAL_COSMETIC_KEYS_TO_ID) as Vehicles.Upgrades.Cosmetic.NormalKey[]).reduce(
       (acc, k) => {
@@ -52,7 +54,7 @@ export const generateBaseCosmeticUpgrades = (
         b: 255,
       },
     },
-    primaryColor,
+    primaryColor: includeColors ? RANDOM_COLORS[Math.floor(Math.random() * RANDOM_COLORS.length)] : undefined,
     secondaryColor: 0,
     interiorColor: 0,
     dashboardColor: 0,
@@ -65,7 +67,7 @@ export const generateBaseCosmeticUpgrades = (
     livery: -1,
     plateColor: 0,
     windowTint: 0,
-  };
+  } as T;
 };
 
 export const generateBasePerformanceUpgrades = (): Vehicles.Upgrades.Performance.Upgrades => ({

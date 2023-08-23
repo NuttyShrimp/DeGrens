@@ -33,7 +33,7 @@ class UpgradesManager extends Util.Singleton<UpgradesManager>() {
 
     if (result.length === 0) return;
 
-    const baseCosmeticJSON = JSON.stringify(generateBaseCosmeticUpgrades());
+    const baseCosmeticJSON = JSON.stringify(generateBaseCosmeticUpgrades(true));
     SQL.insertValues(
       'vehicle_upgrades',
       result.map(({ vin }) => ({ vin, cosmetic: baseCosmeticJSON }))

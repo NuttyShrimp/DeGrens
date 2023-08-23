@@ -125,7 +125,7 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
 
     // upgrades
     const mergedUpgrades = mergeUpgrades(
-      generateBaseCosmeticUpgrades(true, upgradesManager.doesModelHaveDefaultExtras(modelHash)),
+      generateBaseCosmeticUpgrades(false, upgradesManager.doesModelHaveDefaultExtras(modelHash)),
       generateBasePerformanceUpgrades(),
       data.upgrades ?? {}
     );
