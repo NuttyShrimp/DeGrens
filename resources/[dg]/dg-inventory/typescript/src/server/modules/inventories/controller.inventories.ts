@@ -110,11 +110,20 @@ export const preloadActivePlayerInventories = () => {
   });
 };
 
-Core.onPlayerLoaded(playerData => {
-  inventoryManager.get(Inventory.concatId('player', playerData.citizenid));
+Core.onPlayerLoaded(async playerData => {
+  const invId = Inventory.concatId('player', playerData.citizenid);
+  if (!inventoryManager.isLoaded(invId)) {
+    inventoryManager.get(invId); // this loads inventory
+    return;
+  }
+
+  // if inventory is already loaded we force objects to reapply.
+  // This can happen when player rejoin or char switches
+  // We need to force this as normally objects get added from inventoryUpdate event on inventory load
+  const inv = await inventoryManager.get(invId);
+  inv.forceUpdateObjects();
 });
 
 Core.onPlayerUnloaded((plyId, cid) => {
   contextManager.playerClosed(plyId, true);
-  inventoryManager.unload(Inventory.concatId('player', cid));
 });

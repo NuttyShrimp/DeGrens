@@ -49,9 +49,13 @@ class InventoryManager extends Util.Singleton<InventoryManager>() {
     this.inventories.delete(invId);
   };
 
-  // Unload inv, gets used when player leaves. This way, when he reconnects objects will spawn on player
+  public isLoaded = (invId: string) => {
+    return this.inventories.has(invId);
+  };
+
+  // Unload inv
   @Export('forceUnloadInventory')
-  public async unload(invId: string) {
+  private async _unload(invId: string) {
     const inventory = await this.get(invId);
     inventory.getItems(true).forEach(item => itemManager.unloadItem(item.state.id));
     this.inventories.delete(invId);
