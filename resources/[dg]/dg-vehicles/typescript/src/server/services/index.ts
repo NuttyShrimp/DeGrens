@@ -9,4 +9,4 @@ import './fakeplate';
 import './enginesounds';
 import './bulletprooftires';
 import './vinscratch';
-import './missionentity';
+import './persistency';

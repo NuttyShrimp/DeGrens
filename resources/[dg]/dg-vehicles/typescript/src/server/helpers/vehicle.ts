@@ -22,9 +22,8 @@ import {
 import { setVehicleEngineSound } from 'services/enginesounds';
 import { setVehicleAsVinScratched } from 'services/vinscratch';
 import { setVehicleDoorsLocked } from 'modules/keys/service.keys';
-import devModule from 'modules/dev/service.dev';
-import { startMissionEntityEnforcingThread } from 'services/missionentity';
 import { charModule } from './core';
+import persistencyModule from 'services/persistency';
 
 /**
  * Spawn a vehicle
@@ -71,8 +70,8 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
   const position = Vector4.create({ w: 0, ...data.position }).add(0.001);
   const modelHash = GetHashKey(data.model);
 
-  // const vehicle = CreateVehicleServerSetter(modelHash, modelType, position.x, position.y, position.z + 0.5, position.w); // 0.5 offset to avoid ground clipping
-  const vehicle = CreateVehicle(modelHash, position.x, position.y, position.z + 0.4, position.w, true, true);
+  const vehicle = CreateVehicleServerSetter(modelHash, modelType, position.x, position.y, position.z + 0.3, position.w); // 0.3 offset to avoid ground clipping
+  // const vehicle = CreateVehicle(modelHash, position.x, position.y, position.z + 0.4, position.w, true, true);
   await Util.awaitEntityExistence(vehicle);
 
   if (!vehicle || !DoesEntityExist(vehicle)) {
@@ -80,16 +79,14 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     return;
   }
 
-  const vin = data.vin ?? vinManager.generateVin();
-  devModule.registerSpawnedVehicle(vehicle, vin);
-
-  // CREATE_VEHICLE is an RPC native, first owner will ALWAYS be a player. If that owning ply is far away (450m) we wait a max of 500ms for the owner to change back to server
-  const owner = NetworkGetEntityOwner(vehicle);
-  if (Util.getPlyCoords(owner).distance(position) > 450) {
-    await Util.awaitCondition(() => NetworkGetEntityOwner(vehicle) !== owner, 500);
-  }
+  // // CREATE_VEHICLE is an RPC native, first owner will ALWAYS be a player. If that owning ply is far away (450m) we wait a max of 500ms for the owner to change back to server
+  // const owner = NetworkGetEntityOwner(vehicle);
+  // if (Util.getPlyCoords(owner).distance(position) > 450) {
+  //   await Util.awaitCondition(() => NetworkGetEntityOwner(vehicle) !== owner, 500);
+  // }
 
   // setting vin
+  const vin = data.vin ?? vinManager.generateVin();
   vinManager.attachEntityToVin(vin, vehicle);
 
   // setting plate
@@ -147,7 +144,7 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     `Spawned vehicle | model: ${data.model} | entity: ${vehicle} | netId: ${netId} | vin: ${vin} | plate: ${plate}`
   );
 
-  startMissionEntityEnforcingThread(vehicle);
+  persistencyModule.registerSpawnedVehicle({ vehicle, vin, plate, model: data.model });
 
   return {
     vehicle,
@@ -158,10 +155,11 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
 };
 
 export const spawnOwnedVehicle = async (
-  src: number,
+  src: number | undefined,
   vehicleInfo: Vehicle.Vehicle,
   position: Vec4,
-  engineState?: boolean
+  engineState?: boolean,
+  doorsLocked?: boolean
 ) => {
   const upgrades = await upgradesManager.getFull(vehicleInfo.vin);
 
@@ -176,6 +174,7 @@ export const spawnOwnedVehicle = async (
     overrideStance: vehicleInfo.stance ?? undefined,
     engineState,
     fuel: vehicleInfo.status.fuel,
+    doorsLocked,
   });
   if (!spawnedVehicle) return;
   const { vehicle, vin } = spawnedVehicle;
@@ -216,7 +215,7 @@ export const spawnOwnedVehicle = async (
 
 export const deleteVehicle = (veh: number) => {
   if (!DoesEntityExist(veh)) return;
-  devModule.unregisterSpawnedVehicle(veh);
+  persistencyModule.unregisterSpawnedVehicle(veh);
   DeleteEntity(veh);
 };
 
