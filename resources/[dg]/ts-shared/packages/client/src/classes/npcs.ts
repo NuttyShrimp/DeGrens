@@ -39,7 +39,7 @@ class Npcs {
   };
 
   public spawnGuard = (guardData: NPCs.Guard) => {
-    Events.emitNet('npcs:guards:spawn', guardData);
+    Events.emitNet('npcs:guards:spawn', guardData, GetCurrentResourceName());
   };
 }
 

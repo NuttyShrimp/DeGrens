@@ -1,20 +1,11 @@
 import { Sync, Util } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
 
-const guards = new Map<
-  string,
-  {
-    ped: number;
-    deleteTimeout: NodeJS.Timeout;
-    data: NPCs.Guard;
-    health: number;
-    isDeath: boolean;
-  }
->();
+const guards = new Map<string, NPCs.ActiveGuard>();
 
 let deathThread: NodeJS.Timer | null = null;
 
-export const spawnGuard = async (guardData: NPCs.Guard) => {
+export const spawnGuard = async (guardData: NPCs.Guard, resourceName: string) => {
   const guardId = Util.uuidv4();
 
   const hash = typeof guardData.model === 'string' ? GetHashKey(guardData.model) : guardData.model;
@@ -54,6 +45,7 @@ export const spawnGuard = async (guardData: NPCs.Guard) => {
     data: guardData,
     health: 0,
     isDeath: false,
+    resourceName,
   });
 
   // Will not do anything if deaththread is already running
@@ -65,14 +57,23 @@ const startDeleteTimeout = (guardId: string, delay: number) => {
     const guardInfo = guards.get(guardId);
     if (!guardInfo) return;
 
-    guards.delete(guardId);
-    if (guards.size === 0) {
-      clearDeathThread();
+    if (DoesEntityExist(guardInfo.ped) && Entity(guardInfo.ped).state.guardId === guardId) {
+      DeleteEntity(guardInfo.ped);
     }
 
-    if (!DoesEntityExist(guardInfo.ped) || Entity(guardInfo.ped).state.guardId !== guardId) return;
-    DeleteEntity(guardInfo.ped);
+    handleGuardDeleted(guardId, guardInfo);
   }, delay * 1000);
+};
+
+const handleGuardDeleted = (guardId: string, guardInfo: NPCs.ActiveGuard) => {
+  clearTimeout(guardInfo.deleteTimeout);
+  if (!guardInfo.isDeath) {
+    guardInfo.data.onDeath?.(-1);
+  }
+  guards.delete(guardId);
+  if (guards.size === 0) {
+    clearDeathThread();
+  }
 };
 
 const startDeathThread = () => {
@@ -80,15 +81,9 @@ const startDeathThread = () => {
 
   deathThread = setInterval(() => {
     for (const [guardId, guardInfo] of guards) {
+      // catch if ped was deleted by something else
       if (!DoesEntityExist(guardInfo.ped)) {
-        clearTimeout(guardInfo.deleteTimeout);
-        guards.delete(guardId);
-        if (!guardInfo.isDeath) {
-          guardInfo.data.onDeath?.(-1);
-        }
-        if (guards.size === 0) {
-          clearDeathThread();
-        }
+        handleGuardDeleted(guardId, guardInfo);
         continue;
       }
 
@@ -121,4 +116,18 @@ const clearDeathThread = () => {
   if (deathThread === null) return;
   clearInterval(deathThread);
   deathThread = null;
+};
+
+export const deleteGuardsOnResourceStop = (resourceName: string) => {
+  const deleteAll = resourceName === GetCurrentResourceName();
+
+  for (const [guardId, guardInfo] of guards) {
+    if (!deleteAll && guardInfo.resourceName !== resourceName) continue;
+
+    if (DoesEntityExist(guardInfo.ped) && Entity(guardInfo.ped).state.guardId === guardId) {
+      DeleteEntity(guardInfo.ped);
+    }
+
+    handleGuardDeleted(guardId, guardInfo);
+  }
 };

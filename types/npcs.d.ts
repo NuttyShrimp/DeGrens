@@ -35,4 +35,13 @@ declare namespace NPCs {
     doCombatTaskOnSpawn?: boolean; // DEFAULT = TRUE
     onDeath?: (killerServerId?: number) => void; // DEFAULT = -1
   };
+
+  type ActiveGuard = {
+    ped: number;
+    deleteTimeout: NodeJS.Timeout;
+    data: NPCs.Guard;
+    health: number;
+    isDeath: boolean;
+    resourceName: string;
+  };
 }
