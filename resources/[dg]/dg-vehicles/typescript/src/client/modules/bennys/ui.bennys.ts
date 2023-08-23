@@ -121,7 +121,6 @@ UI.RegisterUICallback('bennys:getGenericData', (data: { type: 'interior' | 'exte
       if ('componentNames' in entry) {
         // Filter names based on blocked ids
         entry.componentNames = entry.componentNames.filter((_, i) => !blockedIds.includes(i));
-        console.log(entry.componentNames);
       }
       if ('componentNames' in entry && entry.componentNames.length < 2) return;
       entries.push(entry);
