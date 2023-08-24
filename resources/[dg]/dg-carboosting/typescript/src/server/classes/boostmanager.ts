@@ -44,6 +44,14 @@ class BoostManager {
     return !!this.getBoostByGroupId(group.id);
   };
 
+  public isAnyBoostActiveOfClass = (vehicleClass: Vehicles.Class) => {
+    for (const [_, b] of this.boosts) {
+      if (b.vehicleClass !== vehicleClass) continue;
+      return true;
+    }
+    return false;
+  };
+
   private getBoostByVehicle = (vehicle: number, skipValidation = false) => {
     const boostId = this.vehicleToBoost.get(vehicle);
     if (!boostId) return;

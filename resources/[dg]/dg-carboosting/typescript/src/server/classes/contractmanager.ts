@@ -124,6 +124,9 @@ class ContractManager {
         const choosenClass = classes[Math.floor(Math.random() * classes.length)];
         if (!choosenClass) return;
 
+        // dont give out new contracts if a boost is still active for this class
+        if (boostManager.isAnyBoostActiveOfClass(choosenClass)) return;
+
         if (!this.canAddContractForClass(choosenClass)) return;
         if (this.doesGlobalContractOfClassExist(choosenClass)) return;
 
