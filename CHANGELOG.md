@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Items resetten nu terug naar originele rotatie wanneer je ze loslaat buiten de toegestane grid
 - Je kan weer flyers aanvragen
 - Tijdelijk rainlevels gedisabled om wetness van kledij/puddle noises te fixen
+- Je kan free lockers nu ook transferen naar players die al een locker bezitten
 
 ## [1.4.2]
 

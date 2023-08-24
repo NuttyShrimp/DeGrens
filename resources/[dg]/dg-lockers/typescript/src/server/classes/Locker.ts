@@ -320,7 +320,7 @@ export class Locker {
     const newOwner = Number(result.values.cid);
     if (isNaN(newOwner)) return;
 
-    if (lockersManager.doesPlayerOwnLocker(newOwner)) {
+    if (this.price !== 0 && lockersManager.doesPlayerOwnLocker(newOwner)) {
       Notifications.add(plyId, 'Deze persoon is al eigenaar van een locker', 'error');
       return;
     }
