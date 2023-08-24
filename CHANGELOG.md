@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Guard deathcheck naar serverside gemoved
 - Tweak carhack difficulties
 - Eigenaars van non-player owned voertuigen zijn nu "persistent" tussen iedereen
+- Reputation voor laptopshop verlaagd
 
 ### Fixed
 
