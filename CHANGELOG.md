@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan weer flyers aanvragen
 - Tijdelijk rainlevels gedisabled om wetness van kledij/puddle noises te fixen
 - Je kan free lockers nu ook transferen naar players die al een locker bezitten
+- Enkel politie kan nu effectief mensen hun inbeslag genomen items zien
 
 ## [1.4.2]
 
