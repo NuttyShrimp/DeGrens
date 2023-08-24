@@ -74,12 +74,15 @@ const createObject = async (id: string) => {
     for (const [key, value] of Object.entries(data.flags)) {
       switch (key) {
         case 'onFloor': {
-          let onFloorThread = setInterval(() => {
-            if (!HasCollisionLoadedAroundEntity(entity)) return;
-            PlaceObjectOnGroundProperly(entity);
-            clearInterval(onFloorThread);
-          }, 100);
-          flagThread[id].push(onFloorThread);
+          const success = placeObjectOnGround(entity);
+          if (!success) {
+            const onFloorThread = setInterval(() => {
+              const success = placeObjectOnGround(entity);
+              if (!success) return;
+              clearInterval(onFloorThread);
+            }, 100);
+            flagThread[id].push(onFloorThread);
+          }
           break;
         }
         default: {
@@ -92,6 +95,12 @@ const createObject = async (id: string) => {
   objectStore[data.id].entity = entity;
 
   await Util.Delay(50); // might prevent possible crash when creating lots of entities
+};
+
+const placeObjectOnGround = (entity: number) => {
+  if (!HasCollisionLoadedAroundEntity(entity)) return false;
+  PlaceObjectOnGroundProperly(entity);
+  return true;
 };
 
 const destroyObject = (id: string) => {
