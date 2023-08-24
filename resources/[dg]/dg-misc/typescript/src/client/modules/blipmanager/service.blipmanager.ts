@@ -21,6 +21,14 @@ const createBlip = (id: string, info: NBlipManager.Info) => {
       AddTextComponentString(info.text);
       EndTextCommandSetBlipName(newBlip);
     }
+
+    if (info.hiddenInLegend) {
+      SetBlipHiddenOnLegend(newBlip, true);
+    }
+
+    if (info.flashes) {
+      SetBlipFlashes(newBlip, true);
+    }
   }
 
   SetBlipColour(newBlip, info.color ?? 0);

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Gebruiken van kogelbewijsmateriaal kopieert de serienummer nu naar je clipboard
 - Staff kan nu actieve boosts cancellen bij scuff om Suliro en reputation te refunden
+- Voertuigtracker blips hebben nu altijd een random kleur om beter te kunnen onderscheiden
 
 ### Changed
 

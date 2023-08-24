@@ -3,7 +3,7 @@ import { buildTrackerBlipId } from './helpers.trackers';
 
 const activeBlips = new Set<number>();
 
-export const setVehicleTracker = (trackerId: number, coords: Vec3) => {
+export const setVehicleTracker = (trackerId: number, coords: Vec3, blipColor: number) => {
   const blipId = buildTrackerBlipId(trackerId);
 
   if (activeBlips.has(trackerId)) {
@@ -16,11 +16,12 @@ export const setVehicleTracker = (trackerId: number, coords: Vec3) => {
     id: blipId,
     coords,
     sprite: 225,
-    scale: 1,
-    color: 5,
+    scale: 1.1,
+    color: blipColor,
     text: 'Voertuig Tracker',
     display: 2,
-    // flashInterval: 200
+    hiddenInLegend: true,
+    flashes: true,
   });
   activeBlips.add(trackerId);
 };
