@@ -82,5 +82,8 @@
   },
   "carboost_scratch_X": {
     "police": 6
+  },
+  "banktruck": {
+    "players": 32
   }
 }

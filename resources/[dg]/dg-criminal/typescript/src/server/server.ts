@@ -4,6 +4,7 @@ import { initializeCornerselling } from 'modules/cornerselling/service.cornersel
 import { initializeFence } from 'modules/fence/service.fence';
 import { initializeOxyrun } from 'modules/oxyrun/service.oxyrun';
 import { initializeMethRun } from 'modules/methrun/service.methrun';
+import banktruckManager from 'modules/banktruck/manager.banktruck';
 
 import './services/config';
 import './controllers';
@@ -15,6 +16,7 @@ import './modules/atm';
 import './modules/oxyrun';
 import './modules/parkingmeters';
 import './modules/methrun';
+import './modules/banktruck';
 
 setImmediate(async () => {
   await loadConfig();
@@ -25,4 +27,5 @@ setImmediate(async () => {
   initializeFence();
   initializeOxyrun();
   initializeMethRun();
+  banktruckManager.scheduleStart();
 });
