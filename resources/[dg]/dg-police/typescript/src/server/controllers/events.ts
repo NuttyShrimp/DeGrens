@@ -1,4 +1,4 @@
-import { Events, Chat, Vehicles, Util, Notifications, Status, Jobs, Auth } from '@dgx/server';
+import { Auth, Chat, Events, Jobs, Notifications, Status, Util, Vehicles } from '@dgx/server';
 import { awaitPoliceConfigLoad, getPoliceConfig } from 'services/config';
 import { isPlateFlagged } from 'services/plateflags';
 import { mainLogger } from 'sv_logger';
@@ -11,11 +11,11 @@ Auth.onAuth(async plyId => {
 
 Events.onNet('police:showVehicleInfo', async (src: number, netId: number) => {
   const vehicle = NetworkGetEntityFromNetworkId(netId);
-  const plate = Entity(vehicle).state.plate;
   const vin = Vehicles.getVinForNetId(netId);
   if (!vin) return;
+  const plate = Entity(vehicle).state.plate;
 
-  let ownerName = Util.generateName();
+  let ownerName = Util.generateName(plate);
   if (Vehicles.isVinFromPlayerVeh(vin)) {
     const legalPlate = await Vehicles.getPlateForVin(vin);
     if (legalPlate === plate) {

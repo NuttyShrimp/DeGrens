@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Gespawnede voertuigen die niet van een player zijn spawnen niet langer met random kleuren (bv vuilkar, PostOP wagen, ...)
 - Guard deathcheck naar serverside gemoved
 - Tweak carhack difficulties
+- Eigenaars van non-player owned voertuigen zijn nu "persistent" tussen iedereen
 
 ### Fixed
 
