@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Staff kan nu actieve boosts cancellen bij scuff om Suliro en reputation te refunden
 - Voertuigtracker blips hebben nu altijd een random kleur om beter te kunnen onderscheiden
 - Nieuwe criminele activiteit toegevoegd
+- Gates added for kingsmen
 
 ### Changed
 
@@ -24,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tweak carhack difficulties
 - Eigenaars van non-player owned voertuigen zijn nu "persistent" tussen iedereen
 - Reputation voor laptopshop verlaagd
+- Textures binnen de Taxi MLO veranderd voor TaxiJacky
 
 ### Fixed
 
@@ -44,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tijdelijk rainlevels gedisabled om wetness van kledij/puddle noises te fixen
 - Je kan free lockers nu ook transferen naar players die al een locker bezitten
 - Enkel politie kan nu effectief mensen hun inbeslag genomen items zien
+- Cobrastudios burrito livery is nog maar een beetje lelijk op local burittos
 
 ## [1.4.2]
 
