@@ -1,4 +1,4 @@
-import { Util } from './index';
+import { Util, Sync } from './index';
 
 class Vehicles {
   onLockpick = (handler: (plyId: number, vehicle: number, type: Vehicles.LockpickType) => void) => {
@@ -161,6 +161,10 @@ class Vehicles {
     vinscratched?: boolean
   ): Promise<boolean> => {
     return global.exports['dg-vehicles'].setExistingVehicleAsPlayerOwned(vehicle, ownerCid, vinscratched);
+  };
+
+  public setVehicleDoorOpen = (vehicle: number, doorId: number, open: boolean) => {
+    Sync.executeAction('setVehicleDoorOpen', vehicle, doorId, open);
   };
 }
 
