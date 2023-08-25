@@ -28,8 +28,8 @@ class Npcs {
     }
   };
 
-  public spawnGuard = (guardData: NPCs.Guard) => {
-    global.exports['dg-npcs'].spawnGuard(guardData, GetCurrentResourceName());
+  public spawnGuard = (guardData: NPCs.Guard): Promise<number> => {
+    return global.exports['dg-npcs'].spawnGuard(guardData, GetCurrentResourceName());
   };
 }
 

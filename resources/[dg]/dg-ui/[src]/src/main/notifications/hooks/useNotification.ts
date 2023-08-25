@@ -4,10 +4,12 @@ import { sanitizeText } from '@src/lib/util';
 import { useNotificationStore } from '../stores/useNotificationStore';
 
 export const useNotifications = () => {
-  const [lastId, addStoreNoti, removeStoreNoti] = useNotificationStore(s => [
+  const [lastId, notifications, addStoreNoti, removeStoreNoti, updateStoreNoti] = useNotificationStore(s => [
     s.lastId,
+    s.notifications,
     s.addNotification,
     s.removeNotification,
+    s.updateNotification,
   ]);
 
   const addNotification = useCallback(
@@ -20,7 +22,11 @@ export const useNotifications = () => {
         timeout: data.timeout ?? 5000,
         persistent: data.persistent ?? false,
       };
-      addStoreNoti(notification);
+      if (notifications.find(n => n.id === nId)) {
+        updateStoreNoti(nId, notification);
+      } else {
+        addStoreNoti(notification);
+      }
       if (notification.persistent) {
         return nId;
       }
@@ -28,7 +34,7 @@ export const useNotifications = () => {
         removeStoreNoti(nId);
       }, notification.timeout);
     },
-    [addStoreNoti, removeStoreNoti, lastId]
+    [addStoreNoti, removeStoreNoti, lastId, notifications]
   );
 
   return { addNotification, removeNotification: removeStoreNoti };

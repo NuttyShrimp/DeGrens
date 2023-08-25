@@ -1,4 +1,4 @@
-import { Admin, SQL, Util } from '@dgx/server';
+import { Admin, Overwrites, SQL, Util } from '@dgx/server';
 import { queue_priority } from 'db';
 import { getModule } from 'moduleController';
 import { mainLogger } from 'sv_logger';
@@ -74,6 +74,9 @@ class QueueManager {
   }
 
   private slotsAvailable() {
+    if (Overwrites.getOverwrite('queue:slotsAvailable')) {
+      return 64;
+    }
     return this.serverSize - GetNumPlayerIndices();
   }
 

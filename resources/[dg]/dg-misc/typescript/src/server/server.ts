@@ -32,6 +32,7 @@ import './services/roadsigns';
 import './services/placeableObjectItems';
 import './controllers';
 import './services/flyers';
+import './services/overwrites';
 
 setImmediate(() => {
   startParticleThread();

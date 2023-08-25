@@ -27,4 +27,5 @@ export const DEFAULT_ACTIONS: Record<string, (entity: number, ...args: any[]) =>
       SetVehicleDoorShut(vehicle, doorId, false);
     }
   },
+  PlaceObjectOnGroundProperly,
 };

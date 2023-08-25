@@ -13,3 +13,5 @@ Events.onNet(
     emitNet('misc:taskbar:finished', id, wasCanceled, atPercentage);
   }
 );
+
+Events.onNet('misc:taskbar:cancel', cancelTaskbar);
