@@ -1,4 +1,16 @@
-import { Core, Events, Hospital, Inventory, Jobs, Police, RPC, Screenshot, Status, Util } from '@dgx/server';
+import {
+  Core,
+  Events,
+  Hospital,
+  Inventory,
+  Jobs,
+  Overwrites,
+  Police,
+  RPC,
+  Screenshot,
+  Status,
+  Util,
+} from '@dgx/server';
 import { getHospitalConfig } from 'services/config';
 import { downLogger } from './logger.down';
 import { sendToAvailableBed } from 'modules/beds/service.beds';
@@ -76,7 +88,7 @@ Events.onNet('hospital:down:respawnToBed', async (src: number) => {
   Util.Log('hospital:down:respawnToBed', {}, `${Util.getName(src)} has respawned to a bed`, src);
 
   // dont clear police inv
-  if (Jobs.getCurrentJob(src) !== 'police') {
+  if (Jobs.getCurrentJob(src) !== 'police' && !Overwrites.getOverwrite('hospital:keepItems')) {
     Inventory.clearPlayerInventory(src);
   }
 

@@ -2697,5 +2697,17 @@
     },
     "useable": true,
     "markedForSeizure": true
+  },
+  {
+    "name": "morphine_syringe",
+    "label": "Morphine Syringe",
+    "description": "Help uw buddy in zijn moeilijke tijden",
+    "decayRate": 30240,
+    "image": "morphine_syringe.png",
+    "size": {
+      "x": 3,
+      "y": 3
+    },
+    "useable": true
   }
 ]

@@ -382,10 +382,25 @@ class PropRemover {
   };
 }
 
+class Overwrites {
+  setOverwrite = (key: string, value: any) => {
+    global.exports['dg-misc'].setOverwrite(key, value);
+  };
+
+  getOverwrite = <T = any>(key: string): T => {
+    return global.exports['dg-misc'].getOverwrite(key);
+  };
+
+  removeOverwrite = (key: string) => {
+    global.exports['dg-misc'].removeOverwrite(key);
+  };
+}
+
 export default {
   Util: new Util(),
   Status: new Status(),
   Reputations: new Reputations(),
   SyncedObjects: new SyncedObjects(),
   PropRemover: new PropRemover(),
+  Overwrites: new Overwrites(),
 };

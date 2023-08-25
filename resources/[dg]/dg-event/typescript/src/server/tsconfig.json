@@ -1,0 +1,18 @@
+{
+  "extends": "tsconfig/server.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@shared/*": ["../shared/*"]
+    }
+  },
+  "include": [
+    "./**/*",
+    "../types",
+    "../../../../../../types",
+    "../../../../ts-shared/packages/shared/src/types/*.d.ts",
+    "../../../../ts-shared/packages/server/src/types/*.d.ts",
+    "../../../../../**/types/exports.d.ts"
+  ],
+  "exclude": ["**/node_modules"]
+}

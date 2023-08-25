@@ -23,7 +23,7 @@ import business from './business';
 import npcs from './npcs';
 
 export const { Events, RPC, SQL, API, Auth } = events;
-export const { Util, Status, Reputations, SyncedObjects, PropRemover } = util;
+export const { Util, Status, Reputations, SyncedObjects, PropRemover, Overwrites } = util;
 export const { Phone } = phone;
 export const { Chat, RayCast } = interaction;
 export const { Config } = config;

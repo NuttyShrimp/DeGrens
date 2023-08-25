@@ -3,6 +3,7 @@ export const setupGuard = (ped: number, guardId: string, guardData: NPCs.Guard) 
   SetPedDropsWeaponsWhenDead(ped, false);
   StopPedWeaponFiringWhenDropped(ped);
   RemoveAllPedWeapons(ped, true);
+  PlaceObjectOnGroundProperly(ped);
 
   // flags
   SetPedCombatAbility(ped, 2);

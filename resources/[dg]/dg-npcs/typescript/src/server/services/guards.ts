@@ -50,6 +50,7 @@ export const spawnGuard = async (guardData: NPCs.Guard, resourceName: string) =>
 
   // Will not do anything if deaththread is already running
   startDeathThread();
+  return ped;
 };
 
 const startDeleteTimeout = (guardId: string, delay: number) => {

@@ -1,4 +1,4 @@
-import { Config, Events, Inventory, Notifications, Police, RayCast, RPC, Sounds, Util } from '@dgx/server';
+import { Config, Events, Inventory, Notifications, Overwrites, Police, RayCast, RPC, Sounds, Util } from '@dgx/server';
 import { getConfigByEntity } from 'modules/info/service.info';
 import { getVinForVeh, setEngineState } from '../../helpers/vehicle';
 import { keyManager } from './classes/keymanager';
@@ -182,7 +182,8 @@ export const handleLockpickStart = async (
   }
 
   // Check info to determine difficulty
-  const vehicleClass = getConfigByEntity(vehicle)?.class ?? 'D';
+  const vehicleClass =
+    Overwrites.getOverwrite<Vehicles.Class | undefined>('vehicleClass') ?? getConfigByEntity(vehicle)?.class ?? 'D';
 
   let minigameData: any | undefined = undefined;
   if (info.isSlimjim) {
