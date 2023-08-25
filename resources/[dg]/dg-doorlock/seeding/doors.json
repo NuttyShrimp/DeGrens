@@ -5224,5 +5224,43 @@
     ],
     "authorized": {},
     "name": "villa_driveway_gate_36"
+  },
+  {
+    "description": "kingsmen back entrance",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_facgate_07",
+        "coords": {
+          "x": -1124.660400390625,
+          "y": -1560.495849609375,
+          "z": 3.5767464637756348
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["kingsmen"]
+    },
+    "playSound": true
+  },
+  {
+    "description": "kingsmen front entrance",
+    "locked": true,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_facgate_07",
+        "coords": {
+          "x": -1161.3729248046875,
+          "y": -1519.83642578125,
+          "z": 3.387143611907959
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["kingsmen"]
+    },
+    "playSound": true
   }
 ]
