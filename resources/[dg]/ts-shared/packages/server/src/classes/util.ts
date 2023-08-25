@@ -1,12 +1,19 @@
 import { Util as UtilShared } from '@dgx/shared/src/classes';
+
 import { firstNames, lastNames } from '../data/names';
 
 import { Config, Core, Events, RPC } from './index';
 
 class Util extends UtilShared {
-  generateName = (): string => {
-    const firstName = firstNames[this.getRndInteger(0, firstNames.length - 1)];
-    const lastName = lastNames[this.getRndInteger(0, lastNames.length - 1)];
+  generateName = (seed?: string): string => {
+    let firstNameIdx = this.getRndInteger(0, firstNames.length - 1);
+    let lastNameIdx = this.getRndInteger(0, lastNames.length - 1);
+    if (seed) {
+      firstNameIdx = seed.split('').reduce((s, v) => s + v.charCodeAt(0), 0) % firstNames.length;
+      lastNameIdx = seed.split('').reduce((s, v) => s + v.charCodeAt(0), 0) % firstNames.length;
+    }
+    const firstName = firstNames[firstNameIdx];
+    const lastName = lastNames[lastNameIdx];
     return `${firstName} ${lastName}`;
   };
 
@@ -94,7 +101,7 @@ class Util extends UtilShared {
   }
 
   async getCharName(cid: number) {
-    let charModule = Core.getModule('characters');
+    const charModule = Core.getModule('characters');
     const player = await charModule?.getOfflinePlayer(cid);
     return player ? `${player.charinfo.firstname} ${player.charinfo.lastname}` : '';
   }
@@ -375,10 +382,25 @@ class PropRemover {
   };
 }
 
+class Overwrites {
+  setOverwrite = (key: string, value: any) => {
+    global.exports['dg-misc'].setOverwrite(key, value);
+  };
+
+  getOverwrite = <T = any>(key: string): T => {
+    return global.exports['dg-misc'].getOverwrite(key);
+  };
+
+  removeOverwrite = (key: string) => {
+    global.exports['dg-misc'].removeOverwrite(key);
+  };
+}
+
 export default {
   Util: new Util(),
   Status: new Status(),
   Reputations: new Reputations(),
   SyncedObjects: new SyncedObjects(),
   PropRemover: new PropRemover(),
+  Overwrites: new Overwrites(),
 };

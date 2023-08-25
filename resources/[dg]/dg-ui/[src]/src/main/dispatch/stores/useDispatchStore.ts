@@ -10,7 +10,7 @@ export const useDispatchStore = create<Dispatch.State & Dispatch.StateActions>('
   addCall: c => set(s => ({ calls: [c, ...s.calls].slice(0, s.storeSize) })),
   addCalls: calls =>
     set(s => ({
-      calls: [...calls, ...s.calls].slice(0, s.storeSize + calls.length),
+      calls: [...s.calls, ...calls].slice(0, s.storeSize + calls.length),
       storeSize: s.storeSize + calls.length,
     })),
   setCalls: calls => set(() => ({ storeSize: Math.max(20, calls.length), calls })),

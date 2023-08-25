@@ -21,22 +21,22 @@ export const CLASS_TO_LOCKPICK_DIFFICULTY: Record<
   },
   B: {
     lockpick: { speed: 7, size: 20 },
-    hack: { gridSize: 6, time: 120 },
+    hack: { gridSize: 4, time: 25 },
   },
   A: {
     lockpick: { speed: 10, size: 15 },
-    hack: { gridSize: 6, time: 100 },
+    hack: { gridSize: 6, time: 120 },
   },
   'A+': {
     lockpick: { speed: 13, size: 10 },
-    hack: { gridSize: 6, time: 80 },
+    hack: { gridSize: 6, time: 100 },
   },
   S: {
     lockpick: { speed: 17, size: 8 },
-    hack: { gridSize: 8, time: 200 },
+    hack: { gridSize: 6, time: 80 },
   },
   X: {
     lockpick: { speed: 20, size: 7 },
-    hack: { gridSize: 8, time: 180 },
+    hack: { gridSize: 8, time: 240 },
   },
 };

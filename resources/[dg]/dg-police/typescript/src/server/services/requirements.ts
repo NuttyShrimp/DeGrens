@@ -1,7 +1,8 @@
-import { Sync, Jobs } from '@dgx/server';
+import { Sync, Jobs, Overwrites } from '@dgx/server';
 import { getPoliceConfig } from './config';
 
 global.exports('canDoActivity', (activity: string) => {
+  if (Overwrites.getOverwrite('police:blockActivities')) return false;
   const requirements = getPoliceConfig().requirements;
   if (!(activity in requirements)) {
     throw new Error(`${activity} is not a known activity`);

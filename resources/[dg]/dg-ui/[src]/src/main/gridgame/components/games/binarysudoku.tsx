@@ -45,9 +45,12 @@ export const BinarySudoku: FC<Gridgame.VisionGameData & Gridgame.GameComponentPr
         data: { cantClick: val !== 0, value: val },
       }))
     );
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setTimedOut(true);
     }, props.time * 1000);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [puzzle]);
 
   useEffect(() => {

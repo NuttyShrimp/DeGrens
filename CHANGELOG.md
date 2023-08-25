@@ -13,6 +13,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.4.3]
+
+### Added
+
+- Gebruiken van kogelbewijsmateriaal kopieert de serienummer nu naar je clipboard
+- Staff kan nu actieve boosts cancellen bij scuff om Suliro en reputation te refunden
+- Voertuigtracker blips hebben nu altijd een random kleur om beter te kunnen onderscheiden
+- Nieuwe criminele activiteit toegevoegd
+- Gates added for kingsmen
+
+### Changed
+
+- Politie radar opent nu terug als je terug instapt en deze voorheen aan stond
+- Dispatch blips van eigen job zijn niet langer gegroepeerd
+- Sticky notification gaan altijd zichtbaar zijn, ook als je phone gemute is
+- Gespawnede voertuigen die niet van een player zijn spawnen niet langer met random kleuren (bv vuilkar, PostOP wagen, ...)
+- Guard deathcheck naar serverside gemoved
+- Tweak carhack difficulties
+- Eigenaars van non-player owned voertuigen zijn nu "persistent" tussen iedereen
+- Reputation voor laptopshop verlaagd
+- Textures binnen de Taxi MLO veranderd voor TaxiJacky
+
+### Fixed
+
+- Enkele scuffed carboost voertuiglocaties verplaatst
+- Probleem opgelost waardoor synced objects soms terugkwamen na deze te deleten
+- Probleem opgelost waardoor je sommige plaatsbare items meerdere keren kan oppakken
+- Vinscratched autos worden nu wel uit maintenance fees gefiltered
+- Probleem opgelost waardoor politie cufflogs altijd leeg waren
+- VIN van nieuwe voertuigen wordt nu correct gevalidate
+- Juwelier reset nu wel als politie de deuren opent
+- Dispatch blips van mensen in helicopters werkt nu (hopelijk) wel goed
+- ANG reset niet meer na het heropenen van de tablet
+- Maintenance fees werken terug (Bedankt voor de reports hierover! :kapp:)
+- Recent called list is niet meer cursed AF
+- Timer van phone notifications die optelde werken nu terug treffelijk
+- Items resetten nu terug naar originele rotatie wanneer je ze loslaat buiten de toegestane grid
+- Je kan weer flyers aanvragen
+- Tijdelijk rainlevels gedisabled om wetness van kledij/puddle noises te fixen
+- Je kan free lockers nu ook transferen naar players die al een locker bezitten
+- Enkel politie kan nu effectief mensen hun inbeslag genomen items zien
+- Cobrastudios burrito livery is nog maar een beetje lelijk op local burittos
+
 ## [1.4.2]
 
 ### Added

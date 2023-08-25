@@ -1,4 +1,4 @@
-import { Events, Inventory, SyncedObjects, Util } from '@dgx/server';
+import { Events, Inventory, Notifications, SyncedObjects, Util } from '@dgx/server';
 
 const PLACEABLE_OBJECT_ITEMS: Record<string, { model: string; offset: Vec3 }> = {
   lawntable: {
@@ -10,6 +10,13 @@ const PLACEABLE_OBJECT_ITEMS: Record<string, { model: string; offset: Vec3 }> = 
     offset: { x: 0, y: 1, z: -1 },
   },
 };
+
+const PLACEABLE_OBJECT_ITEM_BACKUP_STASH = 'placeableobject_itembackup';
+
+setImmediate(async () => {
+  await Inventory.awaitLoad();
+  Inventory.clearInventory('stash', PLACEABLE_OBJECT_ITEM_BACKUP_STASH);
+});
 
 Inventory.registerUseable(Object.keys(PLACEABLE_OBJECT_ITEMS), (plyId, itemState) => {
   const objectItemData = PLACEABLE_OBJECT_ITEMS[itemState.name];
@@ -25,16 +32,22 @@ Inventory.registerUseable(Object.keys(PLACEABLE_OBJECT_ITEMS), (plyId, itemState
     coords: offset,
     rotation: { x: 0, y: 0, z: plyHeading },
     flags: {
-      placeableObjectItem: itemState.name,
+      placeableObjectItemId: itemState.id,
     },
+    skipStore: true,
   });
-  Inventory.destroyItem(itemState.id);
+  Inventory.moveItemToInventory('stash', PLACEABLE_OBJECT_ITEM_BACKUP_STASH, itemState.id);
 });
 
-Events.onNet('misc:placeableObjectItems:pickup', (plyId, objId: string, itemName: string) => {
+Events.onNet('misc:placeableObjectItems:pickup', async (plyId, objId: string, itemId: string) => {
   SyncedObjects.remove(objId);
 
-  if (!!PLACEABLE_OBJECT_ITEMS[itemName]) {
-    Inventory.addItemToPlayer(plyId, itemName, 1);
+  const itemState = Inventory.getItemStateById(itemId);
+  if (!itemState || itemState.inventory !== Inventory.concatId('stash', PLACEABLE_OBJECT_ITEM_BACKUP_STASH)) {
+    Notifications.add(plyId, 'Dit item bestaat niet meer', 'error');
+    return;
   }
+
+  Inventory.moveItemToPlayer(plyId, itemState.id);
+  Inventory.showItemBox(plyId, itemState.name, 'Opgepakt');
 });

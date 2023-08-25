@@ -27,7 +27,7 @@ export default class Boost {
     serverId: number | undefined;
   };
   public readonly groupId: string;
-  private readonly vehicleClass: Vehicles.Class;
+  public readonly vehicleClass: Vehicles.Class;
   private readonly vehicleModel: string;
   private readonly type: Carboosting.DropoffType;
   public readonly vehicleLocationIdx: number;

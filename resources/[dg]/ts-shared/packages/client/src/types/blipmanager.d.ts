@@ -12,6 +12,8 @@ declare namespace NBlipManager {
         scale?: number;
         isShortRange?: boolean;
         text?: string;
+        hiddenInLegend?: boolean;
+        flashes?: boolean;
       }
     | {
         radius: number;

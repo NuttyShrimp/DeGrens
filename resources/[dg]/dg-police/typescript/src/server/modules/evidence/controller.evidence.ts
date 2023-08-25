@@ -106,3 +106,11 @@ Inventory.registerUseable<{ dna: string }>('evidence_dna', async (src, item) => 
     `DNA behoort tot ${targetPlayer.charinfo.firstname} ${targetPlayer.charinfo.lastname} (CID: ${targetPlayer.citizenid})`
   );
 });
+
+Inventory.registerUseable<{ serialnumber: string }>('evidence_bullet', async (plyId, itemState) => {
+  const serialnumber = itemState.metadata.serialnumber;
+  if (!serialnumber) return;
+
+  Notifications.add(plyId, 'Serienummer gekopieerd naar je klembord', 'error');
+  UI.addToClipboard(plyId, serialnumber);
+});

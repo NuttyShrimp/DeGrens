@@ -188,7 +188,7 @@ export const doDropoffAction = async (type: Carboosting.DropoffType, vehicle: nu
     return;
   }
 
-  const healthPercentage = Math.round((GetVehicleEngineHealth(vehicle) + GetVehicleBodyHealth(vehicle)) / 2000);
+  const healthPercentage = Math.round(GetVehicleEngineHealth(vehicle) + GetVehicleBodyHealth(vehicle)) / 2000;
   Events.emitNet('carboosting:boost:dropoff', NetworkGetNetworkIdFromEntity(vehicle), healthPercentage);
 };
 

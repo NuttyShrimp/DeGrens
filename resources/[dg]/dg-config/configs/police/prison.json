@@ -62,7 +62,7 @@
     "minZ": 45.61,
     "maxZ": 46.61
   },
-  "whitelistedZoneVehicle": ["prago"],
+  "whitelistedZoneVehicle": ["prago", "ec135"],
   "shop": { "x": 1780.6401, "y": 2559.6711, "z": 45.6705 },
   "camId": 41
 }

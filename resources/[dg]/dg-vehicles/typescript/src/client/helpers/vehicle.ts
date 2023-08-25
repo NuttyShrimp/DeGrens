@@ -115,7 +115,7 @@ export const spawnLocalVehicle: Vehicles.SpawnLocalVehicleFunction = async data 
 
   // upgrades
   const mergedUpgrades = mergeUpgrades({
-    ...generateBaseCosmeticUpgrades(true, upgradesManager.doesVehicleHaveDefaultExtras(vehicle)),
+    ...generateBaseCosmeticUpgrades(false, upgradesManager.doesVehicleHaveDefaultExtras(vehicle)),
     ...generateBasePerformanceUpgrades(),
     ...data.upgrades,
   });

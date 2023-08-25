@@ -1,4 +1,4 @@
-import { BlipManager, Sync } from '@dgx/client';
+import { BlipManager, Jobs, Sync } from '@dgx/client';
 
 const playersWithBlips = new Set<number>();
 let blipsEnabled = false;
@@ -6,23 +6,30 @@ let blipsEnabled = false;
 export const areBlipsEnabled = () => blipsEnabled;
 
 const getBlipSettings = (info: Dispatch.BlipInfo): NBlip.Settings => {
-  if (info.job === 'police') {
-    return {
-      color: 3,
-      heading: true,
-      text: info.text,
-      category: 10,
-    };
+  const ownJob = Jobs.getCurrentJob().name;
+
+  const settings: NBlip.Settings = {
+    heading: true,
+    text: info.text,
+    sprite: info.sprite ?? 1,
+  };
+
+  switch (info.job) {
+    case 'police':
+      settings.color = 3;
+      if (ownJob !== 'police') {
+        settings.category = 10;
+      }
+      break;
+    case 'ambulance':
+      settings.color = 7;
+      if (ownJob !== 'police') {
+        settings.category = 11;
+      }
+      break;
   }
-  if (info.job === 'ambulance') {
-    return {
-      color: 23,
-      heading: true,
-      text: info.text,
-      category: 11,
-    };
-  }
-  return {};
+
+  return settings;
 };
 
 const addBlip = (plyId: number, info: Dispatch.BlipInfo) => {

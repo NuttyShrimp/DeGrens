@@ -7,8 +7,8 @@ export const setTime: CommandData = {
   target: [],
   role: 'staff',
   handler: (caller, data: { time?: string; freeze?: boolean }) => {
-    let time: number | undefined = data.time !== undefined ? parseInt(data.time) : undefined;
-    time = time !== undefined && isNaN(time) ? undefined : time;
+    let time: number | undefined = data.time === undefined || !data.time.length ? undefined : parseInt(data.time);
+    time = time === undefined || isNaN(time) ? undefined : time;
 
     if (Weather.isTimeFrozen() !== !!data.freeze) {
       Weather.freezeTime(!!data.freeze, time);

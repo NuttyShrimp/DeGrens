@@ -1,9 +1,10 @@
 import { Events, Jobs, Sounds, Util } from '@dgx/server';
 import { trackersLogger } from './logger.trackers';
 import { buildTrackerSoundId } from './helpers.trackers';
+import { TRACKER_BLIP_COLORS } from './constants.trackers';
 
 let currentTrackerId = 0;
-const activeTrackers = new Map<number, { vehicle: number; interval: NodeJS.Timer }>();
+const activeTrackers = new Map<number, { vehicle: number; interval: NodeJS.Timer; blipColor: number }>();
 
 export const addTrackerToVehicle = (vehicle: number, delay: number) => {
   if (delay < 1000) throw new Error('Tracker delay must be at least 1000ms');
@@ -17,14 +18,13 @@ export const addTrackerToVehicle = (vehicle: number, delay: number) => {
     break;
   }
 
-  const interval = setInterval(() => {
-    emitTrackerLocationToPolice(trackerId);
-  }, delay);
-
   Entity(vehicle).state.set('trackerId', trackerId, true);
   activeTrackers.set(trackerId, {
     vehicle,
-    interval,
+    interval: setInterval(() => {
+      emitTrackerLocationToPolice(trackerId);
+    }, delay),
+    blipColor: TRACKER_BLIP_COLORS[Math.floor(Math.random() * TRACKER_BLIP_COLORS.length)],
   });
   trackersLogger.silly(`Adding tracker ${trackerId} to vehicle ${vehicle}`);
 
@@ -35,18 +35,18 @@ export const addTrackerToVehicle = (vehicle: number, delay: number) => {
 };
 
 const emitTrackerLocationToPolice = (trackerId: number) => {
-  const vehicle = activeTrackers.get(trackerId)?.vehicle;
-  if (!vehicle || !DoesEntityExist(vehicle)) {
+  const tracker = activeTrackers.get(trackerId);
+  if (!tracker || !DoesEntityExist(tracker.vehicle)) {
     removeTrackerFromVehicle(trackerId);
     return;
   }
 
-  const coords = Util.getEntityCoords(vehicle);
+  const coords = Util.getEntityCoords(tracker.vehicle);
   Jobs.getPlayersForJob('police').forEach(plyId => {
-    emitNet('police:trackers:setCoords', plyId, trackerId, coords);
+    emitNet('police:trackers:setCoords', plyId, trackerId, coords, tracker.blipColor);
   });
 
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
+  const netId = NetworkGetNetworkIdFromEntity(tracker.vehicle);
   Sounds.playOnEntity(buildTrackerSoundId(trackerId), 'Count_Stop', 'GTAO_Speed_Race_Sounds', netId);
 };
 

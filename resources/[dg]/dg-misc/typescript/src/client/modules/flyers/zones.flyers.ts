@@ -1,5 +1,6 @@
 import { Events, Peek, PolyTarget, UI } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
+import { openCreationMenu } from './service.flyers';
 
 Peek.addModelEntry(['prop_printer_01', 'prop_printer_02', 'v_res_printer'], {
   distance: 1.5,
@@ -7,19 +8,8 @@ Peek.addModelEntry(['prop_printer_01', 'prop_printer_02', 'v_res_printer'], {
     {
       label: 'Create flyer',
       icon: 'clipboard-question',
-      action: async () => {
-        const inputs = await UI.openInput<{ link: string }>({
-          header: 'Request flyer',
-          inputs: [
-            {
-              name: 'link',
-              label: 'Link (should end with .png or another valid image extension)',
-              type: 'text',
-            },
-          ],
-        });
-        if (!inputs || !inputs.accepted) return;
-        Events.emitNet('misc:flyers:requestFlyer', inputs.values.link);
+      action: () => {
+        openCreationMenu();
       },
     },
     {

@@ -34,7 +34,7 @@ export const validateVehicleVin = (vehicle: number, vehicleClass?: number): { vi
   vehiclesToDisableEngine.add(vehicle);
 
   return {
-    vin: vehStateVin,
+    vin,
     isNewVehicle: true,
   };
 };

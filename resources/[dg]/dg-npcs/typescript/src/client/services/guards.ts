@@ -1,10 +1,9 @@
-import { Events, Sync } from '@dgx/client';
-
 export const setupGuard = (ped: number, guardId: string, guardData: NPCs.Guard) => {
   SetPedRelationshipGroupHash(ped, GetHashKey('ATTACK_ALL_PLAYERS'));
   SetPedDropsWeaponsWhenDead(ped, false);
   StopPedWeaponFiringWhenDropped(ped);
   RemoveAllPedWeapons(ped, true);
+  PlaceObjectOnGroundProperly(ped);
 
   // flags
   SetPedCombatAbility(ped, 2);
@@ -25,21 +24,8 @@ export const setupGuard = (ped: number, guardId: string, guardData: NPCs.Guard) 
     SetRagdollBlockingFlags(ped, 1);
   }
 
-  TaskCombatPed(ped, PlayerPedId(), 0, 16);
-
-  startDeathCheck(ped, guardId);
-};
-
-export const startDeathCheck = (ped: number, guardId: string) => {
-  const deathThread = setInterval(() => {
-    if (!DoesEntityExist(ped)) {
-      Events.emitNet('npcs:guards:transferDeathCheck', guardId);
-      clearInterval(deathThread);
-    }
-
-    if (IsPedInjured(ped)) {
-      Events.emitNet('npcs:guards:died', guardId);
-      clearInterval(deathThread);
-    }
-  }, 500);
+  const doCombatTaskOnSpawn = guardData.doCombatTaskOnSpawn ?? true;
+  if (doCombatTaskOnSpawn) {
+    TaskCombatPed(ped, PlayerPedId(), 0, 16);
+  }
 };

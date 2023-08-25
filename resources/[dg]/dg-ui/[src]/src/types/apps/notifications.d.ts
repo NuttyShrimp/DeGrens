@@ -16,5 +16,6 @@ declare namespace Notifications {
   interface StateActions {
     addNotification: (noti: Notification) => void;
     removeNotification: (id: string | number) => void;
+    updateNotification: (id: string | number, noti: Partial<Notification>) => void;
   }
 }

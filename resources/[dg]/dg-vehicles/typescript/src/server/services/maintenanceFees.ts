@@ -13,8 +13,9 @@ const generateFees = async (cids: number[]) => {
       if (cid == 1000) return;
       let vehicles = await getPlayerOwnedVehicles(cid);
 
-      // No fees on bicycles
+      // No fees on bicycles or vinscratches
       vehicles = vehicles.filter(veh => {
+        if (veh.vinscratched) return false;
         const vehConfig = getConfigByModel(veh.model);
         if (!vehConfig) {
           mainLogger.error(`Failed to give maintenace fee to ${cid} because ${veh.model} has no config`);

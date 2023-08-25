@@ -1,6 +1,6 @@
-import { Auth, Events } from '@dgx/server';
+import { Auth, BaseEvents, Events } from '@dgx/server';
 import { awaitNpcConfigLoad } from 'services/config';
-import { handleGuardDied, spawnGuard, transferGuardDeathCheck } from 'services/guards';
+import { deleteGuardsOnResourceStop, spawnGuard } from 'services/guards';
 import { dispatchAllNpcsToClient } from 'services/npcs';
 
 Auth.onAuth(async plyId => {
@@ -8,14 +8,10 @@ Auth.onAuth(async plyId => {
   dispatchAllNpcsToClient(plyId);
 });
 
-Events.onNet('npcs:guards:spawn', (_, guardData: NPCs.Guard) => {
-  spawnGuard(guardData);
+Events.onNet('npcs:guards:spawn', (_, guardData: NPCs.Guard, resourceName: string) => {
+  spawnGuard(guardData, resourceName);
 });
 
-Events.onNet('npcs:guards:transferDeathCheck', (_, guardId: string) => {
-  transferGuardDeathCheck(guardId);
-});
-
-Events.onNet('npcs:guards:died', (_, guardId: string) => {
-  handleGuardDied(guardId);
-});
+BaseEvents.onResourceStop(resourceName => {
+  deleteGuardsOnResourceStop(resourceName);
+}, 'any');

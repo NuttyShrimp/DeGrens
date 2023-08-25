@@ -32,6 +32,7 @@ Peek.addZoneEntry('prison_item_retrieval', {
     {
       label: 'Herbekijk Spullen',
       icon: 'fas fa-check',
+      job: 'police',
       action: async () => {
         const result = await UI.openInput<{ cid: string }>({
           header: 'Wiens geconfisceerde spullen wil je bekijken?',

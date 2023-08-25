@@ -23,7 +23,6 @@ import './modules/laptop/controller.laptop';
 import './modules/vehicleshop';
 import './modules/impound/controller.impound';
 import './modules/mechanic/controller.mechanic';
-import './modules/dev';
 import './services';
 
 setImmediate(async () => {

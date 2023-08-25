@@ -352,4 +352,16 @@ export class Inv {
       }
     }
   };
+
+  public forceUpdateObjects = () => {
+    const serverId = charModule.getServerIdFromCitizenId(Number(this.identifier));
+    if (!serverId) return;
+
+    const items = this.getItemStates(true);
+    for (const item of items) {
+      const info = objectsUtility.config?.items[item.name];
+      if (!info) continue;
+      Events.emitNet('inventory:client:updateObject', serverId, 'add', { id: item.id, name: item.name });
+    }
+  };
 }

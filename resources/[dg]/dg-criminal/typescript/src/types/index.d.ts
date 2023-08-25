@@ -8,6 +8,7 @@ declare namespace Criminal {
     oxyrun: Oxyrun.Config;
     parkingmeters: Parkingmeters.Config;
     methrun: Methrun.Config;
+    banktruck: Banktruck.Config;
   };
 
   namespace Weed {
@@ -186,6 +187,45 @@ declare namespace Criminal {
         vehicleLockpicked: boolean;
         trackerRemoved: boolean;
       };
+    };
+  }
+
+  namespace Banktruck {
+    type Config = {
+      amountOfGuards: number;
+      hack: {
+        gridSize: number;
+        time: number;
+      };
+      openingDelay: number; // seconds between hack finish and door opening
+      loot: {
+        timePerBag: number; // seconds between receiving bag
+        bagAmount: [number, number];
+      };
+      startChance: number; // chance of actually starting activity when all other checks are passed
+      scheduleInterval: number; // minutes between start schedule checks
+      timeout: number; // minutes to become available again after finishing
+      locations: LocationConfig[];
+    };
+
+    type LocationConfig = {
+      vehicle: Vec4;
+      guards: Vec4[];
+    };
+
+    type Active = {
+      locationIdx: number;
+      vehicle: number;
+      state: Criminal.Banktruck.State;
+      lootRemaining: number;
+    };
+
+    type State = {
+      hackingPlayer: number | null;
+      opening: boolean;
+      open: boolean;
+      guardsSpawned: boolean;
+      looting: boolean;
     };
   }
 }
