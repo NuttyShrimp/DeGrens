@@ -231,7 +231,7 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     const allHandlerData = this.updateHandlers.get(type) ?? [];
     allHandlerData.push({ handler, item, action });
     this.updateHandlers.set(type, allHandlerData);
-    if (allHandlerData.length === 1) {
+    if (this.updateHandlers.size === 1 && allHandlerData.length === 1) {
       on(
         'inventory:inventoryUpdated',
         (type: Inventory.Type, identifier: string, action: 'add' | 'remove', itemState: Inventory.ItemState) => {
