@@ -116,7 +116,11 @@ export class Spot {
       return;
     }
     SetEntityAsMissionEntity(this.vehicle, true, true);
-    DeleteEntity(this.vehicle);
+    if (!NetworkGetEntityIsNetworked(this.vehicle) && IsEntityAVehicle(this.vehicle)) {
+      DeleteEntity(this.vehicle);
+    } else {
+      console.error(`[VehicleShop] Tried to delete vehicle at spot ${this.id} but targetting wrong entity`);
+    }
     this.vehicle = undefined;
     Peek.removeEntityEntry(this.vehiclePeekIds);
     this.vehiclePeekIds = [];

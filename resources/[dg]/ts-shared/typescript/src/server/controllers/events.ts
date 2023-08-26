@@ -52,6 +52,7 @@ if (GetCurrentResourceName() === 'ts-shared') {
       Vehicles.deleteVehicle(entity);
     } else {
       DeleteEntity(entity);
+      console.log(`[${GetInvokingResource()}] Deleted entity ${entity} | netId ${netId}`);
     }
   });
 }

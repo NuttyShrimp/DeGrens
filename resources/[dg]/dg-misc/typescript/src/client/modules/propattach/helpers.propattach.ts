@@ -8,7 +8,7 @@ export const debug = (msg: string) => {
 export const deleteEntity = (propInfo: PropAttach.ActiveProp) => {
   if (
     propInfo.entity &&
-    NetworkGetEntityIsLocal(propInfo.entity) &&
+    !NetworkGetEntityIsNetworked(propInfo.entity) &&
     DoesEntityExist(propInfo.entity) &&
     propInfo.hash === GetEntityModel(propInfo.entity) >>> 0
   ) {

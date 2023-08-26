@@ -25,7 +25,7 @@ Events.onNet('criminal:weed:plant', async (itemId: string, model: string) => {
 
   // Logic to select a valid location using raycasts, materials and display entity
   const [isValid, plantCoords, plantRotation] = await new Promise<[boolean, Vec3, Vec3]>(async res => {
-    const modelHash = GetHashKey(model);
+    const modelHash = GetHashKey(model) >>> 0;
     await Util.loadModel(modelHash);
     const entity = CreateObject(modelHash, 0, 0, 0, false, false, false);
     await Util.awaitEntityExistence(entity);
@@ -67,7 +67,12 @@ Events.onNet('criminal:weed:plant', async (itemId: string, model: string) => {
         const coords = Util.getEntityCoords(entity);
         const rotation = Util.getEntityRotation(entity);
         res([isValidLocation, coords, rotation]);
-        DeleteEntity(entity);
+
+        if (!NetworkGetEntityIsNetworked(entity) && GetEntityModel(entity) >>> 0 === modelHash) {
+          DeleteEntity(entity);
+        } else {
+          console.error('Failed to delete ghostweedplant entity');
+        }
       }
     }, 1);
   });

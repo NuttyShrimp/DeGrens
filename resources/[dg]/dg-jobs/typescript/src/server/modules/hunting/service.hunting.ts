@@ -89,10 +89,14 @@ export const lootAnimal = (plyId: number, animalNetId: number) => {
   const fromBait = Entity(animal).state?.fromBait ?? false;
 
   const animalHash = GetEntityModel(animal) >>> 0;
-  DeleteEntity(animal);
-
   const animalConfig = huntingConfig.animals.find(a => GetHashKey(a.model) >>> 0 === animalHash);
   if (!animalConfig) return;
+
+  if (animalHash === GetHashKey(animalConfig.model) >>> 0) {
+    DeleteEntity(animal);
+  } else {
+    huntingLogger.error('Animal entity was not of correct model so did not delete');
+  }
 
   const chance = animalConfig.meatChance * 100;
   if (Util.getRndInteger(1, 101) < chance) {

@@ -157,7 +157,11 @@ export class Npc {
     if (!this.entity || !DoesEntityExist(this.entity)) return;
 
     if (!fade) {
-      DeleteEntity(this.entity);
+      if (!NetworkGetEntityIsNetworked(this.entity) && IsEntityAPed(this.entity)) {
+        DeleteEntity(this.entity);
+      } else {
+        console.error('[NPCS] Failed to delete entity | targetting wrong entity');
+      }
       this.entity = null;
       return;
     }

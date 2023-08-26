@@ -146,7 +146,9 @@ export const useDummyVehicle = async <T>(
   const result = func(vehicle);
   if (result instanceof Promise) await result;
 
-  DeleteEntity(vehicle);
+  if (DoesEntityExist(vehicle) && !NetworkGetEntityIsNetworked(vehicle) && IsEntityAVehicle(vehicle)) {
+    DeleteEntity(vehicle);
+  }
   SetModelAsNoLongerNeeded(modelHash);
 
   return result;

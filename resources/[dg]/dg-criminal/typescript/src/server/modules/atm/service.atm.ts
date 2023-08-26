@@ -87,10 +87,15 @@ const createAtmEntity = async (vehicle: number, atmData: Criminal.ATM.AtmData) =
     SetEntityVelocity(atmEntity, normalized.x * 11, normalized.y * 11, normalized.z + 6);
   }, 25);
 
-  atmEntityRemovalTimeout[atmEntity] = setTimeout(() => {
-    DeleteEntity(atmEntity);
-    delete atmEntityRemovalTimeout[atmEntity];
-  }, 3 * 60 * 1000);
+  atmEntityRemovalTimeout[atmEntity] = setTimeout(
+    () => {
+      if (Entity(atmEntity).state.isRobberyAtm && GetEntityModel(atmEntity) >>> 0 === atmData.model >>> 0) {
+        DeleteEntity(atmEntity);
+      }
+      delete atmEntityRemovalTimeout[atmEntity];
+    },
+    3 * 60 * 1000
+  );
 };
 
 export const pickupAtm = (plyId: number, atmNetId: number) => {
@@ -98,16 +103,19 @@ export const pickupAtm = (plyId: number, atmNetId: number) => {
   if (!atmEntity || !DoesEntityExist(atmEntity)) return;
 
   const model = GetEntityModel(atmEntity) >>> 0;
-  const itemName = ATMS.find(a => GetHashKey(a.model) >>> 0 === model)?.itemName;
-  if (!itemName) return;
+  const ATMData = ATMS.find(a => GetHashKey(a.model) >>> 0 === model);
+  if (!ATMData) return;
 
-  DeleteEntity(atmEntity);
+  if (Entity(atmEntity).state.isRobberyAtm && model === GetHashKey(ATMData.model) >>> 0) {
+    DeleteEntity(atmEntity);
+  }
+
   if (atmEntityRemovalTimeout[atmEntity]) {
     clearTimeout(atmEntityRemovalTimeout[atmEntity]);
     delete atmEntityRemovalTimeout[atmEntity];
   }
 
-  Inventory.addItemToPlayer(plyId, itemName, 1);
+  Inventory.addItemToPlayer(plyId, ATMData.itemName, 1);
 
   const logMsg = `${Util.getName(plyId)}(${plyId}) has picked up a robbery ATM`;
   atmLogger.info(logMsg);

@@ -13,6 +13,7 @@ import {
   Phone,
   Animations,
 } from '@dgx/client';
+import { FISH_MODEL } from './constants.fishing';
 
 let inReturnZone = false;
 
@@ -201,7 +202,7 @@ export const useRod = async () => {
   const pedCoords = Util.getPlyCoords();
   await Util.loadModel('a_c_fish');
   await Util.loadAnimDict('anim@heists@narcotics@trash');
-  fishEntity = CreatePed(4, GetHashKey('a_c_fish'), pedCoords.x, pedCoords.y, pedCoords.z, 0, true, false);
+  fishEntity = CreatePed(4, FISH_MODEL, pedCoords.x, pedCoords.y, pedCoords.z, 0, true, false);
   SetPedComponentVariation(fishEntity, 0, 0, 0, 0);
   SetPedPropIndex(fishEntity, 0, 0, 0, false);
   const bone = GetPedBoneIndex(ped, 24818);
@@ -234,7 +235,10 @@ const removeFishEntity = async () => {
   Animations.pauseAnimLoopAnimations(true);
 
   await Util.Delay(100);
-  DeleteEntity(fishEntity);
+
+  if (IsEntityAPed(fishEntity) && GetEntityModel(fishEntity) >>> 0 === FISH_MODEL) {
+    DeleteEntity(fishEntity);
+  }
   fishEntity = null;
   TaskPlayAnim(ped, 'anim@heists@narcotics@trash', 'throw_a', 8.0, 8.0, -1, 17, 1, false, false, false);
 
