@@ -1,4 +1,4 @@
-import { Auth, Events, Util, Config, Notifications, Taskbar, Inventory } from '@dgx/server';
+import { Events, Util, Notifications, Taskbar, Inventory } from '@dgx/server';
 import { getVehicleItemUpgrades, updateVehicleItemUpgrades } from 'db/repository';
 import { getCurrentVehicle, getVinForNetId, getVinForVeh } from 'helpers/vehicle';
 import vinManager from 'modules/identification/classes/vinmanager';
@@ -17,7 +17,7 @@ Inventory.registerUseable('rgb_controller', async plyId => {
   }
 
   const vin = getVinForVeh(vehicle);
-  if (!vin || !vinManager.isVinFromPlayerVeh(vin)) {
+  if (!vin || (!vinManager.isVinFromPlayerVeh(vin) && !Util.isDevEnv())) {
     Notifications.add(plyId, 'Dit voertuig is niet van een burger', 'error');
     return;
   }
@@ -33,7 +33,7 @@ Inventory.registerUseable('rgb_controller', async plyId => {
 
 Events.onNet('vehicles:itemupgrades:install', async (plyId: number, netId: number, item: Vehicles.ItemUpgrade) => {
   const vin = getVinForNetId(netId);
-  if (!vin || !vinManager.isVinFromPlayerVeh(vin)) {
+  if (!vin || (!vinManager.isVinFromPlayerVeh(vin) && !Util.isDevEnv())) {
     Notifications.add(plyId, 'Dit voertuig is niet van een burger', 'error');
     return;
   }

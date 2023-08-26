@@ -11,7 +11,7 @@ Inventory.registerUseable('window_tint', async plyId => {
   }
 
   const vin = getVinForVeh(vehicle);
-  if (!vin || !vinManager.isVinFromPlayerVeh(vin)) {
+  if (!vin || (!vinManager.isVinFromPlayerVeh(vin) && !Util.isDevEnv())) {
     Notifications.add(plyId, 'Dit voertuig is niet van een burger', 'error');
     return;
   }
