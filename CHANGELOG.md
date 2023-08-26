@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Phone notificaties worden niet langer gedeclined als je op de notificatie zelf klikt
+
 ### Fixed
 
 - Error opgelost wanneer een item in of uit inventory van offline player werd gehaald

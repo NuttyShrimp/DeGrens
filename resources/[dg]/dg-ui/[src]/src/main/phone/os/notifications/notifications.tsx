@@ -7,7 +7,7 @@ import { useVhToPixel } from '@src/lib/hooks/useVhToPixel';
 
 import { Icon } from '../../../../components/icon';
 import { formatTime } from '../../../../lib/util';
-import { acceptNotification, declineNotification } from '../../lib';
+import { acceptNotification, declineNotification, removeNotification } from '../../lib';
 import { usePhoneNotiStore } from '../../stores/usePhoneNotiStore';
 
 import { styles } from './notification.styles';
@@ -36,8 +36,15 @@ export const Notification = forwardRef<
     declineNotification(notification.id);
   };
 
+  // Only remove if there is no decline function (to prevent declining on misclicks)
+  const handleNotificationClick = (e: MouseEvent) => {
+    e.stopPropagation();
+    if (notification.onDecline || notification.keepOnAction) return;
+    removeNotification(notification.id);
+  };
+
   return (
-    <animated.div className={classes.box} onClick={handleDecline} style={style} ref={ref}>
+    <animated.div className={classes.box} onClick={handleNotificationClick} style={style} ref={ref}>
       <div>
         <div className={classes.info}>
           <div
