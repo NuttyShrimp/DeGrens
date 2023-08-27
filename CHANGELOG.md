@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Error opgelost wanneer een item in of uit inventory van offline player werd gehaald
+- Banktrucks werken nu wel deftig
 
 ## [1.4.3]
 

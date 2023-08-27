@@ -43,16 +43,12 @@ class BanktruckManager {
   }
 
   public scheduleStart = () => {
-    if (this.startScheduling) {
-      clearTimeout(this.startScheduling);
-    }
-
+    this.stopStartScheduling();
     this.startScheduling = setTimeout(this.start, config.banktruck.scheduleInterval * 60 * 1000);
   };
 
   public stopStartScheduling = () => {
     if (this.startScheduling === null) return;
-
     clearTimeout(this.startScheduling);
     this.startScheduling = null;
   };
@@ -63,8 +59,10 @@ class BanktruckManager {
       this.active !== null ||
       !Police.canDoActivity('banktruck') ||
       Math.random() > config.banktruck.startChance
-    )
+    ) {
+      this.scheduleStart();
       return;
+    }
 
     this.stopStartScheduling();
 
