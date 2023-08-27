@@ -11396,7 +11396,7 @@
     "defaultStock": 5,
     "restockTime": 14,
     "price": 500000,
-    "shop": "nfs",
+    "shop": "pdm",
     "type": "land",
     "inCarboostPool": true
   }
