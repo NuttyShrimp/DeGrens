@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Phone notificaties worden niet langer gedeclined als je op de notificatie zelf klikt
 - Winkeloverval een beetje gerebalanced
+- Politie auto vorderen een tikkeltje makkelijker gemaakt
 
 ### Fixed
 

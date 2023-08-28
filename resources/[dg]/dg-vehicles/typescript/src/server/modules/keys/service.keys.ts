@@ -189,8 +189,8 @@ export const handleLockpickStart = async (
   if (info.isSlimjim) {
     minigameData = {
       amount: Util.getRndInteger(7, 10),
-      speed: 13,
-      size: 10,
+      speed: 10,
+      size: 12,
     };
   } else {
     switch (lockpickType) {
