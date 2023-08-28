@@ -18,6 +18,20 @@ shared_script 'runcode.js'
 
 client_script 'runcode_ui.lua'
 
+shared_scripts {
+  "@ts-shared/shared/lib.lua",
+}
+
+server_scripts {
+  "@ts-shared/server/server.js",
+  "@dg-logs/server/sv_log.lua"
+}
+
+client_scripts {
+  "@ts-shared/client/client.js",
+	"@dg-logs/client/cl_log.lua"
+}
+
 ui_page 'web/nui.html'
 files {
     'web/nui.html'
