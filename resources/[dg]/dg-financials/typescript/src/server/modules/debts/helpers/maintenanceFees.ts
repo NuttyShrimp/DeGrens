@@ -71,7 +71,6 @@ export const scheduleMaintenanceFees = async () => {
   }
 
   setTimeout(() => {
-    debtLogger.info('Starting maintenance fee check');
     registerMaintenanceFees();
   }, maintenanceSchedule.diff(now));
 };
@@ -90,6 +89,7 @@ export const calculateMaintenceFees = async (cids?: number[]) => {
 
 const registerMaintenanceFees = async () => {
   await Util.Delay(90000); // Wait 1.5 minutes to make sure we are not around a restart point, tx has a 1 minute clearance time after the restart time
+  debtLogger.info('Starting maintenance fee check');
   const fees = await calculateMaintenceFees();
 
   // Check if fees for debts[].reason exist
@@ -108,6 +108,7 @@ const registerMaintenanceFees = async () => {
     INSERT INTO maintenance_fee_log (date)
     VALUES (NOW());
   `);
+  debtLogger.info('ran maintenance fee check');
 };
 
 export const removeMaintenanceFees = async (src: number) => {
