@@ -25,13 +25,13 @@ setImmediate(async () => {
   await Config.awaitConfigLoad();
   const config = Config.getModuleConfig<Config>('financials');
   setConfig(config);
+  await seedTaxes();
   await accountManager.init();
   await seedPaycheckCache();
   startPaycheckInterval();
   await cryptoManager.initiate();
   await debtManager.seedDebts();
   await scheduleMaintenanceFees();
-  await seedTaxes();
 
   financialsLoaded = true;
 });

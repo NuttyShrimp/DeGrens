@@ -126,9 +126,12 @@ export const scheduleBankTaxes = async () => {
       return;
     }
     if (hoursTillTax <= 12) {
-      taxAccTimeout = setTimeout(() => {
-        taxBankAccounts(lastTerm[0].date);
-      }, taxDay.diff(dayjs(), 'ms'));
+      taxAccTimeout = setTimeout(
+        () => {
+          taxBankAccounts(lastTerm[0].date);
+        },
+        taxDay.diff(dayjs(), 'ms')
+      );
     }
   }
 };
