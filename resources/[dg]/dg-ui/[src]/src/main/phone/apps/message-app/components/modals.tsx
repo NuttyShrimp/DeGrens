@@ -9,7 +9,7 @@ export const NewConversationModal = () => (
     elements={[
       {
         name: 'number',
-        render: props => <Input.PhoneNumber {...props} label={'TelefoonNr'} icon={'mobile'} />,
+        render: props => <Input.Contact {...props} />,
       },
     ]}
     onAccept={({ number }) => {

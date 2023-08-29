@@ -68,39 +68,36 @@ export const PermissionsModal: FC<React.PropsWithChildren<Financials.ModalProps>
         {
           name: 'cid',
           required: false,
-          render: () => {
-            const options = (props.account.members ?? []).map(m => ({
-              label: `${m.name}`,
-              cid: String(m.cid),
-            }));
-            return (
-              // We dont use input variants because we want custom behavior without overwriting the input variants
-              <Autocomplete
-                id='cid-select'
-                options={options}
-                onInputChange={(e, option) => setCid(option)}
-                freeSolo
-                fullWidth
-                getOptionLabel={option => (typeof option === 'string' ? option : option.cid)}
-                inputValue={value}
-                renderOption={(props, option) => (
-                  <Box component='li' {...props}>
-                    {option.label}
-                  </Box>
-                )}
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    label='CID'
-                    error={cidError}
-                    helperText={cidError ? 'Niet geldig' : ''}
-                    type='text'
-                    inputProps={{ ...params.inputProps, autoComplete: 'new-password' }}
-                  />
-                )}
-              />
-            );
-          },
+          render: () => (
+            // We dont use input variants because we want custom behavior without overwriting the input variants
+            <Autocomplete
+              id='cid-select'
+              options={(props.account.members ?? []).map(m => ({
+                label: String(m.name),
+                cid: String(m.cid),
+              }))}
+              onInputChange={(e, option) => setCid(option)}
+              freeSolo
+              fullWidth
+              getOptionLabel={option => (typeof option === 'string' ? option : option.cid)}
+              inputValue={value}
+              renderOption={(props, option) => (
+                <Box component='li' {...props}>
+                  {option.label}
+                </Box>
+              )}
+              renderInput={params => (
+                <TextField
+                  {...params}
+                  label='CID'
+                  error={cidError}
+                  helperText={cidError ? 'Niet geldig' : ''}
+                  type='text'
+                  inputProps={{ ...params.inputProps, autoComplete: 'new-password' }}
+                />
+              )}
+            />
+          ),
         },
         ...(Object.keys(PERMISSIONS) as (keyof Financials.AccountPermission)[]).map<
           SimpleForm.Form['elements'][number]

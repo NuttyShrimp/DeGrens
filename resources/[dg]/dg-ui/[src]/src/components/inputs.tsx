@@ -7,6 +7,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { styled } from '@mui/material/styles';
 import TextField, { TextFieldProps as TextFieldPropsMUI } from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
+import { Box } from '@mui/system';
+import { emptyFn, uuidv4 } from '@src/lib/util';
 import { useContactAppStore } from '@src/main/phone/apps/contacts-app/stores/useContactAppStore';
 
 import { nuiAction } from '../lib/nui-comms';
@@ -65,7 +67,14 @@ declare interface OSInput {
   MoneyAmount: FC<React.PropsWithChildren<MoneyAmountProps>>;
   PhoneNumber: FC<React.PropsWithChildren<TextFieldProps>>;
   Search: FC<React.PropsWithChildren<TextFieldProps>>;
-  Contact: FC<React.PropsWithChildren<Omit<AutoCompleteProps, 'freeSolo' | 'options' | 'label'> & { label?: string }>>;
+  Contact: FC<
+    React.PropsWithChildren<
+      Omit<AutoCompleteProps, 'freeSolo' | 'options' | 'label'> & {
+        label?: string;
+        setError?: (hasError: boolean) => void;
+      }
+    >
+  >;
 }
 
 // endregion
@@ -271,33 +280,55 @@ Input.Contact = props => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const contacts = useContactAppStore(s => s.contacts);
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [selValue, setSelValue] = useState<string>('');
-  const onChangeCapture: changeFunction = (value, name, evt) => {
-    const isNum = !isNaN(Number(value));
-    let phoneNumber = value;
-    if (!isNum) {
-      phoneNumber = contacts.find(c => c.label === value)?.phone ?? '';
+  const [value, setValue] = useState<string>('');
+
+  const onChangeCapture = value => {
+    setValue(value);
+    const isNumber = !isNaN(+value);
+    props.setError?.(!isNumber);
+    if (isNumber) {
+      //@ts-ignore - onChange func of simplemodalform only requires val instead
+      props.onChange(value);
     }
-    setSelValue(phoneNumber);
-    props.onChange(phoneNumber, name, evt);
   };
+
   return (
-    <Input.AutoComplete
+    // we dont use Input.AutoComplete because we need to use some custom renderoptions etc
+    <Autocomplete
       {...props}
-      icon={props.icon ?? 'mobile'}
-      inputValue={selValue}
       options={contacts.map(c => ({ label: c.label, value: c.phone }))}
-      filterOptions={(options, state) => {
-        const filtered = options.filter(
+      freeSolo
+      fullWidth
+      inputValue={value}
+      // custom renderoption to fix the key issues
+      renderOption={(props, option) => (
+        <Box component='li' {...props} key={uuidv4()}>
+          {option.label}
+        </Box>
+      )}
+      filterOptions={(options, state) =>
+        options.filter(
           o =>
             o.label.toLowerCase().includes(state.inputValue.toLowerCase()) ||
             o.value.toLowerCase().includes(state.inputValue.toLowerCase())
-        );
-        return filtered;
-      }}
-      onChange={onChangeCapture}
-      label={props.label ?? 'TelefoonNr'}
-      freeSolo
+        )
+      }
+      // this makes forces input value to chance to value when typing in label
+      getOptionLabel={option => (typeof option === 'string' ? option : option.value)}
+      onInputChange={(_, value) => onChangeCapture(value)}
+      onChange={emptyFn} // throws ts warning otherwise
+      renderInput={params => (
+        <Input.TextField
+          {...params}
+          icon={props.icon ?? 'mobile'}
+          label={props.label ?? 'TelefoonNr'}
+          error={props.error}
+          helperText={props.error ? 'Niet geldig' : ''}
+          type='text'
+          inputProps={{ ...params.inputProps, autoComplete: 'new-password' }}
+          onChange={emptyFn} // throws ts warning otherwise
+        />
+      )}
     />
   );
 };
