@@ -288,5 +288,10 @@
     "label": "Maibatsu Sunrise R",
     "soundHash": "sunrise",
     "custom": true
+  },
+  {
+    "label": "BMW M4 GT3",
+    "soundHash": "lg18bmwm4",
+    "custom": true
   }
 ]
