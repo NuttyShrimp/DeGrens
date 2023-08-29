@@ -99,3 +99,9 @@ export const removeTrackerFromVehicle = (trackerId: number) => {
 };
 
 export const getAmountOfActiveTrackers = () => activeTrackers.size;
+
+export const isTrackerActive = (trackerId: number) => {
+  const tracker = activeTrackers.get(trackerId);
+  if (!tracker) return false;
+  return DoesEntityExist(tracker.vehicle) && Entity(tracker.vehicle).state.trackerId === trackerId;
+};

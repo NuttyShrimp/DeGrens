@@ -566,7 +566,7 @@ export default class Boost {
   public disableTracker = async (plyId: number) => {
     if (!this.flags.lockpicked) throw new Error('started disabling vehicle tracker before lockpicking');
 
-    if (this.tracker === null) return;
+    if (this.tracker === null || !this.vehicle) return;
 
     if (this.flags.disablingTracker) {
       Notifications.add(plyId, 'Er is momenteel al iemand hiermee bezig', 'error');
@@ -614,10 +614,13 @@ export default class Boost {
       Phone.updateNotification(member.serverId, 'carboosting-tracker-amount', phoneNotifData);
     });
 
-    Police.changeVehicleTrackerDelay(
-      this.tracker.id,
-      trackerConfig.delay + this.tracker.hacks.done * trackerConfig.increase
-    );
+    const trackerDelay = trackerConfig.delay + this.tracker.hacks.done * trackerConfig.increase;
+    if (Police.isTrackerActive(this.tracker.id)) {
+      Police.changeVehicleTrackerDelay(this.tracker.id, trackerDelay);
+    } else {
+      const newTrackerId = Police.addTrackerToVehicle(this.vehicle.vehicle, trackerDelay);
+      this.tracker.id = newTrackerId;
+    }
 
     // start cooldown delay
     this.tracker.cooldown.active = true;
