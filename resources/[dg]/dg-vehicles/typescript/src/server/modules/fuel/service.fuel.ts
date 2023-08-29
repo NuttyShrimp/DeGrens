@@ -88,10 +88,9 @@ export const doRefuel = async (plyId: number, netId: number, usingJerryCan: bool
       Inventory.setQualityOfItem(jerrycanItem.id, old => old - 10);
     }
   } else {
-    if (Financials.getCash(plyId) >= priceForPercentage) {
+    isSuccess = await Financials.purchase(accountId, cid, priceForPercentage, 'Betaald voor benzine', TaxIds.Gas);
+    if (!isSuccess && Financials.getCash(plyId) >= priceForPercentage) {
       isSuccess = Financials.removeCash(plyId, priceForPercentage, `refuel-${vin}`);
-    } else {
-      isSuccess = await Financials.purchase(accountId, cid, priceForPercentage, 'Betaald voor benzine', TaxIds.Gas);
     }
   }
 
