@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Politie auto vorderen een tikkeltje makkelijker gemaakt
 - Bankaccount heeft nu prio om te betalen bij het tanken
 - Tracker die door politie afgezet is, komt nu terug als je deze opnieuw probeert uit te schakelen
+- Statebaghandlers voor voertuigen waar speler inzit worden nu verwijderd als speler niet in voertuig zit
 
 ### Fixed
 

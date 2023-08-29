@@ -1,3 +1,5 @@
+import { BaseEvents } from './index';
+
 class Statebags {
   public addEntityStateBagChangeHandler = <T = never>(
     type: 'player' | 'entity' | 'localEntity',
@@ -15,7 +17,7 @@ class Statebags {
         const bagId = +bagName.replace(`${type}:`, '');
         if (isNaN(bagId)) return;
 
-        // First we await till entity exists. Both types require a different method
+        // First we await till entity exists. All types require a different method
         const [exists, entity] = await new Promise<[false] | [true, number]>(res => {
           let timedOut = false;
           setTimeout(() => (timedOut = true), 1000);
@@ -64,28 +66,40 @@ class Statebags {
     );
   };
 
-  public addCurrentVehicleStatebagChangeHandler = <T = never>(
+  public addCurrentVehicleStatebagChangeHandler = <T>(
     statebagKey: string,
     handler: (vehicle: number, value: T) => void
   ) => {
-    return AddStateBagChangeHandler(
-      statebagKey,
-      null as any,
-      (bagName: string, _key: string, value: T, _: number, fromOwnClient: boolean) => {
-        if (fromOwnClient) return;
+    let statebagHandlerId: number | null = null;
 
-        const netId = +bagName.replace('entity:', '');
-        if (isNaN(netId)) return;
-
-        if (!NetworkDoesEntityExistWithNetworkId(netId)) return;
-
-        const vehicle = NetworkGetEntityFromNetworkId(netId);
-        const playerVehicle = GetVehiclePedIsIn(PlayerPedId(), false);
-        if (playerVehicle !== vehicle) return;
-
-        handler(vehicle, value);
+    BaseEvents.onEnteringVehicle(vehicle => {
+      if (statebagHandlerId !== null) {
+        RemoveStateBagChangeHandler(statebagHandlerId);
+        console.error(`Statebag handler still existed when entering vehicle ${vehicle}`);
       }
-    );
+
+      statebagHandlerId = AddStateBagChangeHandler(
+        statebagKey,
+        null as any,
+        (bagName: string, _key: string, value: T, _: number, fromOwnClient: boolean) => {
+          if (fromOwnClient) return;
+
+          const netId = +bagName.replace('entity:', '');
+          if (isNaN(netId) || !NetworkDoesEntityExistWithNetworkId(netId)) return;
+
+          const ent = NetworkGetEntityFromNetworkId(netId);
+          if (ent !== vehicle) return;
+
+          handler(vehicle, value);
+        }
+      );
+    });
+
+    BaseEvents.onLeftVehicle(() => {
+      if (statebagHandlerId === null) return;
+      RemoveStateBagChangeHandler(statebagHandlerId);
+      statebagHandlerId = null;
+    });
   };
 }
 
