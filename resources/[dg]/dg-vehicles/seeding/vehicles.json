@@ -11477,5 +11477,18 @@
     "shop": "nfs",
     "type": "land",
     "inCarboostPool": true
+  },
+  {
+    "category": "super",
+    "model": "918",
+    "brand": "Porsche",
+    "name": "918 Spyder",
+    "class": "X",
+    "defaultStock": 1,
+    "restockTime": 14,
+    "price": 900000,
+    "shop": "nfs",
+    "type": "land",
+    "inCarboostPool": true
   }
 ]
