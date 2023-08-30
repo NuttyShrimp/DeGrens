@@ -5,7 +5,7 @@ class UI {
   constructor() {
     this.registered = [];
     // eventHandlers
-    this.resourceStarted = GetResourceState('dg-ui') === 'started' && !!global?.exports?.['dg-ui']?.RegisterUIEvent;
+    this.resourceStarted = false;
     on('__dg_ui:Ready', () => {
       this.resourceStarted = true;
       this.registered.forEach(evt => {
@@ -28,7 +28,7 @@ class UI {
       this.registered.push(name);
     }
     AddEventHandler(`__dg_ui:${name}`, callback);
-    if (this.resourceStarted) {
+    if (this.resourceStarted && global?.exports?.['dg-ui'] && global?.exports?.['dg-ui']?.RegisterUIEvent) {
       global.exports['dg-ui'].RegisterUIEvent(name);
     }
   }
