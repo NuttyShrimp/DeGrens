@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Statebaghandlers voor voertuigen waar speler inzit worden nu verwijderd als speler niet in voertuig zit
 - Vehicletypes worden nu gecached zodat voertuigen sneller en reliabler kunnen spawnen
 - Decodingtools zijn nu multiuse
+- Spikestrips kunnen niet langer onder voertuigen gelegd worden
 
 ### Fixed
 
