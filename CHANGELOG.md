@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Banktrucks werken nu wel deftig
 - Maintenance fee calculation fixed
 - Probleem opgelost waardoor quads spawnede als `sanchez`
+- Nummerplaat van een vinscratched voertuig komt niet langer terug op naam van eigenaar
 
 ## [1.4.3]
 

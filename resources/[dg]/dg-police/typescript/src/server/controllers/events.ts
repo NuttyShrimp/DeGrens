@@ -16,7 +16,7 @@ Events.onNet('police:showVehicleInfo', async (src: number, netId: number) => {
   const plate = Entity(vehicle).state.plate;
 
   let ownerName = Util.generateName(plate);
-  if (Vehicles.isVinFromPlayerVeh(vin)) {
+  if (!Vehicles.isVehicleVinScratched(vehicle) && Vehicles.isVinFromPlayerVeh(vin)) {
     const legalPlate = await Vehicles.getPlateForVin(vin);
     if (legalPlate === plate) {
       const ownerCid = await Vehicles.getCidFromVin(vin);
