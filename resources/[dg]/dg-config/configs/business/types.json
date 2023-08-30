@@ -50,5 +50,14 @@
     "lockers": {
       "size": 5
     }
+  },
+  "pawnshop": {
+    "permissions": ["stash", "property_access"],
+    "signin": {
+      "signOutWhenLeavingZone": true
+    },
+    "lockers": {
+      "size": 5
+    }
   }
 }

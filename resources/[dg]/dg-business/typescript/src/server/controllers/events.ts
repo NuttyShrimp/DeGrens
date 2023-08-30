@@ -267,11 +267,14 @@ Events.onNet('business:server:trySetRegister', (plyId, businessName: string, reg
   business.trySetRegister(plyId, registerIdx);
 });
 
-Events.onNet('business:server:setRegister', (plyId, businessId: number, registerIdx: number, items: string[]) => {
-  const business = getBusinessById(businessId);
-  if (!business) return;
-  business.setRegister(plyId, registerIdx, items);
-});
+Events.onNet(
+  'business:server:setRegister',
+  (plyId, businessId: number, registerIdx: number, items: Business.RegisterOrderItem[]) => {
+    const business = getBusinessById(businessId);
+    if (!business) return;
+    business.setRegister(plyId, registerIdx, items);
+  }
+);
 
 Events.onNet('business:server:cancelRegister', (plyId, businessName: string, registerIdx: number) => {
   const business = getBusinessByName(businessName);
@@ -303,8 +306,8 @@ Events.onNet('business:server:checkShop', (plyId, businessName: string) => {
   business.checkShop(plyId);
 });
 
-Events.onNet('business:server:buyFromShop', async (plyId, businessId: number, item: string) => {
+Events.onNet('business:server:buyFromShop', async (plyId, businessId: number, item: string, amount: number) => {
   const business = getBusinessById(businessId);
   if (!business) return;
-  business.buyFromShop(plyId, item);
+  business.buyFromShop(plyId, item, amount);
 });

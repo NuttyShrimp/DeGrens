@@ -4,7 +4,7 @@ let current: {
   pricedItems: Business.ClientPricedItems;
   businessId: number;
   registerIdx: number;
-  orderItems: string[];
+  orderItems: Business.RegisterOrderItem[];
 } | null = null;
 
 export const startPricedItemOrder = (
@@ -28,22 +28,27 @@ export const showOrderMenu = () => {
     return;
   }
 
-  const itemEntries: ContextMenu.Entry[] = current.orderItems.map((item, idx) => ({
-    title: generateMenuItemLabel(item),
-    description: 'Klik om te verwijderen',
-    callbackURL: 'business/order/remove',
-    data: {
-      itemIdx: idx,
-    },
-  }));
+  const itemEntries: ContextMenu.Entry[] = current.orderItems.map((orderItem, idx) => {
+    const pricedItem = current!.pricedItems[orderItem.name];
+    return {
+      title: `${orderItem.amount}x ${pricedItem.label} | €${pricedItem.price * orderItem.amount}`,
+      description: 'Klik om te verwijderen',
+      callbackURL: 'business/order/remove',
+      data: {
+        itemIdx: idx,
+      },
+    };
+  });
 
-  const addEntries: ContextMenu.Entry[] = Object.keys(current.pricedItems).map(item => ({
-    title: generateMenuItemLabel(item),
-    callbackURL: 'business/order/add',
-    data: {
-      item,
-    },
-  }));
+  const addEntries: ContextMenu.Entry[] = Object.entries(current.pricedItems).map(([item, { label, price }]) => {
+    return {
+      title: `${label} | €${price}`,
+      callbackURL: 'business/order/add',
+      data: {
+        item,
+      },
+    };
+  });
 
   const menuEntries: ContextMenu.Entry[] = [
     {
@@ -68,19 +73,35 @@ export const showOrderMenu = () => {
   UI.openApplication('contextmenu', menuEntries);
 };
 
-const generateMenuItemLabel = (item: string) => {
-  const menuItem = current?.pricedItems[item];
-  if (!menuItem) return 'Unknown';
-  return `${menuItem.label} | €${menuItem.price}`;
-};
-
-export const addToItemOrder = (itemName: string) => {
+export const addToItemOrder = async (itemName: string) => {
   if (!current) {
     Notifications.add('Je bent geen order aan het maken', 'error');
     return;
   }
 
-  current.orderItems.push(itemName);
+  const itemLabel = current.pricedItems[itemName]?.label ?? 'Unknown';
+  const result = await UI.openInput<{ amount: string }>({
+    header: `Hoeveel ${itemLabel} wil je toevoegen aan het order?`,
+    inputs: [
+      {
+        type: 'number',
+        name: 'amount',
+        label: 'Aantal',
+      },
+    ],
+  });
+  if (!result.accepted) {
+    showOrderMenu();
+    return;
+  }
+
+  const amount = +result.values.amount;
+  if (isNaN(amount) || amount <= 0) {
+    showOrderMenu();
+    return;
+  }
+
+  current.orderItems.push({ name: itemName, amount });
   showOrderMenu();
 };
 

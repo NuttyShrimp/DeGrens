@@ -313,6 +313,10 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
   public forceUnloadInventory = (inventoryId: string) => {
     global.exports['dg-inventory'].forceUnloadInventory(inventoryId);
   };
+
+  public getContainerItems = (): string[] => {
+    return global.exports['dg-inventory'].getContainerItems();
+  };
 }
 
 export default {

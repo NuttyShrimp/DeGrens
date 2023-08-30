@@ -50,18 +50,21 @@
       "maxZ": 5.37
     }
   },
-  "shopZone": {
-    "center": {
-      "x": -1227.71,
-      "y": -1480.31,
-      "z": 4.37
-    },
-    "width": 4.2,
-    "length": 0.4,
-    "options": {
-      "heading": 305,
-      "minZ": 4.17,
-      "maxZ": 5.77
+  "shop": {
+    "requireStock": false,
+    "zone": {
+      "center": {
+        "x": -1227.71,
+        "y": -1480.31,
+        "z": 4.37
+      },
+      "width": 4.2,
+      "length": 0.4,
+      "options": {
+        "heading": 305,
+        "minZ": 4.17,
+        "maxZ": 5.77
+      }
     }
   },
   "registers": {

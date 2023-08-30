@@ -66,6 +66,7 @@ declare namespace Business {
       sprite: number;
       color: number;
       coords: Vec3;
+      scale?: number;
     };
     // Optional registers for business to handle payments by filling in amount (if itemPrices defined, inputmenu will be repliced by making an order out of those items)
     registers?: {
@@ -74,8 +75,12 @@ declare namespace Business {
     };
     // Optional stash for business for all employees
     stashZone?: Zones.Box | Zones.Circle;
-    // Optional shop zone where players can buy stuff if no employees are signed in. Employees can fill stock. If stock is present money goes to business and item gets removed from stock. If no stock present, item gets created but money goes to state
-    shopZone?: Zones.Box | Zones.Circle;
+    // Optional shop zone where players can buy stuff if no employees are signed in. Employees can fill stock.
+    // If stock is present money goes to business and item gets removed from stock. If no stock present and does not require stock, item gets created but money goes to state
+    shop?: {
+      zone: Zones.Box | Zones.Circle;
+      requireStock: boolean;
+    };
     // Optional crafting zone where signed in players can access bench with provided id
     crafting?: {
       benchId: string;
@@ -117,4 +122,6 @@ declare namespace Business {
       price: number;
     }
   >;
+
+  type RegisterOrderItem = { name: string; amount: number };
 }

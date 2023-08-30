@@ -1,0 +1,130 @@
+{
+  "businessZone": {
+    "vectors": [
+      { "x": -1461.83, "y": -412.32 },
+      { "x": -1456.58, "y": -413.99 },
+      { "x": -1445.59, "y": -407.05 },
+      { "x": -1439.06, "y": -397.26 },
+      { "x": -1444.69, "y": -388.02 },
+      { "x": -1457.05, "y": -395.72 },
+      { "x": -1467.84, "y": -405.6 },
+      { "x": -1465.71, "y": -408.81 }
+    ],
+    "options": {
+      "minZ": 27.3817,
+      "maxZ": 41.1556
+    }
+  },
+  "managementZone": {
+    "center": {
+      "x": -1445.12,
+      "y": -397.17,
+      "z": 35.88
+    },
+    "width": 2.4,
+    "length": 0.8,
+    "options": {
+      "heading": 32,
+      "minZ": 35.48,
+      "maxZ": 36.28
+    }
+  },
+  "blip": {
+    "sprite": 467,
+    "color": 17,
+    "scale": 1.2,
+    "coords": { "x": -1458.6865, "y": -411.5376, "z": 35.8375 }
+  },
+  "stashZone": {
+    "center": {
+      "x": -1446.76,
+      "y": -397.47,
+      "z": 31.34
+    },
+    "width": 8.0,
+    "length": 7.4,
+    "options": {
+      "heading": 32,
+      "minZ": 30.34,
+      "maxZ": 33.14
+    }
+  },
+  "registers": {
+    "employeePercentage": 0.2,
+    "zones": [
+      {
+        "center": {
+          "x": -1454.0,
+          "y": -399.94,
+          "z": 35.84
+        },
+        "width": 1.2,
+        "length": 1,
+        "options": {
+          "heading": 302,
+          "minZ": 35.64,
+          "maxZ": 36.44
+        }
+      },
+      {
+        "center": {
+          "x": -1457.6,
+          "y": -402.09,
+          "z": 35.84
+        },
+        "width": 1.2,
+        "length": 1,
+        "options": {
+          "heading": 302,
+          "minZ": 35.64,
+          "maxZ": 36.44
+        }
+      },
+      {
+        "center": {
+          "x": -1460.92,
+          "y": -404.22,
+          "z": 35.84
+        },
+        "width": 1.2,
+        "length": 1,
+        "options": {
+          "heading": 302,
+          "minZ": 35.64,
+          "maxZ": 36.44
+        }
+      }
+    ]
+  },
+  "shop": {
+    "requireStock": true,
+    "zone": {
+      "center": {
+        "x": -1453.49,
+        "y": -407.4,
+        "z": 35.84
+      },
+      "width": 8.2,
+      "length": 1.4,
+      "options": {
+        "heading": 302,
+        "minZ": 34.84,
+        "maxZ": 36.24
+      }
+    }
+  },
+  "priceItems": [
+    "material_copper",
+    "material_glass",
+    "material_plastic",
+    "material_electronics",
+    "material_iron",
+    "material_aluminum",
+    "material_steel",
+    "refined_copper",
+    "refined_plastic",
+    "refined_iron",
+    "refined_aluminum",
+    "refined_steel"
+  ]
+}
