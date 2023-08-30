@@ -5,6 +5,8 @@ import {
   startJobForGroup,
   putBagInVehicle,
   skipCurrentLocation,
+  openSanitationRecycleMenu,
+  doSanitationRecycleAction,
 } from './service.sanitation';
 
 Events.onNet('jobs:sanitation:signIn', (src: number) => {
@@ -26,3 +28,6 @@ Events.onNet('jobs:sanitation:putInVehicle', (src: number) => {
 Events.onNet('jobs:sanitation:skipLocation', (plyId: number) => {
   skipCurrentLocation(plyId);
 });
+
+Events.onNet('jobs:sanitation:openRecycleMenu', openSanitationRecycleMenu);
+Events.onNet('jobs:sanitation:doRecycleAction', doSanitationRecycleAction);

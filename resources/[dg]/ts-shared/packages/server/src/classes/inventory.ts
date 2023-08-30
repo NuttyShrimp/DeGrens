@@ -203,6 +203,12 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
   ): Promise<Inventory.ItemState<T>[]> => {
     return global.exports['dg-inventory'].getItemsWithNameInInventory(type, identifier, name);
   };
+  public getItemsWithNameOfPlayer = <T extends Record<string, unknown> = {}>(
+    plyId: number,
+    name: string
+  ): Promise<Inventory.ItemState<T>[]> => {
+    return this.getItemsWithNameInInventory('player', this.getPlyIdentifier(plyId), name);
+  };
 
   public getFirstItemOfName = <T extends Record<string, unknown> = {}>(
     type: Inventory.Type,

@@ -51,7 +51,7 @@ export const setAssignedVehicle = (netId: typeof assignedVehicle) => {
         canInteract: vehicle => {
           if (!vehicle) return false;
           if (!holdingTrashbag) return false;
-          return Util.isAtBackOfEntity(vehicle);
+          return Util.isAtBackOfEntity(vehicle, 3);
         },
       },
       {
@@ -71,6 +71,7 @@ export const setAssignedVehicle = (netId: typeof assignedVehicle) => {
             },
           ] satisfies ContextMenu.Entry[]);
         },
+        canInteract: () => !holdingTrashbag,
       },
     ],
     distance: 5.0,

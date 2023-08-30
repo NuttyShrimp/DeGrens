@@ -2709,5 +2709,15 @@
       "y": 3
     },
     "useable": true
+  },
+  {
+    "name": "sanitation_material_bucket",
+    "label": "Recyclage Materiaal",
+    "decayRate": 4320,
+    "image": "sanitation_material_bucket.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
   }
 ]

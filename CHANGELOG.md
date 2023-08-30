@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Je kan nu zoeken op contactnaam in je telefoon tijdens overschrijvingen etc
 - Payconiq transaction modal geeft nu weer of transactie geslaagd is
+- Je kan nu kiezen of je materialen of geld als payout van een vuilkarrit wil
 
 ### Changed
 
