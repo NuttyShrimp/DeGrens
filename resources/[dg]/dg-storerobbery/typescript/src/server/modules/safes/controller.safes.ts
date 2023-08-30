@@ -12,11 +12,13 @@ Events.onNet('storerobbery:safes:hack', async (plyId: number, storeId: Storerobb
     return;
   }
 
-  const hasTool = await Inventory.doesPlayerHaveItems(plyId, 'decoding_tool');
-  if (!hasTool) {
+  const decodingItem = await Inventory.getFirstItemOfNameOfPlayer(plyId, 'decoding_tool');
+  if (!decodingItem) {
     Notifications.add(plyId, 'Hoe ga je dit openen?', 'error');
     return;
   }
+
+  Inventory.setQualityOfItem(decodingItem.id, old => old - getConfig().safe.qualityDecrease);
 
   const storeConfig = getConfig().stores[storeId];
   Police.createDispatchCall({
@@ -35,9 +37,6 @@ Events.onNet('storerobbery:safes:hack', async (plyId: number, storeId: Storerobb
   Util.changePlayerStress(plyId, Util.getRndInteger(10, 15));
 
   const gameSuccess = await Minigames.sequencegame(plyId, 4, 5, 4);
-  const removedItem = await Inventory.removeItemByNameFromPlayer(plyId, 'decoding_tool');
-  if (!removedItem) return;
-
   if (!gameSuccess) {
     Notifications.add(plyId, 'Mislukt...', 'error');
     return;
