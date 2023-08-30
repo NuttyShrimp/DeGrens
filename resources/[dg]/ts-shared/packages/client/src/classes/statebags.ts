@@ -72,7 +72,7 @@ class Statebags {
   ) => {
     let statebagHandlerId: number | null = null;
 
-    BaseEvents.onEnteringVehicle(vehicle => {
+    BaseEvents.onEnteredVehicle(vehicle => {
       if (statebagHandlerId !== null) {
         RemoveStateBagChangeHandler(statebagHandlerId);
         console.error(`Statebag handler still existed when entering vehicle ${vehicle}`);

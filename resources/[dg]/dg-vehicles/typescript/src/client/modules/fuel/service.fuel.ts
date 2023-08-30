@@ -13,13 +13,13 @@ let syncThread: NodeJS.Timer | null = null;
 let fuelThreadPaused = false;
 
 export const setFuelLevel = (level: number) => {
-  fuelLevel = Math.max(0, Math.min(100, level));
+  fuelLevel = Math.max(0, Math.min(100, isNaN(level) ? 0 : level));
   emit('vehicles:fuel:change', level);
 };
 
 // Fetch from state to set local variable on vehicle enter
 export const fetchFuelLevelOnEnter = (vehicle: number) => {
-  const fuelFromState = Number(Entity(vehicle).state.fuelLevel);
+  const fuelFromState = +(Entity(vehicle).state.fuelLevel ?? 0);
   setFuelLevel(fuelFromState);
 };
 
