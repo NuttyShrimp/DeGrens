@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Vehicletypes worden nu gecached zodat voertuigen sneller en reliabler kunnen spawnen
 - Decodingtools zijn nu multiuse
 - Spikestrips kunnen niet langer onder voertuigen gelegd worden
+- Carboost tijd tussen hacks verlaagd
 
 ### Fixed
 
