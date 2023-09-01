@@ -15,8 +15,8 @@ type SpawnedVehicleData = {
     plate: string;
     model: string;
   };
-  loggingThread: NodeJS.Timer;
-  owner: number;
+  // loggingThread: NodeJS.Timer;
+  // owner: number;
   events: Event[];
 };
 
@@ -62,32 +62,30 @@ class PersistencyModule {
   }: {
     vehicle: number;
   } & SpawnedVehicleData['vehicleData']) => {
-    this.startMissionEntityThread(vehicle);
-
     const data: SpawnedVehicleData = {
       vehicleData,
-      owner: -1,
+      // owner: -1,
       events: [
         {
-          message: `Vehicle has been created`,
+          message: `Vehicle has been created | PopulationType: ${GetEntityPopulationType(vehicle)}`,
           timestamp: this.getDate(),
         },
       ],
-      // Ownership transfer logging to debug the actual cause of this shit
-      loggingThread: setInterval(() => {
-        try {
-          const owner = NetworkGetEntityOwner(vehicle);
-          if (data.owner === owner) return;
-          data.events.push({
-            message: `${owner} took ownership from ${data.owner}`,
-            timestamp: this.getDate(),
-          });
-          data.owner = owner;
-        } catch (e: unknown) {
-          this.logger.error(e);
-          this.handleEntityRemoval(vehicle);
-        }
-      }, 100),
+      // // Ownership transfer logging to debug the actual cause of this shit
+      // loggingThread: setInterval(() => {
+      //   try {
+      //     const owner = NetworkGetEntityOwner(vehicle);
+      //     if (data.owner === owner) return;
+      //     data.events.push({
+      //       message: `${owner} took ownership from ${data.owner}`,
+      //       timestamp: this.getDate(),
+      //     });
+      //     data.owner = owner;
+      //   } catch (e: unknown) {
+      //     this.logger.error(e);
+      //     this.handleEntityRemoval(vehicle);
+      //   }
+      // }, 100),
     };
     this.spawnedVehicles.set(vehicle, data);
   };
@@ -96,7 +94,7 @@ class PersistencyModule {
     const data = this.spawnedVehicles.get(vehicle);
     if (!data) return;
 
-    clearInterval(data.loggingThread);
+    // clearInterval(data.loggingThread);
     this.spawnedVehicles.delete(vehicle);
   };
 
@@ -105,12 +103,15 @@ class PersistencyModule {
     if (!this.spawnedVehicles.has(vehicle)) return;
 
     const data = this.spawnedVehicles.get(vehicle)!;
-    clearInterval(data.loggingThread);
+    // clearInterval(data.loggingThread);
     this.spawnedVehicles.delete(vehicle);
 
     // i let this run for 10 minutes and every single time the entity still exists when this event is called
     // we can use that to determine restore data instead of needing to run it in a thread
+    let populationType = -1;
     if (DoesEntityExist(vehicle)) {
+      populationType = GetEntityPopulationType(vehicle);
+
       const restoreData = this.getVehicleRestoreData(vehicle);
       Util.awaitCondition(() => !DoesEntityExist(vehicle)).then(success => {
         if (!success) {
@@ -125,11 +126,11 @@ class PersistencyModule {
 
     // this logging is kept in place to actually debug this shit
     data.events.push({
-      message: `Vehicle has been deleted`,
+      message: `Vehicle has been deleted | PopulationType: ${populationType}`,
       timestamp: this.getDate(),
     });
 
-    const logMsg = `Scriptspawned vehicle ${vehicle} (${data.vehicleData.vin}) has been deleted | Last Owner: ${data.owner}`;
+    const logMsg = `Scriptspawned vehicle ${vehicle} (${data.vehicleData.vin}) has been deleted`;
     this.logger.warn(logMsg);
     Util.Log(
       'vehicles:persistency:vehicleDeleted',
@@ -137,8 +138,8 @@ class PersistencyModule {
         vin: data.vehicleData.vin,
         events: data.events,
       },
-      logMsg,
-      data.owner
+      logMsg
+      // data.owner
     );
   };
 
@@ -170,33 +171,6 @@ class PersistencyModule {
     if (result !== undefined) return;
 
     this.logger.error(`Failed to spawn restore vehicle ${vehicleData.vin}`);
-  };
-
-  private startMissionEntityThread = (vehicle: number) => {
-    // we send vin, netId and serverise handle to client, they send it back when transfering thread to another owner
-    // using those values, we can safely assume that entity is still same entity (as netIds WILL be reused)
-    const vin = getVinForVeh(vehicle);
-    const netId = NetworkGetNetworkIdFromEntity(vehicle);
-    Sync.executeAction('vehicles:persistency:startMissionEntityThread', vehicle, {
-      vin,
-      netId,
-      vehicle,
-    });
-  };
-
-  @DGXEvent('vehicles:persistency:transferMissionEntityThread')
-  private _transferMissionEntityThread = (_: number, data: { vin: string; netId: number; vehicle: number }) => {
-    const vehicle = NetworkGetEntityFromNetworkId(data.netId);
-    if (!vehicle || !DoesEntityExist(vehicle)) return;
-
-    // entity handle should always stay same, we receive original handle from client to check if netId still corresponds to original vehicle
-    if (vehicle !== data.vehicle) return;
-
-    // we check if vehicle still has same vin as it had when thread was started
-    const vin = getVinForVeh(vehicle);
-    if (vin !== data.vin) return;
-
-    Sync.executeAction('vehicles:persistency:startMissionEntityThread', vehicle, data);
   };
 }
 
