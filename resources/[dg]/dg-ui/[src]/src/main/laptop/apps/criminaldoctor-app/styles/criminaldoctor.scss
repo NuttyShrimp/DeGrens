@@ -1,0 +1,17 @@
+@use '../../../styles/colors.scss';
+@use 'src/styles/variables';
+
+.laptop-criminal-doctor {
+  height: 100%;
+  background-color: colors.$primary;
+  padding: 1vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  // stop selection
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

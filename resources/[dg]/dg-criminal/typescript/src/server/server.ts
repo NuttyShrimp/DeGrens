@@ -17,6 +17,7 @@ import './modules/oxyrun';
 import './modules/parkingmeters';
 import './modules/methrun';
 import './modules/banktruck';
+import './modules/doctor';
 
 setImmediate(async () => {
   await loadConfig();
