@@ -524,6 +524,12 @@ export default class Boost {
             'location-dot': 'Actuele trackerlocatie is te bekijken op GPS',
           }
         : undefined,
+      blip: this.chances.tracker
+        ? undefined
+        : {
+            sprite: 645,
+            color: 0,
+          },
     });
   };
 
