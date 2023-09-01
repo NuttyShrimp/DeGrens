@@ -1,6 +1,5 @@
 import { ExportDecorators, SQL, Util } from '@dgx/server';
 import { getVinForVeh } from 'helpers/vehicle';
-
 import vinManager from '../../identification/classes/vinmanager';
 import { fuelLogger } from '../logger.fuel';
 
@@ -26,14 +25,15 @@ class FuelManager extends Util.Singleton<FuelManager>() {
   setFuelLevel(vehicle: number, fuelLevel: number): void {
     fuelLogger.silly(`Setting fuel for ${vehicle} to ${fuelLevel}`);
     Entity(vehicle).state.fuelLevel = fuelLevel;
+    this.saveFuel(vehicle, fuelLevel);
   }
 
-  // Fired when fuelLevel statebag of a vehicle has changed
-  public handleStateChange = (vehicle: number, fuelLevel: number) => {
+  saveFuel(vehicle: number, amount?: number) {
     const vin = getVinForVeh(vehicle);
     if (!vin || !vinManager.isVinFromPlayerVeh(vin)) return;
+    const fuelLevel = amount ?? this.getFuelLevel(vehicle);
     this.updateFuelDB(vin, fuelLevel);
-  };
+  }
 
   // Register new vehicles that dont have fuel registered yet
   registerVehicle(vehicle: number, amount?: number) {

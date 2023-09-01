@@ -1,13 +1,6 @@
-import { Events } from '@dgx/server';
+import { BaseEvents, Events } from '@dgx/server';
 import { fuelManager } from './classes/fuelManager';
 import { doRefuel, openRefuelMenu } from './service.fuel';
-
-Events.onNet('vehicle:fuel:overrideSet', (src: number, netId: number, fuelLevel: number) => {
-  const vehicle = NetworkGetEntityFromNetworkId(netId);
-  if (!vehicle || !DoesEntityExist(vehicle)) return;
-  fuelManager.setFuelLevel(vehicle, fuelLevel);
-  fuelManager.handleStateChange(vehicle, fuelLevel);
-});
 
 Events.onNet('vehicles:fuel:doRefuel', (src, netId: number, usingJerryCan: boolean) => {
   doRefuel(src, netId, usingJerryCan);
@@ -17,10 +10,13 @@ Events.onNet('vehicles:fuel:openRefuelMenu', (src, netId: number) => {
   openRefuelMenu(src, netId);
 });
 
-//@ts-ignore
-AddStateBagChangeHandler('fuelLevel', null, (bagName: string, _, value: number) => {
-  const netId = Number(bagName.replace('entity:', ''));
-  if (Number.isNaN(netId)) return;
-  const vehicle = NetworkGetEntityFromNetworkId(netId);
-  fuelManager.handleStateChange(vehicle, value);
+// Save fuel when player stops becoming driver
+BaseEvents.onLeftVehicle((_, vehicle, seat) => {
+  if (seat !== -1) return;
+  fuelManager.saveFuel(vehicle);
+});
+
+BaseEvents.onVehicleSeatChange((_, vehicle, __, oldSeat) => {
+  if (oldSeat !== -1) return;
+  fuelManager.saveFuel(vehicle);
 });

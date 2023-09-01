@@ -73,11 +73,6 @@ export const cleanFuelThread = (vehicle: number) => {
     syncThread = null;
   }
 
-  // Save fuel to server, when leaving we might not be owner anymore so for safety we dont use statebag setter
-  if (vehicle && NetworkGetEntityIsNetworked(vehicle)) {
-    overrideSetFuel(vehicle, fuelLevel);
-  }
-
   fuelThreadRunning = false;
 };
 
@@ -98,6 +93,7 @@ export const doRefuel = async (netId: number, usingJerryCan = false) => {
     const chance = Util.getRndInteger(1, 101);
     if (chance < 10) {
       Sync.executeAction('NetworkExplodeVehicle', veh, true, false, false);
+      return;
     }
   }
   Events.emitNet('vehicles:fuel:doRefuel', netId, usingJerryCan);
@@ -109,11 +105,6 @@ export const pauseFuelThread = (pause: boolean) => {
 
 export const getVehicleFuel = (vehicle: number) => {
   return Entity(vehicle).state.fuelLevel;
-};
-
-// Use if you are not sure you are entityowner
-export const overrideSetFuel = (vehicle: number, fuelLevel: number) => {
-  Events.emitNet('vehicle:fuel:overrideSet', NetworkGetNetworkIdFromEntity(vehicle), fuelLevel);
 };
 
 export const isHoldingJerryCan = () => {

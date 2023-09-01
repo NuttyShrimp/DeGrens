@@ -4,7 +4,6 @@ import { isCloseToAWheel } from '@helpers/vehicle';
 import { getWindowState, getDoorState, getTyreState } from './helpers.status';
 import { setNativeStatus } from './service.status';
 import { generatePerfectNativeStatus } from '@shared/status/helpers.status';
-import { getVehicleFuel, overrideSetFuel } from 'modules/fuel/service.fuel';
 
 Sync.registerActionHandler(
   'vehicles:status:setNative',
@@ -80,10 +79,7 @@ Sync.registerActionHandler('vehicles:status:fix', (vehicle: number, keepTyreStat
 
   setNativeStatus(vehicle, generatePerfectNativeStatus());
 
-  // SetVehicleFixed native modifies fuel
-  const fuelLevel = getVehicleFuel(vehicle);
   SetVehicleFixed(vehicle);
-  overrideSetFuel(vehicle, fuelLevel);
 
   if (tyreState) {
     setNativeStatus(vehicle, { wheels: tyreState });
