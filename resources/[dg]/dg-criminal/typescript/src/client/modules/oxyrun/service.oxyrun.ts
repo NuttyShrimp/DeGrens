@@ -49,6 +49,10 @@ export const handleEnterLocation = () => {
   if (!inSchedulingTimeout) {
     scheduleFindBuyer();
   }
+
+  global.exports['dg-misc'].overrideDensitySettings({
+    vehicle: 1.0,
+  });
 };
 
 export const handleLeaveLocation = () => {
@@ -56,6 +60,8 @@ export const handleLeaveLocation = () => {
 
   atLocation = false;
   Notifications.add('Je hebt de verkoopplaats verlaten', 'error');
+
+  global.exports['dg-misc'].resetDensitySettings();
 };
 
 const scheduleFindBuyer = async () => {
