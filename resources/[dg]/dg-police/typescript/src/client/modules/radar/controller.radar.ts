@@ -1,4 +1,4 @@
-import { BaseEvents, Jobs, Keys, Notifications } from '@dgx/client';
+import { BaseEvents, Jobs, Keys, Notifications, UI } from '@dgx/client';
 import {
   isRadarActive,
   isRadarEnabled,
@@ -49,4 +49,10 @@ BaseEvents.onVehicleEngineStateChange((_, engineState) => {
   if (isRadarEnabled()) {
     setRadarActive(true, true);
   }
+});
+
+UI.RegisterUICallback('police/radar/copyPlate', (data: { plate: string }, cb) => {
+  UI.addToClipboard(data.plate);
+  Notifications.add('Nummerplaat staat in je clipboard');
+  cb({ meta: { message: 'done', ok: true }, data: {} });
 });

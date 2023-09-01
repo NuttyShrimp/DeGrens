@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Payconiq transaction modal geeft nu weer of transactie geslaagd is
 - Je kan nu kiezen of je materialen of geld als payout van een vuilkarrit wil
 - Carboosts hebben nu een GPS blip indien het voertuig geen tracker heeft
+- Je kan nu een nummerplaat kopieren in de radargeschiedenis
 
 ### Changed
 
