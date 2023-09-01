@@ -9,6 +9,7 @@ declare namespace Criminal {
     parkingmeters: Parkingmeters.Config;
     methrun: Methrun.Config;
     banktruck: Banktruck.Config;
+    doctor: Doctor.Config;
   };
 
   namespace Weed {
@@ -226,6 +227,18 @@ declare namespace Criminal {
       open: boolean;
       guardsSpawned: boolean;
       looting: boolean;
+    };
+  }
+
+  namespace Doctor {
+    type Config = {
+      npcModel: string;
+      duration: number;
+      payment: {
+        coin: string;
+        amount: number;
+      };
+      locations: Vec4[];
     };
   }
 }
