@@ -106,15 +106,12 @@ export const handleLockpickStart = async (
   const vin = getVinForVeh(vehicle);
   if (!vin) return;
 
-  // TODO: Is this actually needed? We check the NO_LOCK_CLASSES when toggling lock but if a vehicle that should be locked,
-  // is somehow locked, we should still be able to lockpick it right?
-
-  // // Check if vehicle class has a lock depending on what we trying to lockpick
-  // const nativeClass = (await RPC.execute<number>('vehicle:getClass', plyId, netId)) ?? -1;
-  // if (nativeClass < 0 || NO_LOCK_CLASSES[lockpickType].indexOf(nativeClass) !== -1) {
-  //   Notifications.add(plyId, 'Je kan dit niet op dit type voertuig', 'error');
-  //   return;
-  // }
+  // Check if vehicle class has a lock depending on what we trying to lockpick
+  const nativeClass = (await RPC.execute<number>('vehicle:getClass', plyId, netId)) ?? -1;
+  if (nativeClass < 0) {
+    Notifications.add(plyId, 'Je kan dit niet op dit type voertuig', 'error');
+    return;
+  }
 
   if (lockpickType === 'door' || lockpickType === 'hack') {
     // Check if near door
@@ -182,8 +179,15 @@ export const handleLockpickStart = async (
   }
 
   // Check info to determine difficulty
-  const vehicleClass =
-    Overwrites.getOverwrite<Vehicles.Class | undefined>('vehicleClass') ?? getConfigByEntity(vehicle)?.class ?? 'D';
+  let vehicleClass: Vehicles.Class;
+  if (Overwrites.getOverwrite<Vehicles.Class | undefined>('vehicleClass')) {
+    vehicleClass = 'D';
+  } else if (nativeClass === 18) {
+    // EMS vehicles always X
+    vehicleClass = 'X';
+  } else {
+    vehicleClass = getConfigByEntity(vehicle)?.class ?? 'D';
+  }
 
   let minigameData: any | undefined = undefined;
   if (info.isSlimjim) {
