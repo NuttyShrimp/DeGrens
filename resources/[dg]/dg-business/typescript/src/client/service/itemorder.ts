@@ -87,6 +87,7 @@ export const addToItemOrder = async (itemName: string) => {
         type: 'number',
         name: 'amount',
         label: 'Aantal',
+        value: '1',
       },
     ],
   });

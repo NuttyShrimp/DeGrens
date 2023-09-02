@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Regen bij CLEARING weather weggehaald
+- Aantal staat nu standaard op 1 wanneer je iets koopt bij een business
 
 ### Fixed
 
