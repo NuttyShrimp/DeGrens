@@ -37,29 +37,27 @@ class BaseEvents extends SharedBaseEvents {
     });
   };
 
-  public onEnteredVehicle = (handler: (plyId: number, vehicle: number, seat: number) => void) => {
-    onNet('baseevents:net:enteredVehicle', (vehicle: number, seat: number) => {
-      handler(source, vehicle, seat);
+  public onEnteredVehicle = (handler: (plyId: number, netId: number, seat: number) => void) => {
+    onNet('baseevents:net:enteredVehicle', (netId: number, seat: number) => {
+      handler(source, netId, seat);
     });
   };
 
-  public onLeftVehicle = (handler: (plyId: number, vehicle: number, seat: number) => void) => {
-    onNet('baseevents:net:leftVehicle', (vehicle: number, seat: number) => {
-      handler(source, vehicle, seat);
+  public onLeftVehicle = (handler: (plyId: number, netId: number, seat: number) => void) => {
+    onNet('baseevents:net:leftVehicle', (netId: number, seat: number) => {
+      handler(source, netId, seat);
     });
   };
 
-  public onVehicleSeatChange = (
-    handler: (plyId: number, vehicle: number, newSeat: number, oldSeat: number) => void
-  ) => {
-    onNet('baseevents:net:vehicleChangedSeat', (vehicle: number, newSeat: number, oldSeat: number) => {
-      handler(source, vehicle, newSeat, oldSeat);
+  public onVehicleSeatChange = (handler: (plyId: number, netId: number, newSeat: number, oldSeat: number) => void) => {
+    onNet('baseevents:net:vehicleChangedSeat', (netId: number, newSeat: number, oldSeat: number) => {
+      handler(source, netId, newSeat, oldSeat);
     });
   };
 
-  public onVehicleEngineStateChange = (handler: (plyId: number, vehicle: number, engineState: boolean) => void) => {
-    onNet('baseevents:net:engineStateChanged', (vehicle: number, engineState: boolean) => {
-      handler(source, vehicle, engineState);
+  public onVehicleEngineStateChange = (handler: (plyId: number, netId: number, engineState: boolean) => void) => {
+    onNet('baseevents:net:engineStateChanged', (netId: number, engineState: boolean) => {
+      handler(source, netId, engineState);
     });
   };
 }
