@@ -38,7 +38,7 @@ Inventory.registerUseable('tracker_disabler', plyId => {
   }
   const driverPed = GetPedInVehicleSeat(vehicle, -1);
   if (!driverPed || !DoesEntityExist(driverPed) || !IsPedAPlayer(driverPed)) {
-    Notifications.add(plyId, 'Er zit niemand aan achter het stuur', 'error');
+    Notifications.add(plyId, 'Er zit niemand aan het stuur', 'error');
     return;
   }
   if (!Util.isDevEnv() && ped === driverPed) {
