@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Carboosts hebben nu een GPS blip indien het voertuig geen tracker heeft
 - Je kan nu een nummerplaat kopieren in de radargeschiedenis
 - Spawnrate van voertuigen wordt nu tijdelijk verhoogd als je een oxyrun aan het doen bent
+- Vesten voor de nieuwe MC's toegevoegd
+- MC logo op hun gebouw geplaatst
 
 ### Changed
 
@@ -30,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Carboost tijd tussen hacks verlaagd
 - Lockpick difficulty van overheidsvoertuigen aangepast
 - Kleine verandering aan manier waarop fuel wordt opgeslagen
+- Handlings voor kofi voertuigen aangepast
 
 ### Fixed
 
