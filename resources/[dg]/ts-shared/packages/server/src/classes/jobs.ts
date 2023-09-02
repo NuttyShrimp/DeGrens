@@ -145,6 +145,10 @@ class Police {
     global.exports['dg-police'].removeTrackerFromVehicle(trackerId);
   };
 
+  public isTrackerActive = (trackerId: number): boolean => {
+    return global.exports['dg-police'].isTrackerActive(trackerId);
+  };
+
   public isCuffed = (plyId: number) => {
     return global.exports['dg-police'].isCuffed(plyId);
   };

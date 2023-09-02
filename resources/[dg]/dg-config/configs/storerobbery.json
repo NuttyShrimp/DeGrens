@@ -1,13 +1,14 @@
 {
   "register": {
     "refillTime": 30,
-    "rollAmount": [2, 5]
+    "rollAmount": [3, 7]
   },
   "safe": {
-    "crackDelay": 5,
+    "crackDelay": 3,
     "refillTime": 120,
     "specialItemChance": 100,
-    "rollAmount": [10, 15]
+    "rollAmount": [20, 30],
+    "qualityDecrease": 20
   },
   "stores": {
     "little_seoul": {

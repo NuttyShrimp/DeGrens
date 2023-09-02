@@ -203,6 +203,12 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
   ): Promise<Inventory.ItemState<T>[]> => {
     return global.exports['dg-inventory'].getItemsWithNameInInventory(type, identifier, name);
   };
+  public getItemsWithNameOfPlayer = <T extends Record<string, unknown> = {}>(
+    plyId: number,
+    name: string
+  ): Promise<Inventory.ItemState<T>[]> => {
+    return this.getItemsWithNameInInventory('player', this.getPlyIdentifier(plyId), name);
+  };
 
   public getFirstItemOfName = <T extends Record<string, unknown> = {}>(
     type: Inventory.Type,
@@ -231,7 +237,7 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
     const allHandlerData = this.updateHandlers.get(type) ?? [];
     allHandlerData.push({ handler, item, action });
     this.updateHandlers.set(type, allHandlerData);
-    if (allHandlerData.length === 1) {
+    if (this.updateHandlers.size === 1 && allHandlerData.length === 1) {
       on(
         'inventory:inventoryUpdated',
         (type: Inventory.Type, identifier: string, action: 'add' | 'remove', itemState: Inventory.ItemState) => {
@@ -306,6 +312,10 @@ class Inventory extends UtilShared.Singleton<Inventory>() {
 
   public forceUnloadInventory = (inventoryId: string) => {
     global.exports['dg-inventory'].forceUnloadInventory(inventoryId);
+  };
+
+  public getContainerItems = (): string[] => {
+    return global.exports['dg-inventory'].getContainerItems();
   };
 }
 

@@ -119,7 +119,7 @@ Peek.addZoneEntry('business_register', {
       icon: 'fas fa-inbox',
       action: option => {
         const stashId = `${option.data.businessName}_register_${option.data.registerIdx}`;
-        Inventory.openStash(stashId, 7);
+        Inventory.openStash(stashId, 15);
       },
     },
   ],

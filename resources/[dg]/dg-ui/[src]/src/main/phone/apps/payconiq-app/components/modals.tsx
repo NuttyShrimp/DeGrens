@@ -1,7 +1,7 @@
 import { Input } from '../../../../../components/inputs';
 import { SimpleForm } from '../../../../../components/simpleform';
 import { nuiAction } from '../../../../../lib/nui-comms';
-import { showCheckmarkModal, showLoadModal } from '../../../lib';
+import { showCheckmarkModal, showLoadModal, showWarningModal } from '../../../lib';
 import { usePayconiqAppStore } from '../stores/usePayconiqAppStore';
 
 export const TransactionModal = () => {
@@ -22,10 +22,10 @@ export const TransactionModal = () => {
           render: props => <Input.TextField {...props} label={'Opmerking'} icon={'comment'} />,
         },
       ]}
-      onAccept={vals => {
+      onAccept={async vals => {
         showLoadModal();
-        nuiAction('phone/payconiq/makeTransaction', vals);
-        showCheckmarkModal(() => {
+        const success = await nuiAction<boolean>('phone/payconiq/makeTransaction', vals);
+        (success ? showCheckmarkModal : showWarningModal)(() => {
           setDirty(true);
         });
       }}

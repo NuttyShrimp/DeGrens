@@ -24,6 +24,7 @@ import { setVehicleAsVinScratched } from 'services/vinscratch';
 import { setVehicleDoorsLocked } from 'modules/keys/service.keys';
 import { charModule } from './core';
 import persistencyModule from 'services/persistency';
+import { getModelType } from './modeltypes';
 
 /**
  * Spawn a vehicle
@@ -44,18 +45,10 @@ export const spawnVehicle: Vehicles.SpawnVehicleFunction = async data => {
     }
   }
 
-  // First we check model if model is vehicle on client
-  // we use core to make sure player is loaded to avoid getting players in loadingscreen
-  const modelCheckPlayer = Object.keys(charModule.getAllPlayers())[0];
-  if (!modelCheckPlayer) {
-    mainLogger.error(`No players available to check model for 'spawnVehicle'`);
-    return;
-  }
-
-  // We keep this RPC to check if model is valid even tho we dont really need to modeltype anymore if not using CREATE_VEHICLE_SERVER_SETTER
-  const modelType = await RPC.execute<string | undefined>('vehicles:getModelType', +modelCheckPlayer, data.model);
+  // we validate model on client to get modeltype
+  const modelType = await getModelType(data.model);
   if (!modelType) {
-    mainLogger.error(`Spawn vehicle: invalid model ${data.model}`);
+    mainLogger.error(`Spawn vehicle: failed to find modeltype for ${data.model}`);
     return;
   }
 

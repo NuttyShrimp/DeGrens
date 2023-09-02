@@ -168,6 +168,7 @@ export const openPlateHistory = () => {
   const menu: ContextMenu.Entry[] = [
     {
       title: 'Nummerplaat geschiedenis',
+      description: 'Klik op een nummerplaat om te deze kopieren',
       disabled: true,
       icon: 'fas fa-input-numeric',
     },
@@ -175,11 +176,15 @@ export const openPlateHistory = () => {
 
   const time = GetGameTimer();
   plateHistory.forEach(x => {
-    const minutesSince = Math.round((time - x.time) / 60000);
+    const minutesSince = Math.ceil((time - x.time) / 60000);
     menu.push({
       title: x.plate,
       description: `${x.flagged ? 'Geflagged' : 'Niet geflagged'} - ${minutesSince} minuten geleden`,
       preventCloseOnClick: true,
+      callbackURL: 'police/radar/copyPlate',
+      data: {
+        plate: x.plate,
+      },
     });
   });
 

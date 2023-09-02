@@ -36,7 +36,7 @@ export const spawnGuard = async (guardData: NPCs.Guard, resourceName: string) =>
     }
   }
 
-  Sync.executeAction('npcs:guards:setup', ped, guardId, guardData);
+  Sync.executeAction('npcs:guards:setup', ped, guardData);
 
   const deleteTimeout = startDeleteTimeout(guardId, guardData.deleteTime?.alive ?? 5 * 60);
   guards.set(guardId, {

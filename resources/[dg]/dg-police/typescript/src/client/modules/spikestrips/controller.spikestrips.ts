@@ -1,9 +1,66 @@
-import { BaseEvents, Statebags, Util, Vehicles, PolyZone } from '@dgx/client';
-import { WHEELS } from './constants.spikestrips';
+import { BaseEvents, Statebags, Util, Vehicles, PolyZone, RPC } from '@dgx/client';
+import { SPIKE_MODEL, WHEELS } from './constants.spikestrips';
+import { Vector4 } from '@dgx/shared';
 
 let spikeThread: NodeJS.Timer | null = null;
 const spikeEntities = new Set<number>();
 const spikesWithZones = new Set<number>();
+
+RPC.register('police:spikestrips:getPosition', async (amount: number) => {
+  await Util.loadModel(SPIKE_MODEL);
+
+  // do raycast to check if no vehicle at spikeposition
+  const [min, max] = GetModelDimensions(SPIKE_MODEL);
+  const spikeLength = max[1] - min[1];
+
+  const ped = PlayerPedId();
+  const pedCoords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(ped, 0, 0.5, -0.5));
+  const startCoords = { ...pedCoords, w: GetEntityHeading(ped) };
+
+  const endCoords = Util.getOffsetFromCoords(startCoords, { x: 0, y: spikeLength * amount, z: 0 });
+  const [_, endCoordsZ] = GetGroundZFor_3dCoord(endCoords.x, endCoords.y, endCoords.z + 5, true);
+  endCoords.z = endCoordsZ + 0.5;
+
+  setInterval(() => {
+    DrawLine(startCoords.x, startCoords.y, startCoords.z, endCoords.x, endCoords.y, endCoords.z, 255, 0, 0, 255);
+  }, 1);
+
+  const rayHandle = StartShapeTestRay(
+    startCoords.x,
+    startCoords.y,
+    startCoords.z,
+    endCoords.x,
+    endCoords.y,
+    endCoords.z,
+    2,
+    ped,
+    0
+  );
+  const hit = GetShapeTestResult(rayHandle)[1];
+  if (hit) return;
+
+  const objectsCreateData: Objects.SyncedCreateData[] = [];
+  for (let i = 0; i < amount; i++) {
+    const coords = Util.getOffsetFromCoords(startCoords, {
+      x: 0,
+      y: (spikeLength / 2) * (i * 2 + 1),
+      z: 1,
+    });
+    objectsCreateData.push({
+      model: 'p_ld_stinger_s',
+      skipScheduling: true,
+      skipStore: true,
+      coords,
+      rotation: { x: 0, y: 0, z: startCoords.w },
+      flags: {
+        onFloor: true,
+        isSpikestrip: true,
+      },
+    });
+  }
+
+  return objectsCreateData;
+});
 
 onNet('police:spikestrips:doAnim', async () => {
   await Util.loadAnimDict('anim@heists@narcotics@trash');
@@ -45,7 +102,7 @@ const startSpikeThread = (vehicle: number) => {
   const poppedTyres = new Set<number>();
 
   spikeThread = setInterval(() => {
-    if (!DoesEntityExist(vehicle) || Vehicles.getVehicleSpeed(vehicle) < 1) return;
+    if (!DoesEntityExist(vehicle) || Vehicles.getVehicleSpeed(vehicle) < 3) return;
     if (Vehicles.getVehicleHasBulletProofTires(vehicle)) return;
 
     for (const entity of spikeEntities) {

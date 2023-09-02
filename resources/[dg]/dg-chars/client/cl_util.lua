@@ -104,13 +104,17 @@ end
 
 removeEntities = function(skipObjects)
   for k, v in pairs(entityCache.peds) do
-    DeleteEntity(v)
+    if IsEntityAPed(v) and not NetworkGetEntityIsNetworked(entity) then
+      DeleteEntity(v)
+    end
   end
   if skipObjects then
     return
   end
   for k, v in pairs(entityCache.objects) do
-    DeleteEntity(v)
+    if not NetworkGetEntityIsNetworked(entity) then
+      DeleteEntity(v)
+    end
   end
 end
 

@@ -1,4 +1,4 @@
-import { Config, Events, Financials, Inventory, Notifications, Util, Vehicles, Phone } from '@dgx/server';
+import { Config, Events, Inventory, Notifications, Util, Vehicles, Phone, UI, Financials } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
 import jobManager from 'classes/jobManager';
 import { changeJob, disbandGroup, getGroupById, getGroupByServerId } from 'modules/groups/service';
@@ -16,10 +16,10 @@ export const initializeSanitation = () => {
     legal: true,
     icon: 'trash-can',
     location: { x: -346.0635, y: -1556.1328 },
-    // this is payout per bag player has done, 10 bags means * 10
+    // this is amount of money for 1 bucket, 10 bags means * 10
     payout: {
-      min: 14,
-      max: 20,
+      min: 15,
+      max: 30,
       groupPercent: 25,
     },
   });
@@ -105,14 +105,13 @@ export const startJobForGroup = async (plyId: number) => {
     Notifications.add(plyId, 'Kon het voertuig niet uithalen', 'error');
     return;
   }
-  const { vehicle, netId, vin } = spawnedVehicle;
+  const { netId, vin } = spawnedVehicle;
 
   const locationSequence = generateLocationSequence();
   const jobGroup: Sanitation.Job = {
     vin,
     locationSequence,
     dumpstersDone: [],
-    bagsPerPlayer: new Map(),
     payoutLevel,
   };
   activeGroups.set(group.id, jobGroup);
@@ -164,16 +163,6 @@ export const finishJobForGroup = (plyId: number, netId: number) => {
     return;
   }
 
-  const payoutPerBag = jobManager.getJobPayout('sanitation', group.size, active.payoutLevel) ?? 0;
-  group.members.forEach(m => {
-    if (m.serverId === null) return;
-
-    const amount = active.bagsPerPlayer.get(m.cid);
-    if (!amount) return;
-    const plyMultiplier = jobManager.getPlayerAmountOfJobsFinishedMultiplier(m.cid);
-    Financials.addCash(m.serverId, payoutPerBag * amount * plyMultiplier, 'sanitation-payout');
-  });
-
   const vehicle = NetworkGetEntityFromNetworkId(netId);
   Vehicles.deleteVehicle(vehicle);
 
@@ -182,7 +171,6 @@ export const finishJobForGroup = (plyId: number, netId: number) => {
     'jobs:sanitation:finish',
     {
       groupId: group.id,
-      bagsPerPlayer: [...active.bagsPerPlayer.entries()],
     },
     `${Util.getName(plyId)}(${plyId}) finished sanitation for group`,
     plyId
@@ -313,21 +301,13 @@ export const putBagInVehicle = (plyId: number) => {
     return;
   }
 
-  // Handle loot chance
-  if (Util.getRndInteger(1, 101) < sanitationConfig.lootChance) {
-    let items: string[];
-    if (Util.getRndInteger(1, 101) === 1) {
-      items = [...sanitationConfig.specialLoot];
-    } else {
-      items = [...sanitationConfig.loot];
-    }
-    Inventory.addItemToPlayer(plyId, items[Math.floor(Math.random() * items.length)], 1);
-  }
-
-  // Save amount of bags done
   const cid = Util.getCID(plyId);
-  const amountOfPackages = active.bagsPerPlayer.get(cid) ?? 0;
-  active.bagsPerPlayer.set(cid, amountOfPackages + 1);
+  const bucketPrice = jobManager.getJobPayout('sanitation', group.size, active.payoutLevel) ?? 0;
+  const plyMultiplier = jobManager.getPlayerAmountOfJobsFinishedMultiplier(cid);
+  Inventory.addItemToPlayer(plyId, 'sanitation_material_bucket', 1, {
+    hiddenKeys: ['price'],
+    price: bucketPrice * plyMultiplier,
+  });
 };
 
 export const skipCurrentLocation = (plyId: number) => {
@@ -377,4 +357,110 @@ export const skipCurrentLocation = (plyId: number) => {
       Events.emitNet('jobs:sanitation:setLocation', m.serverId, null);
     }
   });
+};
+
+export const openSanitationRecycleMenu = async (plyId: number) => {
+  const menuEntries: ContextMenu.Entry[] = [
+    {
+      title: 'Recycleer Materiaal',
+      icon: 'fas fa-recycle',
+      description: 'Kies wat je met je recycleerbaar materiaal wil doen',
+      disabled: true,
+    },
+    {
+      title: 'Verkoop',
+      icon: 'fas fa-dollar-sign',
+      submenu: [
+        {
+          title: 'Verkoop 1',
+          callbackURL: 'sanitation/recycle',
+          data: {
+            action: 'sell',
+            all: false,
+          },
+          preventCloseOnClick: true,
+        },
+        {
+          title: 'Verkoop alle',
+          callbackURL: 'sanitation/recycle',
+          data: {
+            action: 'sell',
+            all: true,
+          },
+        },
+      ],
+    },
+  ];
+
+  for (let i = 0; i < sanitationConfig.recycleItems.length; i++) {
+    const recycleItem = sanitationConfig.recycleItems[i];
+    const itemLabel = Inventory.getItemData(recycleItem.name)?.label ?? 'Onbekend';
+    menuEntries.push({
+      title: itemLabel,
+      callbackURL: 'sanitation/recycle',
+      description: `Zet om naar ${recycleItem.amount}x ${itemLabel}`,
+      submenu: [
+        {
+          title: '1 omzetten',
+          callbackURL: 'sanitation/recycle',
+          data: {
+            action: 'convert',
+            itemIdx: i,
+            all: false,
+          },
+          preventCloseOnClick: true,
+        },
+        {
+          title: 'Alle omzetten',
+          callbackURL: 'sanitation/recycle',
+          data: {
+            action: 'convert',
+            itemIdx: i,
+            all: true,
+          },
+        },
+      ],
+    });
+  }
+
+  UI.openContextMenu(plyId, menuEntries);
+};
+
+export const doSanitationRecycleAction = async (
+  plyId: number,
+  action: 'sell' | 'convert',
+  all: boolean,
+  itemIdx?: number
+) => {
+  // itemIdx can be serialized to null bcs yey
+  if (action !== 'sell' && !(action === 'convert' && itemIdx != undefined)) return;
+
+  const bucketItems = await Inventory.getItemsWithNameOfPlayer<{ price: number }>(plyId, 'sanitation_material_bucket');
+  if (bucketItems.length === 0) {
+    Notifications.add(plyId, 'Je hebt geen recycleerbaar materiaal', 'error');
+    return;
+  }
+
+  const removed = await Inventory.removeItemsByIdsFromPlayer(
+    plyId,
+    all ? bucketItems.map(i => i.id) : [bucketItems[0].id]
+  );
+  if (!removed) {
+    Notifications.add(plyId, 'Je hebt geen recycleerbaar materiaal', 'error');
+    return;
+  }
+
+  if (action === 'sell') {
+    let price = 0;
+    if (all) {
+      price = bucketItems.reduce((acc, cur) => acc + (cur.metadata.price ?? 0), 0);
+    } else {
+      price = bucketItems[0].metadata.price ?? 0;
+    }
+    Financials.addCash(plyId, price, 'sanitation-sell-bucket');
+  } else {
+    const amount = all ? bucketItems.length : 1;
+    const recycleItem = sanitationConfig.recycleItems[itemIdx!];
+    Inventory.addItemToPlayer(plyId, recycleItem.name, recycleItem.amount * amount);
+  }
 };

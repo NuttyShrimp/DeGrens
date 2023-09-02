@@ -9,7 +9,10 @@
     "length": 5,
     "time": 3
   },
-  "safeDelay": 30,
+  "safe": {
+    "delay": 30,
+    "qualityDecrease": 40
+  },
   "actions": [
     {
       "coords": {

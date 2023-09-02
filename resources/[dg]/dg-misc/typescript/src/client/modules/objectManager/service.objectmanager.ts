@@ -105,11 +105,14 @@ const placeObjectOnGround = (entity: number) => {
 
 const destroyObject = (id: string) => {
   const entityId = objectStore[id]?.entity;
-  if (!entityId) {
-    return;
+  if (!entityId) return;
+
+  if (DoesEntityExist(entityId) && Entity(entityId).state.objId === id) {
+    DeleteEntity(entityId);
+  } else {
+    console.error('[ObjectManager] Failed to delete entity, statebag did not match id');
   }
 
-  DeleteEntity(entityId);
   if (flagThread[id]) {
     flagThread[id].forEach(clearInterval);
     delete flagThread[id];

@@ -14,4 +14,5 @@ Peek.addModelEntry(DUMPSTER_MODELS, {
       },
     },
   ],
+  distance: 2.0,
 });

@@ -13,6 +13,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.4.4]
+
+### Added
+
+- Je kan nu zoeken op contactnaam in je telefoon tijdens overschrijvingen etc
+- Payconiq transaction modal geeft nu weer of transactie geslaagd is
+- Je kan nu kiezen of je materialen of geld als payout van een vuilkarrit wil
+- Carboosts hebben nu een GPS blip indien het voertuig geen tracker heeft
+- Je kan nu een nummerplaat kopieren in de radargeschiedenis
+- Spawnrate van voertuigen wordt nu tijdelijk verhoogd als je een oxyrun aan het doen bent
+- Vesten voor de nieuwe MC's toegevoegd
+- MC logo op hun gebouw geplaatst
+
+### Changed
+
+- Phone notificaties worden niet langer gedeclined als je op de notificatie zelf klikt
+- Winkeloverval een beetje gerebalanced
+- Politie auto vorderen een tikkeltje makkelijker gemaakt
+- Bankaccount heeft nu prio om te betalen bij het tanken
+- Tracker die door politie afgezet is, komt nu terug als je deze opnieuw probeert uit te schakelen
+- Statebaghandlers voor voertuigen waar speler inzit worden nu verwijderd als speler niet in voertuig zit
+- Vehicletypes worden nu gecached zodat voertuigen sneller en reliabler kunnen spawnen
+- Decodingtools zijn nu multiuse
+- Spikestrips kunnen niet langer onder voertuigen gelegd worden
+- Carboost tijd tussen hacks verlaagd
+- Lockpick difficulty van overheidsvoertuigen aangepast
+- Kleine verandering aan manier waarop fuel wordt opgeslagen
+- Handlings voor kofi voertuigen aangepast
+
+### Fixed
+
+- Error opgelost wanneer een item in of uit inventory van offline player werd gehaald
+- Banktrucks werken nu wel deftig
+- Maintenance fee calculation fixed
+- Probleem opgelost waardoor quads spawnede als `sanchez`
+- Nummerplaat van een vinscratched voertuig komt niet langer terug op naam van eigenaar
+- Revolver staat nu geregistreerd als wapen waar je dood door bent ipv bewusteloos
+
 ## [1.4.3]
 
 ### Added

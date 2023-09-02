@@ -26,5 +26,5 @@ export const addItemToRecycle = (plyIdentifier: string, sellItem: Inventory.Item
     receivedItems.forEach(i => {
       Inventory.addItemToInventory('player', plyIdentifier, i, 1);
     });
-  }, 5000);
+  }, 2000);
 };

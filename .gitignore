@@ -21,7 +21,7 @@ logtypes.json
 !.env.template
 .replxx_history
 tsup.config.bundled*
-
+venv/
 
 positions.txt
 dev-save.txt

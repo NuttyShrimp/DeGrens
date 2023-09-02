@@ -16,7 +16,7 @@ export const ExchangeModal: FC<React.PropsWithChildren<{ coin: Phone.Crypto.Coin
     elements={[
       {
         name: 'target',
-        render: props => <Input.Contact {...props} icon={'mobile'} />,
+        render: props => <Input.Contact {...props} />,
       },
       {
         name: 'amount',

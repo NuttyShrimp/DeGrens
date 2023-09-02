@@ -8,7 +8,7 @@ Events.onNet('police:trackers:removeAll', removeAllTrackerBlips);
 Peek.addGlobalEntry('vehicle', {
   options: [
     {
-      label: 'Tracker Uitschakelen',
+      label: 'Tracker Afzetten',
       icon: 'fas fa-location-dot-slash',
       job: 'police',
       action: (_, vehicle) => {

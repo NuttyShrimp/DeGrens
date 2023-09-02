@@ -1,4 +1,4 @@
-export const setupGuard = (ped: number, guardId: string, guardData: NPCs.Guard) => {
+export const setupGuard = (ped: number, guardData: NPCs.Guard) => {
   SetPedRelationshipGroupHash(ped, GetHashKey('ATTACK_ALL_PLAYERS'));
   SetPedDropsWeaponsWhenDead(ped, false);
   StopPedWeaponFiringWhenDropped(ped);

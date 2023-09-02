@@ -241,8 +241,10 @@ export class PaletoManager implements Heists.TypeManager {
       return;
     }
 
-    const itemRemoved = await Inventory.removeItemByNameFromPlayer(plyId, 'decoding_tool');
-    if (!itemRemoved) return;
+    const decodingItem = await Inventory.getFirstItemOfNameOfPlayer(plyId, 'decoding_tool');
+    if (!decodingItem) return;
+
+    Inventory.setQualityOfItem(decodingItem.id, old => old - config.paleto.safe.qualityDecrease);
 
     const hackSuccess = await Minigames.keygameCustom(
       plyId,
@@ -255,7 +257,7 @@ export class PaletoManager implements Heists.TypeManager {
       () => {
         this.canHackSafe = true;
       },
-      config.paleto.safeDelay * 60 * 1000
+      config.paleto.safe.delay * 60 * 1000
     );
 
     Inventory.addItemToPlayer(plyId, 'heist_paleto_key', 1);

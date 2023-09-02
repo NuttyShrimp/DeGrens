@@ -35,8 +35,8 @@ export const getModelType = (model: string | number) => {
 
   // why the fuck is the getVehicletype native only on serverside, now i need to use this cancerous method
   // returns the type arg accepted in CreateVehicleServerSetter
-  if (IsThisModelACar(model)) return 'automobile';
-  if (IsThisModelABike(model) || IsThisModelAQuadbike(model)) return 'bike';
+  if (IsThisModelACar(model) || IsThisModelAQuadbike(model)) return 'automobile';
+  if (IsThisModelABike(model)) return 'bike';
   if (IsThisModelABoat(model)) return 'boat';
   if (IsThisModelAHeli(model)) return 'heli';
   if (IsThisModelAPlane(model)) return 'plane';
@@ -146,7 +146,9 @@ export const useDummyVehicle = async <T>(
   const result = func(vehicle);
   if (result instanceof Promise) await result;
 
-  DeleteEntity(vehicle);
+  if (DoesEntityExist(vehicle) && !NetworkGetEntityIsNetworked(vehicle) && IsEntityAVehicle(vehicle)) {
+    DeleteEntity(vehicle);
+  }
   SetModelAsNoLongerNeeded(modelHash);
 
   return result;

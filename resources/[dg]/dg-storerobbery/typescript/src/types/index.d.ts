@@ -9,6 +9,7 @@ declare namespace Storerobbery {
       refillTime: number;
       specialItemChance: number;
       rollAmount: [number, number];
+      qualityDecrease: number;
     };
     stores: Record<Id, Data>;
   };

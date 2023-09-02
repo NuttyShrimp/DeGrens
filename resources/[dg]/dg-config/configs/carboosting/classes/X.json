@@ -23,7 +23,7 @@
     "delay": 2000,
     "increase": 1000,
     "amount": 20,
-    "cooldown": 60000,
+    "cooldown": 50000,
     "hack": {
       "gridSize": 6,
       "length": 8,

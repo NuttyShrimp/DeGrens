@@ -4,7 +4,7 @@
   "module": "src/index.ts",
   "type": "module",
   "types": "src/index.ts",
-  "version": "1.4.2",
+  "version": "1.4.4",
   "devDependencies": {
     "@types/core-js": "^2.5.5",
     "rimraf": "^5.0.1",

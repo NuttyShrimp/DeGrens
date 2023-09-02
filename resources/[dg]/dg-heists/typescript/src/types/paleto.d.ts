@@ -10,7 +10,10 @@ declare namespace Paleto {
       length: number;
       time: number;
     };
-    safeDelay: number; // minutes
+    safe: {
+      delay: 30; // minutes
+      qualityDecrease: 25;
+    };
     actions: {
       coords: Vec3;
       size: number;

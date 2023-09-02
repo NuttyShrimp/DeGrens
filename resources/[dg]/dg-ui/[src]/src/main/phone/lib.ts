@@ -207,7 +207,7 @@ export const addNotification = (
 };
 
 export const removeNotification = (id: string) => {
-  const oldList = usePhoneNotiStore.getState().list;
+  const { list: oldList, timers: oldTimers } = usePhoneNotiStore.getState();
   if (!oldList.some(n => n.id === id)) return;
 
   if (notificationTimers[id]) {
@@ -216,8 +216,10 @@ export const removeNotification = (id: string) => {
   }
 
   const newList = oldList.filter(n => n.id !== id).sort(sortNotification);
+  delete oldTimers[id];
   usePhoneNotiStore.setState({
     list: newList,
+    timers: oldTimers,
   });
 
   // only close app when phone is not open
@@ -315,6 +317,9 @@ const startNotificationTimer = (id: string, timer: number) => {
     }, 1000);
   } else {
     let time = 0;
+    usePhoneNotiStore.setState(s => ({
+      timers: { ...s.timers, [id]: ++time },
+    }));
     notificationTimers[id] = setInterval(() => {
       usePhoneNotiStore.setState(s => ({
         timers: { ...s.timers, [id]: ++time },

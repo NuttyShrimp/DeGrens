@@ -153,7 +153,26 @@ UI.RegisterUICallback('business/order/confirm', (data: unknown, cb) => {
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
 
-UI.RegisterUICallback('business/shop/buy', (data: { item: string; businessId: number }, cb) => {
-  Events.emitNet('business:server:buyFromShop', data.businessId, data.item);
-  cb({ data: {}, meta: { ok: true, message: 'done' } });
-});
+UI.RegisterUICallback(
+  'business/shop/buy',
+  async (data: { item: string; businessId: number; itemLabel: string }, cb) => {
+    cb({ data: {}, meta: { ok: true, message: 'done' } });
+
+    const result = await UI.openInput<{ amount: string }>({
+      header: `Hoeveel ${data.itemLabel} wil je kopen?`,
+      inputs: [
+        {
+          type: 'number',
+          name: 'amount',
+          label: 'Aantal',
+        },
+      ],
+    });
+    if (!result.accepted) return;
+
+    const amount = +result.values.amount;
+    if (isNaN(amount) || amount <= 0) return;
+
+    Events.emitNet('business:server:buyFromShop', data.businessId, data.item, amount);
+  }
+);

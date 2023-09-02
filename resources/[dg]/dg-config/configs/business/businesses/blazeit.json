@@ -69,18 +69,21 @@
       }
     ]
   },
-  "shopZone": {
-    "center": {
-      "x": 364.47,
-      "y": -1264.99,
-      "z": 32.59
-    },
-    "width": 4.6,
-    "length": 1.2,
-    "options": {
-      "heading": 320,
-      "minZ": 31.59,
-      "maxZ": 33.79
+  "shop": {
+    "requireStock": false,
+    "zone": {
+      "center": {
+        "x": 364.47,
+        "y": -1264.99,
+        "z": 32.59
+      },
+      "width": 4.6,
+      "length": 1.2,
+      "options": {
+        "heading": 320,
+        "minZ": 31.59,
+        "maxZ": 33.79
+      }
     }
   },
   "crafting": {

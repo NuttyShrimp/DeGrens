@@ -44,10 +44,10 @@ export class Room {
       if (distance < 50 && foundObj != ped) {
         if (IsEntityAPed(foundObj)) {
           if (!IsPedAPlayer(foundObj)) {
-            DeleteObject(foundObj);
+            DeleteEntity(foundObj);
           }
         } else if (!IsEntityAVehicle(foundObj) && !IsEntityAttached(foundObj)) {
-          DeleteObject(foundObj);
+          DeleteEntity(foundObj);
         }
       }
       [success, foundObj] = FindNextObject(handle);

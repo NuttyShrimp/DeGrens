@@ -13,7 +13,10 @@ export class Business {
 
   private readonly playersInside: Set<number>;
   private readonly signedInPlayers: { serverId: number; cid: number }[];
-  private readonly registers: Map<number, { price: number; employeeCid: number; orderId: string; items?: string[] }>;
+  private readonly registers: Map<
+    number,
+    { price: number; employeeCid: number; orderId: string; items?: Business.RegisterOrderItem[] }
+  >;
   private readonly priceItems: Map<string, { label: string; price: number }>;
   private paycheckThread: NodeJS.Timer | null;
 
@@ -107,8 +110,11 @@ export class Business {
     }
 
     // Create scripted stash if this business has a shop defined to set allowed items
-    if (getConfig().businesses?.[this.info.name]?.shopZone) {
-      Inventory.createScriptedStash(`${this.info.name}_shop`, 50, [...this.priceItems.keys()]);
+    if (getConfig().businesses?.[this.info.name]?.shop) {
+      Inventory.createScriptedStash(`${this.info.name}_shop`, 100, [
+        ...Inventory.getContainerItems(), // we also allow containers inside
+        ...this.priceItems.keys(),
+      ]);
     }
   }
 
@@ -1004,7 +1010,7 @@ export class Business {
     this.setRegister(plyId, registerIdx, price);
   };
 
-  public setRegister = (plyId: number, registerIdx: number, data: number | string[]) => {
+  public setRegister = (plyId: number, registerIdx: number, data: number | Business.RegisterOrderItem[]) => {
     if (!this.isSignedIn(plyId)) return;
 
     if (this.registers.has(registerIdx)) {
@@ -1013,11 +1019,11 @@ export class Business {
     }
 
     let price = 0;
-    let items: string[] | undefined = undefined;
+    let items: Business.RegisterOrderItem[] | undefined = undefined;
     if (typeof data === 'number') {
       price = data;
     } else {
-      price = data.reduce((acc, cur) => acc + (this.priceItems.get(cur)?.price ?? 0), 0);
+      price = data.reduce((acc, cur) => acc + (this.priceItems.get(cur.name)?.price ?? 0) * cur.amount, 0);
       items = data;
     }
 
@@ -1063,10 +1069,12 @@ export class Business {
 
     const itemEntries: ContextMenu.Entry[] = [];
     for (const item of register.items ?? []) {
-      const priceItem = this.priceItems.get(item);
+      const priceItem = this.priceItems.get(item.name);
       if (!priceItem) continue;
       itemEntries.push({
-        title: `${priceItem.label} | €${Financials.getTaxedPrice(priceItem.price, TaxIds.Goederen).taxPrice}`,
+        title: `${item.amount}x ${priceItem.label} | €${
+          Financials.getTaxedPrice(priceItem.price * item.amount, TaxIds.Goederen).taxPrice
+        }`,
         disabled: true,
       });
     }
@@ -1169,7 +1177,7 @@ export class Business {
     }
 
     const result = await UI.openInput<{ item: string; price: string }>(plyId, {
-      header: 'Verander de menuitem prijzen',
+      header: 'Verander prijzen',
       inputs: [
         {
           type: 'select',
@@ -1238,16 +1246,16 @@ export class Business {
         callbackURL: 'business/shop/buy',
         data: {
           item,
+          itemLabel: data.label,
           businessId: this.info.id,
         },
-        preventCloseOnClick: true,
       });
     }
 
     UI.openContextMenu(plyId, menuEntries);
   };
 
-  public buyFromShop = async (plyId: number, itemName: string) => {
+  public buyFromShop = async (plyId: number, itemName: string, amount: number) => {
     if (this.signedInPlayers.length > 0) {
       Notifications.add(plyId, 'Er is een medewerker aanwezig', 'error');
       return;
@@ -1266,29 +1274,49 @@ export class Business {
       return;
     }
 
-    // if stash had this item in stock, the money goes to the business else to state
-    const targetItem = await Inventory.getFirstItemOfName('stash', `${this.info.name}_shop`, itemName);
+    const targetItems = await Inventory.getItemsWithNameInInventory('stash', `${this.info.name}_shop`, itemName);
+    if (targetItems.length < amount && getConfig().businesses[this.info.name].shop?.requireStock) {
+      Notifications.add(
+        plyId,
+        `Er is ${targetItems.length === 0 ? 'geen' : `maar ${targetItems.length}`} ${itemData.label} in voorraad`,
+        'error'
+      );
+      return;
+    }
 
-    const purchaseComment = `Aankoop ${itemData.label} uit ${this.info.label} shop`;
-    if (targetItem) {
+    const amountToCreate = Math.max(0, amount - targetItems.length);
+    const amountToMove = Math.min(amount, targetItems.length);
+
+    if (amountToMove > 0) {
       const transferSuccess = await Financials.transfer(
         accId,
         this.info.bank_account_id,
         cid,
         cid,
-        itemData.price,
-        purchaseComment,
+        itemData.price * amountToMove,
+        `Aankoop ${amountToMove}x ${itemData.label} uit ${this.info.label} shop`,
         TaxIds.Goederen
       );
       if (!transferSuccess) return;
 
-      Inventory.moveItemToPlayer(plyId, targetItem.id);
-      Inventory.showItemBox(plyId, targetItem.name, '1x Ontvangen');
-    } else {
-      const paymentSuccess = await Financials.purchase(accId, cid, itemData.price, purchaseComment, TaxIds.Goederen);
-      if (!paymentSuccess) return;
-
-      Inventory.addItemToPlayer(plyId, itemName, 1);
+      let amountMoved = 0;
+      for (const item of targetItems) {
+        if (amountMoved >= amountToMove) break;
+        await Inventory.moveItemToPlayer(plyId, item.id);
+        amountMoved++;
+      }
+      Inventory.showItemBox(plyId, itemName, `${amountToMove}x Ontvangen`);
+    }
+    if (amountToCreate > 0) {
+      const purchaseSuccess = await Financials.purchase(
+        accId,
+        cid,
+        itemData.price * amountToCreate,
+        `Aankoop ${amountToCreate}x ${itemData.label}`,
+        TaxIds.Goederen
+      );
+      if (!purchaseSuccess) return;
+      Inventory.addItemToPlayer(plyId, itemName, amountToCreate);
     }
   };
 }

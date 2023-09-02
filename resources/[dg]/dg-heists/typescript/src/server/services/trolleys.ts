@@ -57,9 +57,8 @@ export const spawnTrolleys = (locationId: Heists.LocationId) => {
         lootingPlayer: null,
         deleteTimeout: setTimeout(
           () => {
-            if (!DoesEntityExist(entity) || !getTrolleyDataByEntity(entity)) return; // this validates statebag to make sure we delete correct entity
             activeTrolleys.delete(entity);
-            DeleteEntity(entity);
+            deleteTrolleyEntity(entity);
           },
           10 * 60 * 1000
         ),
@@ -93,7 +92,7 @@ Events.onNet('heists:trolleys:finishLooting', (plyId, trolleyNetId: number) => {
 
   activeTrolleys.delete(trolleyEntity);
   setTimeout(() => {
-    DeleteEntity(trolleyEntity);
+    deleteTrolleyEntity(trolleyEntity);
   }, 5000);
 
   const heistTypeConfig = heistManager.getHeistTypeConfigByLocationId(activeTrolley.locationId);
@@ -142,8 +141,15 @@ export const removeAllTrolleyObjects = () => {
     if (t.deleteTimeout) {
       clearInterval(t.deleteTimeout);
     }
-    if (DoesEntityExist(ent) && !!getTrolleyDataByEntity(ent)) {
-      DeleteEntity(ent);
-    }
+    deleteTrolleyEntity(ent);
   }
+};
+
+const deleteTrolleyEntity = (entity: number) => {
+  if (!DoesEntityExist || !getTrolleyDataByEntity(entity)) {
+    console.error('Tried to delete trolley entity but did not match statebag');
+    return;
+  }
+
+  DeleteEntity(entity);
 };

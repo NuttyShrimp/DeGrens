@@ -164,7 +164,7 @@ RegisterCommand("cd", function(source, args, rawCommand)
 	py = 0.0;
 	pz = 0.0;
 
-	DeleteObject(object)
+	DeleteEntity(object)
 end)
 
 -- position

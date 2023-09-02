@@ -85,7 +85,7 @@
     "name": "decoding_tool",
     "label": "Decoding Tool",
     "useable": true,
-    "decayRate": 4320,
+    "decayRate": 10080,
     "image": "decoding_tool.png",
     "description": "Hiermee kan je geavanceerde sloten decoderen zoals kluizen.",
     "size": {
@@ -2709,5 +2709,15 @@
       "y": 3
     },
     "useable": true
+  },
+  {
+    "name": "sanitation_material_bucket",
+    "label": "Recyclage Materiaal",
+    "decayRate": 4320,
+    "image": "sanitation_material_bucket.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    }
   }
 ]

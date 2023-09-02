@@ -5262,5 +5262,23 @@
       "gang": ["kingsmen"]
     },
     "playSound": true
+  },
+  {
+    "description": "stabcity mc",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "v_ilev_lostdoor",
+        "coords": {
+          "x": 99.63089752197266,
+          "y": 3615.9140625,
+          "z": 40.63957595825195
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["hellsangels"]
+    }
   }
 ]

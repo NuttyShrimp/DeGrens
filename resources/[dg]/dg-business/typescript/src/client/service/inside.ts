@@ -44,8 +44,8 @@ export const handleEnteredBusinessZone = (businessName: string, businessType: st
   }
 
   // build shop if defined
-  if (businessConfig.shopZone) {
-    PolyTarget.buildAnyZone('business_shop', businessConfig.shopZone, {
+  if (businessConfig.shop) {
+    PolyTarget.buildAnyZone('business_shop', businessConfig.shop.zone, {
       id: businessName,
     });
   }

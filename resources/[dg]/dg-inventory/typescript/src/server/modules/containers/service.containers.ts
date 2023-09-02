@@ -40,3 +40,5 @@ export const registerContainers = () => {
     ]);
   });
 };
+
+export const getContainerItems = () => Object.keys(containers);

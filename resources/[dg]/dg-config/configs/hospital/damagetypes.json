@@ -363,6 +363,10 @@
     "downType": "dead",
     "status": "gsw"
   },
+  "WEAPON_REVOLVER_MK2": {
+    "downType": "dead",
+    "status": "gsw"
+  },
   "WEAPON_RPG": {
     "downType": "dead",
     "status": "burns"

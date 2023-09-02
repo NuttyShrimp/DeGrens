@@ -63,7 +63,12 @@ export const findSeedCoords = async (entityModel: string, zOffset: number) => {
       if (IsControlJustPressed(0, 18)) {
         clearInterval(interval);
         res([isValidLocation, raycastCoords]);
-        DeleteEntity(entity);
+
+        if (!NetworkGetEntityIsNetworked(entity) && GetEntityModel(entity) >>> 0 === modelHash) {
+          DeleteEntity(entity);
+        } else {
+          console.error('Failed to delete ghostplant entity');
+        }
       }
     }, 1);
   });

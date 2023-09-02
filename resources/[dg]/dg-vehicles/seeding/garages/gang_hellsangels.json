@@ -1,0 +1,37 @@
+{
+  "garage_id": "hellsangels",
+  "name": "Hells Angels MC Garage",
+  "type": "gang",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": 96.56,
+      "y": 3634.66,
+      "z": 40.01
+    },
+    "width": 14.8,
+    "length": 7.6,
+    "options": {
+      "heading": 0,
+      "minZ": 38.81,
+      "maxZ": 43.41
+    }
+  },
+  "vehicle_types": ["land"],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 88.814,
+      "coords": { "x": 96.7668, "y": 3631.3293, "z": 40.0074 }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 88.814,
+      "coords": { "x": 97.3033, "y": 3638.3242, "z": 40.0074 }
+    }
+  ]
+}

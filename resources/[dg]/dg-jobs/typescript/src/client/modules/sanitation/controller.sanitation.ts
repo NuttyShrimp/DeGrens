@@ -22,6 +22,13 @@ Peek.addFlagEntry('isSanitationManager', {
         Events.emitNet('jobs:sanitation:signIn');
       },
     },
+    {
+      label: 'Recycleer',
+      icon: 'fas fa-recycle',
+      action: () => {
+        Events.emitNet('jobs:sanitation:openRecycleMenu');
+      },
+    },
   ],
   distance: 2.0,
 });
@@ -74,5 +81,10 @@ Keys.onPressDown('GeneralUse', () => {
 
 UI.RegisterUICallback('sanitation/skip', (_: any, cb) => {
   Events.emitNet('jobs:sanitation:skipLocation');
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
+});
+
+UI.RegisterUICallback('sanitation/recycle', (data: { action: string; all: boolean; itemIdx?: number }, cb) => {
+  Events.emitNet('jobs:sanitation:doRecycleAction', data.action, data.all, data.itemIdx);
   cb({ data: {}, meta: { ok: true, message: 'done' } });
 });
