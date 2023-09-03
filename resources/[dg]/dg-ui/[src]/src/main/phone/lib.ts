@@ -18,6 +18,7 @@ export const hidePhone = () => {
   const state = usePhoneStore.getState();
   usePhoneStore.setState({
     animating: state.hasNotifications ? 'peek' : 'closed',
+    bigPhoto: null,
   });
   setTimeout(() => {
     if (state.hasNotifications) return;
