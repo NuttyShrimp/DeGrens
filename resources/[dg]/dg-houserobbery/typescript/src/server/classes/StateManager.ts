@@ -386,6 +386,7 @@ class StateManager extends Util.Singleton<StateManager>() {
         },
         timeToFind * 60 * 1000
       ),
+      finished: false,
     });
 
     Events.emitNet('houserobbery:client:activateLocation', -1, houseId, location);
@@ -450,6 +451,8 @@ class StateManager extends Util.Singleton<StateManager>() {
       });
     }
 
+    house.finished = true;
+
     Util.Log(
       'houserobbery:job:finish',
       {
@@ -476,7 +479,10 @@ class StateManager extends Util.Singleton<StateManager>() {
   };
 
   public handlePlayerLeftGroup = (plyId: number | null, cid: number, groupId: string) => {
-    if (!this.getHouseIdByGroupId(groupId)) return;
+    const houseId = this.getHouseIdByGroupId(groupId);
+    if (!houseId) return;
+    const house = this.activeHouses.get(houseId);
+    if (!house || house.finished) return;
     stateManager.finishJobForPly(plyId, cid, true);
   };
 }
