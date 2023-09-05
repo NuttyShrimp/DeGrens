@@ -83,23 +83,14 @@ const Component: AppFunction = props => {
     }
   }, [active]);
 
-  const handleKeyPress = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key !== 'Escape' || infoDisplay !== null) return;
-      finishGame(false);
-    },
-    [infoDisplay]
-  );
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [handleKeyPress]);
+  const handleEscape = useCallback(() => {
+    if (infoDisplay !== null) return;
+    finishGame(false);
+    return false; // Prevents the app from closing
+  }, [infoDisplay]);
 
   return (
-    <AppWrapper appName={config.name} onShow={handleShow} onHide={handleHide} full center>
+    <AppWrapper appName={config.name} onShow={handleShow} onHide={handleHide} full center onEscape={handleEscape}>
       <div className='gridgame'>
         {infoDisplay !== null ? <InfoDisplay size={gridSize * 10 + 1} {...infoDisplay}></InfoDisplay> : activeGame}
       </div>
