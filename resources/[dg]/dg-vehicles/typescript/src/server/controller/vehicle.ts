@@ -19,6 +19,7 @@ import { getCurrentVehicleStance } from 'modules/stances/service.stances';
 import { getVehicleWaxExpirationDate } from 'modules/carwash/service.carwash';
 import { getVehicleNosAmount } from 'modules/nos/service.nos';
 import upgradesManager from 'modules/upgrades/classes/manager.upgrades';
+import { setVehicleAsVinScratched } from 'services/vinscratch';
 
 RPC.register('vehicles:getVehicleByVin', (src, vin: string) => {
   mainLogger.silly(`Request to get vehicle by vin: ${vin}`);
@@ -162,6 +163,10 @@ global.exports(
 
     vinManager.addPlayerVin(vin);
     plateManager.addPlayerPlate(plate);
+
+    if (vinscratched) {
+      setVehicleAsVinScratched(vehicle);
+    }
 
     return true;
   }
