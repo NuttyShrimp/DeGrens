@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Regen bij CLEARING weather weggehaald
 - Aantal staat nu standaard op 1 wanneer je iets koopt bij een business
 - Salesticket bij PDM hebben nu een minimum en maximum waarde
+- Idlecam in voertuigen gedisabled
 
 ### Fixed
 

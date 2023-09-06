@@ -36,6 +36,7 @@ export const setGTABehaviour = async () => {
 
   // Disable automatic camera movement when afk'ing
   DisableIdleCamera(true);
+  DisableVehiclePassengerIdleCamera(true);
 
   // Initial state of radar is invisible
   DisplayRadar(false);
