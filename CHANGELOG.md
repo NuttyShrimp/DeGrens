@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Salesticket bij PDM hebben nu een minimum en maximum waarde
 - Idlecam in voertuigen gedisabled
 - Werking van snelheidszones aangepast
+- Plaat vooraan van LFA gehaald
+- Meerdere handlings getweaked
 
 ### Fixed
 
@@ -27,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 'Inventory vol' notificatie wordt niet meer gespammed als je meer dan 1 item krijgt
 - Helicopters gebruiken nu wel benzine
 - Gesprekkenlijst in messages phone app staan correct gesorteerd op nieuwste bericht
+- Voertuigdamage RS6 Avant verlaagd
 
 ## [1.4.4]
 
