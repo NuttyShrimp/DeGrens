@@ -20,9 +20,6 @@ declare namespace Hospital {
     beds: Vec4[];
   };
 
-  type DownType = 'unconscious' | 'dead';
-  type State = 'alive' | DownType;
-
   type Needs = Record<CharacterNeed, number>;
 
   type HealItem = {

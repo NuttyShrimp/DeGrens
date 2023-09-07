@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Werking van snelheidszones aangepast
 - Plaat vooraan van LFA gehaald
 - Meerdere handlings getweaked
+- Telefoongesprek stopt nu vanzelf als ge dood/bewusteloos gaat
 
 ### Fixed
 
