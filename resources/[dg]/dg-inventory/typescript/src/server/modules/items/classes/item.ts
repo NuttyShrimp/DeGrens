@@ -10,6 +10,8 @@ import locationManager from 'modules/locations/manager.locations';
 import { charModule } from 'services/core';
 import { handleOnDelete } from '../helpers.items';
 
+const throttleInventoryFullNotificationPlayers = new Set<number>();
+
 export class Item {
   private readonly logger: winston.Logger;
   private id!: string;
@@ -74,7 +76,13 @@ export class Item {
                 this.rotated = availableInDrop.rotated;
               }
 
-              Notifications.add(plyId, 'Voorwerp ligt op de grond, je zakken zitten vol', 'error');
+              if (!throttleInventoryFullNotificationPlayers.has(plyId)) {
+                Notifications.add(plyId, 'Voorwerp ligt op de grond, je zakken zitten vol', 'error');
+                throttleInventoryFullNotificationPlayers.add(plyId);
+                setTimeout(() => {
+                  throttleInventoryFullNotificationPlayers.delete(plyId);
+                }, 5000);
+              }
             }
           }
         }
