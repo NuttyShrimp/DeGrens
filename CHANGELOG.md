@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mogelijks probleem met keygame opgelost waardoor keypresses niet registreren
 - 'Inventory vol' notificatie wordt niet meer gespammed als je meer dan 1 item krijgt
 - Helicopters gebruiken nu wel benzine
+- Gesprekkenlijst in messages phone app staan correct gesorteerd op nieuwste bericht
 
 ## [1.4.4]
 

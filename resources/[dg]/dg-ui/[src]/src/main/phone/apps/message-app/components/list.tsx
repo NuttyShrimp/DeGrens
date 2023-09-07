@@ -60,7 +60,7 @@ export const List: FC<{}> = () => {
         }
         return [...acc, cur];
       }, [])
-      .sort((a, b) => (a.messages.at(-1)?.date ?? 0) - (b.messages.at(-1)?.date ?? 0));
+      .sort((a, b) => (b.messages.at(-1)?.date ?? 0) - (a.messages.at(-1)?.date ?? 0));
   }, [msgs]);
 
   useEffect(() => {
