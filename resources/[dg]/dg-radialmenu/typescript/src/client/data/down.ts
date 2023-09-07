@@ -8,4 +8,15 @@ export const down: RadialMenu.Entry[] = [
     shouldClose: true,
     jobs: ['police'],
   },
+  {
+    title: 'Deel Sleutels',
+    icon: 'key',
+    type: 'client',
+    event: 'vehicles:keys:share',
+    shouldClose: true,
+    isEnabled: ({ currentVehicle }) => {
+      if (!currentVehicle) return false;
+      return global.exports['dg-vehicles'].hasVehicleKeys(currentVehicle);
+    },
+  },
 ];
