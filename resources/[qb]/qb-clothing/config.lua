@@ -541,7 +541,6 @@ Config.ClothingRooms = {
   {requiredBusiness = "taxijacky", coords = vector3(893.537, -162.3032, 76.8911)},
   {requiredBusiness = "scrapz", coords = vector3(-1455.3711, -395.905, 35.844)},
   {requiredGang = "medellincartel", coords = vector3(1253.8843, -1571.0618, 58.7463)},
-  {requiredGang = "plukketuffers", coords = vector3(2187.86913, 5581.1284, 53.8983)},
   {requiredGang = "asphaltrebellions", coords = vector3(985.186, -91.702, 74.8483)},
   {requiredGang = "kingsmen", coords = vector3(-1158.2506, -1517.7375, 11.1597)},
   {requiredGang = "hellsangels", coords = vector3(103.9543, 3604.6768, 40.4919)},
