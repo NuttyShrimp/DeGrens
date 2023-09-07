@@ -5280,5 +5280,49 @@
     "authorized": {
       "gang": ["hellsangels"]
     }
+  },
+  {
+    "description": "vinewoord pawnshop main doors",
+    "locked": false,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "mosbaekdesign_vinewood_pawnshop_prop_door_club_glam_wc",
+        "coords": {
+          "x": -1460.23095703125,
+          "y": -412.81170654296875,
+          "z": 36.009464263916016
+        }
+      },
+      {
+        "model": "mosbaekdesign_vinewood_pawnshop_prop_door_club_glam_wc",
+        "coords": {
+          "x": -1458.17724609375,
+          "y": -413.4075622558594,
+          "z": 36.009464263916016
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["scrapz"]
+    }
+  },
+  {
+    "description": "vinewood pawnshop employee door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "ch_chint07_casino_staff_door_03",
+        "coords": {
+          "x": -1454.583740234375,
+          "y": -397.32476806640625,
+          "z": 35.99352264404297
+        }
+      }
+    ],
+    "authorized": {
+      "business": ["scrapz"]
+    }
   }
 ]

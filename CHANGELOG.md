@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Sloten op deuren en kledingkast in Scrapz bedrijf
+
 ### Changed
 
 - Regen bij CLEARING weather weggehaald
