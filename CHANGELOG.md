@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Sloten op deuren en kledingkast in Scrapz bedrijf
 - Je kan nu sleutels geven aan de personen waar je in de wagen mee zit als je neer bent
+- Je cursor is nu gecentreerd als je je inventory open doet
 
 ### Changed
 

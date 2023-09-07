@@ -32,6 +32,7 @@ class ContextManager extends Util.Singleton<ContextManager>() {
       return;
     }
     this.forceSecondary = sec ?? null;
+    UI.SetCursorLocation(0.5, 0.5);
     UI.openApplication('inventory');
     this.isInventoryOpen = true;
     TriggerScreenblurFadeIn(0);

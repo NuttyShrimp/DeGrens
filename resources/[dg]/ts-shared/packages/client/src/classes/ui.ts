@@ -49,6 +49,10 @@ class UI {
     global.exports['dg-ui'].SetUIFocusCustom(hasFocus, hasCursor);
   }
 
+  SetCursorLocation(x: number, y: number) {
+    global.exports['dg-ui'].SetCursorLocation(x, y);
+  }
+
   doesUIHaveFocus(): boolean {
     return global.exports['dg-ui'].doesUIHaveFocus();
   }
