@@ -32,7 +32,6 @@ Events.onNet('vehicles:enginesounds:set', (plyId, netId: number, idx: number) =>
   if (!engineSound) return;
 
   setVehicleEngineSound(vehicle, engineSound.soundHash);
-  Notifications.add(plyId, `Huidig: ${engineSound.label}`);
 });
 
 Events.onNet('vehicles:enginesounds:save', (plyId, netId: number) => {
@@ -74,70 +73,7 @@ Events.onNet('vehicles:enginesounds:reset', (plyId, netId: number) => {
 });
 
 const openEngineSoundMenu = (plyId: number) => {
-  const vehicle = GetVehiclePedIsIn(GetPlayerPed(String(plyId)), false);
-  if (!vehicle || !DoesEntityExist(vehicle)) {
-    Notifications.add(plyId, 'Je zit niet in een voertuig');
-    return;
-  }
-
-  const netId = NetworkGetNetworkIdFromEntity(vehicle);
-
-  const menuEntries: ContextMenu.Entry[] = [
-    {
-      title: 'Engine Swap',
-      icon: 'engine',
-      disabled: true,
-    },
-  ];
-
-  const customMenuEntries: ContextMenu.Entry[] = [];
-  const nativeMenuEntries: ContextMenu.Entry[] = [];
-
-  for (let i = 0; i < engineSounds.length; i++) {
-    const entry: ContextMenu.Entry = {
-      title: engineSounds[i].label,
-      preventCloseOnClick: true,
-      callbackURL: 'vehicles/enginesounds/set',
-      data: {
-        netId,
-        idx: i,
-      },
-    };
-    if (engineSounds[i].custom) {
-      customMenuEntries.push(entry);
-    } else {
-      nativeMenuEntries.push(entry);
-    }
-  }
-
-  menuEntries.push(
-    {
-      title: 'Normale Engines',
-      submenu: nativeMenuEntries.sort((a, b) => a.title.localeCompare(b.title)),
-    },
-    {
-      title: 'Custom Engines',
-      submenu: customMenuEntries.sort((a, b) => a.title.localeCompare(b.title)),
-    },
-    {
-      title: 'Reset',
-      icon: 'arrows-rotate',
-      callbackURL: 'vehicles/enginesounds/reset',
-      data: {
-        netId,
-      },
-    },
-    {
-      title: 'Opslaan',
-      icon: 'floppy-disk',
-      callbackURL: 'vehicles/enginesounds/save',
-      data: {
-        netId,
-      },
-    }
-  );
-
-  UI.openContextMenu(plyId, menuEntries);
+  Events.emitNet('vehicles:enginesounds:openMenu', plyId, engineSounds);
 };
 
 global.exports('openEngineSoundMenu', openEngineSoundMenu);

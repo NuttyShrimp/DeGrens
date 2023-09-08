@@ -14,6 +14,7 @@ import {
 import { BaseEvents } from '@dgx/client';
 import { disableHarnassHUD, updateHarnassHUD } from 'modules/seatbelts/service.seatbelts';
 import { driverThread } from 'threads/driver';
+import { closeEngineSoundMenuOnVehicleExit } from 'services/enginesounds';
 
 BaseEvents.onEnteringVehicle(vehicle => {
   SetVehicleNeedsToBeHotwired(vehicle, false);
@@ -59,6 +60,7 @@ BaseEvents.onLeftVehicle((vehicle, seat) => {
   stopNoShuffleThread();
   disableHarnassHUD();
   stopVehicleCrashThread();
+  closeEngineSoundMenuOnVehicleExit();
 });
 
 BaseEvents.onVehicleSeatChange((vehicle, newSeat, oldSeat) => {

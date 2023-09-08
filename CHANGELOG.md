@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Plaat vooraan van LFA gehaald
 - Meerdere handlings getweaked
 - Telefoongesprek stopt nu vanzelf als ge dood/bewusteloos gaat
+- Je hoeft niet langer enginesound manueel op te slaan
 
 ### Fixed
 
