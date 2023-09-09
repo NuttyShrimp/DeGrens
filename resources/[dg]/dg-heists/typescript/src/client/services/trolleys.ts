@@ -36,12 +36,14 @@ const lootTrolley = async (trolley: number) => {
   await Promise.all([Util.requestEntityControl(trolley), Util.loadAnimDict(animDict)]);
 
   // animation intro
-  const { entity: bagObject } = await Util.createObjectOnServer('hei_p_m_bag_var22_arm_s', plyCoords);
-  if (!bagObject) {
+  const spawnedBagObject = await Util.createObjectOnServer('hei_p_m_bag_var22_arm_s', plyCoords);
+  if (!spawnedBagObject) {
     console.log('failed to create bagobject');
     global.exports['dg-lib'].shouldExecuteKeyMaps(true);
     return;
   }
+
+  const bagObject = spawnedBagObject.entity;
 
   let animScene = NetworkCreateSynchronisedScene(
     trolleyCoords.x,
@@ -65,9 +67,10 @@ const lootTrolley = async (trolley: number) => {
   // handles the object in hand
   setImmediate(async () => {
     const pickupHash = TROLLEY_OBJECTS[trolleyType].pickup;
-    const { entity: pickupObject } = await Util.createObjectOnServer(pickupHash, plyCoords);
-    if (!pickupObject) return;
+    const spawnedPickupObject = await Util.createObjectOnServer(pickupHash, plyCoords);
+    if (!spawnedPickupObject) return;
 
+    const pickupObject = spawnedPickupObject.entity;
     FreezeEntityPosition(pickupObject, true);
     SetEntityInvincible(pickupObject, true);
     SetEntityNoCollisionEntity(pickupObject, plyPed, false);

@@ -71,15 +71,17 @@ export const doThermiteOnDoorAnimScene = async (position: Vec4) => {
     1.3
   );
 
-  const { entity: bagObject } = await Util.createObjectOnServer('hei_p_m_bag_var22_arm_s', {
+  const spawnedBagObject = await Util.createObjectOnServer('hei_p_m_bag_var22_arm_s', {
     ...position,
     z: position.z - 3,
   });
-  if (!bagObject) {
+  if (!spawnedBagObject) {
     console.log('Failed to create bagObject');
     global.exports['dg-lib'].shouldExecuteKeyMaps(true);
     return;
   }
+
+  const bagObject = spawnedBagObject.entity;
   SetEntityCollision(bagObject, false, true);
   NetworkAddPedToSynchronisedScene(
     ped,
@@ -106,15 +108,17 @@ export const doThermiteOnDoorAnimScene = async (position: Vec4) => {
 
   await Util.Delay(1500);
 
-  const { entity: thermiteObject } = await Util.createObjectOnServer('hei_prop_heist_thermite', {
+  const spawnedThermiteObject = await Util.createObjectOnServer('hei_prop_heist_thermite', {
     ...position,
     z: position.z - 3,
   });
-  if (!thermiteObject) {
+  if (!spawnedThermiteObject) {
     console.log('Failed to create thermiteObject');
     global.exports['dg-lib'].shouldExecuteKeyMaps(true);
     return;
   }
+
+  const thermiteObject = spawnedThermiteObject.entity;
   SetEntityCollision(thermiteObject, false, true);
   AttachEntityToEntity(
     thermiteObject,

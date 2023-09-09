@@ -243,14 +243,14 @@ export const spawnAnimal = async (animalModel: string) => {
   }
 
   // We keep using networkgetentityfromnetid, because entity id might change during this step
-  const { netId, entity } = await Util.createPedOnServer(animalModel, animalSpawnPosition, undefined, {
+  const spawnedPed = await Util.createPedOnServer(animalModel, animalSpawnPosition, undefined, {
     fromBait: true,
   });
   baitPlaced = false;
-  if (!netId || !entity) return;
+  if (!spawnedPed) return;
 
-  currentAnimal = netId;
-  let spawnedAnimal = entity;
+  currentAnimal = spawnedPed.netId;
+  let spawnedAnimal = spawnedPed.entity;
 
   SetPedAsNoLongerNeeded(spawnedAnimal);
   TaskSetBlockingOfNonTemporaryEvents(spawnedAnimal, false);

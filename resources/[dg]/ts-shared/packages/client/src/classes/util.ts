@@ -151,11 +151,11 @@ class Util extends UtilShared {
     coords: Vec3 | Vec4,
     routingBucket?: number,
     stateBags?: Record<string, any>
-  ): Promise<{ netId: number | null; entity: number | null }> => {
+  ): Promise<{ netId: number; entity: number } | undefined> => {
     const netId = await RPC.execute<number>('dgx:createEntity', entityType, model, coords, routingBucket, stateBags);
-    if (!netId) return { netId: null, entity: null };
+    if (!netId) return;
     const exists = await this.awaitEntityExistence(netId, true);
-    if (!exists) return { netId: null, entity: null };
+    if (!exists) return;
     const entity = NetworkGetEntityFromNetworkId(netId);
     await this.requestEntityControl(entity);
     return { netId, entity };
