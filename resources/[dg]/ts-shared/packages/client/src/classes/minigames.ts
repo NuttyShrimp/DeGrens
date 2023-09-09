@@ -61,7 +61,7 @@ class Minigames {
     return global.exports['dg-minigames'].gridgame(data);
   };
 
-  public keypad = (data: Minigames.Keypad.Data): Promise<boolean> => {
+  public keypad = (data: Minigames.Keypad.Data): Promise<[boolean, string]> => {
     return global.exports['dg-minigames'].keypad(data);
   };
 }
