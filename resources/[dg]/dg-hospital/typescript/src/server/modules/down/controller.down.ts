@@ -112,3 +112,22 @@ Core.onPlayerUnloaded((plyId, cid, playerData) => {
     `${playerData.name}(${playerData.serverId}) has logged out while being ${downState}`
   );
 });
+
+RegisterCommand(
+  'hospital:revive',
+  (src: number, args: string[]) => {
+    if (src > 0) {
+      console.log(`[hospital:revive] This command is only to be used in the server console`);
+      return;
+    }
+
+    const target = +args[0];
+    if (!target || Number.isNaN(target)) {
+      console.log(`[hospital:revive] Invalid target ${target}`);
+      return;
+    }
+
+    Hospital.revivePlayer(target);
+  },
+  true
+);
