@@ -40,8 +40,8 @@ const enableHeliCam = async () => {
   SetCamFov(cam, currentFov);
   RenderScriptCams(true, false, 0, true, false);
 
-  const scaleform = RequestScaleformMovie('HELI_CAM');
-  await Util.awaitCondition(() => HasScaleformMovieLoaded(scaleform));
+  const scaleform = await Util.loadScaleform('HELI_CAM');
+
   PushScaleformMovieFunction(scaleform, 'SET_CAM_LOGO');
   PushScaleformMovieFunctionParameterInt(0);
   PopScaleformMovieFunctionVoid();

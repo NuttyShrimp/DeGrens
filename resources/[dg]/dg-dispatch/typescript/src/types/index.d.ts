@@ -1,5 +1,3 @@
-declare type Direction = 'up' | 'down' | 'left' | 'right';
-
 declare namespace Dispatch {
   interface Call {
     title: string;

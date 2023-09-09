@@ -14,8 +14,7 @@ Events.onNet('misc:binoculars:use', async () => {
 
   const fpCamPromise = Util.startFirstPersonCam();
 
-  const scaleform = RequestScaleformMovie('BINOCULARS');
-  await Util.awaitCondition(() => HasScaleformMovieLoaded(scaleform));
+  const scaleform = await Util.loadScaleform('BINOCULARS');
 
   PushScaleformMovieFunction(scaleform, 'SET_CAM_LOGO');
   PushScaleformMovieFunctionParameterInt(0);

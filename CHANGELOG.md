@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan nu sleutels geven aan de personen waar je in de wagen mee zit als je neer bent
 - Je cursor is nu gecentreerd als je je inventory open doet
 - Optie om iemand te reviven in de serverconsole
+- Algemene camera optie toegevoegd om dit makkelijker te hergebruiken dev-wise
 
 ### Changed
 
@@ -26,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Telefoongesprek stopt nu vanzelf als ge dood/bewusteloos gaat
 - Je hoeft niet langer enginesound manueel op te slaan
 - Stressmiddelen helpen beter
+- Dispatch cameras laden nu sneller
 
 ### Fixed
 

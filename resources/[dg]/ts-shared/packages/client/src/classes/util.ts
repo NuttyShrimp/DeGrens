@@ -72,6 +72,12 @@ class Util extends UtilShared {
     return this.awaitCondition(() => HasAnimSetLoaded(set));
   };
 
+  loadScaleform = async (scaleformName: string) => {
+    const scaleform = RequestScaleformMovie(scaleformName);
+    await this.awaitCondition(() => HasScaleformMovieLoaded(scaleform));
+    return scaleform;
+  };
+
   goToCoords = async (position: Vec4, timeout = 5000, targetPed?: number) => {
     let ped = PlayerPedId();
     if (targetPed) {
@@ -354,6 +360,46 @@ class Util extends UtilShared {
     ACCEPTED_MATERIALS?: string[]
   ): Promise<{ coords: Vec3; rotation: Vec3 } | null> => {
     return global.exports['dg-misc'].startGhostPlacement(model, maxDistance, ACCEPTED_MATERIALS);
+  };
+
+  public toggleScreenFadeOut = async (enabled: boolean, time: number) => {
+    if (IsScreenFadedOut() == enabled) return; // if already this state, do nothing
+
+    enabled ? DoScreenFadeOut(time) : DoScreenFadeIn(time);
+
+    const success = await this.awaitCondition(() => !!IsScreenFadedOut() === enabled, time * 2);
+    if (success) return;
+
+    // if we failed to fade out, just set it to the state we want instantly
+    enabled ? DoScreenFadeOut(0) : DoScreenFadeIn(0);
+  };
+
+  public enterCamera = (camInfo: Misc.Cameras.Info): Promise<void> => {
+    return global.exports['dg-misc'].enterCamera(camInfo);
+  };
+
+  public exitCamera = (): Promise<void> => {
+    return global.exports['dg-misc'].exitCamera();
+  };
+
+  public isCameraActive = (): boolean => {
+    return global.exports['dg-misc'].isCameraActive();
+  };
+
+  // this shit is so dumb fuckme
+  public loadCollisionAroundCoord = async (coords: Vec3) => {
+    const hash = GetHashKey('prop_ld_test_01'); // gta test object with like no polys
+    await this.loadModel(hash);
+    const tempEnt = CreateObject(hash, coords.x, coords.y, coords.z, false, false, false);
+    SetModelAsNoLongerNeeded(hash);
+    await this.loadCollisionAroundEntity(tempEnt);
+    DeleteEntity(tempEnt);
+  };
+
+  public loadCollisionAroundEntity = async (entity: number) => {
+    const coords = this.getEntityCoords(entity);
+    RequestCollisionAtCoord(coords.x, coords.y, coords.z);
+    await this.awaitCondition(() => HasCollisionLoadedAroundEntity(entity));
   };
 }
 
