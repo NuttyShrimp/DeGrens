@@ -90,7 +90,7 @@
   "stress": [
     {
       "name": "joint",
-      "decrease": 50,
+      "decrease": 80,
       "duration": 30000,
       "uses": 1,
       "animation": {
@@ -103,7 +103,7 @@
     },
     {
       "name": "blazeit_joint",
-      "decrease": 50,
+      "decrease": 80,
       "duration": 30000,
       "uses": 1,
       "animation": {
@@ -116,7 +116,7 @@
     },
     {
       "name": "blazeit_brownie",
-      "decrease": 50,
+      "decrease": 80,
       "duration": 15000,
       "uses": 2,
       "animation": {
@@ -128,7 +128,7 @@
     },
     {
       "name": "blazeit_cookie",
-      "decrease": 50,
+      "decrease": 80,
       "duration": 15000,
       "uses": 2,
       "animation": {
@@ -140,7 +140,7 @@
     },
     {
       "name": "blazeit_gummy",
-      "decrease": 50,
+      "decrease": 80,
       "duration": 15000,
       "uses": 3,
       "animation": {
@@ -152,7 +152,7 @@
     },
     {
       "name": "blazeit_oil",
-      "decrease": 50,
+      "decrease": 80,
       "duration": 10000,
       "uses": 5,
       "animation": {
@@ -164,7 +164,7 @@
     },
     {
       "name": "blazeit_stick",
-      "decrease": 50,
+      "decrease": 80,
       "duration": 10000,
       "uses": 5,
       "animation": {
