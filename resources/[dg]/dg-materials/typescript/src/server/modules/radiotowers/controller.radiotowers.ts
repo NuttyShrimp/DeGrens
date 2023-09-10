@@ -1,5 +1,5 @@
 import { Events, Inventory, Notifications, Police, RPC, Sounds, Taskbar, Util } from '@dgx/server';
-import { getConfig } from 'services/config';
+import config from 'services/config';
 import { mainLogger } from 'sv_logger';
 import { getTowerState, resetTowerState, setTowerState, tryToSpawnTowerPeds } from './service.radiotowers';
 
@@ -15,7 +15,7 @@ Events.onNet('materials:radiotower:disable', (src: number, towerId: string) => {
   if (getTowerState(towerId).disabled) return;
   setTowerState(towerId, 'disabled', true);
 
-  const coords = getConfig().radiotowers.towers[towerId].position;
+  const coords = config.radiotowers.towers[towerId].position;
   Police.createDispatchCall({
     tag: '10-31',
     title: 'Onbevoegde persoon aan vliegveld radiotoren',
@@ -28,11 +28,14 @@ Events.onNet('materials:radiotower:disable', (src: number, towerId: string) => {
     },
   });
 
-  const configTimeout = getConfig().radiotowers.timeout;
+  const configTimeout = config.radiotowers.timeout;
   const timeout = Util.getRndInteger(configTimeout - 5, configTimeout + 5);
-  setTimeout(() => {
-    resetTowerState(towerId, false);
-  }, timeout * 60 * 1000);
+  setTimeout(
+    () => {
+      resetTowerState(towerId, false);
+    },
+    timeout * 60 * 1000
+  );
 });
 
 Events.onNet('materials:radiotowers:override', (src: number, towerId: string, key: Materials.Radiotowers.Action) => {
@@ -53,7 +56,7 @@ Events.onNet('materials:radiotowers:override', (src: number, towerId: string, ke
     const { overrideOne, overrideTwo } = getTowerState(towerId);
     const overrideSuccess = overrideOne && overrideTwo;
 
-    const soundPosition = getConfig().radiotowers.towers[towerId].actions.find(a => a.action === key)?.position;
+    const soundPosition = config.radiotowers.towers[towerId].actions.find(a => a.action === key)?.position;
     if (soundPosition) {
       Sounds.playSuccessSoundFromCoord(soundPosition, overrideSuccess);
     }
@@ -105,7 +108,7 @@ Events.onNet('materials:radiotowers:loot', async (src: number, towerId: string) 
   Inventory.setQualityOfItem(item.id, oldQuality => oldQuality - 50);
 
   setTowerState(towerId, 'looted', true);
-  Inventory.addItemToPlayer(src, 'material_electronics', getConfig().radiotowers.amountOfItems);
+  Inventory.addItemToPlayer(src, 'material_electronics', config.radiotowers.amountOfItems);
 
   const logMsg = `${Util.getName(src)} has looted a radiotower ${towerId}`;
   Util.Log('materials:radiotower:loot', { towerId }, logMsg, src);

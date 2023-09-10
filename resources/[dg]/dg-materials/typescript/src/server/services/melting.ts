@@ -1,12 +1,12 @@
 import { Events, Inventory, Notifications, Util, Taskbar, UI } from '@dgx/server';
-import { getConfig } from './config';
+import config from './config';
 
 let recipes: Materials.Melting.Config['recipes'] = [];
 
 let activeItem: (Materials.Melting.RecipeItem & { isReady: boolean }) | null = null;
 
 export const loadMeltingRecipes = () => {
-  recipes = getConfig().melting.recipes;
+  recipes = config.melting.recipes;
 };
 
 Events.onNet('materials:melting:showMenu', (src: number) => {
@@ -81,7 +81,7 @@ Events.onNet('materials:melting:melt', async (src: number, recipeId: number) => 
     return;
   }
 
-  const meltTimePerStack = getConfig().melting.meltingTime;
+  const meltTimePerStack = config.melting.meltingTime;
   const timeMultiplier = 1 - Math.min(amountOfStacks, 10) * 0.05;
   const secondsTillMelted = Math.round(meltTimePerStack * amountOfStacks * timeMultiplier);
 

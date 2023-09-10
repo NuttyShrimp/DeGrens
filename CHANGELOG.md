@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je cursor is nu gecentreerd als je je inventory open doet
 - Optie om iemand te reviven in de serverconsole
 - Algemene camera optie toegevoegd om dit makkelijker te hergebruiken dev-wise
+- Nieuwe activiteit toegevoegd om aan materialen te komen
 
 ### Changed
 

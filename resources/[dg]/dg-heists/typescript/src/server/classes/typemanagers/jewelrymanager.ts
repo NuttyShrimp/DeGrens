@@ -391,7 +391,7 @@ export class JewelryManager implements Heists.TypeManager {
 
     this.setActionBusy('overridingAlarm', true);
 
-    const success = await Minigames.keypad(plyId, { solution: this.pinCode });
+    const [success] = await Minigames.keypad(plyId, { solution: this.pinCode });
     Sounds.playSuccessSoundFromCoord(Util.getPlyCoords(plyId), success);
 
     if (!success) {

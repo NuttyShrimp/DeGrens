@@ -1,5 +1,5 @@
 import { Config, Events, Inventory, Police, RPC, Util } from '@dgx/server';
-import { getConfig } from 'services/config';
+import config from 'services/config';
 import { mainLogger } from 'sv_logger';
 import { canCutLocation, cutLocation } from './service.wirecutting';
 
@@ -13,7 +13,7 @@ Events.onNet('materials:wirecutting:cut', async (src: number, locationId: number
   const item = await Inventory.getFirstItemOfName('player', String(Util.getCID(src)), 'bolt_cutters');
   if (!item) return;
 
-  const { qualityDecrease, itemAmount } = getConfig().wirecutting;
+  const { qualityDecrease, itemAmount } = config.wirecutting;
   Inventory.setQualityOfItem(item.id, oldQuality => oldQuality - qualityDecrease);
   Inventory.addItemToPlayer(src, 'material_copper', itemAmount);
   cutLocation(locationId);
@@ -26,7 +26,7 @@ Events.onNet('materials:wirecutting:dispatch', (src: number, locationId: number)
   const callChance = Config.getConfigValue('dispatch.callChance.wirecutting');
   if (rng > callChance) return;
 
-  const coords = getConfig().wirecutting.locations[locationId];
+  const coords = config.wirecutting.locations[locationId];
   Police.createDispatchCall({
     tag: '10-31',
     title: 'Verdachte activiteit aan treinspoor',

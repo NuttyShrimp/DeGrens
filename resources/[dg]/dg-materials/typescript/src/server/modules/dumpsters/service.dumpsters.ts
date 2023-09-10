@@ -4,7 +4,7 @@
 // When together with 2 players, they could possibly player1 search then move and player2 search but afaik there is no real way to solve this
 
 import { Vector3 } from '@dgx/shared';
-import { getConfig } from 'services/config';
+import config from 'services/config';
 
 const searchedDumpsters: Vec3[] = [];
 
@@ -17,7 +17,7 @@ export const setAsSearched = (position: Vec3) => {
   searchedDumpsters.push(position);
 
   // Timeout is always same so first item in array is always gonne be oldest
-  const timeout = getConfig().dumpsters.refillTime * 60 * 1000;
+  const timeout = config.dumpsters.refillTime * 60 * 1000;
   setTimeout(() => {
     searchedDumpsters.shift();
   }, timeout);

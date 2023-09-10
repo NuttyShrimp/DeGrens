@@ -7,6 +7,7 @@ declare namespace Materials {
     melting: Melting.Config;
     crafting: Crafting.Config;
     containers: Containers.Config;
+    portrobbery: PortRobbery.Config;
   };
 
   type InitData = {
@@ -15,6 +16,7 @@ declare namespace Materials {
     meltingZone: Melting.Config['zone'];
     moldZone: Containers.Config['mold']['location'];
     containerProps: Containers.Config['props'];
+    portrobbery: PortRobbery.InitData;
   };
 
   namespace Wirecutting {
@@ -153,5 +155,34 @@ declare namespace Materials {
     );
 
     type Prop<T extends string | number> = { model: T; doZOffset: boolean };
+  }
+
+  namespace PortRobbery {
+    type Config = {
+      code: {
+        maxActive: number;
+        scheduleDelay: number;
+        peds: Vec4[];
+        inputZone: Zones.Box;
+      };
+      cams: { coords: Vec3; rotation: Vec3 }[];
+      locations: { camIdx: number; coords: Vec4 }[];
+      loot: {
+        time: number;
+        pool: {
+          items: {
+            name: string;
+            amount: number | [number, number];
+            quality?: number;
+          }[];
+          weight: number;
+        }[];
+      };
+    };
+
+    type InitData = {
+      codeInputZone: PortRobbery.Config['code']['inputZone'];
+      activeLocationZones: { idx: number; coords: Vec4 }[];
+    };
   }
 }

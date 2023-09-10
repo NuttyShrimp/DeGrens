@@ -1,5 +1,5 @@
 import { Events, Inventory, RPC, Util } from '@dgx/server';
-import { getConfig } from 'services/config';
+import config from 'services/config';
 import { mainLogger } from 'sv_logger';
 import { isSearched, setAsSearched } from './service.dumpsters';
 
@@ -15,7 +15,7 @@ Events.onNet('materials:dumpsters:finishSearch', (plyId: number, position: Vec3)
     return;
   }
 
-  for (const loot of getConfig().dumpsters.loot) {
+  for (const loot of config.dumpsters.loot) {
     if (Math.random() > loot.chance) continue;
 
     let amount: number;

@@ -4,6 +4,7 @@ import { loadContainers } from 'modules/containers/service.containers';
 import { initializeRecyclePed } from 'modules/recycleped/service.recycleped';
 import { loadMeltingRecipes } from 'services/melting';
 import { loadCrafting } from './services/crafting';
+import portRobberyManager from 'modules/portrobbery/manager.portrobbery';
 
 import './controllers/events';
 
@@ -24,4 +25,5 @@ setImmediate(async () => {
   loadMeltingRecipes();
   loadCrafting();
   loadContainers();
+  portRobberyManager.startCodePedThread();
 });

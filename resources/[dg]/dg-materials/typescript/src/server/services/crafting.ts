@@ -1,6 +1,6 @@
 import { Reputations, Util, Inventory, SQL } from '@dgx/server';
 import { mainLogger } from 'sv_logger';
-import { getConfig } from './config';
+import config from './config';
 
 const craftingLogger = mainLogger.child({ module: 'Crafting' });
 
@@ -11,7 +11,7 @@ export const loadCrafting = async () => {
   await Inventory.awaitLoad();
 
   // Build the required UI data for each recipe so we can cache it
-  const configRecipes = Object.entries(getConfig().crafting.recipes);
+  const configRecipes = Object.entries(config.crafting.recipes);
   configRecipes.forEach(([itemName, recipe]) => {
     const info = Inventory.getItemData(itemName);
     if (!info) return;
@@ -39,7 +39,7 @@ export const loadCrafting = async () => {
 
   // Load benches
   const dbLevels: { benchId: string; level: number }[] = await SQL.query(`SELECT * FROM bench_levels`);
-  Object.entries(getConfig().crafting.benches).forEach(([benchId, benchConfig]) => {
+  Object.entries(config.crafting.benches).forEach(([benchId, benchConfig]) => {
     let data: Materials.Crafting.Bench.Data;
     const items = new Set(benchConfig.items);
     if (benchConfig.reputation === undefined) {

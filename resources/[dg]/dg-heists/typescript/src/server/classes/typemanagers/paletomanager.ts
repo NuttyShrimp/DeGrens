@@ -147,7 +147,7 @@ export class PaletoManager implements Heists.TypeManager {
     const keypadCoords = config.paleto.actions.find(z => z.id === keypadId)?.coords;
     if (!keypadCoords) return;
 
-    const keypadSuccess = await Minigames.keypad(plyId, {
+    const [keypadSuccess] = await Minigames.keypad(plyId, {
       solution: this.currentCode ?? '', // we catch if no code active after input finish
     });
 

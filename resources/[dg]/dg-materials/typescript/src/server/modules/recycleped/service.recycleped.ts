@@ -1,16 +1,16 @@
 import { Core, Inventory, Notifications } from '@dgx/server';
-import { getConfig } from 'services/config';
+import config from 'services/config';
 
 let items: Materials.RecyclePed.Items;
 
 export const initializeRecyclePed = async () => {
-  items = getConfig().recycleped.allowedItems;
+  items = config.recycleped.allowedItems;
   Inventory.createScriptedStash('materials_recycleped', 10, Object.keys(items));
 };
 
 export const addItemToRecycle = (plyIdentifier: string, sellItem: Inventory.ItemState) => {
   const charModule = Core.getModule('characters');
-  if (sellItem.quality === undefined || sellItem.quality > getConfig().recycleped.maximumPercentage) {
+  if (sellItem.quality === undefined || sellItem.quality > config.recycleped.maximumPercentage) {
     const plyId = charModule.getServerIdFromCitizenId(Number(plyIdentifier));
     if (plyId !== undefined) {
       Notifications.add(plyId, 'Dit is nog niet kapot genoeg', 'error');
