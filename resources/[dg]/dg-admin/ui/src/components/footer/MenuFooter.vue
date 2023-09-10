@@ -29,8 +29,7 @@
     store.dispatch('toggleDevMode');
   };
   const copyCoords = async () => {
-    const coords = await nuiAction('copyCoords');
-    copyToClipboard(String(coords));
+    nuiAction('copyCoords');
   };
   const openCoordsSelector = async () => {
     const coords = await nuiAction('openCoordsSelector');
