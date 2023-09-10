@@ -1,7 +1,7 @@
 declare namespace Materials {
   type Config = {
     wirecutting: Wirecutting.Config;
-    dumpsters: Dumpster.Config;
+    searchableprops: SearchableProps.Config;
     radiotowers: Radiotowers.Config;
     recycleped: RecyclePed.Config;
     melting: Melting.Config;
@@ -17,6 +17,7 @@ declare namespace Materials {
     moldZone: Containers.Config['mold']['location'];
     containerProps: Containers.Config['props'];
     portrobbery: PortRobbery.InitData;
+    searchableprops: SearchableProps.InitData;
   };
 
   namespace Wirecutting {
@@ -28,14 +29,22 @@ declare namespace Materials {
     };
   }
 
-  namespace Dumpster {
-    type Config = {
-      loot: {
-        item: string;
-        amount: [number, number] | number;
-        chance: number;
-      }[];
-      refillTime: number;
+  namespace SearchableProps {
+    type Config = Record<
+      string,
+      {
+        models: string[];
+        loot: {
+          item: string;
+          amount: [number, number] | number;
+          chance: number;
+        }[];
+        timeout: number;
+      }
+    >;
+
+    type InitData = {
+      models: Record<string, string[]>;
     };
   }
 

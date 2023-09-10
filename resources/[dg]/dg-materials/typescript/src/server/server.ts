@@ -9,7 +9,7 @@ import portRobberyManager from 'modules/portrobbery/manager.portrobbery';
 import './controllers/events';
 
 import './modules/wirecutting';
-import './modules/dumpsters';
+import './modules/searchableprops';
 import './modules/radiotowers';
 import './modules/recycleped';
 import './modules/containers';
