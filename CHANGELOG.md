@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optie om iemand te reviven in de serverconsole
 - Algemene camera optie toegevoegd om dit makkelijker te hergebruiken dev-wise
 - Nieuwe activiteit toegevoegd om aan materialen te komen
+- Optie om maillocatie meteen te markeren op GPS bij ontvangen van mail
 
 ### Changed
 

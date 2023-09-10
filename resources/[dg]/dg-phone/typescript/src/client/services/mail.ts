@@ -6,6 +6,10 @@ Events.onNet('phone:mails:add', (mail: Phone.Mails.Mail | Phone.Mails.Mail[], sk
     action: 'addMail',
     data: { mail, skipNotification },
   });
+
+  if (!Array.isArray(mail) && mail.coords && mail.instantlySetLocation) {
+    Util.setWaypoint(mail.coords);
+  }
 });
 
 UI.RegisterUICallback('phone/mails/remove', (data: { id: string }, cb) => {
