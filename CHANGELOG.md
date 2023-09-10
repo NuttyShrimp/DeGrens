@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Algemene camera optie toegevoegd om dit makkelijker te hergebruiken dev-wise
 - Nieuwe activiteit toegevoegd om aan materialen te komen
 - Optie om maillocatie meteen te markeren op GPS bij ontvangen van mail
+- Je kan nu kiezen welke gordel je aandoen wanneer je een harness in je voertuig hebt (modifier key voor harness)
 
 ### Changed
 
