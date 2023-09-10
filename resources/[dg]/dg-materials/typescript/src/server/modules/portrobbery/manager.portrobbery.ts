@@ -96,6 +96,10 @@ class PortRobberyManager {
     const code = Util.getRndInteger(100000, 999999);
     this.activeCodes.add(code);
     Inventory.addItemToPlayer(plyId, 'paper_note', 1, { code });
+
+    const logMsg = `${Util.getName(plyId)}(${plyId}) has requested portrobbery code ${code}`;
+    this.logger.info(logMsg);
+    Util.Log('materials:portrobbery:requestCode', { code }, logMsg, plyId);
   };
 
   @DGXEvent('materials:portrobbery:inputCode')
@@ -126,6 +130,10 @@ class PortRobberyManager {
 
     const camData = config.portrobbery.cams[location.camIdx];
     Events.emitNet('materials:portrobbery:openCam', plyId, camData);
+
+    const logMsg = `${Util.getName(plyId)}(${plyId}) has actived portrobbery location ${locationIdx}`;
+    this.logger.info(logMsg);
+    Util.Log('materials:portrobbery:activate', { locationIdx }, logMsg, plyId);
   };
 
   @RPCEvent('materials:portrobbery:canLoot')
@@ -202,6 +210,10 @@ class PortRobberyManager {
     clearInterval(itemThread);
 
     this.removeActiveLocation(locationIdx);
+
+    const logMsg = `${Util.getName(plyId)}(${plyId}) has looted portrobbery location ${locationIdx}`;
+    this.logger.info(logMsg);
+    Util.Log('materials:portrobbery:loot', { locationIdx }, logMsg, plyId);
   };
 
   private removeActiveLocation = (locationIdx: number) => {
