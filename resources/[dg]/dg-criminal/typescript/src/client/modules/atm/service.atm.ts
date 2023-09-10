@@ -107,7 +107,9 @@ export const startAttaching = async (atm: number) => {
     prop: 'big_drill',
   });
 
-  Particles.remove(particleId);
+  if (particleId) {
+    Particles.remove(particleId);
+  }
 
   if (canceled) return;
 

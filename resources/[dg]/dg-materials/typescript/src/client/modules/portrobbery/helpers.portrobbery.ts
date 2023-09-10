@@ -46,6 +46,7 @@ export const playOpeningAnim = async () => {
       offset: { x: 0, y: 0.25, z: 0 },
     });
 
+    if (!ptfx) return;
     setTimeout(() => {
       Particles.remove(ptfx);
     }, 1200);

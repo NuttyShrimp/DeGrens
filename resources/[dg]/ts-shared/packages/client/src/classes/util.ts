@@ -78,6 +78,11 @@ class Util extends UtilShared {
     return scaleform;
   };
 
+  loadPtfx = (ptfx: string) => {
+    RequestNamedPtfxAsset(ptfx);
+    return this.awaitCondition(() => HasNamedPtfxAssetLoaded(ptfx));
+  };
+
   goToCoords = async (position: Vec4, timeout = 5000, targetPed?: number) => {
     let ped = PlayerPedId();
     if (targetPed) {

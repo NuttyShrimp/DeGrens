@@ -3,3 +3,7 @@ type ObjEntries<T> = {
 }[keyof T][];
 
 type ObjKeys<T> = (keyof T)[];
+
+type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>;
+};

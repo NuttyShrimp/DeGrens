@@ -1,42 +1,51 @@
-import { Events, Util } from '@dgx/server';
-import { mainLogger } from 'sv_logger';
+import { Events } from '@dgx/server';
 
-const activeLoopedParticles: Map<string, Required<Particles.Particle>> = new Map();
+const activeParticles: Map<string, Misc.Particles.Data> = new Map();
 
-// Every 10s, send event to players who are in range for all particles
-export const startParticleThread = () => {
-  setInterval(() => {
-    for (const [id, data] of activeLoopedParticles) {
-      // Check if entity still exists
-      if ('netId' in data) {
-        const entity = NetworkGetEntityFromNetworkId(data.netId);
-        if (!entity || !DoesEntityExist(entity)) {
-          activeLoopedParticles.delete(id);
-          mainLogger.silly('Registered particle has been removed because entity does not exist');
-          continue;
-        }
-      }
-      sendToClosePlayers(id, data);
-    }
-  }, 1000 * 10);
-};
+export const addLoopedParticle = (id: string, data: Misc.Particles.Data) => {
+  if (activeParticles.has(id)) return;
 
-export const addLoopedParticle = (id: string, data: Required<Particles.Particle>): boolean => {
-  if (activeLoopedParticles.has(id)) return false;
-  activeLoopedParticles.set(id, data);
-  return true;
+  if ('netId' in data) {
+    const entity = NetworkGetEntityFromNetworkId(data.netId);
+    if (!entity || !DoesEntityExist(entity)) return;
+
+    const entState = Entity(entity).state;
+    const existingPtfx: Record<string, Misc.Particles.Data> = entState.ptfx ?? {};
+    existingPtfx[id] = data;
+    entState.set('ptfx', existingPtfx, true);
+  } else {
+    // we are better of sending it once to all clients, than to start thread and send to only close clients
+    Events.emitNet('particles:client:add', -1, id, data);
+  }
+
+  activeParticles.set(id, data);
 };
 
 export const removeLoopedParticle = (id: string) => {
-  activeLoopedParticles.delete(id);
+  const data = activeParticles.get(id);
+  if (!data) return;
+
+  if ('netId' in data) {
+    const entity = NetworkGetEntityFromNetworkId(data.netId);
+    if (!entity || !DoesEntityExist(entity)) return;
+
+    const entState = Entity(entity).state;
+    const existingPtfx: Record<string, Misc.Particles.Data> = entState.ptfx ?? {};
+    delete existingPtfx[id];
+    entState.set('ptfx', existingPtfx, true);
+  } else {
+    Events.emitNet('particles:client:remove', -1, id);
+  }
+
+  activeParticles.delete(id);
 };
 
-export const sendToClosePlayers = (id: string, data: Required<Particles.Particle>) => {
-  const coords = 'coords' in data ? data.coords : Util.getEntityCoords(NetworkGetEntityFromNetworkId(data.netId));
-
-  for (const plyId of Util.getAllPlayers()) {
-    const ped = GetPlayerPed(String(plyId));
-    if (!DoesEntityExist(ped) || Util.getEntityCoords(ped).distance(coords) > 100) continue;
-    Events.emitNet('particles:client:addLooped', plyId, id, data);
+// clear all entity states on resource stop
+export const handleParticlesModuleResourceStop = () => {
+  for (const [_, data] of activeParticles) {
+    if (!('netId' in data)) continue;
+    const entity = NetworkGetEntityFromNetworkId(data.netId);
+    if (!entity || !DoesEntityExist(entity)) continue;
+    Entity(entity).state.set('ptfx', {}, true);
   }
 };

@@ -1,5 +1,8 @@
 class Particles {
-  public add = (data: Particles.Particle): string => {
+  /**
+   * @returns id gets returned if the particle is of `looped` kind
+   */
+  public add = (data: Misc.Particles.Data): string | undefined => {
     return global.exports['dg-misc'].addParticle(data);
   };
   public remove = (id: string) => {
