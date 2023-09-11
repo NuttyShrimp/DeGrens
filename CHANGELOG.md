@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je hoeft niet langer enginesound manueel op te slaan
 - Stressmiddelen helpen beter
 - Dispatch cameras laden nu sneller
+- Enkele textures in de Scrapz aangepast
+- Vrouwelijke MC vest aangepast
 
 ### Fixed
 
