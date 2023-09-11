@@ -10,7 +10,7 @@ class Util extends UtilShared {
     let lastNameIdx = this.getRndInteger(0, lastNames.length - 1);
     if (seed) {
       firstNameIdx = seed.split('').reduce((s, v) => s + v.charCodeAt(0), 0) % firstNames.length;
-      lastNameIdx = seed.split('').reduce((s, v) => s + v.charCodeAt(0), 0) % firstNames.length;
+      lastNameIdx = seed.split('').reduce((s, v) => s + v.charCodeAt(0), 0) % lastNames.length;
     }
     const firstName = firstNames[firstNameIdx];
     const lastName = lastNames[lastNameIdx];

@@ -63,11 +63,13 @@ Events.onNet('blackout:powerstation:useExplosive', async (stationId: number) => 
   }
 
   const explosiveCoords = Util.ArrayToVector3(GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 0.65, -0.8));
-  const { entity: explosiveObject } = await Util.createObjectOnServer('prop_ld_bomb', explosiveCoords);
-  if (!explosiveObject) {
+  const spawnedObject = await Util.createObjectOnServer('prop_ld_bomb', explosiveCoords);
+  if (!spawnedObject) {
     placingExplosive = false;
     return;
   }
+
+  const explosiveObject = spawnedObject.entity;
 
   const removedItem = await Inventory.removeItemByNameFromPlayer('big_explosive');
   if (!removedItem) {

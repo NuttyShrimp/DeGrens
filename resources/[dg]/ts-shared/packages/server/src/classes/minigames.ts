@@ -1,7 +1,7 @@
 import { Events } from './index';
 
 class Minigames {
-  private games: Record<number, Record<number, (result: boolean) => void>> = {};
+  private games: Record<number, Record<number, (...args: any) => void>> = {};
   private id = 0;
   private readonly resName: string;
 
@@ -74,9 +74,9 @@ class Minigames {
     });
   };
 
-  public keypad = (src: number, data: Minigames.Keypad.Data): Promise<boolean> => {
+  public keypad = (src: number, data: Minigames.Keypad.Data = {}) => {
     this.playGame(src, ++this.id, 'keypad', data);
-    return new Promise<boolean>(res => {
+    return new Promise<[boolean, string]>(res => {
       if (!this.games[src]) this.games[src] = {};
       this.games[src][this.id] = res;
     });

@@ -40,6 +40,9 @@ export const WEATHERS: Record<
       { type: 'CLEAR', percentage: 30 },
       { type: 'EXTRASUNNY', percentage: 50 },
     ],
+    rainLevel: 0,
+    cannotBeFirst: true,
+    duration: 5,
   },
   OVERCAST: {
     enabled: true,

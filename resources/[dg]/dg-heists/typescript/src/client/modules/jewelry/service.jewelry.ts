@@ -60,10 +60,13 @@ export const lootVitrine = async (vitrineId: number) => {
   const animDuration = GetAnimDuration('missheist_jewel', vitrineModelData.animName);
 
   TaskPlayAnim(ped, 'missheist_jewel', vitrineModelData.animName, 8.0, 1.0, -1, 0, 0, false, false, false);
-  setTimeout(() => {
-    ClearPedTasks(ped);
-    Events.emitNet('heists:jewelry:finishLootingVitrine', vitrineId);
-  }, animDuration * 1000 - 500);
+  setTimeout(
+    () => {
+      ClearPedTasks(ped);
+      Events.emitNet('heists:jewelry:finishLootingVitrine', vitrineId);
+    },
+    animDuration * 1000 - 500
+  );
 
   await Util.Delay(vitrineModelData.delay);
 
@@ -74,6 +77,7 @@ export const lootVitrine = async (vitrineId: number) => {
     looped: true,
   });
   setTimeout(() => {
+    if (!ptfxId) return;
     Particles.remove(ptfxId);
   }, 2000);
   Sounds.playLocalSound('breaking_vitrine_glass', 0.4);

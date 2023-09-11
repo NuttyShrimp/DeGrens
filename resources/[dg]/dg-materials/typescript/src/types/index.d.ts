@@ -1,12 +1,13 @@
 declare namespace Materials {
   type Config = {
     wirecutting: Wirecutting.Config;
-    dumpsters: Dumpster.Config;
+    searchableprops: SearchableProps.Config;
     radiotowers: Radiotowers.Config;
     recycleped: RecyclePed.Config;
     melting: Melting.Config;
     crafting: Crafting.Config;
     containers: Containers.Config;
+    portrobbery: PortRobbery.Config;
   };
 
   type InitData = {
@@ -15,6 +16,8 @@ declare namespace Materials {
     meltingZone: Melting.Config['zone'];
     moldZone: Containers.Config['mold']['location'];
     containerProps: Containers.Config['props'];
+    portrobbery: PortRobbery.InitData;
+    searchableprops: SearchableProps.InitData;
   };
 
   namespace Wirecutting {
@@ -26,14 +29,22 @@ declare namespace Materials {
     };
   }
 
-  namespace Dumpster {
-    type Config = {
-      loot: {
-        item: string;
-        amount: [number, number] | number;
-        chance: number;
-      }[];
-      refillTime: number;
+  namespace SearchableProps {
+    type Config = Record<
+      string,
+      {
+        models: string[];
+        loot: {
+          item: string;
+          amount: [number, number] | number;
+          chance: number;
+        }[];
+        timeout: number;
+      }
+    >;
+
+    type InitData = {
+      models: Record<string, string[]>;
     };
   }
 
@@ -153,5 +164,34 @@ declare namespace Materials {
     );
 
     type Prop<T extends string | number> = { model: T; doZOffset: boolean };
+  }
+
+  namespace PortRobbery {
+    type Config = {
+      code: {
+        maxActive: number;
+        scheduleDelay: number;
+        peds: Vec4[];
+        inputZone: Zones.Box;
+      };
+      cams: { coords: Vec3; rotation: Vec3 }[];
+      locations: { camIdx: number; coords: Vec4 }[];
+      loot: {
+        time: number;
+        pool: {
+          items: {
+            name: string;
+            amount: number | [number, number];
+            quality?: number;
+          }[];
+          weight: number;
+        }[];
+      };
+    };
+
+    type InitData = {
+      codeInputZone: PortRobbery.Config['code']['inputZone'];
+      activeLocationZones: { idx: number; coords: Vec4 }[];
+    };
   }
 }

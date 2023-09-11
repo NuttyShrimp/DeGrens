@@ -55,8 +55,9 @@ export const generateLogger = (name: string, packageInfo: Record<string, any>, l
       tracesSampleRate: 1.0,
     });
   }
+  const originalLogLevel = logLevelOverwrite ?? mainJSON.loglevel;
   const logger = winston.createLogger({
-    level: logLevelOverwrite ?? mainJSON.loglevel,
+    level: originalLogLevel,
     transports: [
       new winston.transports.Console({
         format: winston.format.combine(
@@ -68,6 +69,20 @@ export const generateLogger = (name: string, packageInfo: Record<string, any>, l
       }),
     ],
   });
+
+  // allow changing loglevel at runtime using servercommand
+  //@ts-ignore
+  RegisterCommand(
+    `${GetCurrentResourceName()}:loglevel`,
+    (source: number, args: [logLevel: string]) => {
+      if (source !== 0) throw new Error('Command can only be used on server');
+      const logLevel = args[0] ?? originalLogLevel;
+      logger.level = logLevel;
+      logger.info(`Log level has been set to: '${logLevel}'`);
+    },
+    true
+  );
+
   if (mainJSON.production) {
     logger.add(
       new SentryTransport({

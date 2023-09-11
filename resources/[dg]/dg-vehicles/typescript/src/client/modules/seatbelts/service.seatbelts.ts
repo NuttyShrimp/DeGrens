@@ -2,13 +2,15 @@ import { Events, HUD, Sounds, Taskbar, Util } from '@dgx/client';
 import { Vector3 } from '@dgx/shared';
 import { getCurrentVehicle, getVehHalfLength } from '@helpers/vehicle';
 
-let currentSeatbelt: 'none' | 'seatbelt' | 'harness' = 'none';
+type SeatbeltType = 'none' | 'seatbelt' | 'harness';
+
+let currentSeatbelt: SeatbeltType = 'none';
 let keyThread: NodeJS.Timer | null = null;
 
 let harnessUses = 0;
 let ejected = false;
 
-const setCurrentSeatbelt = (seatbelt: typeof currentSeatbelt) => {
+const setCurrentSeatbelt = (seatbelt: SeatbeltType) => {
   currentSeatbelt = seatbelt;
   emit('vehicles:seatbelt:toggle', currentSeatbelt !== 'none');
 };
@@ -21,13 +23,13 @@ export const isHarnessOn = () => {
   return currentSeatbelt === 'harness';
 };
 
-export const doesVehicleHaveSeatbelt = (veh: number) => {
+const doesVehicleHaveSeatbelt = (veh: number) => {
   const vehClass = GetVehicleClass(veh);
   const illegalClass = [8, 13, 14].includes(vehClass);
   return !illegalClass;
 };
 
-export const toggleSeatbelt = async () => {
+export const toggleSeatbelt = async (doHarnass: boolean) => {
   const veh = getCurrentVehicle();
   if (!veh) return;
   if (!doesVehicleHaveSeatbelt(veh)) return;
@@ -47,20 +49,24 @@ export const toggleSeatbelt = async () => {
     return;
   }
 
-  const uses: number = Entity(veh).state.harnessUses ?? 0;
+  let newSeatbeltType: SeatbeltType = 'seatbelt';
+  if (doHarnass) {
+    const uses: number = Entity(veh).state.harnessUses ?? 0;
+    if (uses > 0) {
+      const [wasCanceled] = await Taskbar.create('person-seat-reclined', 'Putting on harness', 5000, {
+        canCancel: true,
+        cancelOnDeath: true,
+      });
+      if (wasCanceled) return;
+      if (getCurrentVehicle() !== veh) return;
 
-  if (uses > 0) {
-    const [wasCanceled] = await Taskbar.create('person-seat-reclined', 'Putting on harness', 5000, {
-      canCancel: true,
-      cancelOnDeath: true,
-    });
-    if (wasCanceled) return;
-    if (getCurrentVehicle() !== veh) return;
-    Events.emitNet('vehicles:seatbelts:decreaseHarness', NetworkGetNetworkIdFromEntity(veh));
+      Events.emitNet('vehicles:seatbelts:decreaseHarness', NetworkGetNetworkIdFromEntity(veh));
+      newSeatbeltType = 'harness';
+    }
   }
 
   Sounds.playLocalSound('carbuckle', 0.7);
-  setCurrentSeatbelt(uses > 0 ? 'harness' : 'seatbelt');
+  setCurrentSeatbelt(newSeatbeltType);
 
   // Disable exiting vehicle while seatbelt on
   if (keyThread !== null) clearInterval(keyThread);

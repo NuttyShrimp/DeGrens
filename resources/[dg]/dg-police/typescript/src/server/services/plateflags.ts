@@ -7,9 +7,9 @@ const plateflagsLogger = mainLogger.child({ module: 'Plate Flags' });
 
 export const loadAllFlaggedPlates = async () => {
   const time = Math.round(Date.now() / 1000);
-  const { affectedRows } = (await SQL.query(`DELETE FROM plate_flags WHERE expiration_date < ?`, [time])) as {
+  const { affectedRows } = await SQL.query<{
     affectedRows: number;
-  };
+  }>(`DELETE FROM plate_flags WHERE expiration_date < ?`, [time]);
 
   const result = await SQL.query<
     { id: string; plate: string; reason: string; issued_by: number; issued_date: number }[]
@@ -24,7 +24,7 @@ export const loadAllFlaggedPlates = async () => {
       issuedDate: flag.issued_date,
     });
   });
-  plateflagsLogger.silly(`${plateFlags.length} flags have been loaded. ${affectedRows} flags have expired`);
+  plateflagsLogger.info(`${plateFlags.length} flags have been loaded. ${affectedRows} flags have expired`);
 };
 
 // TODO LTS: Move to ANG. This is temp solution for launch
@@ -153,3 +153,7 @@ export const isPlateFlagged = (plate: string) => {
 RPC.register('police:plateflags:isFlagged', (src, plate: string) => {
   return isPlateFlagged(plate);
 });
+
+export const getPlateFlags = (plate: string) => {
+  return plateFlags.filter(f => f.plate === plate);
+};

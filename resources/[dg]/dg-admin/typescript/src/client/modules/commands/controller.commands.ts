@@ -1,7 +1,7 @@
-import { Events, Notifications, PropAttach, RPC, SyncedObjects, UI, Util } from '@dgx/client';
+import { Events, Keys, Notifications, PropAttach, RPC, SyncedObjects, UI, Util } from '@dgx/client';
 
 import { disableBlips, enableBlips } from '../../service/playerBlips';
-import { toggleLocalVis } from './service.commands';
+import { copyEntityCoordsToClipboard, toggleLocalVis } from './service.commands';
 import { getCmdState, setCmdState } from './state.commands';
 import { toggleNoclip } from 'service/noclip';
 
@@ -44,13 +44,7 @@ on('admin:commands:toggleFreezeEntity', (ent: number) => {
   Events.emitNet('admin:server:toggleFreezeEntity', NetworkGetNetworkIdFromEntity(entity), isFrozen);
 });
 on('admin:commands:copyCoords', (ent: number) => {
-  const coords: Vec4 = { ...Util.getEntityCoords(ent), w: GetEntityHeading(ent) };
-  for (const key of Object.keys(coords)) {
-    //@ts-expect-error
-    coords[key] = Util.round(coords[key], 4);
-  }
-
-  UI.addToClipboard(JSON.stringify(coords));
+  copyEntityCoordsToClipboard(ent);
 });
 
 Events.onNet('admin:commands:runCmd', (handler, args: any[]) => {
@@ -267,4 +261,9 @@ Events.onNet('admin:commands:addEventBlip', (coords: Vec3, time: number) => {
     },
     time * 60 * 1000
   );
+});
+
+Keys.register('admin-copy-coords', '(zAdmin) Copy coords');
+Keys.onPressDown('admin-copy-coords', () => {
+  copyEntityCoordsToClipboard();
 });

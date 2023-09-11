@@ -11490,5 +11490,31 @@
     "shop": "nfs",
     "type": "land",
     "inCarboostPool": true
+  },
+  {
+    "category": "super",
+    "model": "ageraone",
+    "brand": "Koenigsegg",
+    "name": "Agera One-1",
+    "class": "X",
+    "defaultStock": 1,
+    "restockTime": 14,
+    "price": 900000,
+    "shop": "nfs",
+    "type": "land",
+    "inCarboostPool": true
+  },
+  {
+    "category": "motorcycles",
+    "model": "knucklehead",
+    "brand": "Harley-Davidson",
+    "name": "Knucklehead",
+    "class": "B",
+    "defaultStock": 1,
+    "restockTime": 14,
+    "price": 50000,
+    "shop": "nfs",
+    "type": "land",
+    "inCarboostPool": true
   }
 ]

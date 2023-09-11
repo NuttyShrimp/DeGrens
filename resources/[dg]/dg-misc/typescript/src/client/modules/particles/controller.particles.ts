@@ -1,43 +1,25 @@
-import { Events, RPC, Util } from '@dgx/client';
-import { addParticle, getIsLooped, removeParticle } from './service.particles';
+import { Events, Statebags, Util } from '@dgx/client';
+import { createParticle, handleEntityPtfxStateChange, removeParticle } from './service.particles';
 
-// Looped are NOT networked by 5M, nonlooped are networked by 5M
-const addParticleHandler = (particle: Particles.Particle) => {
-  const data: Required<Particles.Particle> = {
-    offset: { x: 0, y: 0, z: 0 },
-    rotation: { x: 0, y: 0, z: 0 },
-    scale: 1,
-    ...particle,
-  };
+// Nonlooped are networked, looped are not
+global.exports('addParticle', (data: Misc.Particles.Data) => {
+  if (!data.looped) {
+    createParticle('', data); // id doesnt matter for nonlooped
+    return;
+  }
 
   const id = Util.uuidv4();
-  if (data.looped) {
-    Events.emitNet('particles:server:addLooped', id, data);
-  } else {
-    addParticle(id, data);
-  }
+  Events.emitNet('particles:server:addLooped', id, data);
   return id;
-};
-
-RPC.register('particles:client:add', addParticleHandler);
-global.exports('addParticle', addParticleHandler);
-
-const removeParticleHandler = (id: string) => {
-  const looped = getIsLooped(id);
-  if (looped) {
-    Events.emitNet('particles:server:removeLooped', id);
-  } else {
-    removeParticle(id);
-  }
-};
-
-Events.onNet('particles:client:remove', removeParticleHandler);
-global.exports('removeParticle', removeParticleHandler);
-
-Events.onNet('particles:client:addLooped', (id: string, data: Required<Particles.Particle>) => {
-  addParticle(id, data);
 });
 
-Events.onNet('particles:client:removeLooped', (id: string) => {
-  removeParticle(id);
+global.exports('removeParticle', (id: string) => {
+  Events.emitNet('particles:server:removeLooped', id);
+});
+
+Events.onNet('particles:client:add', createParticle);
+Events.onNet('particles:client:remove', removeParticle);
+
+Statebags.addEntityStateBagChangeHandler<Record<string, Misc.Particles.Data>>('entity', 'ptfx', (_, entity, ptfx) => {
+  handleEntityPtfxStateChange(entity, ptfx);
 });

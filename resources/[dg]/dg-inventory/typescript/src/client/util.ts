@@ -36,7 +36,7 @@ export const doDropAnimation = async () => {
   const animDict = 'pickup_object';
   const anim = 'pickup_low';
   await Util.loadAnimDict(animDict);
-  TaskPlayAnim(ped, animDict, anim, 8.0, -8.0, -1, 1, 0.0, false, false, false);
+  TaskPlayAnim(ped, animDict, anim, 8.0, -8.0, -1, 0, 0.0, false, false, false);
   await Util.Delay(1200);
   StopAnimTask(ped, animDict, anim, 1.0);
 };

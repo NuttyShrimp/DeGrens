@@ -6,28 +6,6 @@ interface RGB {
   b: number;
 }
 
-declare type DeepPartial<T> = {
-  [P in keyof T]?: DeepPartial<T[P]>;
-};
-
-declare namespace Particles {
-  type Particle = {
-    dict: string;
-    name: string;
-    offset?: Vec3;
-    rotation?: Vec3;
-    scale?: number;
-    looped: boolean;
-  } & (
-    | { coords: Vec3 }
-    | { netId: number }
-    | ({ netId: number; ignoreBoneRotation?: boolean } & ({ boneName: string } | { boneIndex: number }))
-  );
-
-  // only looped return ptfx handle
-  type Data = Required<Particle> & { ptfx?: number };
-}
-
 declare type RayCastHit = {
   entity?: number;
   coords?: Vec3;

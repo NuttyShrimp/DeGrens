@@ -1,4 +1,3 @@
-import { startParticleThread } from 'modules/particles/service.particles';
 import { loadStatusData } from 'modules/status/service.status';
 import { loadAllPlayerReputations } from 'modules/reputation/service.reputation';
 import { loadHudConfig } from 'modules/hud/service.hud';
@@ -35,7 +34,6 @@ import './services/flyers';
 import './services/overwrites';
 
 setImmediate(() => {
-  startParticleThread();
   loadStatusData();
   loadAllPlayerReputations();
   loadHudConfig();

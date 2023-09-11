@@ -52,7 +52,7 @@ declare namespace Minigames {
   namespace Keypad {
     type Data = {
       buttons?: string[]; // LENGTH 10
-      solution: string;
+      solution?: string;
     };
   }
 }

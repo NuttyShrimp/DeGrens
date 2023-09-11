@@ -39,6 +39,8 @@ export const fxPuke = async () => {
     },
   });
   await Util.Delay(3500);
-  Particles.remove(pfxId);
+  if (pfxId) {
+    Particles.remove(pfxId);
+  }
   Animations.stopAnimLoop(animId);
 };

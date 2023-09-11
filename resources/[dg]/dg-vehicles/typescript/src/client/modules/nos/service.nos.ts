@@ -124,6 +124,7 @@ const addNosPtfx = (veh: number) => {
       looped: true,
       scale: 1.3,
     });
+    if (!ptfxId) continue;
     ptfxIds.nos.add(ptfxId);
   }
 };
@@ -144,6 +145,7 @@ const addPurgePtfx = (veh: number) => {
       scale: 0.8,
       looped: true,
     });
+    if (!ptfxId) return;
     ptfxIds.purge.add(ptfxId);
   });
 };

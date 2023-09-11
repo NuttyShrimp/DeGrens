@@ -3,6 +3,7 @@ import { Events, RPC, Storage, Util, RayCast, UI, Notifications } from '@dgx/cli
 import { assignBind, getAllBinds } from '../helpers/binds';
 import { RegisterUICallback } from '../helpers/ui';
 import { selectedEntity, selectedEntityType } from '../modules/selector/service.selector';
+import { copyEntityCoordsToClipboard } from 'modules/commands/service.commands';
 
 RegisterUICallback('logOpenMenu', (_, cb) => {
   Events.emitNet('admin:menu:openlog');
@@ -144,16 +145,8 @@ RegisterUICallback('toggleDevMode', (data: { toggle: boolean }, cb) => {
 });
 
 RegisterUICallback('copyCoords', (_, cb) => {
-  const coords = Util.getPlyCoords();
-  const heading = GetEntityHeading(PlayerPedId());
-  const data = {
-    x: Util.round(coords.x, 4),
-    y: Util.round(coords.y, 4),
-    z: Util.round(coords.z, 4),
-    w: Util.round(heading, 4),
-  };
-  Notifications.add('Check clipboard for coordinate');
-  cb({ meta: { ok: true, message: 'done' }, data: JSON.stringify(data) });
+  copyEntityCoordsToClipboard();
+  cb({ meta: { ok: true, message: 'done' }, data: {} });
 });
 
 RegisterUICallback('openCoordsSelector', async (_, cb) => {

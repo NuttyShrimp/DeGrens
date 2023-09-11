@@ -1,5 +1,5 @@
 import { Events, Inventory, Notifications, RPC, Taskbar, Util } from '@dgx/server';
-import { getConfig } from 'services/config';
+import config from 'services/config';
 import { containersLogger } from './logger.containers';
 import {
   canEnterContainer,
@@ -57,7 +57,7 @@ Events.onNet('materials:containers:meltMold', async (src: number) => {
     return;
   }
 
-  const amount = getConfig().containers.mold.requiredSteel;
+  const amount = config.containers.mold.requiredSteel;
   const removedItems = await Inventory.removeItemByNameFromPlayer(src, 'refined_steel', amount);
   if (!removedItems) {
     Notifications.add(src, 'Je hebt niet genoeg om dit te vullen', 'error');

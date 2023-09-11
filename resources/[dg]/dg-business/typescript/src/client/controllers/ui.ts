@@ -165,6 +165,7 @@ UI.RegisterUICallback(
           type: 'number',
           name: 'amount',
           label: 'Aantal',
+          value: '1',
         },
       ],
     });

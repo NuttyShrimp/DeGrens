@@ -13,6 +13,7 @@ import './modules/evidence';
 import './modules/alerts';
 import './modules/interactions';
 import './modules/prison';
+import './modules/speedzones';
 
 setImmediate(async () => {
   await loadPoliceConfig();

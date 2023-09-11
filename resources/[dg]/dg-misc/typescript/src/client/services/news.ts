@@ -102,8 +102,7 @@ const enableNewsCamera = async () => {
   SetTimecycleModifierStrength(0.3);
 
   // load required scaleforms
-  const scaleform = RequestScaleformMovie('breaking_news');
-  await Util.awaitCondition(() => HasScaleformMovieLoaded(scaleform));
+  const scaleform = await Util.loadScaleform('breaking_news');
 
   BeginScaleformMovieMethod(scaleform, 'breaking_news');
   EndScaleformMovieMethod();

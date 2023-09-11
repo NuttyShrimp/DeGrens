@@ -1,6 +1,6 @@
 import { Util, Gangs, Inventory, Police } from '@dgx/server';
 import { Vector3 } from '@dgx/shared';
-import { getConfig } from 'services/config';
+import config from 'services/config';
 import {
   doesGangHaveContainerKey,
   fetchContainerKeyItems,
@@ -15,7 +15,7 @@ const containerForPlayer = new Map<number, string>();
 export const loadContainers = async () => {
   const dbContainerBenches = await fetchContainerKeyItems();
 
-  Object.entries(getConfig().containers.containers).forEach(([containerId, containerConfig]) => {
+  Object.entries(config.containers.containers).forEach(([containerId, containerConfig]) => {
     let data: Materials.Containers.Container;
     if (containerConfig.public) {
       data = { bench: containerConfig.bench, position: containerConfig.position, public: true };

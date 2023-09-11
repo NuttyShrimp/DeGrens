@@ -13,6 +13,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.4.5]
+
+### Added
+
+### Changed
+
+### Fixed
+
+## [1.4.5]
+
+### Added
+
+### Changed
+
+### Fixed
+
+## [1.4.5]
+
+### Added
+
+- Sloten op deuren en kledingkast in Scrapz bedrijf
+- Je kan nu sleutels geven aan de personen waar je in de wagen mee zit als je neer bent
+- Je cursor is nu gecentreerd als je je inventory open doet
+- Optie om iemand te reviven in de serverconsole
+- Algemene camera optie toegevoegd om dit makkelijker te hergebruiken dev-wise
+- Nieuwe activiteit toegevoegd om aan materialen te komen
+- Optie om maillocatie meteen te markeren op GPS bij ontvangen van mail
+- Je kan nu kiezen welke gordel je aandoen wanneer je een harness in je voertuig hebt (modifier key voor harness)
+- Inhouse particles wrapper opnieuw geschreven om syncing te verbeteren
+
+### Changed
+
+- Regen bij CLEARING weather weggehaald
+- Aantal staat nu standaard op 1 wanneer je iets koopt bij een business
+- Salesticket bij PDM hebben nu een minimum en maximum waarde
+- Idlecam in voertuigen gedisabled
+- Werking van snelheidszones aangepast
+- Plaat vooraan van LFA gehaald
+- Meerdere handlings getweaked
+- Telefoongesprek stopt nu vanzelf als ge dood/bewusteloos gaat
+- Je hoeft niet langer enginesound manueel op te slaan
+- Stressmiddelen helpen beter
+- Dispatch cameras laden nu sneller
+- Enkele textures in de Scrapz aangepast
+- Vrouwelijke MC vest aangepast
+
+### Fixed
+
+- Je krijgt geen huisinbraak mislukt mail meer wanneer je groep verlaat na huisinbraak te voltooien
+- Mogelijks probleem met keygame opgelost waardoor keypresses niet registreren
+- 'Inventory vol' notificatie wordt niet meer gespammed als je meer dan 1 item krijgt
+- Helicopters gebruiken nu wel benzine
+- Gesprekkenlijst in messages phone app staan correct gesorteerd op nieuwste bericht
+- Voertuigdamage RS6 Avant verlaagd
+
 ## [1.4.4]
 
 ### Added

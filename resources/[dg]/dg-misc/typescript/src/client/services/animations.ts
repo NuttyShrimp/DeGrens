@@ -72,12 +72,13 @@ export const doLaptopHackAnimation = async (hackFunc?: () => Promise<boolean>): 
 
   await Util.loadAnimDict('anim@heists@ornate_bank@hack');
 
-  const { entity: laptopObject } = await Util.createObjectOnServer('hei_prop_hst_laptop', coords);
-  if (!laptopObject || !DoesEntityExist(laptopObject)) {
+  const spawnedLaptopObject = await Util.createObjectOnServer('hei_prop_hst_laptop', coords);
+  if (!spawnedLaptopObject) {
     activeAnimations.delete('laptophack');
     return false;
   }
 
+  const laptopObject = spawnedLaptopObject.entity;
   animProps.add(laptopObject);
 
   const { x, y, z } = coords;

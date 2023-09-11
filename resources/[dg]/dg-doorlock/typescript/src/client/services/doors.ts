@@ -269,7 +269,9 @@ export const tryToThermiteDoor = async (itemId: string) => {
       scale: 0.7,
     });
     await Util.Delay(10000);
-    Particles.remove(particleId);
+    if (particleId) {
+      Particles.remove(particleId);
+    }
     Events.emitNet('doorlock:server:changeDoorState', doorId, false);
   }
 

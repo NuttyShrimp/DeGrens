@@ -33,6 +33,7 @@ exports('SetUIFocus', SetUIFocus)
 function doesUIHaveFocus()
   return IsNuiFocused()
 end
+
 exports('doesUIHaveFocus', doesUIHaveFocus)
 
 function SendAppEvent(app, data)
@@ -73,3 +74,7 @@ function closeApplication(app, data)
 end
 
 exports('closeApplication', closeApplication)
+
+exports('SetCursorLocation', function(x, y)
+  SetCursorLocation(x, y)
+end)

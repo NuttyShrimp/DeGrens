@@ -162,6 +162,11 @@
         "name": "mailbox",
         "amount": 50,
         "price": 500
+      },
+      {
+        "name": "angle_grinder",
+        "amount": 50,
+        "price": 375
       }
     ],
     "fishing": [

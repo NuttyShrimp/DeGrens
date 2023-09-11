@@ -1,6 +1,6 @@
 import { Events, Inventory } from '@dgx/server';
 import { charModule } from 'helpers/core';
-import { getCallIdForPly } from 'modules/calls/service.calls';
+import { endCall, getCallIdForPly } from 'modules/calls/service.calls';
 
 Events.onNet('dg-phone:load', async src => {
   const hasPhone = await Inventory.doesPlayerHaveItems(src, 'phone');
@@ -8,6 +8,13 @@ Events.onNet('dg-phone:load', async src => {
   if (getCallIdForPly(src)) {
     Events.emitNet('phone:client:setState', src, 'inCall', true);
   }
+});
+
+Events.onNet('hospital:down:changeState', (src, state: Hospital.State) => {
+  if (state == 'alive') return;
+  const callId = getCallIdForPly(src);
+  if (!callId) return;
+  endCall(callId);
 });
 
 Inventory.onInventoryUpdate(

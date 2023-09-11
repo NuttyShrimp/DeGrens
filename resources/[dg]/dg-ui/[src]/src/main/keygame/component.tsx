@@ -105,9 +105,10 @@ const Component: AppFunction = props => {
     };
   }, [currectCycle]);
 
-  const handleShow = useCallback(async (data: Keygame.Open) => {
-    setArrowColor('normal');
+  const handleShow = useCallback((data: Keygame.Open) => {
     setId(data.id);
+    setArrowColor('normal');
+    setKeypressed(null);
     setCycles(data.cycles);
     setCurrentCycle(0);
   }, []);

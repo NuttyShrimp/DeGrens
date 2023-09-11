@@ -1,4 +1,4 @@
-import { Keys, Notifications, PropAttach, Util, Vehicles } from '@dgx/client';
+import { Keys, Notifications, PropAttach, UI, Util, Vehicles } from '@dgx/client';
 import { getCmdState, setCmdState } from 'modules/commands/state.commands';
 
 let noclipThread: NodeJS.Timer | null = null;
@@ -91,8 +91,17 @@ export const printDebugInfo = () => {
   }
   const camCoords = Util.ArrayToVector3(GetCamCoord(noclipCam));
   const camRot = Util.ArrayToVector3(GetCamRot(noclipCam, 2));
+
+  for (const key of Object.keys(camCoords) as (keyof Vec3)[]) {
+    camCoords[key] = Util.round(camCoords[key], 4);
+  }
+  for (const key of Object.keys(camRot) as (keyof Vec3)[]) {
+    camRot[key] = Util.round(camRot[key], 4);
+  }
+
   console.log(camCoords);
   console.log(camRot);
+  UI.addToClipboard(JSON.stringify({ coords: camCoords, rotation: camRot }));
 };
 
 // get noclip data for entityselector

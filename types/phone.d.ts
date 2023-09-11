@@ -12,6 +12,7 @@ declare namespace Phone {
       subject: string;
       message: string;
       coords?: Vec3;
+      instantlySetLocation?: boolean;
     };
   }
 }

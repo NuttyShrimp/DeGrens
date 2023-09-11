@@ -1,17 +1,28 @@
-import { Config, Util } from '@dgx/server';
+import { Config } from '@dgx/server';
 
-let materialsConfig: Materials.Config | null = null;
+const CONFIG_KEY = 'materials';
 
-export const awaitConfigLoad = () => Util.awaitCondition(() => materialsConfig !== null);
-
-export const getConfig = () => {
-  if (materialsConfig === null) {
-    throw new Error('Tried to get config but was not initialized yet...');
+let configData: Materials.Config | null = null;
+const config = new Proxy(
+  {},
+  {
+    get(_: any, prop: keyof Materials.Config) {
+      if (configData == null) {
+        throw new Error('Config was not loaded yet...');
+      }
+      return configData[prop];
+    },
   }
-  return materialsConfig;
-};
+);
+
+on('dg-config:moduleLoaded', (module: string, data: Materials.Config) => {
+  if (module !== CONFIG_KEY) return;
+  configData = data;
+});
 
 export const loadConfig = async () => {
   await Config.awaitConfigLoad();
-  materialsConfig = Config.getConfigValue('materials');
+  configData = Config.getConfigValue<Materials.Config>(CONFIG_KEY);
 };
+
+export default config as Materials.Config;

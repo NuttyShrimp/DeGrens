@@ -30,6 +30,7 @@ declare namespace Houserobbery {
     locked: boolean;
     groupId: string;
     failTimeout: NodeJS.Timeout;
+    finished: boolean;
   };
 
   namespace Interior {

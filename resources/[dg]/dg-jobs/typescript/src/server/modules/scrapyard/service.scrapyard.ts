@@ -95,6 +95,7 @@ export const assignLocationToGroup = async (ownerId: number) => {
       message:
         'De locatie van het voertuig zit bij deze mail.<br>Gelieve het voertuig naar deze werkplaats te brengen.<br>Eenmaal je hier bent kan je bepaalde onderdelen demonteren. Geef me daarna de onderdelen om de opdracht af te ronden.',
       coords: location.vehicleLocation,
+      instantlySetLocation: true,
     });
   });
 };

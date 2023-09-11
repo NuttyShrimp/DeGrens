@@ -11,9 +11,10 @@ import {
 
 HUD.addEntry('harness-uses', 'user-slash', '#11A156', () => getHarnessUses(), 3, 100, false);
 
-Keys.register('toggleseatbelt', 'Toggle Seatbelt', 'G');
+Keys.register('toggleseatbelt', '(seatbelt) toggle (+mod harness)', 'G');
 Keys.onPressDown('toggleseatbelt', () => {
-  toggleSeatbelt();
+  const isModPressed = Keys.isModPressed();
+  toggleSeatbelt(isModPressed);
 });
 
 Statebags.addCurrentVehicleStatebagChangeHandler<number>('harnessUses', (vehicle, value) => {

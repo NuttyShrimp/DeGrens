@@ -1,6 +1,6 @@
-import { getConfig } from 'services/config';
+import config from 'services/config';
 import { TOWER_STATE_KEYS } from './constants.radiotowers';
-import { Events, Util, Jobs, Npcs } from '@dgx/server';
+import { Util, Npcs } from '@dgx/server';
 import { radioTowerLogger } from './logger.radiotowers';
 
 const towerStates: Record<string, Materials.Radiotowers.State> = {};
@@ -25,7 +25,7 @@ export const resetTowerState = (towerId: string, enabled: boolean) => {
 };
 
 export const initializeRadiotowerStates = () => {
-  const radioTowerIds = Object.keys(getConfig().radiotowers.towers);
+  const radioTowerIds = Object.keys(config.radiotowers.towers);
 
   // we start as all already done and init the players set
   radioTowerIds.forEach(towerId => {
@@ -34,11 +34,14 @@ export const initializeRadiotowerStates = () => {
 
   // wait random amount before first time available since restart
   const rndMinutes = Util.isDevEnv() ? 1 : Util.getRndInteger(30, 60);
-  setTimeout(() => {
-    radioTowerIds.forEach(towerId => {
-      resetTowerState(towerId, false);
-    });
-  }, rndMinutes * 60 * 1000);
+  setTimeout(
+    () => {
+      radioTowerIds.forEach(towerId => {
+        resetTowerState(towerId, false);
+      });
+    },
+    rndMinutes * 60 * 1000
+  );
 };
 
 export const tryToSpawnTowerPeds = (towerId: string) => {
@@ -46,7 +49,7 @@ export const tryToSpawnTowerPeds = (towerId: string) => {
 
   setTowerState(towerId, 'pedsSpawned', true);
 
-  getConfig().radiotowers.towers[towerId].peds.forEach(position => {
+  config.radiotowers.towers[towerId].peds.forEach(position => {
     Npcs.spawnGuard({
       model: 's_m_y_blackops_02',
       position,

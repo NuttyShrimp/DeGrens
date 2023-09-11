@@ -47,7 +47,11 @@
   },
   "timeForSale": 180,
   "classesThatNeedEmployee": ["X", "S", "A+"],
-  "employeePercentage": 2,
+  "employeeTicket": {
+    "percentage": 2,
+    "min": 250,
+    "max": 5000
+  },
   "quicksell": {
     "percentage": 0.5,
     "allowedUpgrades": [

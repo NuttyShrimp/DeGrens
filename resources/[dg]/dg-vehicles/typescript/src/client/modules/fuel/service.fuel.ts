@@ -32,13 +32,16 @@ export const startFuelThread = (vehicle: number) => {
   const vehClass = GetVehicleClass(vehicle);
   if (vehClass == 13) return;
 
+  // helis and planes should always be full rpm
+  const alwaysFullRPM = vehClass === 15 || vehClass === 16;
+
   fuelThreadRunning = true;
   fuelThread = setInterval(() => {
     if (!vehicle || !DoesEntityExist(vehicle)) return;
     if (fuelThreadPaused) return;
     if (!GetIsVehicleEngineRunning(vehicle)) return;
 
-    const vehRPM = GetVehicleCurrentRpm(vehicle);
+    const vehRPM = alwaysFullRPM ? 1 : GetVehicleCurrentRpm(vehicle);
     // Exponential growth ((2 ** Modifier) - 1) * Max
     const mod = (2 ** vehRPM - 1) * CONSUMATION_PER_SECOND;
     setFuelLevel(fuelLevel - mod);

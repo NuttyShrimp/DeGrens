@@ -42,7 +42,6 @@ export const startLadderThread = () => {
       ClearPedTasksImmediately(ped);
       setTimeout(() => {
         SetPedToRagdollWithFall(ped, 1000, 1500, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0);
-        Hospital.setHealth(1);
       }, 50);
     }
   }, 500);

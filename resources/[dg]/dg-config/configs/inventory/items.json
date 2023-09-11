@@ -2719,5 +2719,15 @@
       "x": 2,
       "y": 2
     }
+  },
+  {
+    "name": "angle_grinder",
+    "label": "Slijper",
+    "image": "angle_grinder.png",
+    "size": {
+      "x": 3,
+      "y": 2
+    },
+    "decayRate": 86400
   }
 ]

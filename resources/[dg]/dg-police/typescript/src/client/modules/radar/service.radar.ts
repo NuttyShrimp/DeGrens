@@ -99,13 +99,19 @@ const startRadarThread = () => {
       // If scanned new vehicle while not having any vehicle locked check if flagged
       if (lockedPlate === null && activeData.plate !== targetPlate) {
         activeData.plate = targetPlate;
-        const isFlagged = (await RPC.execute<boolean>('police:plateflags:isFlagged', targetPlate)) ?? false;
-        if (isFlagged) {
-          Sounds.playLocalSound('pager', 0.1);
-          activeData.flagged = true;
-          lockedPlate = targetPlate;
-          Notifications.add('Geflagde nummerplaat is automatisch gelocked');
+
+        // only do isFlagged RPC call if vehicle has a vin (so no population vehickes)
+        let isFlagged = false;
+        if (!!Entity(activeData.veh).state.vin) {
+          isFlagged = (await RPC.execute<boolean>('police:plateflags:isFlagged', targetPlate)) ?? false;
+          if (isFlagged) {
+            Sounds.playLocalSound('pager', 0.1);
+            activeData.flagged = true;
+            lockedPlate = targetPlate;
+            Notifications.add('Geflagde nummerplaat is automatisch gelocked');
+          }
         }
+
         plateHistory.unshift({ plate: targetPlate, flagged: isFlagged, time: GetGameTimer() });
         plateHistory.length = 10; // oh no
       }
