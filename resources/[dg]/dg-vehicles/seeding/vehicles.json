@@ -11516,5 +11516,18 @@
     "shop": "nfs",
     "type": "land",
     "inCarboostPool": true
+  },
+  {
+    "category": "compacts",
+    "model": "ef9",
+    "brand": "Honda",
+    "name": "Civic EF9",
+    "class": "A",
+    "defaultStock": 1,
+    "restockTime": 14,
+    "price": 125000,
+    "shop": "nfs",
+    "type": "land",
+    "inCarboostPool": true
   }
 ]
