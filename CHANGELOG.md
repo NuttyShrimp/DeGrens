@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Debuglijnen van spikestrip weggehaald
+- Probleem opgelost waardoor mazebank deur meteen opende na hack
 
 ## [1.4.5]
 

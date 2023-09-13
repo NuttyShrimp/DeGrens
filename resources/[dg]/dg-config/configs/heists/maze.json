@@ -1,5 +1,5 @@
 {
-  "doorOpenDelay": 5,
+  "doorOpenDelay": 180,
   "emptyLocationTimeForReset": 3,
   "resetTime": 20,
   "hack": {
