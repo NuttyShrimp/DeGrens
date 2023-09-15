@@ -275,7 +275,7 @@ class ShopManager extends Util.Singleton<ShopManager>() {
       if (employeeId) {
         const ticketConfig = getVehicleShopConfig().employeeTicket;
         const ticketPrice = Math.round(
-          Math.max(ticketConfig.min, Math.min(ticketConfig.min, modelData.price * (ticketConfig.percentage / 100)))
+          Math.max(ticketConfig.min, Math.min(ticketConfig.max, modelData.price * (ticketConfig.percentage / 100)))
         );
         Inventory.addItemToPlayer(employeeId, 'sales_ticket', 1, {
           origin: 'generic',
