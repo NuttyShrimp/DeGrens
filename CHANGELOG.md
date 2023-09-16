@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Debuglijnen van spikestrip weggehaald
 - Probleem opgelost waardoor mazebank deur meteen opende na hack
 - Prijsberekening van PDM salesticket gefixt
+- Probleem opgelost waardoor peek opties niet zichtbaar werden in sommige gevallen
 
 ## [1.4.5]
 
