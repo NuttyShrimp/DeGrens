@@ -10963,10 +10963,10 @@
     "model": "r33",
     "brand": "Nissan",
     "name": "R33",
-    "class": "S",
+    "class": "A+",
     "defaultStock": 5,
     "restockTime": 14,
-    "price": 460000,
+    "price": 208500,
     "shop": "nfs",
     "type": "land",
     "inCarboostPool": true
