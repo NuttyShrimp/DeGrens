@@ -2,7 +2,7 @@ import { SelectorTarget } from '../../../enums/SelectorTargets';
 
 export const syncRemoveProp: CommandData = {
   name: 'syncRemoveProp',
-  role: 'developer',
+  role: 'staff',
   log: 'has sync removed a prop',
   target: [SelectorTarget.ENTITY],
   isClientCommand: true,

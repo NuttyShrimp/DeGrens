@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Aantal vereiste spelers voor banktruck gehalveerd. 
+- Staff kan nu ook enginesound / stancing aanpassen en synced objects plaatsen/verwijderen. 
+- Enkele handlings aangepast
 
 ### Fixed
 
