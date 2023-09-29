@@ -13,21 +13,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-## [1.4.5]
+## [1.4.6]
 
 ### Added
 
 ### Changed
+- Aantal vereiste spelers voor banktruck gehalveerd. 
+- Staff kan nu ook enginesound / stancing aanpassen en synced objects plaatsen/verwijderen. 
+- Enkele handlings aangepast
 
 ### Fixed
 
-## [1.4.5]
-
-### Added
-
-### Changed
-
-### Fixed
+- Debuglijnen van spikestrip weggehaald
+- Probleem opgelost waardoor mazebank deur meteen opende na hack
+- Prijsberekening van PDM salesticket gefixt
+- Probleem opgelost waardoor peek opties niet zichtbaar werden in sommige gevallen
 
 ## [1.4.5]
 

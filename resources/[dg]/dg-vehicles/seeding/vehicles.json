@@ -10963,10 +10963,10 @@
     "model": "r33",
     "brand": "Nissan",
     "name": "R33",
-    "class": "S",
+    "class": "A+",
     "defaultStock": 5,
     "restockTime": 14,
-    "price": 460000,
+    "price": 208500,
     "shop": "nfs",
     "type": "land",
     "inCarboostPool": true
@@ -11513,6 +11513,19 @@
     "defaultStock": 1,
     "restockTime": 14,
     "price": 50000,
+    "shop": "nfs",
+    "type": "land",
+    "inCarboostPool": true
+  },
+  {
+    "category": "compacts",
+    "model": "ef9",
+    "brand": "Honda",
+    "name": "Civic EF9",
+    "class": "A",
+    "defaultStock": 1,
+    "restockTime": 14,
+    "price": 125000,
     "shop": "nfs",
     "type": "land",
     "inCarboostPool": true

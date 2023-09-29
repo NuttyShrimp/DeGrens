@@ -1,13 +1,12 @@
-import { Events, Peek, Util } from '@dgx/client';
+import { Events, Peek } from '@dgx/client';
 import {
   buildPortrobberyLocationZone,
   destroyPortrobberyLocationZone,
   openPortrobberyCam,
   startLootingPortrobberyLocation,
 } from './service.portrobbery';
-import { playOpeningAnim } from './helpers.portrobbery';
 
-Peek.addFlagEntry('portrobberyCodePedIdx', {
+Peek.addFlagEntry('isPortrobberyCodePed', {
   options: [
     {
       label: 'Code Vragen',

@@ -6,7 +6,7 @@ declare interface PlaceObjectData {
 
 export const placeSyncedObject: CommandData = {
   name: 'placeSyncedObject',
-  role: 'developer',
+  role: 'staff',
   target: false,
   isClientCommand: false,
   log: 'placed a synced object',
