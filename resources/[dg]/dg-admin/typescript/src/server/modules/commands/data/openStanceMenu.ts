@@ -7,7 +7,7 @@ interface OpenStanceMenuData {
 
 export const openStanceMenu: CommandData = {
   name: 'openStanceMenu',
-  role: 'developer',
+  role: 'staff',
   log: 'has opened stance menu',
   target: false,
   isClientCommand: false,

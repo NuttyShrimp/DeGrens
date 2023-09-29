@@ -21,10 +21,6 @@ RPC.register('police:spikestrips:getPosition', async (amount: number) => {
   const [_, endCoordsZ] = GetGroundZFor_3dCoord(endCoords.x, endCoords.y, endCoords.z + 5, true);
   endCoords.z = endCoordsZ + 0.5;
 
-  setInterval(() => {
-    DrawLine(startCoords.x, startCoords.y, startCoords.z, endCoords.x, endCoords.y, endCoords.z, 255, 0, 0, 255);
-  }, 1);
-
   const rayHandle = StartShapeTestRay(
     startCoords.x,
     startCoords.y,

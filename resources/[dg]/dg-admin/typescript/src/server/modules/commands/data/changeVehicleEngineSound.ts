@@ -7,7 +7,7 @@ interface ChangeVehicleEngineSoundData {
 
 export const changeVehicleEngineSound: CommandData = {
   name: 'changeVehicleEngineSound',
-  role: 'developer',
+  role: 'staff',
   log: 'has opened vehicle engine sound menu',
   target: false,
   isClientCommand: false,

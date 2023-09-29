@@ -70,6 +70,7 @@ class PortRobberyManager {
         ignore: true,
       },
       flags: {
+        isPortrobberyCodePed: true,
         portrobberyCodePedIdx: codePedIdx,
       },
     });
