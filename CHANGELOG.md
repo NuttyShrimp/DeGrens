@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Job payout verhoogd
+- Methlab: De beveilging lijkt verzwakt te zijn.
+- Er is iets meer te vinden in de huisjes.
+- Bert B zijn vriend betaalt nu beter uit.
+- VPN wordt nu ook (ergens...) verkocht
+- Betere boor en touw voor ATM overvallers.
+- Winkelovervallen loot aangepast
+
 ### Fixed
 
 ## [1.4.6]
@@ -18,8 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
-- Aantal vereiste spelers voor banktruck gehalveerd. 
-- Staff kan nu ook enginesound / stancing aanpassen en synced objects plaatsen/verwijderen. 
+
+- Aantal vereiste spelers voor banktruck gehalveerd.
+- Staff kan nu ook enginesound / stancing aanpassen en synced objects plaatsen/verwijderen.
 - Enkele handlings aangepast
 
 ### Fixed
