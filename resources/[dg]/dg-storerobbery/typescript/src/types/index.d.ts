@@ -3,11 +3,13 @@ declare namespace Storerobbery {
     register: {
       refillTime: number;
       rollAmount: [number, number];
+      cashAmount: [number, number];
     };
     safe: {
       crackDelay: number;
       refillTime: number;
       specialItemChance: number;
+      goldBarChance: number;
       rollAmount: [number, number];
       qualityDecrease: number;
     };
