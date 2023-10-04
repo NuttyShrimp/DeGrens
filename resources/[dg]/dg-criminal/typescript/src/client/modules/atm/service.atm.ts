@@ -88,7 +88,7 @@ export const startAttaching = async (atm: number) => {
     looped: true,
   });
 
-  const [canceled] = await Taskbar.create('link', 'Vastmaken', Util.isDevEnv() ? 1000 : 60 * 1000, {
+  const [canceled] = await Taskbar.create('link', 'Vastmaken', Util.isDevEnv() ? 1000 : 40 * 1000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
@@ -121,7 +121,7 @@ export const finishAttaching = async (vehicle: number) => {
   if (!canDoAtmRobbery({ vehicle })) return;
   if (!isCurrentlyAttaching()) return;
 
-  const [canceled] = await Taskbar.create('link', 'Vastmaken', Util.isDevEnv() ? 1000 : 60 * 1000, {
+  const [canceled] = await Taskbar.create('link', 'Vastmaken', Util.isDevEnv() ? 1000 : 40 * 1000, {
     canCancel: true,
     cancelOnDeath: true,
     cancelOnMove: true,
