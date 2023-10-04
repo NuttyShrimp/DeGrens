@@ -18,8 +18,8 @@ export const initializeSanitation = () => {
     location: { x: -346.0635, y: -1556.1328 },
     // this is amount of money for 1 bucket, 10 bags means * 10
     payout: {
-      min: 15,
-      max: 30,
+      min: 18,
+      max: 36,
       groupPercent: 25,
     },
   });

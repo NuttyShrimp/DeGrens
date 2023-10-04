@@ -18,8 +18,8 @@ export const initializeFishing = () => {
     location: { x: -2080.4377, y: 2609.925 },
     // THIS IS THE PAYOUT PER FISH
     payout: {
-      min: 40,
-      max: 50,
+      min: 48,
+      max: 60,
       groupPercent: 25,
     },
   });
