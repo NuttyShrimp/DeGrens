@@ -47,6 +47,11 @@ DGX.Events.onNet('financials:client:cashChange', function(total)
   SendAppEvent('character', characterInfo)
 end)
 
+DGX.Events.onNet('phone:client:hasPhone', function(hasPhone)
+  characterInfo.hasPhone = hasPhone
+  SendAppEvent('character', characterInfo)
+end)
+
 RegisterNetEvent('onResourceStart', function(resource)
   if resource ~= GetCurrentResourceName() then
     return

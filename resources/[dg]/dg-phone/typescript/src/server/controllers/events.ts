@@ -27,6 +27,7 @@ Inventory.onInventoryUpdate(
     const plySource = charModule.getServerIdFromCitizenId(Number(identifier));
     if (!plySource) return;
     Events.emitNet('phone:client:setState', plySource, 'hasPhone', hasPhone);
+    Events.emitNet('phone:client:hasPhone', plySource, hasPhone);
   },
   'phone'
 );

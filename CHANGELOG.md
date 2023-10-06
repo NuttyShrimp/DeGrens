@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Probleem met telefoon notificaties die soms niet tevoorschijn kwamen opgelost
+
 ## [1.4.6]
 
 ### Added
