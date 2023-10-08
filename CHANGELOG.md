@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Fixed
+
+## [1.4.7]
+
+### Added
+
+### Changed
+
 - Job payout verhoogd
 - Methlab: De beveilging lijkt verzwakt te zijn.
 - Er is iets meer te vinden in de huisjes.

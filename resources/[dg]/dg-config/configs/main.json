@@ -1,7 +1,7 @@
 {
   "production": false,
   "loglevel": "info",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "logServer": "http://10.0.0.2:12201/gelf",
   "devLogServer": "https://graylog.nuttyshrimp.me/gelf",
   "panelEndpoint": "https://panel.degrensrp.be",
