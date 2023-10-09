@@ -11,7 +11,9 @@
     { "itemName": "meth_lab_keycard", "weight": 1, "lootTableId": 0 },
     { "itemName": "tv", "weight": 1, "lootTableId": 1 },
     { "itemName": "vaas", "weight": 1, "lootTableId": 2 },
-    { "itemName": "microwave", "weight": 1, "lootTableId": 3 }
+    { "itemName": "microwave", "weight": 1, "lootTableId": 3 },
+    { "itemName": "decoding_tool", "weight": 1, "lootTableId": 0 },
+    { "itemName": "atm_rope", "weight": 1, "lootTableId": 0 }
   ],
   "playerCooldown": 20,
   "timeToRob": 15,

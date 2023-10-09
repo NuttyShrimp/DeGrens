@@ -2,10 +2,10 @@
   "items": {
     "camera": 250,
     "gameboy": 195,
-    "hifi": 155,
+    "hifi": 310,
     "nintendo_switch": 190,
     "nokia": 180,
-    "psp": 210,
+    "psp": 420,
     "crt_tv": 450,
     "tv": 650,
     "vaas": 600,

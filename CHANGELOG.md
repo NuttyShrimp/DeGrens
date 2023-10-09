@@ -13,16 +13,65 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.4.7]
+
+### Added
+
+### Changed
+
+- Job payout verhoogd
+- Methlab: De beveilging lijkt verzwakt te zijn.
+- Er is iets meer te vinden in de huisjes.
+- Bert B zijn vriend betaalt nu beter uit.
+- VPN wordt nu ook (ergens...) verkocht
+- Betere boor en touw voor ATM overvallers.
+- Winkelovervallen loot aangepast
+
+### Fixed
+
+- Probleem met telefoon notificaties die soms niet tevoorschijn kwamen opgelost
+
 ## [1.4.6]
 
 ### Added
 
 ### Changed
-- Aantal vereiste spelers voor banktruck gehalveerd. 
-- Staff kan nu ook enginesound / stancing aanpassen en synced objects plaatsen/verwijderen. 
+
+- Aantal vereiste spelers voor banktruck gehalveerd.
+- Staff kan nu ook enginesound / stancing aanpassen en synced objects plaatsen/verwijderen.
+- Enkele handlings aangepast
+
+- Aantal vereiste spelers voor banktruck gehalveerd.
+- Staff kan nu ook enginesound / stancing aanpassen en synced objects plaatsen/verwijderen.
+- Enkele handlings aangepast
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+- Aantal vereiste spelers voor banktruck gehalveerd.
+- Staff kan nu ook enginesound / stancing aanpassen en synced objects plaatsen/verwijderen.
 - Enkele handlings aangepast
 
 ### Fixed
+
+=======
+
+- Debuglijnen van spikestrip weggehaald
+- Probleem opgelost waardoor mazebank deur meteen opende na hack
+- Prijsberekening van PDM salesticket gefixt
+- Probleem opgelost waardoor peek opties niet zichtbaar werden in sommige gevallen
+  > > > > > > > main
+
+=======
+
+### Fixed
+
+- Debuglijnen van spikestrip weggehaald
+- Probleem opgelost waardoor mazebank deur meteen opende na hack
+- Prijsberekening van PDM salesticket gefixt
+- Probleem opgelost waardoor peek opties niet zichtbaar werden in sommige gevallen
+
+  > > > > > > > 9db2abbe6 (v1.4.6)
 
 - Debuglijnen van spikestrip weggehaald
 - Probleem opgelost waardoor mazebank deur meteen opende na hack

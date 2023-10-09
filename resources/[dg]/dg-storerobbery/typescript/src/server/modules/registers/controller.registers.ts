@@ -1,4 +1,4 @@
-import { Admin, Events, Inventory, Notifications, Police, Util } from '@dgx/server';
+import { Admin, Events, Inventory, Notifications, Police, Util, Financials } from '@dgx/server';
 import stateManager from 'classes/StateManager';
 import { getConfig } from 'helpers/config';
 import { handleStartRegister } from './service.registers';
@@ -67,8 +67,14 @@ Events.onNet('storerobbery:registers:rob', async (plyId: number, storeId: Storer
 
   const [minRollAmount, maxRollAmount] = getConfig().register.rollAmount;
   let amount = Util.getRndInteger(minRollAmount, maxRollAmount + 1);
+  const [minCash, maxCash] = getConfig().register.cashAmount;
+  let cashAmount = Util.getRndInteger(minCash, maxCash);
+
   if (!Police.canDoActivity('storerobbery_register')) {
     amount = Math.max(1, Math.floor(amount / 2));
+    cashAmount = Math.max(1, Math.floor(cashAmount / 2));
   }
+
   Inventory.addItemToPlayer(plyId, 'money_roll', amount);
+  Financials.addCash(plyId, cashAmount, 'storerobbery-cashrobbedS');
 });

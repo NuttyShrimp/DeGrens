@@ -1,12 +1,14 @@
 {
   "register": {
     "refillTime": 30,
-    "rollAmount": [3, 7]
+    "rollAmount": [1, 4],
+    "cashAmount": [150, 300]
   },
   "safe": {
     "crackDelay": 3,
     "refillTime": 120,
     "specialItemChance": 100,
+    "goldBarChance": 50,
     "rollAmount": [20, 30],
     "qualityDecrease": 20
   },

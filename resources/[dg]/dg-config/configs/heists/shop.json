@@ -36,6 +36,10 @@
       "item": "laptop_v5",
       "price": 40,
       "requiredItem": "drive_v5"
+    },
+    {
+      "item": "vpn",
+      "price": 5
     }
   ]
 }

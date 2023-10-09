@@ -78,6 +78,11 @@ RPC.register('storerobbery:safes:tryToLoot', async (src: number, storeId: Storer
     Inventory.addItemToPlayer(src, 'drive_v1', 1);
   }
 
+  const receiveGoldBar = Util.getRndInteger(1, 101) < safeConfig.goldBarChance;
+  if (receiveGoldBar) {
+    Inventory.addItemToPlayer(src, 'gold_bar', 1);
+  }
+
   const logMsg = `${Util.getName(src)} has looted a safe for ${amount} moneyrolls${
     receiveSpecial ? ' and the special item' : ''
   }`;
@@ -87,6 +92,7 @@ RPC.register('storerobbery:safes:tryToLoot', async (src: number, storeId: Storer
     {
       amount,
       receiveSpecial,
+      receiveGoldBar,
       storeId,
     },
     logMsg,

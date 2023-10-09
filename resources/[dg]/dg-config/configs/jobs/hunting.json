@@ -27,10 +27,10 @@
     }
   ],
   "sellables": {
-    "animal_skin_deer": 25,
-    "animal_skin_boar": 40,
-    "animal_skin_coyote": 70,
-    "animal_skin_mtlion": 80
+    "animal_skin_deer": 30,
+    "animal_skin_boar": 48,
+    "animal_skin_coyote": 84,
+    "animal_skin_mtlion": 96
   },
   "huntingZones": [
     [
