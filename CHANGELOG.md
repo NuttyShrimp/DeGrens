@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `ivy` ped added
+- Nieuwe politie kleren toegevoegd
+
 ### Changed
 
 - Job payout verhoogd
@@ -30,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Probleem met telefoon notificaties die soms niet tevoorschijn kwamen opgelost
+- Dubbel wiel uit mc20h model gehaald
 
 ## [1.4.6]
 
