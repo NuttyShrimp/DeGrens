@@ -1,21 +1,73 @@
 {
   "moldChance": 0.5,
   "lootTable": [
-    { "itemName": "camera", "weight": 2, "lootTableId": 0 },
-    { "itemName": "gameboy", "weight": 2, "lootTableId": 0 },
-    { "itemName": "hifi", "weight": 2, "lootTableId": 0 },
-    { "itemName": "nintendo_switch", "weight": 2, "lootTableId": 0 },
-    { "itemName": "nokia", "weight": 2, "lootTableId": 0 },
-    { "itemName": "psp", "weight": 2, "lootTableId": 0 },
-    { "itemName": "phone", "weight": 2, "lootTableId": 0 },
-    { "itemName": "meth_lab_keycard", "weight": 1, "lootTableId": 0 },
-    { "itemName": "tv", "weight": 1, "lootTableId": 1 },
-    { "itemName": "vaas", "weight": 1, "lootTableId": 2 },
-    { "itemName": "microwave", "weight": 1, "lootTableId": 3 },
-    { "itemName": "decoding_tool", "weight": 1, "lootTableId": 0 },
-    { "itemName": "atm_rope", "weight": 1, "lootTableId": 0 }
+    {
+      "itemName": "camera",
+      "weight": 2,
+      "lootTableId": 0
+    },
+    {
+      "itemName": "gameboy",
+      "weight": 2,
+      "lootTableId": 0
+    },
+    {
+      "itemName": "hifi",
+      "weight": 2,
+      "lootTableId": 0
+    },
+    {
+      "itemName": "nintendo_switch",
+      "weight": 2,
+      "lootTableId": 0
+    },
+    {
+      "itemName": "nokia",
+      "weight": 2,
+      "lootTableId": 0
+    },
+    {
+      "itemName": "psp",
+      "weight": 2,
+      "lootTableId": 0
+    },
+    {
+      "itemName": "phone",
+      "weight": 2,
+      "lootTableId": 0
+    },
+    {
+      "itemName": "meth_lab_keycard",
+      "weight": 1,
+      "lootTableId": 0
+    },
+    {
+      "itemName": "tv",
+      "weight": 1,
+      "lootTableId": 1
+    },
+    {
+      "itemName": "vaas",
+      "weight": 1,
+      "lootTableId": 2
+    },
+    {
+      "itemName": "microwave",
+      "weight": 1,
+      "lootTableId": 3
+    },
+    {
+      "itemName": "decoding_tool",
+      "weight": 1,
+      "lootTableId": 0
+    },
+    {
+      "itemName": "atm_rope",
+      "weight": 1,
+      "lootTableId": 0
+    }
   ],
-  "playerCooldown": 20,
+  "playerCooldown": 9,
   "timeToRob": 15,
   "timeToFind": 15,
   "shellInfo": {

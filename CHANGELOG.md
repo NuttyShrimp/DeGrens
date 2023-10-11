@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Tijd tussen aanbieding van huisinbraken verminderd
+
 ### Fixed
 
 ## [1.4.7]
