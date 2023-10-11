@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Tijd tussen aanbieding van huisinbraken verminderd
+- Je kan langer onderwater blijven met een duikpak
 
 ### Fixed
 

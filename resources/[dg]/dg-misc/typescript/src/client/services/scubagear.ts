@@ -41,7 +41,7 @@ Events.onNet('misc:scubagear:toggle', async () => {
 
   const ped = PlayerPedId();
 
-  maxUnderwaterTime = scubagearEquipped ? 50 : 10;
+  maxUnderwaterTime = scubagearEquipped ? 300 : 10;
   SetPedMaxTimeUnderwater(ped, maxUnderwaterTime);
   SetEnableScuba(ped, scubagearEquipped);
 });
