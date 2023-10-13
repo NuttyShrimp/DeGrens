@@ -1,27 +1,25 @@
-import fastify, { FastifyLoggerOptions, FastifyReply, FastifyRequest, RawServerDefault } from 'fastify';
-import { Config, Util } from '@dgx/server';
 import { setHttpCallback } from '@citizenfx/http-wrapper';
-import { tokenManager } from 'classes/tokenManager';
-import { mainLogger } from 'sv_logger';
+import { Config, Util } from '@dgx/server';
 import cors from '@fastify/cors';
 import sensible from '@fastify/sensible';
+import fastifyWebsocket from '@fastify/websocket';
+import { tokenManager } from 'classes/tokenManager';
+import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { extractBearerToken } from 'middlewares/helpers';
 import pino, { Logger } from 'pino';
 import pretty from 'pino-pretty';
-
-import { banManager } from './classes/banManager';
-import { infoRouter } from 'routes/info';
-import { tokenRouter } from 'routes/token';
 import { adminRouter } from 'routes/admin';
 import { businessRouter } from 'routes/business';
+import { debugRouter } from 'routes/debug';
 import { financialsRouter } from 'routes/financials';
-import { PinoLoggerOptions } from 'fastify/types/logger';
+import { infoRouter } from 'routes/info';
 import { inventoryRouter } from 'routes/inventory';
+import { tokenRouter } from 'routes/token';
+import { mainLogger } from 'sv_logger';
+
+import { banManager } from './classes/banManager';
 
 const apiConfig = Config.getModuleConfig('api');
-
-const prodLogger = (): (FastifyLoggerOptions<RawServerDefault> & PinoLoggerOptions) | Logger => {
-  return {};
-};
 
 const devLogger = (): Logger => {
   const stream = pretty({
@@ -40,29 +38,78 @@ const devLogger = (): Logger => {
   );
 };
 
-export const server = fastify({
-  logger: Util.isDevEnv() ? devLogger() : undefined, //prodLogger(),
-});
+const serverGenerator = () => {
+  const server = fastify({
+    logger: Util.isDevEnv() ? devLogger() : undefined, //prodLogger(),
+  });
+  (async () => {})();
 
-setImmediate(async () => {
-  await server.register(cors, {
+  server.addHook('preValidation', async (req: FastifyRequest, res) => {
+    if (!checkBan(req, res)) {
+      Util.Log(
+        'api:request:failed',
+        {
+          req,
+        },
+        `${req.ip} tried to make a request on ${req.url}, but the IP is banned`,
+        undefined,
+        true
+      );
+      throw res.forbidden('Banned due mis-use');
+    }
+  });
+
+  return server;
+};
+
+export const server = serverGenerator();
+export const debugServer = serverGenerator();
+
+const serverHooks = async (srv: typeof server) => {
+  await srv.register(cors, {
     methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     origin: apiConfig.allowedDomains.map((d: string) => `http://${d}`),
   });
 
-  await server.register(sensible);
+  await srv.register(sensible);
+  await srv.register(fastifyWebsocket);
+};
 
-  server.addHook('preValidation', async (req: FastifyRequest, res) => {
-    validateRequest(req, res);
+setImmediate(async () => {
+  await serverHooks(server);
+  await serverHooks(debugServer);
+  // Unauthenticaed routes
+  debugServer.register(async fastify => {
+    fastify.register(debugRouter, { prefix: '/debug' });
   });
 
-  server.register(infoRouter, { prefix: '/info' });
-  server.register(tokenRouter, { prefix: '/tokens' });
-  server.register(adminRouter, { prefix: '/admin' });
-  server.register(businessRouter, { prefix: '/business' });
-  server.register(financialsRouter, { prefix: '/financials' });
-  server.register(inventoryRouter, { prefix: '/inventory' });
+  debugServer.listen({ port: 30121 });
+
+  // Authenticated routes via DB tokens
+  server.register(async fastify => {
+    fastify.addHook('preValidation', async (req: FastifyRequest, res) => {
+      if (!authorizationMiddleware(req, res)) {
+        Util.Log(
+          'api:request:failed',
+          {
+            req,
+          },
+          `${req.ip} tried to make a request on ${req.url}, but used an invalid token`,
+          undefined,
+          true
+        );
+        throw res.unauthorized('Invalid token');
+      }
+    });
+
+    fastify.register(infoRouter, { prefix: '/info' });
+    fastify.register(tokenRouter, { prefix: '/tokens' });
+    fastify.register(adminRouter, { prefix: '/admin' });
+    fastify.register(businessRouter, { prefix: '/business' });
+    fastify.register(financialsRouter, { prefix: '/financials' });
+    fastify.register(inventoryRouter, { prefix: '/inventory' });
+  });
 
   server.ready(err => {
     if (err) {
@@ -75,46 +122,9 @@ setImmediate(async () => {
   });
 });
 
-const validateRequest = (req: FastifyRequest, res: FastifyReply) => {
-  if (!checkBan(req, res)) {
-    Util.Log(
-      'api:request:failed',
-      {
-        req,
-      },
-      `${req.ip} tried to make a request on ${req.url}, but the IP is banned`,
-      undefined,
-      true
-    );
-    throw res.forbidden('Banned due mis-use');
-  }
-  if (!authorizationMiddleware(req, res)) {
-    Util.Log(
-      'api:request:failed',
-      {
-        req,
-      },
-      `${req.ip} tried to make a request on ${req.url}, but used an invalid token`,
-      undefined,
-      true
-    );
-    throw res.unauthorized('Invalid token');
-  }
-};
-
 const authorizationMiddleware = (req: FastifyRequest, res: FastifyReply): boolean => {
-  const bearerToken = req.headers.authorization;
-  if (!bearerToken) {
-    res.code(401).send({ message: 'No authentication token' });
-    banManager.ban(req.ip);
-    return false;
-  }
-  if (!bearerToken.match(/^Bearer .*$/)) {
-    res.code(401).send({ message: 'Invalid authentication token' });
-    banManager.ban(req.ip);
-    return false;
-  }
-  const token = bearerToken.replace(/Bearer /, '');
+  const token = extractBearerToken(req, res);
+  if (!token) return false;
   if (!tokenManager.isTokenValid(token)) {
     res.code(401).send({ message: 'Invalid authentication token' });
     banManager.ban(req.ip);

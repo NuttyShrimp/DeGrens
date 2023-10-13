@@ -1,12 +1,8 @@
-import { RewriteFrames } from '@sentry/integrations';
-import * as Sentry from '@sentry/node';
 import winston from 'winston';
 
 import mainJSON from '../../resources/[dg]/dg-config/configs/main.json';
 
 import SentryTransport from './sentry-transport';
-
-const SENTRY_DSN = 'https://47836ea9173b4e52b8820a05996cf549@sentry.nuttyshrimp.me/2';
 
 // Needed to manually apply a color to componenent property of log
 const manualColorize = (strToColor: string): string => `[\x1b[35m${strToColor}\x1b[0m]`;
@@ -23,27 +19,6 @@ const formatLogs = (log: winston.Logform.TransformableInfo): string => {
 };
 
 export const generateLogger = (name: string, packageInfo: Record<string, any>, logLevelOverwrite?: string) => {
-  if (mainJSON.production) {
-    Sentry.init({
-      dsn: SENTRY_DSN,
-      integrations: [
-        new RewriteFrames({
-          iteratee: frame => {
-            frame.in_app = frame.filename?.startsWith('@') || frame.abs_path?.startsWith('@') || frame.in_app;
-            frame.abs_path = `app://${frame.filename}`;
-            return frame;
-          },
-        }),
-      ],
-      release: packageInfo.version,
-      attachStacktrace: true,
-      environment: mainJSON.production ? 'production' : 'development',
-      // Set tracesSampleRate to 1.0 to capture 100%
-      // of transactions for performance monitoring.
-      // We recommend adjusting this value in production
-      tracesSampleRate: 1.0,
-    });
-  }
   const originalLogLevel = logLevelOverwrite ?? mainJSON.loglevel;
   const logger = winston.createLogger({
     level: originalLogLevel,

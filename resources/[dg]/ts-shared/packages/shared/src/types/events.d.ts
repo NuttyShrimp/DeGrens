@@ -2,77 +2,24 @@ declare namespace DGXEvents {
   type ServerEventHandler<T = void> = (src: number, ...args: any[]) => T | Promise<T>;
   type LocalEventHandler<T = void> = (...args: any[]) => T | Promise<T>;
 
-  interface ServerNetEvtData {
-    token: string;
-    /**
-     * The resource that sent the event
-     */
-    origin: string;
-    eventId: string;
-    metadata: Record<string, any>;
-    args: any[];
-  }
-
   interface ServerLocalEvtData {
-    eventName: string;
-    args: any[];
-    metadata: Record<string, number>;
-  }
-
-  interface ClientNetEvtData {
-    eventName: string;
-    args: any[];
-    traceId: string | null;
     metadata: EventMetadata;
   }
 
-  interface EventMetadata {
-    receiver: Record<string, any>;
-    handler: Record<string, any>;
+  // event payload
+  interface NetEvtData {
+    metadata: EventMetadata;
+    skipSentry?: boolean;
+    skipLog?: boolean;
+    traceId?: string;
   }
+  type EventMetadata = Partial<Record<'sender' | 'handler' | 'response', Partial<Record<'start' | 'end', string>>>>;
 }
 
 declare namespace DGXRPC {
-  // S -> C emit request data
-  interface ServerRequestData {
+  interface RequestData {
     id: number;
-    name: string;
-    args: any[];
-    originToken: string;
-  }
-
-  // C -> S response request data
-  interface ClientResponseData<T = any> {
-    result: T;
-    resource: string;
-    originToken: string;
-    token: string;
-    metadata: {
-      handler: Record<string, string>;
-      response: Record<string, string>;
-    };
-  }
-
-  interface ClientRequestMetadata {
-    request: Record<string, string>;
-    handler: Record<string, string>;
-    response: Record<string, string>;
-  }
-
-  interface ClientRequestData {
-    id: number;
-    name: string;
-    args: any[];
-    token: string;
-    resource: string;
-    metadata: ClientRequestMetadata;
-  }
-
-  interface ServerResponseData<T = any> {
-    id: number;
-    result: T;
-    token: string;
-    traceId: string | undefined;
-    metadata: ClientRequestMetadata;
+    origin: string;
+    metadata: DGXEvents.EventMetadata;
   }
 }
