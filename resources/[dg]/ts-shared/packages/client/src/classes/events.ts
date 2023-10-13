@@ -1,290 +1,287 @@
-import { Util } from './index';
-import 'core-js/stable/btoa';
+import { enc } from 'crypto-js';
+import {
+  awaitKeys,
+  decryptAESPayload,
+  decryptClientPayload,
+  decryptServerPayload,
+  encryptClientPayload,
+  getEventHash,
+  setKeys,
+} from '@dgx/shared/src/classes/encrypt';
+import utilClass from './util';
+import { DGXAuth } from '../exports';
 
-class TokenStorage {
-  private static instance: TokenStorage;
+const util = utilClass.Util;
 
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new TokenStorage();
-    }
-    return this.instance;
+class Events extends util.Singleton<Events>() {
+  constructor() {
+    super();
+
+    setImmediate(() => {
+      const resName = GetCurrentResourceName();
+      emitNet('__dgx_auth_init', resName);
+      onNet(`__dgx_auth:${resName}`, (token: string, secret: string) => {
+        onNet(`__dgx_auth_res:${token}`, (encKeys: string) => {
+          const keys = enc.Utf8.stringify(enc.Base64.parse(encKeys));
+          if (!keys) {
+            throw new Error('Failed to retreive encryption keys');
+          }
+          const decKeys = keys.split(':').map(k => decryptAESPayload(k, secret));
+          setKeys({
+            event: decKeys[0] ?? '',
+            decode: decKeys[1] ?? '',
+            encrypt: decKeys[2] ?? '',
+          });
+        });
+
+        emitNet(`__dgx_auth_req:${token}`, resName);
+      });
+    });
   }
 
-  private token: string | null;
-  private readonly resourceName: string;
+  on = async (event: string, handler: DGXEvents.LocalEventHandler) => {
+    await awaitKeys();
+    global.on(getEventHash(event), async (dataStr: string, ...args: any[]) => {
+      const data: DGXEvents.NetEvtData = decryptClientPayload(dataStr);
+      if (!data.metadata) data.metadata = {};
+      if (!data.metadata.sender) data.metadata.sender = {};
+      if (!data.metadata.handler) data.metadata.handler = {};
+      const now = new Date().toString();
+      data.metadata.sender.end = now;
+      data.metadata.handler.start = now;
 
-  constructor() {
-    this.token = null;
-    this.resourceName = GetCurrentResourceName();
-    onNet('dg-auth:token:reset', () => {
-      this.getResourceToken();
-    });
-    onNet('dg-auth:token:set', (target: string, token: string) => {
-      if (target === this.resourceName) {
-        this.token = token;
+      DGXAuth.logEvent({
+        send: 'client',
+        recv: 'client',
+        event,
+        target: 0,
+        data: JSON.stringify(args),
+      });
+
+      let err: any | null = null;
+      try {
+        await handler(...args);
+      } catch (e: any) {
+        err = e;
+        console.error(e);
+      } finally {
+        data.metadata.handler.end = new Date().toString();
       }
     });
-    this.getResourceToken();
-  }
+  };
 
-  private getResourceToken() {
-    emitNet('dg-auth:token:requestResource', this.resourceName);
-  }
+  onNet = async (event: string, handler: DGXEvents.LocalEventHandler, passData = false) => {
+    await awaitKeys();
+    global.onNet(getEventHash(event), async (dataStr: string, ...args: any[]) => {
+      const data: DGXEvents.NetEvtData = decryptServerPayload(dataStr);
+      if (!data.metadata) data.metadata = {};
+      if (!data.metadata.sender) data.metadata.sender = {};
+      if (!data.metadata.handler) data.metadata.handler = {};
+      const now = new Date().toString();
+      data.metadata.sender.end = now;
+      data.metadata.handler.start = now;
 
-  getToken() {
-    return new Promise<string>(res => {
-      if (this.token !== null) {
-        res(this.token);
-        return;
+      if (!data.skipLog) {
+        DGXAuth.logEvent({
+          send: 'server',
+          recv: 'client',
+          event,
+          target: 0,
+          data: JSON.stringify(args),
+        });
       }
 
-      const thread = setInterval(() => {
-        if (this.token === null) return;
-        clearInterval(thread);
-        res(this.token);
-      }, 100);
+      let err: any | null = null;
+      try {
+        if (passData) {
+          await handler(data, ...args);
+        } else {
+          await handler(...args);
+        }
+      } catch (e: any) {
+        err = e;
+        console.error(e);
+      } finally {
+        data.metadata.handler.end = new Date().toString();
+        if (data.skipSentry || !data.traceId) return;
+        emitNet(`__dgx_sentry:${GetCurrentResourceName()}:finishTrace`, data.traceId, data.metadata, err !== null, err);
+      }
     });
-  }
-}
+  };
 
-class Events {
-  private static instance: Events;
-
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new Events();
-    }
-    return this.instance;
-  }
-
-  private readonly resName: string;
-  private readonly tokenStorage: TokenStorage;
-
-  private serverEventHandlers: Map<string, DGXEvents.LocalEventHandler[]> = new Map();
-  private localEventHandlers: Map<string, DGXEvents.LocalEventHandler[]> = new Map();
-
-  constructor() {
-    this.tokenStorage = TokenStorage.getInstance();
-    this.resName = GetCurrentResourceName();
-    onNet('__dgx_event:ClientNetEvent', (data: DGXEvents.ClientNetEvtData) => {
-      this.netEventHandler(data);
-    });
-    on('__dgx_event:ClientLocalEvent', (data: { eventName: string; args: any[] }) => {
-      this.localEventHandler(data);
-    });
-  }
-
-  private async localEventHandler(data: { eventName: string; args: any[] }) {
-    const handlers = this.localEventHandlers.get(data.eventName);
-    if (!handlers) return;
-    handlers.forEach(handler => {
-      handler(...data.args);
-    });
-    if (Util.isDevEnv()) {
-      console.log(`[DGX] [C -> C] Event: ${data.eventName}`);
-    }
-  }
-
-  // onNet collector
-  private async netEventHandler(data: DGXEvents.ClientNetEvtData) {
-    data.metadata.receiver.finishedAt = new Date().toString();
-    data.metadata.handler.createdAt = new Date().toString();
-    if (!this.serverEventHandlers.has(data.eventName)) return;
-    if (Util.isDevEnv()) {
-      console.log(`[DGX] [S -> C] Event: ${data.eventName}`);
-    }
-    const handlers = this.serverEventHandlers.get(data.eventName)!;
-    await Promise.all(handlers.map(handler => handler(...data.args)));
-    data.metadata.handler.finishedAt = new Date().toString();
-    if (data.traceId && data.traceId.trim() !== '') {
-      emitNet('__dgx_event:traceServer', data.traceId, data.metadata);
-    }
-  }
-
-  async awaitSession(): Promise<void> {
-    await this.tokenStorage.getToken();
-  }
-
-  async emitNet(event: string, ...args: any[]) {
-    const metadata = {
-      createdAt: new Date().toString(),
-    };
-    const token = await this.tokenStorage.getToken();
-    // Just base64 but enough for stupid people
-    const eventHash = btoa(event);
-    if (Util.isDevEnv()) {
-      console.log(`[DGX] [C -> S] Event: ${event}`);
-    }
-    const evtData: DGXEvents.ServerNetEvtData = {
-      token,
-      origin: this.resName,
-      eventId: eventHash,
-      metadata,
-      args,
-    };
-    emitNet('__dgx_event:ServerNetEvent', evtData);
-  }
-
-  emit(evtName: string, ...args: any[]) {
-    emit(`__dgx_event:ClientLocalEvent`, {
-      eventName: evtName,
-      args,
-    });
-  }
-
-  onNet(evtName: string, handler: DGXEvents.LocalEventHandler) {
-    let srvHandlers = this.serverEventHandlers.get(evtName);
-    if (!srvHandlers) {
-      srvHandlers = [];
-    }
-    srvHandlers.push(handler);
-    this.serverEventHandlers.set(evtName, srvHandlers);
-    this.on(evtName, handler);
-  }
-
-  on(evtName: string, handler: DGXEvents.LocalEventHandler) {
-    let clientHandlers = this.localEventHandlers.get(evtName);
-    if (!clientHandlers) {
-      clientHandlers = [];
-    }
-    clientHandlers.push(handler);
-    this.localEventHandlers.set(evtName, clientHandlers);
-  }
-
-  // TODO: test if can be deleted by function, otherwise turn set into map
-  removeEventHandler(evtName: string, handler: DGXEvents.LocalEventHandler) {
-    let srvHandlers = this.serverEventHandlers.get(evtName);
-    if (srvHandlers) {
-      this.serverEventHandlers.set(
-        evtName,
-        srvHandlers.filter(h => h !== handler)
-      );
-    }
-    let clientHandlers = this.localEventHandlers.get(evtName);
-    if (clientHandlers) {
-      this.localEventHandlers.set(
-        evtName,
-        clientHandlers.filter(h => h !== handler)
-      );
-    }
-  }
-}
-
-class RPC {
-  private static instance: RPC;
-
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new RPC();
-    }
-    return this.instance;
-  }
-
-  private tokenStorage: TokenStorage;
-
-  private registeredHandlers: Map<string, DGXEvents.LocalEventHandler> = new Map();
-  private idsInUse: Set<number>;
-  private readonly resourceName: string;
-
-  constructor() {
-    this.tokenStorage = TokenStorage.getInstance();
-    this.resourceName = GetCurrentResourceName();
-    this.idsInUse = new Set();
-
-    onNet('__dgx_rpc:emitClient', (data: DGXRPC.ServerRequestData) => this.handleIncomingRequest(data));
-  }
-
-  private async handleIncomingRequest(data: DGXRPC.ServerRequestData) {
-    const handler = this.registeredHandlers.get(data.name);
-    if (!handler) return;
-    const metadata = {
-      createdAt: new Date().toString(),
-      finishedAt: new Date().toString(),
-    };
-    if (Util.isDevEnv()) {
-      console.log(`[DGX] [S -> C -> S] RPC: ${data.name}`);
-    }
-    const result = await handler(...data.args);
-    const token = await this.tokenStorage.getToken();
-    metadata.finishedAt = new Date().toString();
-    const responseData: DGXRPC.ClientResponseData = {
-      result,
-      resource: this.resourceName,
-      originToken: data.originToken,
-      token,
+  emit = async (event: string, ...args: any[]) => {
+    const data = {
       metadata: {
-        handler: metadata,
-        response: {
-          createdAt: new Date().toString(),
+        sender: {
+          start: new Date().toString(),
         },
       },
     };
-    emitNet(`__dgx_rpc:responseClient:${data.id}`, responseData);
+    await awaitKeys();
+    const encData = encryptClientPayload(data);
+    if (!encData) {
+      throw new Error(`Failed to encrypt event payload | ${event}`);
+    }
+    global.emit(getEventHash(event), encData, ...args);
+  };
+
+  emitNet = async (event: string | { event: string; data: DeepPartial<DGXEvents.NetEvtData> }, ...args: any[]) => {
+    await awaitKeys();
+    const extData: DeepPartial<DGXEvents.NetEvtData> = typeof event === 'string' ? {} : event.data;
+    const data = {
+      metadata: {
+        sender: {
+          start: new Date().toString(),
+          ...(extData.metadata?.sender ?? {}),
+        },
+        ...(extData.metadata ?? {}),
+      },
+      ...(extData ?? {}),
+    };
+    const encData = encryptClientPayload(data);
+    args.unshift(encData);
+    const packedData = (global as any).msgpack_pack(args);
+    const evtHash = getEventHash(typeof event === 'string' ? event : event.event);
+    if (packedData.length < 16000) {
+      global.TriggerServerEventInternal(evtHash, packedData, packedData.length);
+    } else {
+      global.TriggerLatentServerEventInternal(evtHash, packedData, packedData.length, 1280000);
+    }
+  };
+
+  awaitSession = async () => {
+    await awaitKeys();
+  };
+}
+
+class RPC extends util.Singleton<RPC>() {
+  private readonly resourceName: string;
+  private id: number;
+  private pendingCalls: Map<
+    number,
+    {
+      resolve: (data: any) => void;
+      reject: (reason?: any) => void;
+      timeout: NodeJS.Timeout;
+      args: any[];
+      evtName: string;
+    }
+  >;
+  private events: Events;
+
+  constructor() {
+    super();
+
+    this.resourceName = GetCurrentResourceName();
+    this.pendingCalls = new Map();
+    this.id = 0;
+    this.events = Events.getInstance();
+
+    this.events.onNet(
+      `__dgx_res:${this.resourceName}`,
+      (payload: DGXRPC.RequestData, success: boolean, result: any) => {
+        if (!payload.id) return;
+        const pendingRPC = this.pendingCalls.get(payload.id);
+        if (pendingRPC === undefined) return;
+        if (!payload.metadata.response) payload.metadata.response = {};
+        payload.metadata.response.end = new Date().toString();
+
+        clearTimeout(pendingRPC.timeout);
+        if (success) {
+          pendingRPC.resolve(result);
+        } else {
+          pendingRPC.reject(result);
+        }
+
+        DGXAuth.logEvent({
+          send: 'client',
+          recv: 'server',
+          event: pendingRPC.evtName,
+          target: 0,
+          data: JSON.stringify(pendingRPC.args),
+          rpc: true,
+          response: JSON.stringify(result),
+        });
+      },
+      true
+    );
   }
 
-  private getPromiseId(): number {
-    const id = Util.getRndInteger(100000, 999999);
-    if (this.idsInUse.has(id)) {
-      return this.getPromiseId();
-    }
-    this.idsInUse.add(id);
-    return id;
-  }
+  register = <T = any>(event: string, handler: DGXEvents.LocalEventHandler<T>) => {
+    this.events.onNet(
+      `__dgx_req:${event}`,
+      async (payload: DGXRPC.RequestData & DGXEvents.NetEvtData, ...args: any[]) => {
+        let result: any;
+        let success = false;
+        try {
+          if (!payload.metadata.sender) payload.metadata.sender = {};
+          payload.metadata.sender.end = new Date().toString();
+          if (!payload.metadata.handler) payload.metadata.handler = { start: '', end: '' };
+          payload.metadata.handler.start = new Date().toString();
+          result = await handler(...args);
+          success = true;
+        } catch (e) {
+          result = e;
+          console.error(e);
+        } finally {
+          if (!payload.metadata.handler) payload.metadata.handler = {};
+          payload.metadata.handler.end = new Date().toString();
+          if (!payload.metadata.response) payload.metadata.response = { start: '', end: '' };
+          payload.metadata.response.start = new Date().toString();
+          payload.skipLog = true;
+
+          this.events.emitNet(
+            {
+              event: `__dgx_res:${payload.origin}`,
+              data: payload,
+            },
+            success,
+            result
+          );
+        }
+      },
+      true
+    );
+  };
 
   async execute<T = any>(evtName: string, ...args: any[]): Promise<T | null> {
-    const promId = this.getPromiseId();
-    const token = await this.tokenStorage.getToken();
-    const data: DGXRPC.ClientRequestData = {
-      id: promId,
-      name: evtName,
-      args,
-      token,
-      resource: this.resourceName,
-      metadata: {
-        request: {
-          createdAt: new Date().toString(),
+    const data = { id: ++this.id, origin: this.resourceName };
+    const prom = new Promise<T>((res, rej) => {
+      const timeout = setTimeout(() => {
+        rej(`RPC timed-out | name: ${evtName}`);
+      }, 60000);
+      const promData = {
+        resolve: (v: T) => {
+          res(v);
         },
-        handler: {},
-        response: {},
-      },
-    };
-    let evtHandler: ((data: DGXRPC.ServerResponseData<T>) => void) | null = null;
-    const result = await new Promise<T | null>(res => {
-      evtHandler = (data: DGXRPC.ServerResponseData<T>) => {
-        if (!this.idsInUse.has(data.id)) if (data.token !== token) return;
-        this.idsInUse.delete(data.id);
-
-        data.metadata.response.finishedAt = new Date().toString();
-        res(data.result);
-        if (data.traceId) {
-          emitNet('__dgx_rpc:traceServer', data.traceId, data.metadata);
-        }
+        reject: rej,
+        timeout,
+        args,
+        evtName,
       };
-      onNet(`__dgx_rpc:responseServer:${promId}`, (data: DGXRPC.ServerResponseData<T>) => {
-        if (evtHandler) {
-          evtHandler(data);
-        }
-      });
-      emitNet('__dgx_rpc:emitServer', data);
 
-      setTimeout(() => {
-        if (!this.idsInUse.has(promId)) return;
-        this.idsInUse.delete(promId);
-        res(null);
-      }, 20000);
+      this.pendingCalls.set(data.id, promData);
     });
-    if (evtHandler) {
-      removeEventListener(`__dgx_rpc:responseServer:${promId}`, evtHandler);
-    }
-    if (Util.isDevEnv()) {
-      console.log(`[DGX] [C -> S -> C] RPC: ${evtName} | Timed-out: ${result === null}`);
-    }
-    return result;
-  }
 
-  register(name: string, handler: DGXEvents.LocalEventHandler<any>) {
-    this.registeredHandlers.set(name, handler);
+    this.events.emitNet(
+      {
+        event: `__dgx_req:${evtName}`,
+        data: {
+          ...data,
+          skipLog: true,
+          metadata: {
+            sender: {
+              start: new Date().toString(),
+            },
+          },
+        },
+      },
+      ...args
+    );
+
+    prom.finally(() => this.pendingCalls.delete(data.id));
+
+    return prom;
   }
 }
 

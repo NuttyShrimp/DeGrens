@@ -10,7 +10,9 @@
     "tsup": "^7.0.0"
   },
   "dependencies": {
+    "@types/crypto-js": "3.1.47",
     "color-name-list": "^10.11.0",
+    "crypto-js": "3.3.0",
     "nearest-color": "^0.4.4",
     "reflect-metadata": "^0.1.13",
     "typescript": "^5.1.6"

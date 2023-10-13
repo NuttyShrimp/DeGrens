@@ -1,9 +1,3 @@
-interface ResourceTokenData {
-  timeStamp: number;
-  resource: string;
-  steamId: string;
-}
-
 declare namespace AntiCheat {
   interface Config {
     afkKickMessage: string;
@@ -38,3 +32,5 @@ declare namespace AntiCheat {
     headshot: boolean;
   }
 }
+
+declare type EventSubscriber = (logs: Auth.EventLog[]) => void;

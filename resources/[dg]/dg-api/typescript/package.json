@@ -16,6 +16,7 @@
     "@dgx/server": "workspace:*",
     "@dgx/shared": "workspace:*",
     "@dgx/tsup-config": "workspace:*",
+    "@types/ws": "^8.5.5",
     "esbuild": "^0.19.2",
     "logger": "workspace:*",
     "pino-pretty": "^10.2.0",
@@ -26,6 +27,7 @@
     "@citizenfx/http-wrapper": "^0.2.2",
     "@fastify/cors": "^8.3.0",
     "@fastify/sensible": "^5.2.0",
+    "@fastify/websocket": "^8.2.0",
     "fastify": "^4.21.0",
     "pino": "^8.15.0"
   }

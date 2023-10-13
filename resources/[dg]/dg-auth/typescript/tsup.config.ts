@@ -3,4 +3,5 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig(opts => ({
   ...getOptions(opts),
+  minify: false,
 }));
