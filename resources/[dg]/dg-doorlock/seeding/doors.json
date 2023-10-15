@@ -5324,5 +5324,57 @@
     "authorized": {
       "business": ["scrapz"]
     }
+  },
+  {
+    "description": "triads front door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_g_triads_door_ent_r",
+        "coords": {
+          "x": -637.3693237304688,
+          "y": -1249.239990234375,
+          "z": 11.945558547973633
+        }
+      },
+      {
+        "model": "gabz_g_triads_door_ent_l",
+        "coords": {
+          "x": -639.8295288085938,
+          "y": -1248.908203125,
+          "z": 11.945558547973633
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["sokudochasers"]
+    }
+  },
+  {
+    "description": "triads back door",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_g_triads_door_ent_l",
+        "coords": {
+          "x": -643.1560668945312,
+          "y": -1229.2705078125,
+          "z": 11.682079315185547
+        }
+      },
+      {
+        "model": "gabz_g_triads_door_ent_r",
+        "coords": {
+          "x": -644.4833374023438,
+          "y": -1227.172607421875,
+          "z": 11.682079315185547
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["sokudochasers"]
+    }
   }
 ]
