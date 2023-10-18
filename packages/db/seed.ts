@@ -197,8 +197,8 @@ async function devEnv() {
   await prisma.business.createMany({
     data: [
       {
-        name: 'dff',
-        label: 'De FliereFluiters',
+        name: 'straightpipers',
+        label: 'Straightpipers',
         business_type: 1,
         bank_account_id: 'BE49834957',
       },
