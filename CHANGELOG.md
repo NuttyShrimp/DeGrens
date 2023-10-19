@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Exploit in cornerselling opgelost
 - Sentry sourcemaps werken terug
+- Je character tped niet meer in de muur in de mazebank bij de trolleys
 
 ## [1.4.7]
 
