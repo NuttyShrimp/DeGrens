@@ -375,6 +375,14 @@
         "z": -0.05
       },
       "model": "prop_table_03b_chr"
+    },
+    {
+      "offset": {
+        "x": 0,
+        "y": -0.36,
+        "z": -0.4
+      },
+      "model": "prop_torture_ch_01"
     }
   ]
 }
