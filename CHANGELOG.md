@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Halloween shenanigans
+- Voertuigen Los Santos Drug Wars toegevoegd. 
 
 ### Changed
 
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je kan langer onderwater blijven met een duikpak
 - Removed overflow in admin entity selector action menu
 - De bestanden voor de scripts die je download zijn verkleint
+- m4gt3 uit carboostpool gehaald. 
 
 ### Fixed
 

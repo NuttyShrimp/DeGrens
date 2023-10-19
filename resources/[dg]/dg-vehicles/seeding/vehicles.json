@@ -11463,7 +11463,7 @@
     "price": 250000,
     "shop": "nfs",
     "type": "land",
-    "inCarboostPool": true
+    "inCarboostPool": false
   },
   {
     "category": "sedans",
