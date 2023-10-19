@@ -1,5 +1,7 @@
 import { Admin, Util, lib } from '@dgx/server';
-import { AES, enc } from 'crypto-js';
+import AES from 'crypto-js/aes';
+import encUtf8 from 'crypto-js/enc-utf8';
+import encBase64 from 'crypto-js/enc-base64';
 import { getPlySteamId } from './steamids';
 import { isResourceKnown } from 'helpers/resources';
 
@@ -35,7 +37,7 @@ const getKeysForServer = () => {
 const getKeysForClient = (token: string) => {
   // key cipher: e57gfqvxdtam5lnqqpykun4a
   const secret = [secrets.event, secrets.decode, secrets.encrypt].map(k => AES.encrypt(k, token).toString()).join(':');
-  return enc.Base64.stringify(enc.Utf8.parse(secret));
+  return encBase64.stringify(encUtf8.parse(secret));
 };
 
 lib<'dg-auth'>('getKeysForServer', getKeysForServer);

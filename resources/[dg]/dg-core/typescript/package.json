@@ -19,7 +19,6 @@
     "@dgx/tsup-config": "workspace:*",
     "dayjs": "^1.11.9",
     "db": "workspace:*",
-    "esbuild": "^0.19.2",
     "logger": "workspace:*",
     "tsconfig": "workspace:*",
     "tsup": "^7.2.0"

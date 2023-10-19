@@ -1,4 +1,6 @@
-import { AES, enc, HmacMD5 } from 'crypto-js';
+import AES from 'crypto-js/aes';
+import encUtf8 from 'crypto-js/enc-utf8';
+import HmacMD5 from 'crypto-js/hmac-md5';
 
 import { Util } from '../index';
 
@@ -34,7 +36,7 @@ export const decryptAESPayload = (cipher: string, secret: string) => {
   if (typeof cipher !== 'string' || typeof secret !== 'string') {
     return;
   }
-  return AES.decrypt(cipher, secret).toString(enc.Utf8);
+  return AES.decrypt(cipher, secret).toString(encUtf8);
 };
 
 const getEventMD5 = (evtName: string, secret: string) => {

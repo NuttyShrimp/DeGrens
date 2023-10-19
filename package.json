@@ -13,22 +13,16 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@anatine/esbuild-decorators": "^0.2.19",
     "@citizenfx/client": "2.0.6643-1",
     "@citizenfx/server": "2.0.6643-1",
     "@jgoz/esbuild-plugin-typecheck": "^3.0.3",
     "dayjs": "^1.11.9",
-    "esbuild": "^0.19.2",
-    "esbuild-plugin-clean": "^1.0.1",
-    "esbuild-plugin-fileloc": "^0.0.6",
     "esbuild-plugin-import-pattern": "^0.1.0",
-    "javascript-obfuscator": "^4.0.2",
     "tsup": "^7.2.0",
     "typescript": "^5.1.6",
     "winston": "^3.10.0"
   },
   "devDependencies": {
-    "@sentry/esbuild-plugin": "^2.6.2",
     "@sentry/integrations": "^7.64.0",
     "@sentry/node": "^7.64.0",
     "@sentry/tracing": "^7.64.0",
