@@ -1,4 +1,4 @@
-import { Admin, Util, lib } from '@dgx/server';
+import { Admin, Core, Util, lib } from '@dgx/server';
 import AES from 'crypto-js/aes';
 import encUtf8 from 'crypto-js/enc-utf8';
 import encBase64 from 'crypto-js/enc-base64';
@@ -58,7 +58,7 @@ onNet('__dgx_auth_init', (resName: string) => {
     Admin.ACBan(Number(src), 'Failed to properly authenticate resource (RS)');
     return;
   }
-  const plyRecvTokens = receivedToken.get(src);
+  const plyRecvTokens = receivedToken.get(steamId);
   if (plyRecvTokens && plyRecvTokens.has(resName)) {
     Admin.ACBan(Number(src), 'Failed to properly authenticate resource (RT)', { resName });
     return;
@@ -68,11 +68,13 @@ onNet('__dgx_auth_init', (resName: string) => {
 });
 
 // Sending secrets to resources logic
-let pendingTokens = new Map<number, Map<string, string>>();
-let receivedToken = new Map<number, Map<string, string>>();
+let pendingTokens = new Map<string, Map<string, string>>();
+let receivedToken = new Map<string, Map<string, string>>();
 
 const sendRetrieveKeysTokenToResource = (src: number, res: string) => {
+  const userModule = Core.getModule('users');
   let token = Util.uuidv4();
+  const steamId = userModule.getPlyIdentifiers(src).steam;
   let validToken = false;
   while (!validToken) {
     let changed = false;
@@ -85,14 +87,15 @@ const sendRetrieveKeysTokenToResource = (src: number, res: string) => {
     validToken = !changed;
   }
 
-  const plyTokens = pendingTokens.get(src) || new Map<string, string>();
+  const plyTokens = pendingTokens.get(steamId) || new Map<string, string>();
   plyTokens.set(res, token);
-  pendingTokens.set(src, plyTokens);
+  pendingTokens.set(steamId, plyTokens);
 
   const encToken = Util.getRndString(16, true);
   const eventHandler = (resName: string) => {
     const src = +source;
-    const storedTokens = pendingTokens.get(src);
+    const steamId = userModule.getPlyIdentifiers(src).steam;
+    const storedTokens = pendingTokens.get(steamId);
     if (!storedTokens) {
       Admin.ACBan(Number(src), 'Failed to properly authenticate resource (ST)');
       return;
@@ -107,10 +110,9 @@ const sendRetrieveKeysTokenToResource = (src: number, res: string) => {
     removeEventListener(`__dgx_auth_req:${token}`, eventHandler);
     storedTokens.delete(resName);
 
-    const plyTokens = receivedToken.get(src) || new Map<string, string>();
+    const plyTokens = receivedToken.get(steamId) || new Map<string, string>();
     plyTokens.set(resName, token);
-    receivedToken.set(src, plyTokens);
-
+    receivedToken.set(steamId, plyTokens);
     setTimeout(() => {
       emit('dg-auth:token:resourceRegistered', +src, resName);
     }, 200);
@@ -136,4 +138,13 @@ export const removeResourceToken = (res: string) => {
       }
     }
   });
+};
+
+export const cleanupPlayer = (src: number) => {
+  const userModule = Core.getModule('users');
+  const steamId = userModule.getPlyIdentifiers(src).steam;
+  console.log(`Cleaning up player ${src} (${steamId})`);
+  if (!steamId) return;
+  pendingTokens.delete(steamId);
+  receivedToken.delete(steamId);
 };

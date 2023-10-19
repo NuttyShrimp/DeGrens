@@ -1,7 +1,7 @@
 import { Config, Events } from '@dgx/server';
 import { setPrivateToken } from 'helpers/privateToken';
 import { addStartedResource, createList } from 'helpers/resources';
-import { removeResourceToken } from 'services/eventTokens';
+import { cleanupPlayer, removeResourceToken } from 'services/eventTokens';
 import { generatePanelToken, setPanelEndpoint } from 'services/panelTokens';
 
 setImmediate(async () => {
@@ -27,4 +27,9 @@ on('dg-config:moduleLoaded', (name: string, data: { private_key: string; panelEn
 
 Events.onNet('auth:panel:reconnect', src => {
   generatePanelToken(src);
+});
+
+on('playerDropped', () => {
+  const src = +source;
+  cleanupPlayer(src);
 });
