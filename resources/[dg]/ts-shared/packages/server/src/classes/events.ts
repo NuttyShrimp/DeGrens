@@ -225,6 +225,15 @@ class Events extends util.Singleton<Events>() {
         this.pendingTransaction.set(transaction.traceId, transaction);
       }
 
+      if (!data.skipLog) {
+        DGXAuth.logEvent({
+          send: 'server',
+          recv: 'client',
+          target: target,
+          data: args,
+        });
+      }
+
       const encData = encryptServerPayload(data);
       args.unshift(encData);
       const packedData = (global as any).msgpack_pack(args);
@@ -388,6 +397,16 @@ class RPC extends util.Singleton<RPC>() {
           payload.metadata.handler.end = new Date().toString();
           if (!payload.metadata.response) payload.metadata.response = { start: '', end: '' };
           payload.metadata.response.start = new Date().toString();
+
+          DGXAuth.logEvent({
+            send: 'client',
+            recv: 'server',
+            rpc: true,
+            event: event,
+            target: 0,
+            data: args,
+            response: result,
+          });
 
           this.events.emitNet(
             {

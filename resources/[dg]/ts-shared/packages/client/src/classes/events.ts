@@ -142,6 +142,15 @@ class Events extends util.Singleton<Events>() {
     args.unshift(encData);
     const packedData = (global as any).msgpack_pack(args);
     const evtHash = getEventHash(typeof event === 'string' ? event : event.event);
+    if (!data.skipLog) {
+      DGXAuth.logEvent({
+        send: 'client',
+        recv: 'server',
+        event,
+        target: 0,
+        data: JSON.stringify(args),
+      });
+    }
     if (packedData.length < 16000) {
       global.TriggerServerEventInternal(evtHash, packedData, packedData.length);
     } else {
@@ -229,6 +238,16 @@ class RPC extends util.Singleton<RPC>() {
           if (!payload.metadata.response) payload.metadata.response = { start: '', end: '' };
           payload.metadata.response.start = new Date().toString();
           payload.skipLog = true;
+
+          DGXAuth.logEvent({
+            send: 'server',
+            recv: 'client',
+            event: event,
+            target: 0,
+            data: JSON.stringify(args),
+            rpc: true,
+            response: JSON.stringify(result),
+          });
 
           this.events.emitNet(
             {

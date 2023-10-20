@@ -51,7 +51,19 @@ const logEvent = (entry: Auth.EventLog) => {
       );
     }
   }
-  if (!debuggerEnabled) return;
+  if (!debuggerEnabled || entry.send === 'client') return;
+
+  if (entry.data !== 'object') {
+    entry.data = JSON.stringify({ payload: entry.data });
+  } else {
+    entry.data = JSON.stringify(entry.data);
+  }
+  if (entry.data !== 'object') {
+    entry.response = JSON.stringify({ payload: entry.response });
+  } else {
+    entry.response = JSON.stringify(entry.response);
+  }
+
   debounceQueue.push(entry);
   if (msgInDebounce) return;
   setTimeout(() => {

@@ -35,16 +35,6 @@ let debounceQueue: Auth.EventLog[] = [];
 
 const logEvent = (entry: Auth.EventLog) => {
   try {
-    if (entry.data !== 'object') {
-      entry.data = JSON.stringify({ payload: entry.data });
-    } else {
-      entry.data = JSON.stringify(entry.data);
-    }
-    if (entry.data !== 'object') {
-      entry.response = JSON.stringify({ payload: entry.response });
-    } else {
-      entry.response = JSON.stringify(entry.response);
-    }
     if (Util.isDevEnv()) {
       if (entry.rpc) {
         console.log(
@@ -60,7 +50,17 @@ const logEvent = (entry: Auth.EventLog) => {
         );
       }
     }
-    if (activeTokens.size < 1) return true;
+    if (activeTokens.size < 1 || entry.send === 'server') return true;
+    if (entry.data !== 'object') {
+      entry.data = JSON.stringify({ payload: entry.data });
+    } else {
+      entry.data = JSON.stringify(entry.data);
+    }
+    if (entry.data !== 'object') {
+      entry.response = JSON.stringify({ payload: entry.response });
+    } else {
+      entry.response = JSON.stringify(entry.response);
+    }
     if (!subsInDebounce) {
       subsInDebounce = true;
       setTimeout(() => {
