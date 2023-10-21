@@ -544,7 +544,7 @@ Config.ClothingRooms = {
   {requiredGang = "asphaltrebellions", coords = vector3(985.186, -91.702, 74.8483)},
   {requiredGang = "kingsmen", coords = vector3(-1158.2506, -1517.7375, 11.1597)},
   {requiredGang = "hellsangels", coords = vector3(103.9543, 3604.6768, 40.4919)},
-  {requiredGang = "sokudochasers", coords = vector3({-653.0182, -1229.3389, 11.5554})},
+  {requiredGang = "sokudochasers", coords = vector3(-653.0182, -1229.3389, 11.5554)},
 }
 
 Config.Outfits = {}
