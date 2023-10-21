@@ -1,0 +1,78 @@
+{
+  "garage_id": "soduko",
+  "name": "Soduko Garage",
+  "type": "gang",
+  "shared": true,
+  "location": {
+    "vector": {
+      "x": -643.75,
+      "y": -1217.92,
+      "z": 11.15
+    },
+    "width": 18.8,
+    "length": 6.6,
+    "options": {
+      "heading": 33,
+      "minZ": 10.15,
+      "maxZ": 14.15
+    }
+  },
+  "vehicle_types": ["land"],
+  "parking_spots": [
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 33.0,
+      "coords": {
+        "x": -639.67,
+        "y": -1223.97,
+        "z": 11.62
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 33.0,
+      "coords": {
+        "x": -641.56,
+        "y": -1220.78,
+        "z": 11.62
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 33.0,
+      "coords": {
+        "x": -643.69,
+        "y": -1217.85,
+        "z": 11.79
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 33.0,
+      "coords": {
+        "x": -645.67,
+        "y": -1214.74,
+        "z": 11.67
+      }
+    },
+    {
+      "type": "land",
+      "size": 2.0,
+      "distance": 1.8,
+      "heading": 33.0,
+      "coords": {
+        "x": -647.62,
+        "y": -1211.54,
+        "z": 11.69
+      }
+    }
+  ]
+}
