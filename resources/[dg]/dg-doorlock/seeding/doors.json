@@ -5376,5 +5376,24 @@
     "authorized": {
       "gang": ["sokudochasers"]
     }
+  },
+  {
+    "description": "veltman gang garagedoor",
+    "locked": false,
+    "distance": 10,
+    "doors": [
+      {
+        "model": "prop_facgate_07",
+        "coords": {
+          "x": 463.49566650390625,
+          "y": -1909.390625,
+          "z": 24.344457626342773
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["groepveltman"]
+    },
+    "playSound": true
   }
 ]
