@@ -50,6 +50,10 @@ onNet('__dgx_auth_init', (resName: string) => {
     return;
   }
 
+  if (Util.isDevEnv()) {
+    receivedToken.delete(steamId);
+  }
+
   if (!resName) {
     Admin.ACBan(Number(src), 'Failed to properly authenticate resource (N)');
     return;
@@ -102,6 +106,9 @@ const sendRetrieveKeysTokenToResource = (src: number, res: string) => {
     }
     const storedToken = storedTokens.get(resName);
     if (!storedToken || storedToken !== token) {
+      if (Util.isDevEnv()) {
+        console.log(storedTokens);
+      }
       Admin.ACBan(Number(src), 'Authentication token mismatch (SYN ACK)', { storedToken, token, resource: res });
       return;
     }
@@ -143,7 +150,6 @@ export const removeResourceToken = (res: string) => {
 export const cleanupPlayer = (src: number) => {
   const userModule = Core.getModule('users');
   const steamId = userModule.getPlyIdentifiers(src).steam;
-  console.log(`Cleaning up player ${src} (${steamId})`);
   if (!steamId) return;
   pendingTokens.delete(steamId);
   receivedToken.delete(steamId);

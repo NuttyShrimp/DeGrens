@@ -229,6 +229,7 @@ class Events extends util.Singleton<Events>() {
         DGXAuth.logEvent({
           send: 'server',
           recv: 'client',
+          event: evtName,
           target: target,
           data: args,
         });
