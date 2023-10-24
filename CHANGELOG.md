@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je character tped niet meer in de muur in de mazebank bij de trolleys
 - Vrouwelijke voetballshirtje
 - Je kan terug in unlocked houses
+- Mailbox placeren
 
 ## [1.4.7]
 
