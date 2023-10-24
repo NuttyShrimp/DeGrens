@@ -11737,5 +11737,18 @@
     "shop": "pdm",
     "type": "land",
     "inCarboostPool": true
+  },
+  {
+    "category": "sports",
+    "model": "GC24stang",
+    "brand": "Ford",
+    "name": "Mustang",
+    "class": "S",
+    "defaultStock": 10,
+    "restockTime": 10,
+    "price": 250000,
+    "shop": "nfs",
+    "type": "land",
+    "inCarboostPool": false
   }
 ]
