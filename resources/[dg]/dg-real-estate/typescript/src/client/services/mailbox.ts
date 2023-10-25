@@ -1,14 +1,16 @@
-import { Events, Inventory, Notifications, Peek, SyncedObjects, Util } from '@dgx/client';
+import { Events, Inventory, Keys, Notifications, Peek, SyncedObjects, UI, Util } from '@dgx/client';
 import { getHouseInfo, getHousesInfo } from 'modules/houses/services/store';
 
 Events.onNet('realestate:placeMailbox', async () => {
+  UI.showInteraction(`[${Keys.getBindedKey('object-place')}] - Plaats`);
   const placeInfo = await Util.startGhostPlacement('prop_letterbox_01', 10);
+  UI.hideInteraction();
   if (!placeInfo) {
     Notifications.add('Dat is geen goede plek', 'error');
     return;
   }
   const houses = Object.values(getHousesInfo()).filter(h => h.owned);
-  const nearHouse = houses.find(h => h.enter.distance(placeInfo.coords) < 5);
+  const nearHouse = houses.find(h => h.enter.distance(placeInfo.coords) < 10);
   if (!nearHouse) {
     Notifications.add('Dit is niet bij een huis dat je bezit', 'error');
     return;

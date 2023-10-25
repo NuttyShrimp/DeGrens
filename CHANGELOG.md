@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Je kunt mailbox verder van u huis zetten
+
 ### Fixed
 
 ## [1.4.8]
