@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.4.8]
+
+### Added
+
 - Halloween shenanigans
 - Voertuigen Los Santos Drug Wars toegevoegd.
 - Map changes voor gangs
