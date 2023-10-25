@@ -27,7 +27,7 @@ export const setCornersellEnabled = (enabled: boolean) => {
             sellToPed(entity);
           },
           canInteract: entity => {
-            if (isSelling) return false;
+            if (isSelling || !cornersellEnabled) return false;
             return entity === buyerPed;
           },
         },
@@ -96,7 +96,7 @@ export const findBuyer = async () => {
 };
 
 const sellToPed = async (buyer: number) => {
-  if (buyer !== buyerPed) return;
+  if (buyer !== buyerPed || !cornersellEnabled) return;
 
   isSelling = true;
   const ped = PlayerPedId();

@@ -9,9 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Halloween shenanigans
+- Voertuigen Los Santos Drug Wars toegevoegd.
+- Map changes voor gangs
+- Requested Hayes assets added
+
 ### Changed
 
+- Tijd tussen aanbieding van huisinbraken verminderd
+- Je kan langer onderwater blijven met een duikpak
+- Removed overflow in admin entity selector action menu
+- De bestanden voor de scripts die je download zijn verkleint
+- m4gt3 uit carboostpool gehaald.
+- Handling changes
+
 ### Fixed
+
+- Exploit in cornerselling opgelost
+- Sentry sourcemaps werken terug
+- Je character tped niet meer in de muur in de mazebank bij de trolleys
+- Vrouwelijke voetballshirtje
+- Je kan terug in unlocked houses
+- Mailbox placeren
 
 ## [1.4.7]
 

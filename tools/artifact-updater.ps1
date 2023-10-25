@@ -13,10 +13,10 @@ $artifactsInfo = 'https://changelogs-live.fivem.net/api/changelog/versions/win32
 try
 {
   $artifactsJson = Invoke-WebRequest -Uri $artifactsInfo
-  if ($artifactsJson.connectionTestStatus -match "FAIL")
+  if ($artifactsJson.StatusDescription -match "FAIL")
   {
     Write-Host "Could fetch updates for artifacts" -ForegroundColor Red
-    return $response.connectionTestStatus
+    return $artifactsJson.StatusDescription
   }
   $artifactsJson = $artifactsJson | ConvertFrom-Json
 }

@@ -87,7 +87,7 @@ export const loadHouses = async () => {
 
 export const hasAccess = (propertyName: string) => {
   const houseInfo = houses[propertyName];
-  return houseInfo && houseInfo.hasKey;
+  return houseInfo && (houseInfo.hasKey || !houseInfo.locked);
 };
 
 export const updateHouseGarage = (propertyName: string, coords: Vec4) => {

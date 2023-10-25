@@ -281,6 +281,11 @@ class Util extends UtilShared {
     const targetCoords = this.getPlyCoords(targetSrvId);
     return srcCoords.distance(targetCoords);
   };
+
+  debug = (...msg: any[]) => {
+    if (!this.isDevEnv()) return;
+    console.log(...msg);
+  };
 }
 
 export class Status {

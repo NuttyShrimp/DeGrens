@@ -270,6 +270,6 @@ Keys.onPressDown('object-place', () => {
 
 Keys.register('object-rotate-left', '(editor) Rotate left', 'IOM_WHEEL_DOWN', 'MOUSE_WHEEL');
 Keys.register('object-rotate-right', '(editor) Rotate right', 'IOM_WHEEL_UP', 'MOUSE_WHEEL');
-Keys.register('object-place', '(editor) Place Object', 'ENTER', 'KEYBOARD');
+Keys.register('object-place', '(editor) Place Object', 'RETURN', 'KEYBOARD');
 
 global.exports('startGhostPlacement', startGhostPlacement);

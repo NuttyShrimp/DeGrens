@@ -764,7 +764,7 @@ model realestate_locations {
   stash                      String?
   logout                     String?
   clothing                   String?
-  has_mailbox                String
+  has_mailbox                String?
   realestate_location_access realestate_location_access[]
 }
 

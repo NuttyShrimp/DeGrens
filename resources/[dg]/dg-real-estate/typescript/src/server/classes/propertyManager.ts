@@ -26,7 +26,7 @@ class PropertyManager {
         property.locations.stash ? JSON.stringify(property.locations.stash) : null,
         property.locations.logout ? JSON.stringify(property.locations.logout) : null,
         property.locations.clothing ? JSON.stringify(property.locations.clothing) : null,
-        property.has_mailbox ?? false,
+        property.has_mailbox ?? null,
       ]
     );
 

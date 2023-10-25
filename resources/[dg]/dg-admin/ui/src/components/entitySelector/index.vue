@@ -2,8 +2,10 @@
   <div class="selector-container" v-show="visible">
     <p class="selector-title">{{ title }}</p>
     <hr />
-    <div v-for="action in actions" :key="action.name">
-      <DoAction :action="action" @click="() => handleAction(action.name)" />
+    <div class="selector-actions">
+      <div v-for="action in actions" :key="action.name">
+        <DoAction :action="action" @click="() => handleAction(action.name)" />
+      </div>
     </div>
   </div>
 </template>
@@ -33,12 +35,32 @@
       top: 30vh;
       right: 55vh;
       width: 35vh;
+      height: 66vh;
 
       padding: 2vh;
       border-radius: 1rem;
 
       color: white;
       background-color: v-bind('theme.primaryDarker.dark + "80"');
+    }
+
+    &-actions {
+      overflow: auto;
+      max-height: 59vh;
+
+      &::-webkit-scrollbar-track {
+        background-color: #f5f5f500;
+      }
+
+      &::-webkit-scrollbar {
+        width: 6px;
+        background-color: #f5f5f500;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #1a1a1a;
+        border-radius: 1rem;
+      }
     }
 
     &-title {

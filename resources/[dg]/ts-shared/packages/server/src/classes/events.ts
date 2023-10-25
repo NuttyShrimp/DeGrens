@@ -1,668 +1,428 @@
-import { TransactionContext } from '@sentry/types';
+import {
+  awaitKeys,
+  decryptClientPayload,
+  encryptServerPayload,
+  getEventHash,
+  setKeys,
+} from '@dgx/shared/src/classes/encrypt';
+import * as Sentry from '@sentry/node';
 
-import { Sentry } from '../helpers/sentry';
+import utilClass from './util';
+import { DGXAuth } from '../exports';
 
-import { Admin, Util } from './index';
-import { sentryHandler } from './sentry';
+const util = utilClass.Util;
 
-// Idea for extra layer of security:
-class Distributor {
-  public static init = () => {
-    const distributor = new Distributor();
-    distributor.isLoaded = true;
-  };
-
-  public isLoaded = false;
-
-  // Event name to resources
-  private readonly netEventToResources: Map<string, Set<string>>;
-  private readonly localEventToResources: Map<string, Set<string>>;
-  private readonly rpcToResource: Map<string, string>;
-
-  // Resource name to handler
-  private readonly netEventHandlers: Record<string, Events['netEventHandler']>;
-  private readonly localEventHandlers: Record<string, Events['localEventHandler']>;
-  private readonly rpcHandlers: Record<string, RPC['handleIncomingRequest']>;
-
+class Events extends util.Singleton<Events>() {
+  private pendingTransaction: Map<string, Sentry.Transaction> = new Map();
   constructor() {
-    this.netEventToResources = new Map();
-    this.localEventToResources = new Map();
-    this.rpcToResource = new Map();
-
-    this.netEventHandlers = {};
-    this.localEventHandlers = {};
-    this.rpcHandlers = {};
-
-    global.exports('isDistributorLoaded', () => this.isLoaded);
-
-    // Handlers for the actual events
-    onNet('__dgx_event:ServerNetEvent', (data: DGXEvents.ServerNetEvtData) => {
-      this.distributeNetEvent(source, data);
-    });
-    on('__dgx_event:ServerLocalEvent', (data: DGXEvents.ServerLocalEvtData) => {
-      this.distributeLocalEvent(data);
-    });
-    onNet('__dgx_rpc:emitServer', (data: DGXRPC.ClientRequestData) => {
-      this.distributeRPC(source, data);
+    super();
+    setImmediate(() => {
+      const keys: Auth.SecretKeys = exports['dg-auth'].getKeysForServer();
+      setKeys(keys);
     });
 
-    // Register event names to resource
-    on('__dgx:registerNetEvent', this.registerNetEvent);
-    on('__dgx:registerLocalEvent', this.registerLocalEvent);
-    on('__dgx:registerRPC', this.registerRPC);
+    onNet(
+      `__dgx_sentry:${GetCurrentResourceName()}:finishTrace`,
+      (src: number, traceId: string, metadata: DGXEvents.EventMetadata, hasError: boolean, err?: any) => {
+        const transaction = this.pendingTransaction.get(traceId);
+        if (!transaction) return;
+        if (transaction.data.target == -1) {
+          // Debounce to catch all handlers
+          // TODO: implement debounce
+        }
 
-    // Get handlers for each resource
-    on('__dgx:setServerNetEventHandler', (resource: string, handler: Events['netEventHandler']) => {
-      this.netEventHandlers[resource] = handler;
-    });
-    on('__dgx:setServerLocalEventHandler', (resource: string, handler: Events['localEventHandler']) => {
-      this.localEventHandlers[resource] = handler;
-    });
-    on('__dgx:setRPCHandler', (resource: string, handler: RPC['handleIncomingRequest']) => {
-      this.rpcHandlers[resource] = handler;
-    });
-  }
-
-  private distributeNetEvent = (src: number, data: DGXEvents.ServerNetEvtData) => {
-    // Check if resource token is valid
-    if (!global.exports['dg-auth'].validateToken(src, data.origin, data.token)) return;
-
-    const eventName = atob(data.eventId);
-    const resources = this.netEventToResources.get(eventName);
-    if (!resources) return;
-
-    for (const resource of resources) {
-      try {
-        this.netEventHandlers[resource](src, eventName, data);
-      } catch (e: any) {
-        if (e.message !== 'BUFFER_SHORTAGE') {
-          console.error(e);
-          Sentry.captureException(e, {
-            extra: {
-              event: eventName,
-              resource: {
-                target: resource,
-                origin: data.origin,
-              },
-              args: data.args,
+        const steamId = Player(src).state.steamId;
+        if (!steamId) return;
+        (['sender', 'handler', 'receiver'] as (keyof DGXEvents.EventMetadata)[]).forEach(type => {
+          const rawData = metadata[type];
+          if (!rawData || (!rawData.end && !rawData.start)) return;
+          const parsed = {
+            start: (rawData.start ? new Date(rawData.start).getTime() : Date.now()) / 1000,
+            end: (rawData.end ? new Date(rawData.end).getTime() : Date.now()) / 1000,
+          };
+          const span = transaction.startChild({
+            op: type,
+            data: {
+              origin: src,
+              originSteamId: steamId,
             },
+            startTimestamp: parsed.start,
           });
-        }
-      }
-    }
-  };
-
-  private distributeLocalEvent = (data: DGXEvents.ServerLocalEvtData) => {
-    const resources = this.localEventToResources.get(data.eventName);
-    if (!resources) return;
-
-    for (const resource of resources) {
-      this.localEventHandlers[resource](data);
-    }
-  };
-
-  private distributeRPC = (src: number, data: DGXRPC.ClientRequestData) => {
-    // Check if resource token is valid
-    if (!global.exports['dg-auth'].validateToken(src, data.resource, data.token)) return;
-
-    const resource = this.rpcToResource.get(data.name);
-    if (!resource) return;
-
-    try {
-      this.rpcHandlers[resource](src, data);
-    } catch (e: any) {
-      if (e.message !== 'BUFFER_SHORTAGE') {
-        console.error(e);
-        Sentry.captureException(e, {
-          extra: {
-            event: data.name,
-            resource: {
-              target: resource,
-              origin: data.resource,
-            },
-            args: data.args,
-          },
+          span.finish(parsed.end);
+          // this error happend in client during the handler process
+          if (hasError && type == 'handler') {
+            Sentry.captureException(err, transaction);
+          }
         });
-      }
-    }
-  };
-
-  private registerNetEvent = (evtName: string, resource: string) => {
-    let resources = this.netEventToResources.get(evtName);
-    if (!resources) {
-      resources = new Set();
-      onNet(evtName, () => {
-        Admin.ACBan(source, 'emitted DGX event', {
-          evtName,
-        });
-      });
-    }
-    resources.add(resource);
-    this.netEventToResources.set(evtName, resources);
-  };
-
-  private registerLocalEvent = (evtName: string, resource: string) => {
-    let resources = this.localEventToResources.get(evtName);
-    (resources ??= new Set()).add(resource);
-    this.localEventToResources.set(evtName, resources);
-  };
-
-  private registerRPC = (evtName: string, resource: string) => {
-    if (!this.rpcToResource.has(evtName)) {
-      onNet(evtName, () => {
-        Admin.ACBan(source, 'emitted RPC event', {
-          evtName,
-        });
-      });
-    }
-
-    this.rpcToResource.set(evtName, resource);
-  };
-
-  public static awaitLoad = () => {
-    return new Promise<void>(res => {
-      const thread = setInterval(() => {
-        if (
-          GetResourceState('ts-shared') === 'started' &&
-          !!global.exports['ts-shared'] &&
-          global.exports['ts-shared'].isDistributorLoaded()
-        ) {
-          clearInterval(thread);
-          res();
-        }
-      }, 5);
-    });
-  };
-}
-
-if (GetCurrentResourceName() === 'ts-shared') {
-  Distributor.init();
-}
-
-class Events {
-  private static instance: Events;
-
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new Events();
-    }
-    return this.instance;
-  }
-
-  private readonly resName: string;
-  private netEventHandlers: Map<string, DGXEvents.ServerEventHandler[]> = new Map();
-  private localEventHandlers: Map<string, DGXEvents.LocalEventHandler[]> = new Map();
-
-  constructor() {
-    this.resName = GetCurrentResourceName();
-
-    // dispatch local handlers to dgx distributor
-    on('onServerResourceStart', (resName: string) => {
-      if (resName !== 'ts-shared' && resName !== this.resName) return;
-      emit('__dgx:setServerNetEventHandler', this.resName, this.netEventHandler);
-      emit('__dgx:setServerLocalEventHandler', this.resName, this.localEventHandler);
-    });
-
-    if (this.resName === 'ts-shared') {
-      onNet('__dgx_event:traceServer', (traceId: string, metadata: DGXEvents.EventMetadata) => {
-        this.createClientEvtTransaction(source, traceId, metadata);
-      });
-    }
-  }
-
-  // Arrow func to retain 'this' context when passing to export in constructor
-  private netEventHandler = async (src: number, eventName: string, data: DGXEvents.ServerNetEvtData) => {
-    const handlers = this.netEventHandlers.get(eventName);
-    if (!handlers) return;
-
-    data.metadata.finishedAt = new Date().getTime() / 1000;
-    const transaction = Sentry.startTransaction({
-      name: eventName,
-      op: 'client.events.net',
-      description: `Incoming network event ${eventName} on server`,
-      tags: {
-        user: Player(src).state.steamId,
-      },
-      data: {
-        args: data.args,
-        origin: Player(src).state.steamId,
-        originResource: data.origin,
-      },
-      startTimestamp: new Date(data.metadata.createdAt).getTime() / 1000,
-    });
-    Sentry.configureScope(scope => {
-      scope.setSpan(transaction);
-    });
-    transaction
-      .startChild({
-        startTimestamp: new Date(data.metadata.createdAt).getTime() / 1000,
-        endTimestamp: data.metadata.finishedAt,
-        op: 'receive',
-      })
-      .finish();
-    const span = transaction.startChild({
-      op: 'handler',
-    });
-
-    if (Util.isDevEnv()) {
-      console.log(
-        `[EVENTS] [C -> S] event: ${eventName} | trigger: ${data.origin} | ply: ${Util.getName(src)}(${src})`
-      );
-    }
-
-    try {
-      await Promise.all(handlers.map(handler => handler(src, ...data.args)));
-      if (span) {
-        span.setStatus(handlers ? 'ok' : 'not_found');
-      }
-    } catch (e) {
-      Sentry.captureException(e);
-      console.error(e);
-      if (span) {
-        span.setStatus('internal_error');
-      }
-    } finally {
-      if (span) {
-        span.finish();
-      }
-      if (transaction) {
         transaction.finish();
       }
-    }
-  };
+    );
+  }
 
-  // Arrow func to retain 'this' context when passing to export in constructor
-  private localEventHandler = async (data: DGXEvents.ServerLocalEvtData) => {
-    const handlers = this.localEventHandlers.get(data.eventName);
-    if (!handlers) return;
+  on = (event: string, handler: DGXEvents.LocalEventHandler) => {
+    setImmediate(async () => {
+      await awaitKeys();
+      global.on(getEventHash(event), async (_: DGXEvents.ServerLocalEvtData, ...args: any[]) => {
+        DGXAuth.logEvent({
+          send: 'server',
+          recv: 'server',
+          event,
+          target: 0,
+          data: args,
+        });
 
-    data.metadata.finishedAt = new Date().getTime() / 1000;
-    const transaction = Sentry.startTransaction({
-      name: data.eventName,
-      op: 'server.event.local',
-      description: `Incoming local event ${data.eventName} on server`,
-      data: {
-        args: data.args,
-      },
-    });
-    Sentry.configureScope(scope => {
-      scope.setSpan(transaction);
-    });
-    transaction
-      .startChild({
-        startTimestamp: data.metadata.createdAt,
-        op: 'receive',
-      })
-      .finish(data.metadata.finishedAt);
-    const span = transaction.startChild({
-      op: 'handler',
-    });
-
-    if (Util.isDevEnv()) {
-      console.log(`[EVENTS] [S -> S] event: ${data.eventName} | trigger: ${GetInvokingResource()}`);
-    }
-
-    try {
-      await Promise.all(handlers.map(handler => handler(...data.args)));
-      span.setStatus(handlers ? 'ok' : 'not_found');
-    } catch (e) {
-      Sentry.captureException(e);
-      console.error(e);
-      span.setStatus('internal_error');
-    } finally {
-      span.finish();
-      transaction.finish();
-    }
-  };
-
-  public emitNet(evtName: string, target: number, ...args: any[]) {
-    if (target === -1) {
-      if (!GetNumPlayerIndices()) {
-        return;
-      }
-    } else {
-      if (!GetPlayerName(String(target))) {
-        if (Util.isDevEnv()) {
-          console.error(`Tried sending ${evtName} to ${target} who is not online`);
+        try {
+          await handler(...args);
+        } catch (e) {
+          console.error(e);
         }
-        return;
-      }
-    }
-    const evtData: DGXEvents.ClientNetEvtData = {
-      eventName: evtName,
-      args,
-      traceId: '',
-      metadata: {
-        receiver: {
-          createdAt: new Date().toString(),
-        },
-        handler: {},
-      },
-    };
-    if (!evtName.startsWith('__dg')) {
-      const transactionContext: TransactionContext = {
-        name: evtName,
-        op: 'server.event.net',
-        description: `Outgoing network event ${evtName} on server`,
-        data: {
-          args,
-          target: target !== -1 ? Player(target).state.steamId : target,
-        },
-        tags: {
-          handler: 'Events',
-          target: 'Client',
-          user: target !== -1 ? Player(target).state.steamId : 'everyone',
-        },
-      };
-      // 2 spans -> receiver + handler
-      const transaction = sentryHandler.startTransaction(transactionContext, 20000, 2);
-      evtData.traceId = transaction.traceId ?? null;
-      if (Util.isDevEnv()) {
-        console.log(
-          `[EVENTS] [S -> C] event: ${evtName} | trigger: ${GetInvokingResource()} | ply: ${
-            target === -1 ? 'All' : Util.getName(target)
-          }(${target})`
-        );
-      }
-    }
-
-    try {
-      emitNet('__dgx_event:ClientNetEvent', Number(target), evtData);
-    } catch (e) {
-      Sentry.captureException(e);
-      console.error('[DGX] Error emitting net event', evtName, target, e);
-    }
-  }
-
-  public emit(evtName: string, ...args: any[]) {
-    const metadata = {
-      createdAt: new Date().getTime() / 1000,
-    };
-    emit(`__dgx_event:ServerLocalEvent`, {
-      eventName: evtName,
-      metadata,
-      args,
-    });
-  }
-
-  public onNet(evtName: string, handler: DGXEvents.ServerEventHandler) {
-    let netHandlers = this.netEventHandlers.get(evtName);
-    if (!netHandlers) {
-      netHandlers = [];
-    }
-    netHandlers.push(handler);
-    this.netEventHandlers.set(evtName, netHandlers);
-    this.on(evtName, handler);
-
-    Distributor.awaitLoad().then(() => {
-      emit('__dgx:registerNetEvent', evtName, this.resName);
-    });
-  }
-
-  public on(evtName: string, handler: DGXEvents.LocalEventHandler) {
-    let clientHandlers = this.localEventHandlers.get(evtName);
-    if (!clientHandlers) {
-      clientHandlers = [];
-    }
-    clientHandlers.push(handler);
-    this.localEventHandlers.set(evtName, clientHandlers);
-
-    Distributor.awaitLoad().then(() => {
-      emit('__dgx:registerLocalEvent', evtName, this.resName);
-    });
-  }
-
-  private createClientEvtTransaction = (src: number, traceId: string, metadata: DGXEvents.EventMetadata) => {
-    const steamId = Player(src).state.steamId;
-    if (!steamId) return;
-    (['receiver', 'handler'] as (keyof DGXEvents.EventMetadata)[]).forEach(type => {
-      const spanId = sentryHandler.addSpan(steamId, traceId, {
-        op: type,
-        data: {
-          origin: src,
-          originSteamId: steamId,
-        },
-        startTimestamp: new Date(metadata[type].createdAt).getTime() / 1000,
       });
-      if (!spanId) return;
-      sentryHandler.finishSpan(steamId, traceId, spanId, new Date(metadata[type].finishedAt).getTime() / 1000);
     });
-    sentryHandler.finishTransaction(traceId);
+  };
+
+  onNet = (event: string, handler: DGXEvents.ServerEventHandler, passData = false) => {
+    setImmediate(async () => {
+      await awaitKeys();
+      global.onNet(getEventHash(event), async (encData: string, ...args: any[]) => {
+        const src = +source;
+        const data: DGXEvents.NetEvtData = decryptClientPayload(encData);
+        if (data === undefined) {
+          throw new Error('Failed to decode event payload');
+        }
+        if (!data.metadata.sender) data.metadata.sender = {};
+        data.metadata.sender.end = new Date().toString();
+
+        if (!data.skipLog) {
+          DGXAuth.logEvent({
+            send: 'client',
+            recv: 'server',
+            event,
+            target: src,
+            data: args,
+          });
+        }
+
+        let span: Sentry.Span | null = null;
+        let transaction: Sentry.Transaction | null = null;
+        if (!data.skipSentry) {
+          transaction = Sentry.startTransaction({
+            name: event,
+            op: 'client.events.net',
+            description: `Incoming network event ${event} on server`,
+            tags: {
+              user: Player(src).state.steamId,
+            },
+            data: {
+              args: args,
+              origin: Player(src).state.steamId,
+            },
+            startTimestamp: data.metadata?.sender?.start
+              ? new Date(data.metadata.sender.start).getTime() / 1000
+              : Date.now(),
+          });
+          Sentry.configureScope(scope => {
+            scope.setSpan(transaction!);
+          });
+          transaction
+            .startChild({
+              startTimestamp: data.metadata.sender?.start
+                ? new Date(data.metadata.sender?.start).getTime() / 1000
+                : Date.now(),
+              endTimestamp: data.metadata.sender?.end
+                ? new Date(data.metadata.sender?.end).getTime() / 1000
+                : Date.now(),
+              op: 'receive',
+            })
+            .finish();
+          span = transaction.startChild({
+            op: 'handler',
+          });
+        }
+
+        try {
+          if (passData) {
+            await handler(+src, data, ...args);
+          } else {
+            await handler(+src, ...args);
+          }
+          if (span) {
+            span.setStatus('ok');
+          }
+        } catch (e) {
+          Sentry.captureException(e);
+          console.error(e);
+          if (span) {
+            span.setStatus('internal_error');
+          }
+        } finally {
+          if (span) {
+            span.finish();
+          }
+          if (transaction) {
+            transaction.finish();
+          }
+        }
+      });
+    });
+  };
+
+  emit = (event: string | { event: string; data: DeepPartial<DGXEvents.ServerLocalEvtData> }, ...args: any[]) => {
+    setImmediate(async () => {
+      await awaitKeys();
+      const extData: DeepPartial<DGXEvents.ServerLocalEvtData> = typeof event === 'string' ? {} : event.data;
+      global.emit(
+        getEventHash(typeof event === 'string' ? event : event.event),
+        {
+          metadata: {
+            sender: {
+              start: new Date(),
+              ...(extData.metadata?.sender ?? {}),
+            },
+            ...(extData.metadata ?? {}),
+          },
+          ...(extData ?? {}),
+        },
+        ...args
+      );
+    });
+  };
+
+  emitNet = (
+    event: string | { event: string; data: DeepPartial<DGXEvents.NetEvtData> },
+    target: number,
+    ...args: any[]
+  ) => {
+    setImmediate(async () => {
+      await awaitKeys();
+      const extData: DeepPartial<DGXEvents.NetEvtData> = typeof event === 'string' ? {} : event.data;
+      const data = {
+        metadata: {
+          sender: {
+            start: new Date().toString(),
+            ...(extData.metadata?.sender ?? {}),
+          },
+          ...(extData.metadata ?? {}),
+        },
+        ...(extData ?? {}),
+      };
+
+      const evtName = typeof event === 'string' ? event : event.event;
+      if (!data.skipSentry) {
+        const transaction = Sentry.startTransaction({
+          name: evtName,
+          op: 'server.event.net',
+          description: `Outgoing network event ${evtName} on server`,
+          data: {
+            args,
+            target: target !== -1 ? Player(target).state.steamId : target,
+          },
+          tags: {
+            handler: 'Events',
+            target: 'Client',
+            user: target !== -1 ? Player(target).state.steamId : 'everyone',
+          },
+        });
+        this.pendingTransaction.set(transaction.traceId, transaction);
+      }
+
+      if (!data.skipLog) {
+        DGXAuth.logEvent({
+          send: 'server',
+          recv: 'client',
+          event: evtName,
+          target: target,
+          data: args,
+        });
+      }
+
+      const encData = encryptServerPayload(data);
+      args.unshift(encData);
+      const packedData = (global as any).msgpack_pack(args);
+      const evtHash = getEventHash(evtName);
+      if (packedData.length < 16000) {
+        global.TriggerClientEventInternal(evtHash, String(target), packedData, packedData.length);
+      } else {
+        global.TriggerLatentClientEventInternal(evtHash, String(target), packedData, packedData.length, 1280000);
+      }
+    });
   };
 }
 
-class RPC {
-  private static instance: RPC;
-
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new RPC();
-    }
-    return this.instance;
-  }
-
+class RPC extends util.Singleton<RPC>() {
   private readonly resourceName: string;
-  private token: string;
-  // Ids of RPC, of this current resource awaiting response
-  private idsInUse: Set<number> = new Set();
-  private registeredHandlers: Map<string, DGXEvents.ServerEventHandler<unknown>> = new Map();
+  private id: number;
+  private pendingCalls: Map<
+    number,
+    { resolve: (data: any) => void; reject: (reason?: any) => void; timeout: NodeJS.Timeout; name: string; args: any[] }
+  >;
+  private events: Events;
 
   constructor() {
+    super();
+
     this.resourceName = GetCurrentResourceName();
-    this.token = '';
-    this.generateToken();
+    this.pendingCalls = new Map();
+    this.id = 0;
+    this.events = Events.getInstance();
 
-    // dispatch local handler to dgx distributor
-    on('onServerResourceStart', (resName: string) => {
-      if (resName !== 'ts-shared' && resName !== this.resourceName) return;
-      emit('__dgx:setRPCHandler', this.resourceName, this.handleIncomingRequest);
-    });
+    this.events.onNet(
+      `__dgx_res:${this.resourceName}`,
+      (src, payload: DGXRPC.RequestData, success: boolean, result: any) => {
+        if (!payload.id) return;
+        const pendingRPC = this.pendingCalls.get(payload.id);
+        if (pendingRPC === undefined) return;
 
-    if (this.resourceName === 'ts-shared') {
-      onNet('__dgx_rpc:traceServer', (traceId: string, metadata: DGXRPC.ClientRequestMetadata) =>
-        this.finishClientRequestTrace(source, traceId, metadata)
-      );
-    }
-  }
+        if (!payload.metadata.response) return;
+        payload.metadata.response.end = new Date().toString();
 
-  private async generateToken() {
-    while (GetResourceState('dg-auth') !== 'started') {
-      await new Promise(res => setTimeout(res, 10));
-    }
-    this.token = global.exports['dg-auth'].createResourceToken();
-  }
+        clearTimeout(pendingRPC.timeout);
+        if (success) {
+          pendingRPC.resolve(result);
+        } else {
+          pendingRPC.reject(result);
+        }
 
-  // Arrow func to retain 'this' context when passing to export in constructor
-  private handleIncomingRequest = async (src: number, data: DGXRPC.ClientRequestData) => {
-    const handler = this.registeredHandlers.get(data.name);
-    if (!handler) return;
+        const data: Auth.EventLog = {
+          send: 'server',
+          recv: 'client',
+          rpc: true,
+          event: pendingRPC.name,
+          target: 0,
+          data: pendingRPC.args,
+          response: result,
+        };
+        try {
+          DGXAuth.logEvent(data);
+        } catch (e) {
+          // ignore
+        }
 
-    data.metadata.request.finishedAt = new Date().toString();
-    data.metadata.handler.createdAt = new Date().toString();
-    const steamId = Player(src).state.steamId;
-    const { traceId } = sentryHandler.startTransaction(
-      {
-        op: 'client.rpc',
-        name: data.name,
-        description: `Incoming RPC on server`,
-        data: {
-          origin: steamId,
-          name: data.name,
-          args: data.args,
-        },
-        tags: {
-          user: steamId,
-          handler: 'RPC',
-        },
+        const steamId = Player(src).state.steamId;
+        const transaction = Sentry.startTransaction({
+          name: pendingRPC.name,
+          op: 'server.rpc',
+          description: `Outgoing RPC request to ${pendingRPC.name} to ${src}`,
+          data: {
+            target: steamId,
+          },
+          tags: {
+            handler: 'RPC',
+            target: 'Client',
+            resource: this.resourceName,
+            user: steamId,
+          },
+        });
+        Sentry.configureScope(scope => {
+          scope.setSpan(transaction);
+        });
+        (Object.keys(payload.metadata) as (keyof DGXEvents.EventMetadata)[]).forEach(type => {
+          const rawData = payload.metadata[type];
+          if (!rawData || (!rawData.end && !rawData.start)) return;
+          const parsed = {
+            start: (rawData.start ? new Date(rawData.start).getTime() : Date.now()) / 1000,
+            end: (rawData.end ? new Date(rawData.end).getTime() : Date.now()) / 1000,
+          };
+          const span = transaction.startChild({
+            op: 'sender',
+            status: 'ok',
+            startTimestamp: parsed.start,
+          });
+          span.finish(parsed.end);
+        });
       },
-      20000,
-      3
+      true
     );
-
-    let spanId;
-    if (traceId) {
-      sentryHandler.addSpan(steamId, traceId, {
-        op: 'request',
-        data: {
-          processor: this.resourceName,
-        },
-        startTimestamp: new Date(data.metadata.request.createdAt).getTime() / 1000,
-        endTimestamp: new Date(data.metadata.request.finishedAt).getTime() / 1000,
-      });
-      spanId = sentryHandler.addSpan(steamId, traceId, {
-        op: 'handler',
-        data: {
-          processor: this.resourceName,
-        },
-        startTimestamp: new Date(data.metadata.handler.createdAt).getTime() / 1000,
-      });
-    }
-
-    try {
-      if (Util.isDevEnv()) {
-        console.log(`[DGX] [C -> S -> C] RPC: ${data.name} | origin: ${src}`);
-      }
-
-      const result = await handler(src, ...data.args);
-      const responseData: DGXRPC.ServerResponseData = {
-        id: data.id,
-        result,
-        token: data.token,
-        traceId,
-        metadata: data.metadata,
-      };
-      emitNet(`__dgx_rpc:responseServer:${data.id}`, src, responseData);
-    } catch (e) {
-      Sentry.captureException(e);
-      console.error(e);
-    } finally {
-      if (spanId && traceId) {
-        sentryHandler.finishSpan(steamId, traceId, spanId);
-      }
-    }
-  };
-
-  private async finishClientRequestTrace(src: number, traceId: string, data: DGXRPC.ClientRequestMetadata) {
-    const steamId = Player(src).state.steamId;
-    if (!steamId || !data.response.createdAt || !data.response.finishedAt) return;
-
-    const spanId = sentryHandler.addSpan(steamId, traceId, {
-      op: 'response',
-      startTimestamp: new Date(data.response.createdAt).getTime() / 1000,
-    });
-    if (!spanId) return;
-
-    sentryHandler.finishSpan(steamId, traceId, spanId, new Date(data.response.finishedAt).getTime() / 1000);
-  }
-
-  private getPromiseId(): number {
-    const id = Util.getRndInteger(100000, 999999);
-    if (this.idsInUse.has(id)) {
-      return this.getPromiseId();
-    }
-    this.idsInUse.add(id);
-    return id;
   }
 
   async execute<T = any>(evtName: string, target: number, ...args: any[]): Promise<T | null> {
-    const promId = this.getPromiseId();
-    const transaction = Sentry.startTransaction({
-      name: evtName,
-      op: 'server.rpc',
-      description: `Outgoing RPC request to ${evtName} to ${target}`,
-      data: {
-        target: target > 0 ? Player(target).state.steamId : target,
+    const data = { id: ++this.id, origin: this.resourceName };
+
+    const prom = new Promise<T>((res, rej) => {
+      const timeout = setTimeout(() => {
+        rej(`RPC timed-out | name: ${evtName}`);
+      }, 60000);
+      const promData = {
+        resolve: (v: T) => {
+          res(v);
+        },
+        reject: rej,
+        timeout,
+        name: evtName,
+        args,
+      };
+
+      this.pendingCalls.set(data.id, promData);
+    });
+
+    this.events.emitNet(
+      {
+        event: `__dgx_req:${evtName}`,
+        data: {
+          ...data,
+          skipSentry: true,
+          skipLog: true,
+          metadata: {
+            sender: {
+              start: new Date().toString(),
+            },
+          },
+        },
       },
-      tags: {
-        handler: 'RPC',
-        target: 'Client',
-        resource: this.resourceName,
-        user: Player(target).state.steamId,
-      },
-    });
-    Sentry.configureScope(scope => {
-      scope.setSpan(transaction);
-    });
-    const span = transaction.startChild({
-      op: 'request',
-      status: 'ok',
-    });
+      target,
+      ...args
+    );
 
-    let result: T | null;
-    try {
-      let evtHandler: ((src: number, data: DGXRPC.ClientResponseData<T>) => void) | null = null;
-      result = await new Promise(res => {
-        evtHandler = (source: number, data: DGXRPC.ClientResponseData<T>) => {
-          if (!this.idsInUse.has(promId)) return;
-          // Check if response is for us
-          if (data.originToken !== this.token) return;
-          this.idsInUse.delete(promId);
-          if (!global.exports['dg-auth'].validateToken(source, data.resource, data.token)) return;
+    prom.finally(() => this.pendingCalls.delete(data.id));
 
-          if (data) {
-            span.finish(new Date(data.metadata.handler.createdAt).getTime() / 1000);
-            transaction.startChild({
-              op: 'handler',
-              status: 'ok',
-              startTimestamp: new Date(data.metadata.handler.createdAt).getTime() / 1000,
-              endTimestamp: new Date(data.metadata.handler.finishedAt).getTime() / 1000,
-            });
-            transaction.startChild({
-              op: 'response',
-              status: 'ok',
-              startTimestamp: new Date(data.metadata.response.createdAt).getTime() / 1000,
-              endTimestamp: new Date().getTime() / 1000,
-            });
-          }
-          res(data.result);
-        };
-
-        onNet(`__dgx_rpc:responseClient:${promId}`, (data: DGXRPC.ClientResponseData<T>) => {
-          if (evtHandler) {
-            evtHandler(source, data);
-          }
-        });
-
-        const requestData: DGXRPC.ServerRequestData = {
-          id: promId,
-          name: evtName,
-          args,
-          originToken: this.token,
-        };
-        emitNet('__dgx_rpc:emitClient', target, requestData);
-
-        setTimeout(() => {
-          if (!this.idsInUse.has(promId)) return;
-          this.idsInUse.delete(promId);
-          res(null);
-        }, 20000);
-      });
-
-      if (evtHandler) {
-        removeEventListener(`__dgx_rpc:responseClient:${promId}`, evtHandler);
-      }
-
-      if (Util.isDevEnv()) {
-        console.log(`[DGX] [S -> C -> S] RPC: ${evtName} | target: ${target}`);
-      }
-    } catch (e) {
-      result = null;
-    } finally {
-      if (!span.endTimestamp) {
-        span.finish();
-      }
-      transaction.finish();
-    }
-    return result;
+    return prom;
   }
 
-  register(name: string, handler: DGXEvents.ServerEventHandler<any>) {
-    this.registeredHandlers.set(name, handler);
+  register = <T = any>(event: string, handler: DGXEvents.ServerEventHandler<T>) => {
+    this.events.onNet(
+      `__dgx_req:${event}`,
+      async (src, payload: DGXRPC.RequestData, ...args: any[]) => {
+        let result: any;
+        let success = false;
+        try {
+          if (!payload.metadata.sender) payload.metadata.sender = {};
+          payload.metadata.sender.end = new Date().toString();
+          if (!payload.metadata.handler) payload.metadata.handler = {};
+          payload.metadata.handler.start = new Date().toString();
+          result = await handler(src, ...args);
+          success = true;
+        } catch (e) {
+          result = e;
+          console.error(e);
+        } finally {
+          if (!payload.metadata.handler) payload.metadata.handler = {};
+          payload.metadata.handler.end = new Date().toString();
+          if (!payload.metadata.response) payload.metadata.response = { start: '', end: '' };
+          payload.metadata.response.start = new Date().toString();
 
-    Distributor.awaitLoad().then(() => {
-      emit('__dgx:registerRPC', name, this.resourceName);
-    });
-  }
+          DGXAuth.logEvent({
+            send: 'client',
+            recv: 'server',
+            rpc: true,
+            event: event,
+            target: 0,
+            data: args,
+            response: result,
+          });
+
+          this.events.emitNet(
+            {
+              event: `__dgx_res:${payload.origin}`,
+              data: payload,
+            },
+            src,
+            success,
+            result
+          );
+        }
+      },
+      true
+    );
+  };
 }
 
 class SQL {
