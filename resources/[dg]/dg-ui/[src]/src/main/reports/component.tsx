@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import AppWrapper from '@src/components/appwrapper';
+import { nuiAction } from '@src/lib/nui-comms';
 import dayjs from 'dayjs';
 
 import { useReportIndicatorStore } from '../reports-indicator/stores/useReportIndicatorStore';
@@ -11,12 +12,14 @@ import config from './_config';
 import './style/index.scss';
 
 const Container: AppFunction = props => {
-  const [setReports, setReportMessages, setConnected, reports, reportMessages] = useReportStore(s => [
+  const [setReports, setReportMessages, setConnected, setTab, reports, reportMessages, reportId] = useReportStore(s => [
     s.setReports,
     s.setReportMessages,
     s.setConnected,
+    s.setTab,
     s.reports,
     s.reportMessages,
+    s.selectedReport,
   ]);
   const [resetIndicator] = useReportIndicatorStore(s => [s.resetCounter]);
 
@@ -28,7 +31,11 @@ const Container: AppFunction = props => {
     props.hideApp();
     setReports([]);
     setReportMessages([]);
-  }, [props.hideApp]);
+    if (reportId) {
+      nuiAction('reports/closeSocket', { id: reportId });
+      setTab('list');
+    }
+  }, [props.hideApp, reportId]);
 
   const eventHandler = (evt: any) => {
     switch (evt.action) {
