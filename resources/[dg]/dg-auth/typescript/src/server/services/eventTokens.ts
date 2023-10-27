@@ -4,6 +4,7 @@ import encUtf8 from 'crypto-js/enc-utf8';
 import encBase64 from 'crypto-js/enc-base64';
 import { getPlySteamId } from './steamids';
 import { isResourceKnown } from 'helpers/resources';
+import { mainLogger } from 'sv_logger';
 
 let srvStarted = false;
 
@@ -105,10 +106,11 @@ const sendRetrieveKeysTokenToResource = (src: number, res: string) => {
       return;
     }
     const storedToken = storedTokens.get(resName);
+    if (!storedToken && !token) {
+      mainLogger.error('We are doing authentication for a non-initiated resource', { resource: res });
+      return;
+    }
     if (!storedToken || storedToken !== token) {
-      if (Util.isDevEnv()) {
-        console.log(storedTokens);
-      }
       Admin.ACBan(Number(src), 'Authentication token mismatch (SYN ACK)', { storedToken, token, resource: res });
       return;
     }
