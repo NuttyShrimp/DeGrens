@@ -16,9 +16,8 @@ export const moveEntity: CommandData = {
     }
     Events.emitNet('dg-misc:objectmanager:startObjectMovement', caller.source, objId);
   },
-  isEnabled: (data: { entity?: number }) => {
-    if (!data.entity) return false;
-    return !!Entity(data.entity).state.objId;
+  isEnabled: (data: { objId?: number }) => {
+    return !!data.objId;
   },
   UI: {
     title: 'Move Entity',
