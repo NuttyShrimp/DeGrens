@@ -9,11 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Politie Interceptors toegevoegd
+
 ### Changed
 
 - Je kunt mailbox verder van u huis zetten
 
 ### Fixed
+
+- Probleem met SYN ACK fail positive dat leide tot bans
 
 ## [1.4.8]
 
