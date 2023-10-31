@@ -33,8 +33,8 @@ body {
 
 #container {
   position: absolute;
-  top: 10vh;
-  left: 90%;
+  top: 25vh;
+  left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
 }

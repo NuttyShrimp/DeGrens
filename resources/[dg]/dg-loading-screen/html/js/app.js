@@ -1,5 +1,5 @@
 window.addEventListener('message', function (e) {
-  if (e.data.eventName === 'loadProgress') {
+  if (e.data.eventName === "loadProgress") {
     // const loaded = parseInt(e.data.loadFraction * 100);
     setIconLoaded(Number(e.data.loadFraction));
   }
@@ -14,13 +14,11 @@ window.addEventListener('message', function (e) {
 });
 
 // video resize shit
-const video = document.querySelector('#bg > video');
+const video = document.querySelector('#id > video');
 window.addEventListener('resize', resize, false);
-video.volume = 0.7;
 
 if (video) {
   video.height = 100; /* to get an initial width to work with*/
-  video.play();
   resize();
 }
 
@@ -41,25 +39,17 @@ function resize() {
 }
 
 // Icon loading
-const logoContainer = document.getElementById('inner_logo_container');
-const logoImg = document.getElementById('logo_fg');
+const logoContainer = document.getElementById("inner_logo_container")
+const logoImg = document.getElementById("logo_fg")
 
-const setIconLoaded = perc => {
-  logoContainer.style.top = `${13 - perc * 13}vh`;
-  logoImg.style.top = `-${13 - perc * 13}vh`;
-};
-
-async function emulateLoading() {
-  for (let i = 0; i <= 100; i++) {
-    window.postMessage({ eventName: 'loadProgress', loadFraction: i / 100 }, 'http://localhost:3000');
-    await new Promise(res => setTimeout(res, Math.floor(Math.random() * (501 - 100)) + 100));
-  }
+const setIconLoaded = (perc) => {
+  logoContainer.style.top = `${13 - (perc * 13)}vh`;
+  logoImg.style.top = `-${13 - (perc * 13)}vh`;
 }
 
-window.onload = () => {
-  document.getElementById('volume').onchange = e => {
-    const vol = e.currentTarget.value;
-    if (!video) return;
-    video.volume = vol;
-  };
-};
+async function emulateLoading() {
+	for (let i = 0; i<= 100; i++) {
+		window.postMessage({eventName: "loadProgress", loadFraction: i/100}, "http://localhost:3000")
+		await new Promise(res => setTimeout(res, Math.floor(Math.random() * (501 - 100)) + 100))
+	}
+}
