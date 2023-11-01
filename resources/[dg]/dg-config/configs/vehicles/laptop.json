@@ -47,6 +47,11 @@
         "item": "nos",
         "label": "NOS",
         "price": 50
+      },
+      {
+        "item": "race_dongle",
+        "label": "Phone Software Upgrade",
+        "price": 20
       }
     ]
   },

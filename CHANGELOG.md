@@ -35,7 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed overflow in admin entity selector action menu
 - De bestanden voor de scripts die je download zijn verkleint
 - m4gt3 uit carboostpool gehaald.
-- Handling changes
 
 ### Fixed
 

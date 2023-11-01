@@ -1,4 +1,4 @@
-import { SQL, Util } from '@dgx/server';
+import { Events, SQL, Util } from '@dgx/server';
 import { identifierManager } from './managers/IdentifierManager';
 import { userManager } from './managers/userManager';
 import { mainLogger } from '../../sv_logger';

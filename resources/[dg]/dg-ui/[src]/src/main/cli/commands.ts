@@ -536,4 +536,19 @@ export const cmds: {
       },
     },
   },
+  {
+    cmd: 'race countdown',
+    app: 'racing',
+    data: {
+      action: 'startCountdown',
+      countDown: 5,
+    },
+  },
+  {
+    cmd: 'race timer',
+    app: 'racing',
+    data: {
+      action: 'startTimer',
+    },
+  },
 ];
