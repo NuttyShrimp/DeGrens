@@ -10,10 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Politie Interceptors toegevoegd
+- Racing activity toegevoegd
+- Kofi kledij toegevoegd
+- Handlings voor de nieuwe DLC wagens
 
 ### Changed
 
 - Je kunt mailbox verder van u huis zetten
+- We hebben assets/aankleding rond de map opgekuist
 
 ### Fixed
 
