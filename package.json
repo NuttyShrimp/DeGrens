@@ -55,7 +55,7 @@
   "prisma": {
     "seed": "ts-node -P packages/db/tsconfig.json packages/db/seed.ts"
   },
-  "version": "1.4.8",
+  "version": "1.5.0",
   "pnpm": {
     "patchedDependencies": {
       "@jgoz/esbuild-plugin-typecheck@3.0.3": "patches/@jgoz__esbuild-plugin-typecheck@3.0.3.patch",
