@@ -16,6 +16,11 @@ on('onResourceStart', (resName: string) => {
   removeResourceToken(resName);
 });
 
+on('playerJoining', () => {
+  const src = +source;
+  cleanupPlayer(src);
+});
+
 on('dg-config:moduleLoaded', (name: string, data: { private_key: string; panelEndpoint: string }) => {
   if (name === 'auth') {
     setPrivateToken(data.private_key);

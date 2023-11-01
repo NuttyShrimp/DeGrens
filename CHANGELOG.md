@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Nog een poging tot het SYN ACK probleem
+
 ## [1.5.0]
 
 ### Added
