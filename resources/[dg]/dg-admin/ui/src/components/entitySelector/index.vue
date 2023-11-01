@@ -10,7 +10,7 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { computed } from 'vue';
+  import { computed, watch } from 'vue';
 
   import { theme } from '@/lib/colors';
 
@@ -24,6 +24,12 @@
   const actions = computed<BaseAction[]>(() => store.getters['selector/actions']);
   const title = computed(() => store.state?.selector?.name ?? '');
 
+  watch(visible, value => {
+    if (value) {
+      store.dispatch('selector/fetchActions');
+    }
+  });
+
   const handleAction = (name: string) => {
     nuiAction('doSelectorAction', { name });
   };
@@ -35,7 +41,7 @@
       top: 30vh;
       right: 55vh;
       width: 35vh;
-      height: 66vh;
+      max-height: 66vh;
 
       padding: 2vh;
       border-radius: 1rem;

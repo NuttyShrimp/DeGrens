@@ -1,7 +1,13 @@
 import { isDevel } from '../env';
 import { create } from '../store';
 
-const defaultVisApps: (keyof RootState)[] = ['interaction', 'notifications', 'itemboxes', 'reports-indicator'];
+const defaultVisApps: (keyof RootState)[] = [
+  'interaction',
+  'notifications',
+  'itemboxes',
+  'reports-indicator',
+  'racing',
+];
 
 export const useVisibleStore = create<VisStore.State>('visible')(set => ({
   visibleApps: isDevel() ? ['cli', 'debuglogs', ...defaultVisApps] : defaultVisApps,

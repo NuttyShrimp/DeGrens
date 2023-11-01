@@ -448,6 +448,9 @@ class Keys {
   }
 
   getBindedKey(keycommand: string, keycontroller = 2) {
+    if (!keycommand.startsWith('+')) {
+      keycommand = `+${keycommand}`;
+    }
     return global.exports['dg-lib'].GetCurrentKeyMap(keycommand, keycontroller);
   }
 

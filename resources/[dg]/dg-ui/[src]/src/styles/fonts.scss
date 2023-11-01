@@ -1,7 +1,11 @@
+@import url('https://fonts.cdnfonts.com/css/pricedown');
+
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-Black.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 Black'), local('HurmeGeometricSans3-Black'),
+  src:
+    local('HurmeGeometricSans3 Black'),
+    local('HurmeGeometricSans3-Black'),
     url('../assets/fonts/HurmeGeometricSans3-Black.woff2') format('woff2');
   font-weight: 900;
   font-style: normal;
@@ -11,7 +15,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-HairlineObl.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 HairlineOblique'), local('HurmeGeometricSans3-HairlineObl'),
+  src:
+    local('HurmeGeometricSans3 HairlineOblique'),
+    local('HurmeGeometricSans3-HairlineObl'),
     url('../assets/fonts/HurmeGeometricSans3-HairlineObl.woff2') format('woff2');
   font-weight: normal;
   font-style: italic;
@@ -21,7 +27,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-Light.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 Light'), local('HurmeGeometricSans3-Light'),
+  src:
+    local('HurmeGeometricSans3 Light'),
+    local('HurmeGeometricSans3-Light'),
     url('../assets/fonts/HurmeGeometricSans3-Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
@@ -31,7 +39,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-Hairline.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 Hairline'), local('HurmeGeometricSans3-Hairline'),
+  src:
+    local('HurmeGeometricSans3 Hairline'),
+    local('HurmeGeometricSans3-Hairline'),
     url('../assets/fonts/HurmeGeometricSans3-Hairline.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
@@ -41,7 +51,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-BlackObl.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 BlackOblique'), local('HurmeGeometricSans3-BlackObl'),
+  src:
+    local('HurmeGeometricSans3 BlackOblique'),
+    local('HurmeGeometricSans3-BlackObl'),
     url('../assets/fonts/HurmeGeometricSans3-BlackObl.woff2') format('woff2');
   font-weight: 900;
   font-style: italic;
@@ -51,7 +63,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-LightObl.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 LightOblique'), local('HurmeGeometricSans3-LightObl'),
+  src:
+    local('HurmeGeometricSans3 LightOblique'),
+    local('HurmeGeometricSans3-LightObl'),
     url('../assets/fonts/HurmeGeometricSans3-LightObl.woff2') format('woff2');
   font-weight: 300;
   font-style: italic;
@@ -61,7 +75,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-Bold.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 Bold'), local('HurmeGeometricSans3-Bold'),
+  src:
+    local('HurmeGeometricSans3 Bold'),
+    local('HurmeGeometricSans3-Bold'),
     url('../assets/fonts/HurmeGeometricSans3-Bold.woff2') format('woff2');
   font-weight: bold;
   font-style: normal;
@@ -71,7 +87,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-BoldObl.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 BoldOblique'), local('HurmeGeometricSans3-BoldObl'),
+  src:
+    local('HurmeGeometricSans3 BoldOblique'),
+    local('HurmeGeometricSans3-BoldObl'),
     url('../assets/fonts/HurmeGeometricSans3-BoldObl.woff2') format('woff2');
   font-weight: bold;
   font-style: italic;
@@ -81,7 +99,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-ThinObl.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 ThinOblique'), local('HurmeGeometricSans3-ThinObl'),
+  src:
+    local('HurmeGeometricSans3 ThinOblique'),
+    local('HurmeGeometricSans3-ThinObl'),
     url('../assets/fonts/HurmeGeometricSans3-ThinObl.woff2') format('woff2');
   font-weight: 100;
   font-style: italic;
@@ -91,7 +111,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-Regular.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 Regular'), local('HurmeGeometricSans3-Regular'),
+  src:
+    local('HurmeGeometricSans3 Regular'),
+    local('HurmeGeometricSans3-Regular'),
     url('../assets/fonts/HurmeGeometricSans3-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
@@ -101,7 +123,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-RegularObl.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 RegularOblique'), local('HurmeGeometricSans3-RegularObl'),
+  src:
+    local('HurmeGeometricSans3 RegularOblique'),
+    local('HurmeGeometricSans3-RegularObl'),
     url('../assets/fonts/HurmeGeometricSans3-RegularObl.woff2') format('woff2');
   font-weight: normal;
   font-style: italic;
@@ -111,7 +135,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-SemiBoldObl.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 SemiBoldOblique'), local('HurmeGeometricSans3-SemiBoldObl'),
+  src:
+    local('HurmeGeometricSans3 SemiBoldOblique'),
+    local('HurmeGeometricSans3-SemiBoldObl'),
     url('../assets/fonts/HurmeGeometricSans3-SemiBoldObl.woff2') format('woff2');
   font-weight: 600;
   font-style: italic;
@@ -121,7 +147,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-Thin.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 Thin'), local('HurmeGeometricSans3-Thin'),
+  src:
+    local('HurmeGeometricSans3 Thin'),
+    local('HurmeGeometricSans3-Thin'),
     url('../assets/fonts/HurmeGeometricSans3-Thin.woff2') format('woff2');
   font-weight: 100;
   font-style: normal;
@@ -131,7 +159,9 @@
 @font-face {
   font-family: 'Hurme Geometric Sans 3';
   src: url('../assets/fonts/HurmeGeometricSans3-SemiBold.woff2') format('woff2');
-  src: local('HurmeGeometricSans3 SemiBold'), local('HurmeGeometricSans3-SemiBold'),
+  src:
+    local('HurmeGeometricSans3 SemiBold'),
+    local('HurmeGeometricSans3-SemiBold'),
     url('../assets/fonts/HurmeGeometricSans3-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
@@ -141,7 +171,9 @@
 @font-face {
   font-family: 'Digital-7 Regular';
   src: url('../assets/fonts/digital-7.regular.woff2') format('woff2');
-  src: local('digital-7 regular'), local('digital-7.regular'),
+  src:
+    local('digital-7 regular'),
+    local('digital-7.regular'),
     url('../assets/fonts/digital-7.regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;

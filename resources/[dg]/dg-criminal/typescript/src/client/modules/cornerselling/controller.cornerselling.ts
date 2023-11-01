@@ -12,6 +12,10 @@ on('criminal:cornersell:toggle', () => {
 });
 
 Events.onNet('criminal:cornersell:findBuyer', () => {
+  if (!isCornersellEnabled()) {
+    setCornersellEnabled(true);
+  }
+
   setTimeout(() => {
     findBuyer();
   }, 15000);

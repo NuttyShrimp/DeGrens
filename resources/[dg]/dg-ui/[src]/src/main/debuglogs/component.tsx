@@ -8,7 +8,7 @@ import './styles/debuglogs.scss';
 
 const Component: AppFunction = props => {
   const handleShow = useCallback(() => props.showApp(), []);
-  const handleHide = useCallback(() => props.hideApp, []);
+  const handleHide = useCallback(() => props.hideApp(), []);
   return (
     <AppWrapper appName={config.name} onShow={handleShow} onHide={handleHide}>
       <LogList />

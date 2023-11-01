@@ -36,6 +36,8 @@ interface Action {
 interface ListItem {
   icon?: string;
   size?: string;
+  onClick?: (data: any) => void;
+  data?: any;
   label: string | JSX.Element;
 }
 
@@ -101,4 +103,5 @@ declare interface RootState {
   reports: Reports.State;
   'reports-indicator': ReportIndicator.State;
   keypad: null;
+  racing: Racing.State;
 }

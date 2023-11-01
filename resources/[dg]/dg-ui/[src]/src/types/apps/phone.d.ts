@@ -484,4 +484,45 @@ declare namespace Phone {
     };
   }
   // endregion
+  namespace Racing {
+    type Track = {
+      id: number;
+      name: string;
+      type: 'sprint' | 'lap';
+      checkpoint: number;
+      creator: number;
+    };
+    type Race = {
+      id: number;
+      trackId: number;
+      creator: number;
+      // For the leaderboard
+      leaderboard: boolean;
+      // Restricted to specific vehicle class
+      classRestriction?: string;
+      // Time until race is getting started in unix
+      startTime: number;
+      // Amount of peeps in race
+      participants: { name: string; cid: number }[];
+      laps?: number;
+      prize?: Record<number, number>;
+      // the leaderboard at the end of the race cid
+      leaderboardData?: number[];
+      state: 'pending' | 'running' | 'ending';
+    };
+    type State = {
+      hidden: boolean;
+      tracks: Track[];
+      racingAlias: string | undefined;
+      canCreateTrack: boolean;
+      selectedRace: Race | undefined;
+      setTracks: (t: Track[]) => void;
+      setRacingAlias: (alias: string | undefined) => void;
+    };
+    type Leaderboard = {
+      name: string;
+      model: string;
+      time: number;
+    };
+  }
 }

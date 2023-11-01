@@ -255,7 +255,7 @@ export default class Boost {
 
     if (failReason && this.owner.serverId) {
       Financials.cryptoAdd(
-        this.owner.serverId,
+        this.owner.cid,
         'Suliro',
         this.getClassConfig().price[this.type],
         `Carboosting Refund: ${failReason}`
@@ -766,7 +766,8 @@ export default class Boost {
 
     const fullReward = this.getClassConfig().price.boost * config.contracts.finishRewardPriceMultiplier;
     const reward = Math.max(Math.round(fullReward * healthPercentage), 1); // always receive minimum of 1 or player would get nothing for D because its free
-    Financials.cryptoAdd(this.owner.serverId ?? plyId, 'Suliro', reward, `Finished ${this.vehicleClass} Contract`);
+    const cid = Util.getCID(plyId);
+    Financials.cryptoAdd(this.owner.cid ?? cid, 'Suliro', reward, `Finished ${this.vehicleClass} Contract`);
 
     this.finish();
 

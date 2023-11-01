@@ -93,7 +93,10 @@ RegisterUICallback('getPlayerData', async (_, cb) => {
 });
 
 RegisterUICallback('getSelectorActions', async (_, cb) => {
-  const actions = await RPC.execute('admin:selector:getActions');
+  const actions = await RPC.execute(
+    'admin:selector:getActions',
+    selectedEntity ? Entity(selectedEntity).state.objId : undefined
+  );
   cb({ data: actions, meta: { ok: true, message: 'done' } });
 });
 RegisterUICallback('isDevEnv', (_, cb) => {
@@ -130,6 +133,7 @@ RegisterUICallback('doSelectorAction', async (data: { name: string }, cb) => {
     netId: NetworkGetNetworkIdFromEntity(selectedEntity),
     entity: selectedEntity,
     entityType: IsPedAPlayer(selectedEntity) ? 0 : selectedEntityType,
+    objId: Entity(selectedEntity).state.objId,
   });
   cb({ meta: { ok: true, message: 'done' }, data: {} });
 });

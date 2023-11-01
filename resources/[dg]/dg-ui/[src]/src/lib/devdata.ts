@@ -1707,3 +1707,107 @@ devData.carboosting = {
     },
   ],
 } satisfies Laptop.Carboosting.State;
+
+devData.pendingRaces = [
+  {
+    id: 1,
+    participants: [
+      { name: 'John Doe', cid: 1000 },
+      { name: 'Jane Doe', cid: 1001 },
+      { name: 'Patrick Hill', cid: 1002 },
+      { name: 'Jonny Cash', cid: 1003 },
+      { name: 'Micheal Murder', cid: 1004 },
+    ],
+    classRestriction: 'C',
+    leaderboard: true,
+    trackId: 1,
+    state: 'pending',
+    startTime: 1696363764000,
+    creator: 1000,
+    laps: 10,
+  },
+  {
+    id: 1,
+    participants: [
+      { name: 'John Doe', cid: 1000 },
+      { name: 'Jane Doe', cid: 1001 },
+      { name: 'Patrick Hill', cid: 1002 },
+      { name: 'Jonny Cash', cid: 1003 },
+      { name: 'Micheal Murder', cid: 1004 },
+    ],
+    leaderboard: false,
+    trackId: 2,
+    state: 'pending',
+    startTime: 1696363764000,
+    creator: 1001,
+  },
+] satisfies Phone.Racing.Race[];
+
+devData.racingTracks = [
+  {
+    id: 1,
+    name: 'Willow spring',
+    type: 'sprint',
+    checkpoint: 51,
+    creator: 1001,
+  },
+  {
+    id: 2,
+    name: 'Bussin beaver',
+    type: 'lap',
+    checkpoint: 232,
+    creator: 1000,
+  },
+] satisfies Phone.Racing.Track[];
+
+emulatedData.toggleCreate = {
+  app: 'phone',
+  appName: 'racing',
+  action: 'toggleCreate',
+  data: {
+    data: true,
+  },
+};
+
+// emulatedData.setRace = {
+//   app: 'phone',
+//   appName: 'racing',
+//   action: 'setRace',
+//   data: {
+//     data: {
+//       id: 1,
+//       trackId: 1,
+//       participants: [
+//         { name: 'Willy wanker', cid: 1000 },
+//         { name: 'Racing Joe', cid: 1001 },
+//         { name: 'Cringe Lord', cid: 1002 },
+//       ],
+//       startTime: 1696699419000,
+//       creator: 1000,
+//       state: 'pending',
+//       leaderboard: false,
+//     } satisfies Phone.Racing.Race,
+//   },
+// };
+
+emulatedData.toggleRaceApp = {
+  app: 'phone',
+  appName: 'racing',
+  action: 'toggleApp',
+  data: {
+    data: true,
+  },
+};
+
+devData.phoneRacingLeaderboard = [
+  {
+    model: 'R35',
+    name: 'Jimmy the race',
+    time: 1313457,
+  },
+  {
+    model: 'r820',
+    name: 'Jack doe',
+    time: 195184,
+  },
+] satisfies Phone.Racing.Leaderboard[];

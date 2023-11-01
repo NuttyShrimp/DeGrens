@@ -11737,5 +11737,31 @@
     "shop": "pdm",
     "type": "land",
     "inCarboostPool": true
+  },
+  {
+    "category": "sports",
+    "model": "interceptorstang",
+    "brand": "Ford",
+    "name": "Mustang",
+    "class": "S",
+    "defaultStock": 3,
+    "restockTime": 30,
+    "price": 300000,
+    "shop": "nfs",
+    "type": "land",
+    "inCarboostPool": false
+  },
+  {
+    "category": "sports",
+    "model": "interceptorrs6",
+    "brand": "Audi",
+    "name": "RS6",
+    "class": "S",
+    "defaultStock": 3,
+    "restockTime": 30,
+    "price": 300000,
+    "shop": "nfs",
+    "type": "land",
+    "inCarboostPool": false
   }
 ]

@@ -12,6 +12,8 @@ export const allowedModels: Record<string, (veh: number) => boolean> = {
   lpoutlaw: () => true,
   pa6: () => true,
   pt6: () => true,
+  interceptorstang: () => true,
+  interceptorrs6: () => true,
   a6: veh => IsVehicleExtraTurnedOn(veh, 1),
   '22m5': veh => IsVehicleExtraTurnedOn(veh, 1),
   drafter: veh => IsVehicleExtraTurnedOn(veh, 1),

@@ -2729,5 +2729,25 @@
       "y": 2
     },
     "decayRate": 86400
+  },
+  {
+    "name": "race_dongle",
+    "label": "Phone Software Upgrade",
+    "image": "usb_drive_1.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 86400
+  },
+  {
+    "name": "race_creator_dongle",
+    "label": "Phone Software Upgrade Pro",
+    "image": "usb_drive_2.png",
+    "size": {
+      "x": 2,
+      "y": 2
+    },
+    "decayRate": 86400
   }
 ]

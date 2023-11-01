@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { Alert, Snackbar } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import * as Sentry from '@sentry/react';
 
 import { EventHandlerProvider } from './components/context/eventHandlerCtx';
@@ -27,32 +29,34 @@ export const IndexProvider = ({ children }) => {
 
   return (
     <Sentry.ErrorBoundary fallback={<div>An error happenend in the root of UI, Restart the ui</div>} showDialog>
-      <EventHandlerProvider>
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            {mounted ? (
-              children
-            ) : (
-              <Snackbar
-                open={!mounted}
-                autoHideDuration={3000}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                onClose={handleClose}
-              >
-                <Alert
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <EventHandlerProvider>
+          <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              {mounted ? (
+                children
+              ) : (
+                <Snackbar
+                  open={!mounted}
+                  autoHideDuration={3000}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                   onClose={handleClose}
-                  variant='filled'
-                  severity={error ? 'error' : 'info'}
-                  sx={{ width: '100%' }}
                 >
-                  {error ? `An error occurred in ${error}.` : ''} Reloading the UI...
-                </Alert>
-              </Snackbar>
-            )}
-          </ThemeProvider>
-        </StyledEngineProvider>
-      </EventHandlerProvider>
+                  <Alert
+                    onClose={handleClose}
+                    variant='filled'
+                    severity={error ? 'error' : 'info'}
+                    sx={{ width: '100%' }}
+                  >
+                    {error ? `An error occurred in ${error}.` : ''} Reloading the UI...
+                  </Alert>
+                </Snackbar>
+              )}
+            </ThemeProvider>
+          </StyledEngineProvider>
+        </EventHandlerProvider>
+      </LocalizationProvider>
     </Sentry.ErrorBoundary>
   );
 };

@@ -1,0 +1,79 @@
+.racing-app {
+  &-list {
+    padding-top: 1vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-pending-race {
+    &-description {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &-short-info {
+      display: flex;
+      align-items: center;
+      line-height: 1;
+
+      & p {
+        margin-right: 0.5vh;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  &-current {
+    &-container {
+      font-size: 0.9rem;
+
+      & > hr {
+        margin: 0.3vh auto;
+      }
+    }
+
+    &-title {
+      display: flex;
+      align-items: center;
+      padding-top: 1vh;
+      font-size: 1rem;
+
+      font-weight: bold;
+
+      & > *:not(:first-child) {
+        padding-left: 0.5vh;
+      }
+    }
+
+    &-actions {
+      margin-top: 1vh;
+      display: flex;
+      justify-content: center;
+
+      & > *:not(:first-child) {
+        margin-left: 0.5vh;
+      }
+    }
+  }
+
+  &-leaderboard {
+    &-container {
+      padding: 0.5vh 0;
+
+      & .title {
+        margin-bottom: 0.5vh;
+
+        width: min-content;
+        cursor: pointer;
+        padding: 0 0.5vh;
+      }
+    }
+
+    &-entry {
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}

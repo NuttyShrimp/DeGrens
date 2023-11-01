@@ -100,6 +100,10 @@ class Util extends UtilShared {
     return GetPlayerName(String(src));
   }
 
+  getIdentifier(src: number | string) {
+    return `${this.getName(src)}(${this.getCID(Number(src), true)} | ${Player(src).state.steamId})`;
+  }
+
   async getCharName(cid: number) {
     const charModule = Core.getModule('characters');
     const player = await charModule?.getOfflinePlayer(cid);
