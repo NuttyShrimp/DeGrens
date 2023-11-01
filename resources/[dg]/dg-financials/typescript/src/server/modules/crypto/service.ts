@@ -2,6 +2,7 @@ import { Core } from '@dgx/server';
 import cryptoManager from './classes/CryptoManager';
 import { CryptoWallet } from './classes/CryptoWallet';
 import { cryptoLogger } from './util';
+import { charModule } from 'helpers/core';
 
 // Will get all the wallets in object form for this player
 export const getPlayerInfo = (src: number): NCrypto.Wallet[] => {
@@ -33,10 +34,10 @@ export const buyCrypto = async (src: number, coin: string, amount: number): Prom
   return wallet.buy(amount);
 };
 
-export const addCrypto = async (src: number, coin: string, amount: number, comment: string): Promise<boolean> => {
-  const Player = Core.getPlayer(src);
+export const addCrypto = async (cid: number, coin: string, amount: number, comment: string): Promise<boolean> => {
+  const Player = await charModule.getOfflinePlayer(cid);
   if (!Player) {
-    cryptoLogger.error(`addCrypto: No player found for serverId: ${src}`);
+    cryptoLogger.error(`addCrypto: No player found for cid: ${cid}`);
     return false;
   }
   const wallet = cryptoManager.getWallet(Player.citizenid, coin) as CryptoWallet;
@@ -48,7 +49,7 @@ export const addCrypto = async (src: number, coin: string, amount: number, comme
     if (!isSuccess) {
       return false;
     }
-    return addCrypto(src, coin, amount, comment);
+    return addCrypto(cid, coin, amount, comment);
   }
   return wallet.add(amount, comment);
 };

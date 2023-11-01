@@ -2,6 +2,7 @@ import { CharacterModule } from 'modules/characters/module.characters';
 import { mainLogger } from 'sv_logger';
 import { QueueModule } from './modules/queue/module.queue';
 import { UserModule } from './modules/users/module.users';
+import { Events } from '@dgx/server';
 
 // TODO: add module to inject module state
 const modules = {

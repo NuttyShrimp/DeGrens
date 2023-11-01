@@ -22,6 +22,7 @@ export const defaultMetadata: Core.Characters.Metadata = {
   stress: 0,
   cash: 500,
   callsign: 'NO CALLSIGN',
+  racingAlias: '',
   inside: {
     house: undefined,
     apartment: {

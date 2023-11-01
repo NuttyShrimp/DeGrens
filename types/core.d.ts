@@ -16,6 +16,7 @@ declare namespace Core {
       dna: string;
       jailMonths: number;
       downState: 'alive' | 'unconscious' | 'dead';
+      racingAlias: string;
       needs: {
         hunger: number;
         thirst: number;

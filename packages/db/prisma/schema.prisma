@@ -201,6 +201,8 @@ model characters {
   kofi_vehicleshop                 kofi_vehicleshop[]
   flyer_request                    flyer_request[]
   realestate_location_access       realestate_location_access[]
+  races                            race_tracks[]
+  race_leaderboard                 race_leaderboard[]
 
   @@index([steamid], map: "steamid")
 }
@@ -778,6 +780,36 @@ model realestate_location_access {
   @@id([location_id, cid])
 }
 
+model race_tracks {
+  id               Int                @id @default(autoincrement())
+  creator          Int
+  name             String
+  type             race_type
+  character        characters         @relation(fields: [creator], references: [citizenid], onDelete: Cascade, onUpdate: Cascade, map: "fk_races_creator")
+  race_checkpoints race_checkpoints[]
+  race_leaderboard race_leaderboard[]
+}
+
+model race_checkpoints {
+  id      Int         @id @default(autoincrement())
+  trackId Int
+  center  String
+  spread  Int
+  track   race_tracks @relation(fields: [trackId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_race_checkpoint")
+}
+
+model race_leaderboard {
+  cid       Int
+  trackId   Int
+  model     String
+  carName   String
+  time      Int
+  track     race_tracks @relation(fields: [trackId], references: [id], onDelete: Cascade, onUpdate: Cascade, map: "fk_race_leaderboard_race")
+  character characters  @relation(fields: [cid], references: [citizenid], onDelete: Cascade, onUpdate: Cascade, map: "fk_race_leaderboard_character")
+
+  @@id([cid, trackId, model])
+}
+
 enum bank_accounts_type {
   standard
   savings
@@ -835,4 +867,9 @@ enum lab_type {
 enum duty_times_action {
   start
   stop
+}
+
+enum race_type {
+  sprint
+  lap
 }

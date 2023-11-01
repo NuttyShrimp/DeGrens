@@ -1,5 +1,4 @@
 @use 'src/styles/variables.scss';
-@import url('https://fonts.cdnfonts.com/css/pricedown');
 
 .hud {
   &-entries {
@@ -10,7 +9,7 @@
     left: 0.8vh;
     transition: all 0.25s ease-in-out;
 
-    &>* {
+    & > * {
       margin-right: 0.8vh;
     }
   }
@@ -19,16 +18,16 @@
     display: flex;
     align-items: flex-end;
 
-    &>div:last-child {
+    & > div:last-child {
       z-index: 2;
     }
   }
 
-  &-health-armor>div:last-child {
+  &-health-armor > div:last-child {
     margin-left: -2.2vh;
   }
 
-  &-needs>div:last-child {
+  &-needs > div:last-child {
     margin-left: -2vh;
   }
 
@@ -88,10 +87,10 @@
       text-align: center;
 
       &-small {
-        font-size: .4em
+        font-size: 0.4em;
       }
 
-      &>* {
+      & > * {
         flex: 1;
       }
     }
@@ -103,7 +102,7 @@
       justify-content: space-evenly;
       align-items: center;
 
-      &>div {
+      & > div {
         height: 1.4rem;
       }
 
@@ -129,7 +128,10 @@
       font-family: 'Work Sans', sans-serif;
       font-variant: small-caps;
       text-transform: none;
-      text-shadow: 0 0 0.1vh rgba(0, 0, 0, 0.6), 0 0 0.1vh rgba(0, 0, 0, 0.6), 0 0 0.1vh rgba(0, 0, 0, 0.6),
+      text-shadow:
+        0 0 0.1vh rgba(0, 0, 0, 0.6),
+        0 0 0.1vh rgba(0, 0, 0, 0.6),
+        0 0 0.1vh rgba(0, 0, 0, 0.6),
         0 0 0.1vh rgba(0, 0, 0, 0.6);
     }
 
@@ -199,7 +201,10 @@
     right: 1vh;
     font-family: 'Pricedown Bl', sans-serif;
     font-size: 1.6rem;
-    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.7), 1px -1px 0 rgba(0, 0, 0, 0.7), -1px 1px 0 rgba(0, 0, 0, 0.7),
+    text-shadow:
+      -1px -1px 0 rgba(0, 0, 0, 0.7),
+      1px -1px 0 rgba(0, 0, 0, 0.7),
+      -1px 1px 0 rgba(0, 0, 0, 0.7),
       1px 1px 0 rgba(0, 0, 0, 0.7);
     text-align: right;
   }

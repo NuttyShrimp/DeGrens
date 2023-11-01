@@ -1,0 +1,27 @@
+{
+  "name": "dg-racing",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "NuttyShrimp",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup --env.NODE_ENV=production",
+    "build:dev": "tsup --env.NODE_ENV=development",
+    "watch": "tsup --watch --env.NODE_ENV=development ",
+    "lint": "eslint --fix --ext .js,.ts ./src",
+    "format": "prettier --write --no-error-on-unmatched-pattern src/**/*.{js,ts,json,md}"
+  },
+  "devDependencies": {
+    "@dgx/client": "workspace:*",
+    "@dgx/server": "workspace:*",
+    "@dgx/shared": "workspace:*",
+    "@dgx/tsup-config": "workspace:*",
+    "esbuild": "*",
+    "logger": "workspace:*",
+    "tsconfig": "workspace:*",
+    "tsup": "*"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.9"
+  }
+}

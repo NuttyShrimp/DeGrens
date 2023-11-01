@@ -23,7 +23,7 @@ const doRequest = async (action: string, body = {}) => {
 export const nuiAction: <T = any>(action: string, body?: Object, devData?: Object) => Promise<T> = async (
   action,
   body = {},
-  devData = {}
+  devData
 ) => {
   body = { ...body, _character: useMainStore.getState().character };
   const actionId = addLog({
@@ -31,7 +31,7 @@ export const nuiAction: <T = any>(action: string, body?: Object, devData?: Objec
     body,
   });
   if (import.meta.env.VITE_ENV === 'development') {
-    const _data = devData;
+    const _data = devData ?? undefined;
     finishLog(actionId, {
       response: _data ?? {},
       isOk: true,

@@ -124,6 +124,17 @@ export const formatTime = (time: number): string => {
   return `${min < 10 ? '0' + min : min}:${sec < 10 ? '0' + sec : sec}`;
 };
 
+export const formatTimeMS = (timer: number) => {
+  if (timer === 0) return '--:--:---';
+  const getMS = `00${Math.floor(timer % 1000)}`.slice(-3);
+  const ms = Math.floor(timer / 1000);
+  const getSeconds = `0${Math.floor(ms % 60)}`.slice(-2);
+  const sec = Math.floor(ms / 60);
+  const getMinutes = `0${sec}`.slice(-2);
+
+  return `${getMinutes}:${getSeconds}:${getMS}`;
+};
+
 export const hexToRGB = (hex: string): RGB => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) {

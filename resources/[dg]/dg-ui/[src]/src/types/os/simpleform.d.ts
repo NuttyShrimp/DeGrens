@@ -2,7 +2,7 @@ declare namespace SimpleForm {
   interface FormElement {
     name: string;
     render: ({ onChange, value, name, required, error, autoFocus, setError }) => React.ReactElement<any, any>;
-    defaultValue?: string | boolean;
+    defaultValue?: any;
     required?: boolean;
   }
 

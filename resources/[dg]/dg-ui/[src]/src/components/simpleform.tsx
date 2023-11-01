@@ -19,9 +19,9 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
 
   useEffect(() => {
     const newValues = {};
-    props.elements.forEach(element => {
-      newValues[element.name] = element.defaultValue ?? values?.[element.name] ?? '';
-    });
+    for (const element of props.elements) {
+      newValues[element.name] = values?.[element.name] ?? element.defaultValue ?? '';
+    }
     setValues(newValues);
   }, [props.elements]);
 
@@ -39,7 +39,11 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
     const newErrors = { ...errors };
     // check if all required fields are filled
     for (const element of props.elements) {
-      if ((element.required ?? true) && (!values[element.name] || values[element.name].trim() === '')) {
+      if (
+        (element.required ?? true) &&
+        (values[element.name] === undefined ||
+          (typeof values[element.name] === 'string' && values[element.name].trim() === ''))
+      ) {
         newErrors[element.name] = true;
       }
     }
@@ -50,7 +54,7 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
     setBtnsDisabled(false);
   };
 
-  const handleChange = (name: string, value: string) => {
+  const handleChange = (name: string, value: any) => {
     const _values = { ...values };
     _values[name] = value;
     if (errors[name]) {
@@ -74,7 +78,7 @@ export const SimpleForm: FC<React.PropsWithChildren<SimpleForm.Form>> = props =>
             name: e.name,
             autoFocus: i === 0,
             value: values[e.name] ?? '',
-            onChange: (val: string) => handleChange(e.name, String(val)),
+            onChange: (val: string) => handleChange(e.name, val),
             required: e.required ?? true,
             error: !!errors[e.name],
             setError: (hasError: boolean) => {

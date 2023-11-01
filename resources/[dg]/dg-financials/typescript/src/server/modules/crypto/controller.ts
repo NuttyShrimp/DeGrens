@@ -7,8 +7,8 @@ import { cryptoLogger } from './util';
 import { charModule } from 'helpers/core';
 
 global.asyncExports('cryptoBuy', (src: number, coin: string, amount: number) => buyCrypto(src, coin, amount));
-global.asyncExports('cryptoAdd', (src: number, coin: string, amount: number, comment: string) =>
-  addCrypto(src, coin, amount, comment)
+global.asyncExports('cryptoAdd', (cid: number, coin: string, amount: number, comment: string) =>
+  addCrypto(cid, coin, amount, comment)
 );
 global.asyncExports('cryptoRemove', (src: number, coin: string, amount: number) => removeCrypto(src, coin, amount));
 global.asyncExports('cryptoGet', (src: number, coin: string) => getCryptoAmount(src, coin));

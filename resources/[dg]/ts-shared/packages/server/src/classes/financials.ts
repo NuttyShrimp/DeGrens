@@ -112,8 +112,8 @@ class Financials {
     return fexp.cryptoBuy(src, coin, amount);
   }
 
-  cryptoAdd(src: number, coin: string, amount: number, comment: string): Promise<boolean> {
-    return fexp.cryptoAdd(src, coin, amount, comment);
+  cryptoAdd(cid: number, coin: string, amount: number, comment: string): Promise<boolean> {
+    return fexp.cryptoAdd(cid, coin, amount, comment);
   }
 
   cryptoRemove(src: number, coin: string, amount: number): Promise<boolean> {

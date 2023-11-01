@@ -211,6 +211,25 @@ class Util extends UtilShared {
     return closestPed;
   };
 
+  getClosestObject = (range: number, entsToIgnore: number[] = [], entityHash: number): number | undefined => {
+    const plyCoords = this.getPlyCoords();
+    const objects: number[] = GetGamePool('CObject');
+
+    let closestObject: number | undefined = undefined;
+    let closestDistance = range;
+
+    for (const object of objects) {
+      if (entsToIgnore.includes(object) || GetEntityModel(object) !== entityHash) continue;
+      const distance = plyCoords.distance(this.getEntityCoords(object));
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestObject = object;
+      }
+    }
+
+    return closestObject;
+  };
+
   debug(msg: string) {
     if (!this.isDevEnv()) return;
     console.log(`[${GetCurrentResourceName()}] ${msg}`);
