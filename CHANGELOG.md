@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Probleem met SYN ACK fail positive dat leide tot bans
+- Cornerselling werkt weer
 
 ## [1.4.8]
 
