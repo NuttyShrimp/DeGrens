@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Races die 30min na het geschatte startuur niet gestart zijn worden automatisch gestopt/verwijderd
+
 ### Fixed
 
 - Nog een poging tot het oplossen van het SYN ACK probleem

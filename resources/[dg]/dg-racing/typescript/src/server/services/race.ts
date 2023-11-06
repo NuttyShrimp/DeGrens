@@ -293,6 +293,13 @@ export const scheduleRace = (
     });
   });
   joinRace(src, id);
+  setTimeout(() => {
+    const race = races.get(id);
+    if (!race || race.state !== 'pending') {
+      return;
+    }
+    stopRace(id);
+  }, dayjs(startTime).add(30, 'minute').diff());
 };
 
 export const joinRace = async (src: number, raceId: number) => {
