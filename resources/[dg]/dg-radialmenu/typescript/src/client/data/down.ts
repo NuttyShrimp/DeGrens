@@ -7,6 +7,7 @@ export const down: RadialMenu.Entry[] = [
     event: 'police:emergencyButton',
     shouldClose: true,
     jobs: ['police'],
+    isEnabled: ({ items }) => items.includes('emergency_button'),
   },
   {
     title: 'Deel Sleutels',
