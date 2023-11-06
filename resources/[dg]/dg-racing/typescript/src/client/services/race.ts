@@ -396,5 +396,7 @@ export const reloadUI = async () => {
         totalCheckpoints: currentRace.checkpoints.length,
       },
     });
+  } else {
+    Events.emitNet('racing:race:syncRaceAppState');
   }
 };

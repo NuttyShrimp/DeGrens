@@ -186,6 +186,35 @@ const generateClientState = (raceId: number): Racing.ClientRaceState | null => {
   };
 };
 
+export const setRaceAppState = async (src: number) => {
+  const plyRaceId = getRaceIdForPly(src);
+  if (plyRaceId) {
+    Notifications.add(src, 'Je zit al in een race');
+    return;
+  }
+  const race = races.get(raceId);
+  if (!race) return;
+
+  const charModule = Core.getModule('characters');
+  const participants = await Promise.all(
+    race.participants.map(async cid => {
+      const ply = await charModule.getOfflinePlayer(cid);
+      return { cid, name: ply?.metadata.racingAlias ?? 'Unknown racer' };
+    })
+  );
+
+  Events.emitNet('racing:race:syncRaceApp', src, {
+    id: race.id,
+    trackId: race.trackId,
+    participants,
+    startTime: race.startTime,
+    creator: race.creator,
+    state: race.state,
+    leaderboard: race.leaderboard,
+    classRestriction: race.classRestriction,
+  } satisfies Racing.AppRaceState);
+};
+
 export const getAvailableRaces = (src: number) => {
   const cid = Util.getCID(src);
   const availableRaces = [];
@@ -288,23 +317,7 @@ export const joinRace = async (src: number, raceId: number) => {
   }
   race.participants.push(cid);
 
-  const charModule = Core.getModule('characters');
-  const participants = await Promise.all(
-    race.participants.map(async cid => {
-      const ply = await charModule.getOfflinePlayer(cid);
-      return { cid, name: ply?.metadata.racingAlias ?? 'Unknown racer' };
-    })
-  );
-  Events.emitNet('racing:race:syncRaceApp', src, {
-    id: raceId,
-    trackId: race.trackId,
-    participants,
-    startTime: race.startTime,
-    creator: race.creator,
-    state: race.state,
-    leaderboard: race.leaderboard,
-    classRestriction: race.classRestriction,
-  } satisfies Racing.AppRaceState);
+  setRaceAppState(src);
 
   const track = getTrackById(race.trackId);
   if (!track) {
