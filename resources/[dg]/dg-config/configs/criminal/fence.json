@@ -15,6 +15,7 @@
     "gold_bar": 2000,
     "jewelry_ring": 250,
     "jewelry_bracelet": 500,
-    "jewelry_necklace": 1250
+    "jewelry_necklace": 1250,
+    "refined_gold_nugget": 950
   }
 }
