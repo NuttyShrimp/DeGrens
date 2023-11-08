@@ -84,6 +84,7 @@
     "police": 6
   },
   "banktruck": {
-    "players": 16
+    "players": 16,
+    "police": 2
   }
 }
