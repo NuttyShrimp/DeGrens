@@ -14,7 +14,7 @@ import {
 import { getHospitalConfig } from 'services/config';
 import { downLogger } from './logger.down';
 import { sendToAvailableBed } from 'modules/beds/service.beds';
-import { revivePlayer } from './service.down';
+import { reviveInBed, revivePlayer } from './service.down';
 
 global.exports('revivePlayer', revivePlayer);
 
@@ -51,7 +51,7 @@ Events.onNet('hospital:down:playerDied', async (src: number, cause: string, kill
   );
 });
 
-Events.onNet('hospital:down:changeState', (src: number, state: Hospital.State) => {
+Events.onNet('hospital:down:changeState', async (src: number, state: Hospital.State) => {
   const player = Core.getPlayer(src);
   if (!player) return;
 
@@ -66,6 +66,11 @@ Events.onNet('hospital:down:changeState', (src: number, state: Hospital.State) =
     `${Util.getName(src)}'s down state has changed to ${state}`,
     src
   );
+
+  if (state === 'dead' && Jobs.getCurrentJob(src) === 'ambulance' && Jobs.getAmountForJob('ambulance') === 1) {
+    // Force respawn
+    reviveInBed(src);
+  }
 });
 
 RPC.register('hospital:down:getRespawnPosition', src => {
@@ -92,15 +97,7 @@ Events.onNet('hospital:down:respawnToBed', async (src: number) => {
     Inventory.clearPlayerInventory(src);
   }
 
-  await Police.forceUncuff(src);
-  await Police.forceStopInteractions(src);
-
-  const bedTimeout = 20000;
-  sendToAvailableBed(src, bedTimeout);
-
-  setTimeout(() => {
-    revivePlayer(src);
-  }, bedTimeout * 0.75);
+  reviveInBed(src);
 });
 
 Core.onPlayerUnloaded((plyId, cid, playerData) => {

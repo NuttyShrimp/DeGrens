@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Ambulanciers die als engiste in dienst zijn worden vanzelf gerevived
+
 ### Changed
 
 - Races die 30min na het geschatte startuur niet gestart zijn worden automatisch gestopt/verwijderd
