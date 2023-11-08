@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Races die 30min na het geschatte startuur niet gestart zijn worden automatisch gestopt/verwijderd
 - Banktruck requirements aangepast
 - Tijd om een kassa leeg te roven aangepast.
+- Requirements voor sommige criminele activities aangepast.
 
 ### Fixed
 

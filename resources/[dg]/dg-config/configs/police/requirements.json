@@ -24,7 +24,7 @@
     "police": 4
   },
   "bench_container_enter": {
-    "players": 20
+    "players": 18
   },
   "labs_meth": {
     "players": 10
@@ -33,7 +33,7 @@
     "players": 1
   },
   "atm_robbery": {
-    "police": 3
+    "police": 2
   },
   "oxyrun": {
     "police": 1
@@ -84,7 +84,7 @@
     "police": 6
   },
   "banktruck": {
-    "players": 16,
-    "police": 2
+    "players": 25,
+    "police": 4
   }
 }
