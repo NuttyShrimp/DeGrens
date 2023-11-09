@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Banktruck requirements aangepast
 - Tijd om een kassa leeg te roven aangepast.
 - Requirements voor sommige criminele activities aangepast.
+- Je valt niet meer uit de lucht bij het spawnen op je laatste locatie
 
 ### Fixed
 

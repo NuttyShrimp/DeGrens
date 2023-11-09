@@ -111,6 +111,7 @@ DGX.RPC.register('dg-chars:server:spawn', function(src, idx)
     returnOptions = {
       resetPed = true,
       resetInside = true,
+      forceGround = true,
       fade = true,
     }
   elseif spawn.spawnType == 'house' then
