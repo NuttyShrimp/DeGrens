@@ -97,6 +97,9 @@ const sendRetrieveKeysTokenToResource = (src: number, res: string) => {
   pendingTokens.set(`${steamId}-${src}`, plyTokens);
 
   const encToken = Util.getRndString(16, true);
+
+  // console.log(`Sending token to ${src} for ${res} ${token}`);
+
   const eventHandler = (resName: string) => {
     const src = +source;
     const steamId = userModule.getPlyIdentifiers(src).steam;
