@@ -17,8 +17,12 @@ setImmediate(async () => {
   // Load config before doing all other thingies!
   await loadConfig();
 
-  await repository.deleteNonPersistent();
-  await repository.deleteByDestroyDate();
+  try {
+    await repository.deleteNonPersistent();
+    await repository.deleteByDestroyDate();
+  } catch (e) {
+    console.error(e);
+  }
   itemDataManager.seed();
   registerContainers();
   await shopManager.seed();
