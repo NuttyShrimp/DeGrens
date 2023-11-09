@@ -8,7 +8,7 @@ export const openSocket = (_token: string) => {
     closeSocket();
   }
   debugToken = _token;
-  const ws = new WebSocket('ws://127.0.0.1:2371');
+  const ws = new WebSocket('wss://127.0.0.1:2371');
   if (ws === null) {
     console.error('Failed to open debug socket, Make sure your debug tool is running');
     return;
