@@ -56,6 +56,17 @@ RegisterNUICallback('__appwrapper:setfocus', function(_, cb)
   })
 end)
 
+RegisterNUICallback("main/close", function(data, cb)
+  closeApplication(data.app)
+  cb({
+    data = {},
+    meta = {
+      ok = true,
+      message = 'done'
+    }
+  })
+end)
+
 RegisterNetEvent('dg-ui:openApplication')
 AddEventHandler('dg-ui:openApplication', openApplication)
 

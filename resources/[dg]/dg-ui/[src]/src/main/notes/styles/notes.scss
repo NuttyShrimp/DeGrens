@@ -1,0 +1,33 @@
+@use 'src/styles/variables';
+
+.notepad {
+  &-container {
+    position: absolute;
+    bottom: 50%;
+    right: 1vh;
+    transform: translate(0, 50%);
+    border-radius: 0.5rem;
+    width: 60vh;
+  }
+  &-pad {
+    padding: 0.5vh;
+    height: 30vh;
+    overflow: auto;
+
+    color: #111;
+    background: linear-gradient(to bottom, white 29px, #c60009 1px);
+    background-size: 100% 30px;
+
+    line-height: 30px;
+    font-size: 20px;
+  }
+  &-actions {
+    height: 5vh;
+    width: 100%;
+    background-color: variables.$gray_normal;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1vh;
+  }
+}

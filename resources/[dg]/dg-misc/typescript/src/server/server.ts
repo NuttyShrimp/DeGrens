@@ -32,6 +32,7 @@ import './services/placeableObjectItems';
 import './controllers';
 import './services/flyers';
 import './services/overwrites';
+import './services/notes';
 
 setImmediate(() => {
   loadStatusData();

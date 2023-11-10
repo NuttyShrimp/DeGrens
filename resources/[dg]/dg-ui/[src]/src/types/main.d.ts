@@ -104,4 +104,5 @@ declare interface RootState {
   'reports-indicator': ReportIndicator.State;
   keypad: null;
   racing: Racing.State;
+  notes: null;
 }

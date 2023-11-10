@@ -2759,5 +2759,15 @@
       "x": 2,
       "y": 2
     }
+  },
+  {
+    "name": "notepad",
+    "label": "Notitieboekje",
+    "image": "notepad.png",
+    "useable": true,
+    "size": {
+      "x": 2,
+      "y": 2
+    }
   }
 ]
