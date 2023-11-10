@@ -69,6 +69,16 @@ export const impoundVehicle = async (src: number, reason: Depot.Reason, veh: num
       return;
     }
 
+    Util.Log(
+      'vehicles:impound',
+      {
+        reason,
+        vin,
+      },
+      `${Util.getIdentifier(src)} has impounded a ${vehicleInfo.model} for ${reason.title}`,
+      src
+    );
+
     if (vehicleInfo.vinscratched) {
       await deleteOwnedVehicle(vin);
     } else {
