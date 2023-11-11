@@ -125,7 +125,7 @@ TS prod build:
     - .cache_modules
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main" && $SHOULD_DEPLOY == "true"
-    - if: $CI_PIPELINE_SOURCE == $CI_DEFAULT_BRANCH && $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   stage: build
   script:
     - pnpm build
