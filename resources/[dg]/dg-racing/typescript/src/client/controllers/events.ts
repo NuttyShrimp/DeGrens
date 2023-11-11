@@ -35,12 +35,10 @@ Events.onNet('racing:race:joined', (checkpoints: Racing.Checkpoint[]) => {
   joinedRace(checkpoints);
 });
 
-Events.onNet(
-  'racing:race:start',
-  (startTime: number, checkpoints: Racing.Checkpoint[], race: Racing.ClientRaceState) => {
-    scheduleRaceStart(startTime, checkpoints, race);
-  }
-);
+Events.onNet('racing:race:start', (evtDiff: number, checkpoints: Racing.Checkpoint[], race: Racing.ClientRaceState) => {
+  const start = Date.now() - evtDiff;
+  scheduleRaceStart(start, checkpoints, race);
+});
 
 Events.onNet('racing:race:setPosition', (position: number) => {
   setPosition(position);

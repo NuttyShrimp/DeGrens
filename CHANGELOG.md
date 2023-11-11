@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Je hebt nu ook de noodknop item nodig voor deze te gebruiken via F1
 - Je gejoinde race is terug zichtbaar als je je UI herstart voor de start van deze race
 - Reports
+- Race countdown mechanism herschreven voor betere syncronisatie
 
 ## [1.5.0]
 

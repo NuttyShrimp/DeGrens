@@ -1,9 +1,9 @@
 import { Events, Notifications, UI, Util } from '@dgx/client';
-import dayjs, { Dayjs } from 'dayjs';
-import { clearBlips, showRaceBlips } from './blips';
-import { doLinesIntersect, getCheckpointObjectCoords } from 'helpers/utils';
 import { Vector3 } from '@dgx/shared';
 import { FLAG_HASH_KEY, PILE_HASH_KEY } from 'constant';
+import { doLinesIntersect, getCheckpointObjectCoords } from 'helpers/utils';
+
+import { clearBlips, showRaceBlips } from './blips';
 import { initGhostProcess, stopGhostProcess } from './ghosting';
 
 const currentRace: {
@@ -154,7 +154,7 @@ const doStartCountdown = async (untilStart: number) => {
     action: 'startCountdown',
   });
   PlaySoundFrontend(-1, 'Beep_Red', 'DLC_HEIST_HACKING_SNAKE_SOUNDS', false);
-  let countdown = setInterval(() => {
+  const countdown = setInterval(() => {
     countDownSec--;
     if (countDownSec <= 0) {
       PlaySoundFrontend(-1, 'Oneshot_Final', 'MP_MISSION_COUNTDOWN_SOUNDSET', false);
@@ -233,14 +233,14 @@ export const scheduleRaceStart = (
   checkpoints: Racing.Checkpoint[],
   race: Racing.ClientRaceState
 ) => {
+  cleanupCheckpointObjects();
   currentRace.race = race;
   if (currentRace.race.laps) {
     currentRace.checkpoints.push(checkpoints[0]);
   }
   currentRace.checkpoint = 0;
-  const now = Date.now();
-  currentRace.startTime = startTime;
-  const cdStartTime = currentRace.startTime - 5000;
+  // Based on a roughly calculated time when the event got emitted, + the countdown time
+  currentRace.startTime = startTime + 5000;
   currentRace.prevCoords = Util.getPlyCoords();
 
   const veh = GetVehiclePedIsIn(PlayerPedId(), false);
@@ -251,6 +251,7 @@ export const scheduleRaceStart = (
   initGhostProcess(currentRace.race);
 
   setTimeout(() => {
+    if (!currentRace.positionThread) return;
     stopGhostProcess();
     Notifications.add('Ghosting is nu uitgeschakeld');
   }, 60000);
@@ -263,25 +264,20 @@ export const scheduleRaceStart = (
     action: 'resetTimer',
   });
 
-  const cdtDiff = currentRace.startTime - Date.now();
-  setTimeout(() => {
+  // missed the start time, start countdown on the next second
+  if (currentRace.startTime < Date.now()) {
+    // Start race instantly
     startRaceThread();
-  }, cdtDiff);
-
-  if (cdStartTime < now) {
-    // missed the start time, start countdown on the next second
-    if (currentRace.startTime < now) {
-      // Start race instantly
-      startRaceThread();
-      return;
-    }
-    doStartCountdown(cdtDiff);
     return;
   }
-  const cdt = cdStartTime - Date.now();
+
+  const timeUntilStart = currentRace.startTime - Date.now();
   setTimeout(() => {
-    doStartCountdown(cdtDiff);
-  }, cdt);
+    startRaceThread();
+  }, timeUntilStart);
+
+  doStartCountdown(timeUntilStart);
+  return;
 };
 
 export const setPosition = (position: number) => {
@@ -292,7 +288,6 @@ export const setPosition = (position: number) => {
       position,
     },
   });
-  // TODO: UI sync
 };
 
 export const cleanupRace = async (canceled = false) => {

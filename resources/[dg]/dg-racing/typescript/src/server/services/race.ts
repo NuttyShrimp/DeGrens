@@ -1,12 +1,13 @@
 import { Admin, Core, Events, Financials, Inventory, Notifications, Phone, SQL, Util, Vehicles } from '@dgx/server';
-import { getTrackById } from './tracks';
-import { mainLogger } from 'sv_logger';
-import { charModule } from 'helpers/core';
 import dayjs from 'dayjs';
+import { charModule } from 'helpers/core';
 import { hasDongle } from 'helpers/utils';
+import { mainLogger } from 'sv_logger';
 
-let races = new Map<number, Racing.RaceState>();
-let runningRaces = new Map<number, Racing.RunningRaceState>();
+import { getTrackById } from './tracks';
+
+const races = new Map<number, Racing.RaceState>();
+const runningRaces = new Map<number, Racing.RunningRaceState>();
 let raceId = 1;
 
 const calculateLeaderboard = (raceId: number) => {
@@ -106,7 +107,7 @@ const calculateCryptoDistribution = (raceId: number) => {
   let price = Math.floor((Math.log2(race.participants.length / 2) + 0.5) * 20);
   raceState.cryptoDistribution = {};
   for (let i = 0; i < raceState.leaderboard.length; i++) {
-    let cid = raceState.leaderboard[i];
+    const cid = raceState.leaderboard[i];
     Financials.cryptoAdd(cid, 'Suliro', price, `Race ${raceId} - ${i} prize`);
     raceState.cryptoDistribution[cid] = price;
     price = Math.floor(price / 2);
@@ -188,11 +189,10 @@ const generateClientState = (raceId: number): Racing.ClientRaceState | null => {
 
 export const setRaceAppState = async (src: number) => {
   const plyRaceId = getRaceIdForPly(src);
-  if (plyRaceId) {
-    Notifications.add(src, 'Je zit al in een race');
+  if (!plyRaceId) {
     return;
   }
-  const race = races.get(raceId);
+  const race = races.get(plyRaceId);
   if (!race) return;
 
   const charModule = Core.getModule('characters');
@@ -218,7 +218,7 @@ export const setRaceAppState = async (src: number) => {
 export const getAvailableRaces = (src: number) => {
   const cid = Util.getCID(src);
   const availableRaces = [];
-  for (let race of races.values()) {
+  for (const race of races.values()) {
     if (race.state === 'ending' || (race.kicked && race.kicked.includes(cid))) continue;
     availableRaces.push(race);
   }
@@ -226,7 +226,7 @@ export const getAvailableRaces = (src: number) => {
 };
 
 export const getRaceIdForPly = (src: number) => {
-  const cid = Util.getCID(src);
+  const cid = Util.getCID(src, true);
   if (!cid) return;
   for (const race of races.values()) {
     if (race.participants.includes(cid)) {
@@ -241,7 +241,7 @@ export const isRaceScheduled = (raceId: number) => {
 };
 
 export const isTrackInUse = (trackId: number) => {
-  for (let race of races.values()) {
+  for (const race of races.values()) {
     if (race.trackId === trackId) {
       return true;
     }
@@ -262,7 +262,7 @@ export const scheduleRace = (
     Notifications.add(src, 'Je zit al in een race');
     return;
   }
-  let id = raceId++;
+  const id = raceId++;
   const cid = Util.getCID(src);
   const track = getTrackById(trackId);
   if (!track) {
@@ -283,7 +283,7 @@ export const scheduleRace = (
   });
   Util.getAllPlayers().forEach(async ply => {
     if (ply === src) return;
-    const amount = await Inventory.getAmountPlayerHas(ply, 'racing_stick');
+    const amount = await Inventory.getAmountPlayerHas(ply, 'race_dongle');
     if (amount < 1) return;
     Phone.showNotification(ply, {
       id: `race_announcement_${raceId}`,
@@ -369,17 +369,17 @@ export const startRace = (src: number, raceId: number) => {
 
   // Do start checks
   if (race.leaderboard) {
-    // if (race.participants.length < 3) {
-    //   Phone.showNotification(src, {
-    //     icon: 'racing',
-    //     title: 'Failed to start race',
-    //     id: 'race-start-error',
-    //     description: 'Er moeten minstens 3 mensen deelnemen aan een tournament',
-    //   });
-    //   return
-    // }
+    if (race.participants.length < 3) {
+      Phone.showNotification(src, {
+        icon: 'racing',
+        title: 'Failed to start race',
+        id: 'race-start-error',
+        description: 'Er moeten minstens 3 mensen deelnemen aan een tournament',
+      });
+      return;
+    }
     if (race.classRestriction) {
-      for (let srvId of Object.values(participantSrvIds)) {
+      for (const srvId of Object.values(participantSrvIds)) {
         const ped = GetPlayerPed(String(srvId));
         const veh = GetVehiclePedIsIn(ped, false);
         const ply = Core.getPlayer(srvId);
@@ -456,7 +456,7 @@ export const startRace = (src: number, raceId: number) => {
   if (!clientState) return;
   Object.values(participantSrvIds).forEach(id => {
     Events.emitNet('racing:race:syncRaceStateApp', id, { state: race.state });
-    Events.emitNet('racing:race:start', id, +startTime, track.checkpoints, clientState);
+    Events.emitNet('racing:race:start', id, GetPlayerPing(String(id)), track.checkpoints, clientState);
   });
   // do a first leaderboard calculation based on the dist from start
   raceInfo.leaderboard = Object.keys(participantSrvIds)
@@ -533,7 +533,7 @@ export const passedCheckpoint = (src: number, raceId: number, checkpoint: number
   }
   raceState.passedPoints[cid][lap][checkpoint] = Date.now();
   if (lap > 1 && checkpoint === 0) {
-    let bestLapTime = calculateBestLap(cid, raceId);
+    const bestLapTime = calculateBestLap(cid, raceId);
     Events.emitNet('racing:race:setBestLap', src, bestLapTime);
   }
   calculateLeaderboard(raceId);
@@ -683,7 +683,7 @@ export const cancelRace = (src: number, raceId: number) => {
 export const rejoinRace = (src: number) => {
   const cid = Util.getCID(src);
   let plyRace: Racing.RaceState | null = null;
-  for (let race of races.values()) {
+  for (const race of races.values()) {
     if (race.participants.includes(cid)) {
       plyRace = race;
     }
