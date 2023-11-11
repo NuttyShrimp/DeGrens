@@ -1,6 +1,6 @@
 {
   "name": "logger",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "main": "./index.ts",
   "types": "./index.ts",
   "license": "MIT",
