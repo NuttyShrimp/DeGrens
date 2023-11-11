@@ -85,6 +85,11 @@
         "name": "hairnet",
         "amount": 50,
         "price": 35
+      },
+      {
+        "name": "notepad",
+        "amount": 50,
+        "price": 35
       }
     ],
     "hardware": [
