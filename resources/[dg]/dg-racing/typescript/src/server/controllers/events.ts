@@ -13,6 +13,7 @@ import {
   passedCheckpoint,
   rejoinRace,
   scheduleRace,
+  setRaceAppState,
   startRace,
 } from 'services/race';
 import { deleteTrack, getAllTracksForClients, getLeaderboardForTrack, getTrackById } from 'services/tracks';
@@ -124,6 +125,10 @@ Events.onNet('racing:race:leave', (src: number, raceId: number) => {
 
 Events.onNet('racing:race:kick', (src: number, raceId: number, cid: number) => {
   kickRace(src, raceId, cid);
+});
+
+Events.onNet('racing:race:syncRaceAppState', src => {
+  setRaceAppState(src);
 });
 
 RPC.register('racing:races:available', async src => {

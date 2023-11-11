@@ -92,6 +92,13 @@ declare namespace Laptop {
     };
 
     type Tab = 'home' | 'members' | 'feed';
+
+    type FeedMsg = {
+      id: number;
+      message: string;
+      sender: string;
+      date: number;
+    };
   }
 
   namespace Confirm {

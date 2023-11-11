@@ -23,3 +23,13 @@ declare namespace Flyers {
   }
   type UIFlyer = { type: 'police'; name: string } | { link: string };
 }
+
+declare namespace Notes {
+  interface Note {
+    id: number;
+    note: string;
+    creator: number;
+    last_editor: number;
+    coords: Vec3;
+  }
+}

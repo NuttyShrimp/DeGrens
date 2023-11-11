@@ -1862,10 +1862,10 @@
     "name": "gold_nugget",
     "label": "Stukje Goud",
     "image": "gold_nugget.png",
-    "decayRate": 10080,
+    "decayRate": 64800,
     "size": {
-      "x": 2,
-      "y": 2
+      "x": 1,
+      "y": 1
     }
   },
   {
@@ -2749,5 +2749,25 @@
       "y": 2
     },
     "decayRate": 86400
+  },
+  {
+    "name": "refined_gold_nugget",
+    "label": "Verwerkt Goud",
+    "image": "gold_nugget.png",
+    "decayRate": 64800,
+    "size": {
+      "x": 2,
+      "y": 2
+    }
+  },
+  {
+    "name": "notepad",
+    "label": "Notitieboekje",
+    "image": "notepad.png",
+    "useable": true,
+    "size": {
+      "x": 2,
+      "y": 2
+    }
   }
 ]

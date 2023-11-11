@@ -71,6 +71,16 @@
         "name": "material_glass",
         "amount": 1
       }
+    },
+    {
+      "from": {
+        "name": "gold_nugget",
+        "amount": 10
+      },
+      "to": {
+        "name": "refined_gold_nugget",
+        "amount": 1
+      }
     }
   ],
   "meltingTime": 10

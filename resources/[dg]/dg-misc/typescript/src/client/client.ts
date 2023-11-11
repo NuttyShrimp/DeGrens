@@ -38,6 +38,7 @@ import './services/placeableObjectItems';
 import './modules/flyers';
 import './services/objectPlacer';
 import './modules/cameras';
+import './services/notes';
 
 import { setDiscordRichPresence } from 'modules/discord/service.discord';
 import { setGTABehaviour } from 'modules/gtabehaviour/service.gtabehaviour';

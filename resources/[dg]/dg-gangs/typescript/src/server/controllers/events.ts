@@ -1,4 +1,4 @@
-import { Chat, Core, RPC, Util } from '@dgx/server';
+import { Core, RPC, Util } from '@dgx/server';
 import gangManager from 'classes/gangmanager';
 import { dispatchCurrentGangToClient } from 'helpers';
 
@@ -19,6 +19,13 @@ RPC.register(
   }
 );
 
+RPC.register('gangs:server:getChatMsgs', (plyId: number) => {
+  const cid = Util.getCID(plyId);
+  const gang = gangManager.getPlayerGang(cid);
+  if (!gang) return [];
+  return gang.getChatMessages();
+});
+
 Core.onPlayerLoaded(playerData => {
   const gang = gangManager.getPlayerGang(playerData.citizenid);
   if (!gang) return;
@@ -27,4 +34,11 @@ Core.onPlayerLoaded(playerData => {
 
 RPC.register('gangs:server:getForAdmin', () => {
   return gangManager.getGangs();
+});
+
+RPC.register('gangs:server:postChatMsg', (plyId: number, message: string) => {
+  const cid = Util.getCID(plyId);
+  const gang = gangManager.getPlayerGang(cid);
+  if (!gang) return;
+  gang.postChatMessage(cid, message);
 });

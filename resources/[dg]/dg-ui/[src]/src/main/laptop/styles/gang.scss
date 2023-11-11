@@ -56,6 +56,61 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    & > div:last-child {
+      margin-top: 1vh;
+    }
+
+    &-chat {
+      &-container {
+        height: 75%;
+        border: 0.3vh solid colors.$secondary;
+        border-radius: 0.3rem;
+        padding-bottom: 1vh;
+      }
+
+      &-input {
+        display: flex;
+        align-items: center;
+        padding: 0 1vh;
+
+        & > .MuiTextField-root {
+          padding-right: 1vh;
+        }
+      }
+
+      &-feed {
+        height: calc(100% - 6vh);
+        overflow: scroll;
+
+        &-msg {
+          display: flex;
+          flex-direction: column;
+          background-color: colors.$secondary;
+          border-radius: 0.4vh;
+          padding: 1vh 2vh;
+          margin: 1vh;
+
+          &-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            &-author {
+              font-size: 1.7vh;
+            }
+
+            &-date {
+              font-size: 1vh;
+            }
+          }
+
+          &-content {
+            font-size: 1.3vh;
+          }
+        }
+      }
+    }
   }
 
   &-members {

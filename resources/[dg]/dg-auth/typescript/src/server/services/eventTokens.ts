@@ -92,17 +92,20 @@ const sendRetrieveKeysTokenToResource = (src: number, res: string) => {
     validToken = !changed;
   }
 
-  const plyTokens = pendingTokens.get(steamId) || new Map<string, string>();
+  const plyTokens = pendingTokens.get(`${steamId}-${src}`) || new Map<string, string>();
   plyTokens.set(res, token);
-  pendingTokens.set(steamId, plyTokens);
+  pendingTokens.set(`${steamId}-${src}`, plyTokens);
 
   const encToken = Util.getRndString(16, true);
+
+  // console.log(`Sending token to ${src} for ${res} ${token}`);
+
   const eventHandler = (resName: string) => {
     const src = +source;
     const steamId = userModule.getPlyIdentifiers(src).steam;
-    const storedTokens = pendingTokens.get(steamId);
+    const storedTokens = pendingTokens.get(`${steamId}-${src}`);
     if (!storedTokens) {
-      Admin.ACBan(Number(src), 'Failed to properly authenticate resource (ST)');
+      Admin.ACBan(Number(src), 'Failed to properly authenticate resource (ST)', { resource: res });
       return;
     }
     const storedToken = storedTokens.get(resName);
@@ -131,28 +134,29 @@ const sendRetrieveKeysTokenToResource = (src: number, res: string) => {
 };
 
 export const removeResourceToken = (res: string) => {
-  pendingTokens.forEach((tokens, src) => {
+  pendingTokens.forEach((tokens, key) => {
     if (tokens.has(res)) {
       tokens.delete(res);
       if (tokens.size === 0) {
-        pendingTokens.delete(src);
+        pendingTokens.delete(key);
       }
     }
   });
-  receivedToken.forEach((tokens, src) => {
+  receivedToken.forEach((tokens, key) => {
     if (tokens.has(res)) {
       tokens.delete(res);
       if (tokens.size === 0) {
-        receivedToken.delete(src);
+        receivedToken.delete(key);
       }
     }
   });
 };
 
 export const cleanupPlayer = (src: number) => {
+  console.log(`Cleaning up player ${src}`);
   const userModule = Core.getModule('users');
   const steamId = userModule.getPlyIdentifiers(src).steam;
   if (!steamId) return;
-  pendingTokens.delete(steamId);
-  receivedToken.delete(steamId);
+  pendingTokens.delete(`${steamId}-${src}`);
+  receivedToken.delete(`${steamId}-${src}`);
 };

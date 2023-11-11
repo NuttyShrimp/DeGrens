@@ -13,6 +13,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.5.1]
+
+### Added
+
+- Ambulanciers die als engiste in dienst zijn worden vanzelf gerevived
+- Notepad item
+- Gang app heeft een communicatie ruimte gekregen
+
+### Changed
+
+- Races die 30min na het geschatte startuur niet gestart zijn worden automatisch gestopt/verwijderd
+- Banktruck requirements aangepast
+- Tijd om een kassa leeg te roven aangepast.
+- Requirements voor sommige criminele activities aangepast.
+- Je valt niet meer uit de lucht bij het spawnen op je laatste locatie
+
+### Fixed
+
+- Nog een poging tot het oplossen van het SYN ACK probleem
+- Je hebt nu ook de noodknop item nodig voor deze te gebruiken via F1
+- Je gejoinde race is terug zichtbaar als je je UI herstart voor de start van deze race
+- Reports
+- Race countdown mechanism herschreven voor betere syncronisatie
+
 ## [1.5.0]
 
 ### Added

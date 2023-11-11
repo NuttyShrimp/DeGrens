@@ -123,10 +123,9 @@ TS prod build:
   extends:
     - .node_mod_installation
     - .cache_modules
-    - .js_changes
-  only:
-    refs:
-      - main
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main" && $SHOULD_DEPLOY == "true"
+    - if: $CI_PIPELINE_SOURCE == $CI_DEFAULT_BRANCH && $CI_COMMIT_BRANCH == "main"
   stage: build
   script:
     - pnpm build
@@ -174,7 +173,7 @@ Unschedule deploy:
     # unschedule deploy
     - 'curl --request PUT --header "PRIVATE-TOKEN: $API_TOKEN" --form "value=false" https://gitlab.pieter557.dscloud.me/api/v4/projects/26/pipeline_schedules/1/variables/SHOULD_DEPLOY | jq'
   rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "main" && $SHOULD_DEPLOY == "true"
 
 Schedule deploy:
   stage: deploy

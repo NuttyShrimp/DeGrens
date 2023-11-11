@@ -74,7 +74,7 @@ export const lootRegister = async (registerIdx: number, isBroken: boolean) => {
     }
   }
 
-  const robTime = isBroken ? 40000 : 20000;
+  const robTime = isBroken ? 45000 : 5000;
   doRobAnimation(robTime);
   const [canceled] = await Taskbar.create('cash-register', 'Kassa beroven...', robTime, {
     canCancel: true,

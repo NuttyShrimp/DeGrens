@@ -87,6 +87,8 @@
         "refined_aluminum",
         "refined_steel",
         "advanced_parts",
+        "gold_nugget",
+        "refined_gold_nugget",
         "sand"
       ]
     },

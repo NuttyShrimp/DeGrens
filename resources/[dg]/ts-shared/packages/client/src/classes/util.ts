@@ -1,5 +1,5 @@
 import { Events, RPC } from './index';
-import { Util as UtilShared } from '@dgx/shared/src/classes';
+import { Thread, Util as UtilShared } from '@dgx/shared/src/classes';
 import { MATERIAL_HASH_ENUM, MOVEMENT_CLIPSET_ENUM } from '../constants';
 
 class Util extends UtilShared {
@@ -424,6 +424,25 @@ class Util extends UtilShared {
     const coords = this.getEntityCoords(entity);
     RequestCollisionAtCoord(coords.x, coords.y, coords.z);
     await this.awaitCondition(() => HasCollisionLoadedAroundEntity(entity));
+  };
+
+  public gridThreadGenerator = (interval: number, chunk_size: number, cb: (chunk: number) => void) => {
+    const thread = new Thread(
+      () => {
+        const pos = this.getPlyCoords();
+        const newChunk = this.getChunkForPos(pos, chunk_size);
+        if (newChunk === thread.data.chunk) return;
+        thread.data.chunk = newChunk;
+        cb(newChunk);
+      },
+      interval,
+      'interval'
+    );
+    thread.addHook('preStart', () => {
+      const pos = this.getPlyCoords();
+      thread.data.chunk = this.getChunkForPos(pos, chunk_size);
+    });
+    return thread;
   };
 }
 

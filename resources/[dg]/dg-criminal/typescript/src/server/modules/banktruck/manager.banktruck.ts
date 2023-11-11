@@ -219,6 +219,11 @@ class BanktruckManager {
     if (!this.active) return;
     if (this.active.state.open || this.active.state.opening || this.active.state.hackingPlayer !== null) return;
 
+    if (!Police.canDoActivity('banktruck')) {
+      Notifications.add(plyId, 'Je apparatuur werkt niet');
+      return;
+    }
+
     const hasLaptop = await Inventory.doesPlayerHaveItems(plyId, 'laptop');
     if (!hasLaptop) {
       Notifications.add(plyId, 'Je hebt geen laptop bij je om de hack te starten', 'error');

@@ -60,6 +60,12 @@ Spawn.choose = function(idx)
     SetEntityCollision(ped, true) --client
     DestroyAllCams(true)          --client
   end
+  if (result.forceGround) then
+    found, pos = GetSafeCoordForPed(spawn.position.x, spawn.position.y, spawn.position.z, true, 16)
+    if (found) then
+      SetEntityCoords(ped, pos.x, pos.y, pos.z, false, false, false, false)
+    end
+  end
   if (result.resetInside) then
     TriggerServerEvent('qb-houses:server:SetInsideMeta', 0, false)
     TriggerServerEvent('dg-apartments:server:setInsideMeta', 0)

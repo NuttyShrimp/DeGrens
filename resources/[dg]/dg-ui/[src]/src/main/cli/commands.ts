@@ -551,4 +551,16 @@ export const cmds: {
       action: 'startTimer',
     },
   },
+  {
+    cmd: 'show notepad',
+    app: 'notes',
+    data: {},
+    show: true,
+  },
+  {
+    cmd: 'hide notepad',
+    app: 'notes',
+    data: {},
+    hide: true,
+  },
 ];
