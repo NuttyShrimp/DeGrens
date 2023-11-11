@@ -203,6 +203,7 @@ model characters {
   realestate_location_access       realestate_location_access[]
   races                            race_tracks[]
   race_leaderboard                 race_leaderboard[]
+  gang_app_messages                gang_app_messages[]
 
   @@index([steamid], map: "steamid")
 }
@@ -271,6 +272,7 @@ model gang_info {
   gang_members       gang_members[]
   gang_feed_messages gang_feed_messages[]
   container_benches  container_benches[]
+  gang_app_messages  gang_app_messages[]
 }
 
 model gang_members {
@@ -808,6 +810,16 @@ model race_leaderboard {
   character characters  @relation(fields: [cid], references: [citizenid], onDelete: Cascade, onUpdate: Cascade, map: "fk_race_leaderboard_character")
 
   @@id([cid, trackId, model])
+}
+
+model gang_app_messages {
+  id         Int        @id @default(autoincrement())
+  cid        Int
+  message    String     @db.LongText
+  date       BigInt
+  gang       String     @db.VarChar(255)
+  gangInfo   gang_info  @relation(fields: [gang], references: [name], onDelete: Cascade, onUpdate: Cascade, map: "gang_app_msgs_gang_fk")
+  characters characters @relation(fields: [cid], references: [citizenid], onDelete: Cascade, map: "fk_gang_app_messages_cid")
 }
 
 enum bank_accounts_type {

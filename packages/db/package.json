@@ -10,7 +10,8 @@
     "db:seed": "prisma db seed",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "db:migrate:diff": "prisma migrate diff --to-schema-datamodel=./prisma/schema.prisma --from-schema-datasource=./prisma/schema.prisma"
   },
   "dependencies": {
     "@prisma/client": "4.14.1",

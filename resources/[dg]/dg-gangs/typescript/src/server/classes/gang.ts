@@ -1,9 +1,10 @@
-import { Phone, Util } from '@dgx/server';
+import { Phone, SQL, Util } from '@dgx/server';
 import { dispatchCurrentGangToClient } from 'helpers';
 import { charModule } from 'services/core';
 import repository from 'services/repository';
 import { mainLogger } from 'sv_logger';
 import winston from 'winston';
+
 import gangManager from './gangmanager';
 
 export class Gang {
@@ -12,6 +13,7 @@ export class Gang {
   private readonly _label: string;
   private _owner: number;
   private readonly members: Gangs.Members;
+  private messages: Gangs.ChatMessage[];
 
   constructor(name: string, label: string, owner: number) {
     this.logger = mainLogger.child({ module: `Gang-${name}` });
@@ -19,7 +21,9 @@ export class Gang {
     this._label = label;
     this._owner = owner;
     this.members = new Map();
+    this.messages = [];
     this.loadMembers();
+    this.loadChatMsgs();
   }
 
   //#region getters/setters
@@ -40,6 +44,13 @@ export class Gang {
   private loadMembers = async () => {
     const members = await repository.getGangMembers(this.name);
     members.forEach(m => this.members.set(m.cid, { ...m }));
+  };
+
+  private loadChatMsgs = async () => {
+    this.messages = await repository.getChatMessage(this.name);
+    this.messages.forEach(async m => {
+      m.sender = await Util.getCharName(m.cid);
+    });
   };
 
   public isMember = (cid: number) => this.members.get(cid) !== undefined;
@@ -134,5 +145,33 @@ export class Gang {
 
   public getFeedMessages = (offset = 0) => {
     return gangManager.getFeedMessagesForGang(this.name, offset);
+  };
+
+  getChatMessages = () => {
+    return this.messages;
+  };
+
+  postChatMessage = async (cid: number, message: string) => {
+    const name = await Util.getCharName(cid);
+    const chatMessage: Gangs.ChatMessage = {
+      sender: name,
+      cid,
+      message,
+      date: Date.now(),
+      gang: this.name,
+    };
+    const result = await SQL.query(
+      'INSERT INTO gang_app_messages (cid, message, date, gang) VALUES (?,?,?,?) RETURNING id',
+      [chatMessage.cid, chatMessage.message, chatMessage.date, chatMessage.gang]
+    );
+    const id = result && result?.[0]?.id;
+    if (!id) {
+      mainLogger.error('Failed to store gang app message', { message, id });
+      return;
+    }
+    chatMessage.id = id;
+    this.messages.unshift(chatMessage);
+    this.messages.sort((a, b) => b.date - a.date);
+    this.messages.splice(30);
   };
 }

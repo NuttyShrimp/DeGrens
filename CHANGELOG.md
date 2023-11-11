@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Ambulanciers die als engiste in dienst zijn worden vanzelf gerevived
 - Notepad item
+- Gang app heeft een communicatie ruimte gekregen
 
 ### Changed
 

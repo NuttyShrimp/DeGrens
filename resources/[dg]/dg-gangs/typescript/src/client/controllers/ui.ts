@@ -1,4 +1,4 @@
-import { RPC, UI } from '@dgx/client';
+import { Events, RPC, UI } from '@dgx/client';
 import { FEED_MESSAGES_BATCH } from '../../shared/constants';
 
 UI.RegisterUICallback('laptop/gang/fetch', async (_, cb) => {
@@ -56,4 +56,14 @@ UI.RegisterUICallback('laptop/gang/getFeedMessages', async (data: { gang: string
     data: { feedMessages, canLoadMore: feedMessages.length === FEED_MESSAGES_BATCH },
     meta: { ok: true, message: 'done' },
   });
+});
+
+UI.RegisterUICallback('laptop/gang/msgs', async (_, cb) => {
+  const msgs = await RPC.execute('gangs:server:getChatMsgs');
+  cb({ data: msgs, meta: { ok: true, message: 'done' } });
+});
+
+UI.RegisterUICallback('laptop/gang/sendMessage', async (data: { message: string }, cb) => {
+  await RPC.execute('gangs:server:postChatMsg', data.message);
+  cb({ data: {}, meta: { ok: true, message: 'done' } });
 });

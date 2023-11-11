@@ -151,8 +151,8 @@ Input.TextField = props => {
 
   return (
     <StyledInput
-      {...props}
       variant='standard'
+      {...props}
       fullWidth={props.fullWidth ?? true}
       onChange={onChange}
       onKeyPress={handleKeyPress}
