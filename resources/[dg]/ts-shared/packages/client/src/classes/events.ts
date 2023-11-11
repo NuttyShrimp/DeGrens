@@ -163,6 +163,8 @@ export class Events extends util.Singleton<Events>() {
   };
 }
 
+const events = new Events();
+
 export default {
-  Events: Events.getInstance(),
+  Events: events,
 };
