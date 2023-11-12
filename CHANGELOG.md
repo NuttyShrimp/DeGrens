@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Je krijgt nu een melding te zien als de ghosting tijdelijk is uitgeschakeld
+
 ### Changed
 
 ### Fixed
