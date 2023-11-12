@@ -233,7 +233,6 @@ export const scheduleRaceStart = (
   checkpoints: Racing.Checkpoint[],
   race: Racing.ClientRaceState
 ) => {
-  cleanupCheckpointObjects();
   currentRace.race = race;
   if (currentRace.race.laps) {
     currentRace.checkpoints.push(checkpoints[0]);
