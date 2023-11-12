@@ -1,4 +1,4 @@
-import { Util } from '@dgx/client';
+import { Notifications, Util } from '@dgx/client';
 import { Thread } from '@dgx/shared';
 
 let plyInfoThread = new Thread(
@@ -20,6 +20,7 @@ let plyInfoThread = new Thread(
 let cancelThread = new Thread(
   function () {
     const plyCoords = Util.getPlyCoords();
+    let wasPrevented = this.data.prevent;
     this.data.prevent = false;
     for (let ply of GetActivePlayers()) {
       let srvId = GetPlayerServerId(ply);
@@ -29,7 +30,11 @@ let cancelThread = new Thread(
       const vehCoords = Util.getEntityCoords(veh);
       if (vehCoords.distance(plyCoords) > 15) {
         this.data.prevent = true;
+        Notifications.add('Ghosting temporarily disabled', 'info', 1000, true, 'ghosting-state');
       }
+    }
+    if (!this.data.prevent && wasPrevented) {
+      Notifications.remove('ghosting-state');
     }
   },
   250,
@@ -74,4 +79,5 @@ export const stopGhostProcess = () => {
   ghostThread.stop();
   cancelThread.stop();
   plyInfoThread.stop();
+  Notifications.remove('ghosting-state');
 };
