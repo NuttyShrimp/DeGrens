@@ -52,7 +52,7 @@ onNet('__dgx_auth_init', (resName: string) => {
   }
 
   if (Util.isDevEnv()) {
-    receivedToken.delete(steamId);
+    receivedToken.delete(`${steamId}-${src}`);
   }
 
   if (!resName) {
@@ -63,7 +63,7 @@ onNet('__dgx_auth_init', (resName: string) => {
     Admin.ACBan(Number(src), 'Failed to properly authenticate resource (RS)');
     return;
   }
-  const plyRecvTokens = receivedToken.get(steamId);
+  const plyRecvTokens = receivedToken.get(`${steamId}-${src}`);
   if (plyRecvTokens && plyRecvTokens.has(resName)) {
     Admin.ACBan(Number(src), 'Failed to properly authenticate resource (RT)', { resName });
     return;
@@ -122,9 +122,9 @@ const sendRetrieveKeysTokenToResource = (src: number, res: string) => {
     removeEventListener(`__dgx_auth_req:${token}`, eventHandler);
     storedTokens.delete(resName);
 
-    const plyTokens = receivedToken.get(steamId) || new Map<string, string>();
+    const plyTokens = receivedToken.get(`${steamId}-${src}`) || new Map<string, string>();
     plyTokens.set(resName, token);
-    receivedToken.set(steamId, plyTokens);
+    receivedToken.set(`${steamId}-${src}`, plyTokens);
     setTimeout(() => {
       emit('dg-auth:token:resourceRegistered', +src, resName);
     }, 200);
