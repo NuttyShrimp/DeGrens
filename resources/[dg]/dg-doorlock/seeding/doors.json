@@ -5395,5 +5395,23 @@
       "gang": ["groepveltman"]
     },
     "playSound": true
+  },
+  {
+    "description": "nrgygang",
+    "locked": true,
+    "distance": 2,
+    "doors": [
+      {
+        "model": "gabz_g_families_door_02",
+        "coords": {
+          "x": -152.02444458007812,
+          "y": -1622.647705078125,
+          "z": 33.8377571105957
+        }
+      }
+    ],
+    "authorized": {
+      "gang": ["nrgy"]
+    }
   }
 ]
