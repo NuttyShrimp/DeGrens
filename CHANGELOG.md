@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- De blips tijdens een race toont nu enkel de nog niet gepasseerde checkpoints
+
 ## [1.5.1]
 
 ### Added

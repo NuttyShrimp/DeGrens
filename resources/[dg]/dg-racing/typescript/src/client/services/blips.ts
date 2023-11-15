@@ -20,8 +20,8 @@ export const showRaceBlips = (checkpoints: Racing.Checkpoint[], current: number,
   ClearGpsMultiRoute();
   StartGpsMultiRoute(21, true, true);
   SetGpsMultiRouteRender(true);
-  const startOffset = Math.min(Math.max(current - 1, 0), checkpoints.length - 1);
-  for (let i = 0; i < 4 && i + startOffset < checkpoints.length; i++) {
+  const startOffset = Math.min(Math.max(current, 0), checkpoints.length - 1);
+  for (let i = 0; i < 3 && i + startOffset < checkpoints.length; i++) {
     const idx = i + startOffset;
     const point = checkpoints[idx];
     if (!point) continue;
