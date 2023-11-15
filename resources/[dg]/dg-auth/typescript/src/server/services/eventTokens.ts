@@ -43,6 +43,10 @@ const getKeysForClient = (token: string) => {
 
 lib<'dg-auth'>('getKeysForServer', getKeysForServer);
 
+// map key to resource name
+const authenticationQueue: { target: number; steamId: string; resource: string }[] = [];
+let authThreadRunning = false;
+
 onNet('__dgx_auth_init', (resName: string) => {
   const src = +source;
   const steamId = getPlySteamId(src);
@@ -63,14 +67,38 @@ onNet('__dgx_auth_init', (resName: string) => {
     Admin.ACBan(Number(src), 'Failed to properly authenticate resource (RS)');
     return;
   }
-  const plyRecvTokens = receivedToken.get(`${steamId}-${src}`);
-  if (plyRecvTokens && plyRecvTokens.has(resName)) {
-    Admin.ACBan(Number(src), 'Failed to properly authenticate resource (RT)', { resName });
+
+  authenticationQueue.push({
+    target: src,
+    steamId,
+    resource: resName,
+  });
+
+  if (authThreadRunning) {
     return;
   }
 
-  sendRetrieveKeysTokenToResource(Number(src), resName);
+  traverseAuthQueue();
 });
+
+const traverseAuthQueue = () => {
+  if (authenticationQueue.length === 0) {
+    authThreadRunning = false;
+    return;
+  }
+  const entry = authenticationQueue.shift();
+  if (!entry) return;
+
+  const plyRecvTokens = receivedToken.get(`${entry.steamId}-${entry.target}`);
+  if (plyRecvTokens && plyRecvTokens.has(entry.resource)) {
+    Admin.ACBan(Number(entry.target), 'Failed to properly authenticate resource (RT)', { resName: entry.resource });
+    return;
+  }
+
+  sendRetrieveKeysTokenToResource(Number(entry.target), entry.resource);
+
+  traverseAuthQueue();
+};
 
 // Sending secrets to resources logic
 let pendingTokens = new Map<string, Map<string, string>>();
@@ -153,7 +181,6 @@ export const removeResourceToken = (res: string) => {
 };
 
 export const cleanupPlayer = (src: number) => {
-  console.log(`Cleaning up player ${src}`);
   const userModule = Core.getModule('users');
   const steamId = userModule.getPlyIdentifiers(src).steam;
   if (!steamId) return;
