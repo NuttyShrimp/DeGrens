@@ -126,6 +126,7 @@ const startRaceThread = () => {
           },
         });
       }
+      PlaySoundFrontend(-1, 'SELECT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', false);
       Events.emitNet('racing:races:passCheckpoint', currentRace.checkpoint - 1);
       showRaceBlips(currentRace.checkpoints, currentRace.checkpoint, currentRace.lap > 1);
     }

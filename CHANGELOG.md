@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Je krijgt nu een melding te zien als de ghosting tijdelijk is uitgeschakeld
+- Als je door een checkpoint rijdt wordt er een geluid afgespeeld
 
 ### Changed
 
