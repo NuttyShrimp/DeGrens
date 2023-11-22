@@ -141,7 +141,10 @@ const sendRetrieveKeysTokenToResource = (src: number, res: string) => {
       mainLogger.error('We are doing authentication for a non-initiated resource', { resource: res });
       return;
     }
-    if (!storedToken || storedToken !== token) {
+
+    let plyTokens = receivedToken.get(`${steamId}-${src}`);
+
+    if ((!storedToken || storedToken !== token) && !(plyTokens?.get(resName) === token)) {
       Admin.ACBan(Number(src), 'Authentication token mismatch (SYN ACK)', { storedToken, token, resource: res });
       return;
     }
@@ -150,7 +153,7 @@ const sendRetrieveKeysTokenToResource = (src: number, res: string) => {
     removeEventListener(`__dgx_auth_req:${token}`, eventHandler);
     storedTokens.delete(resName);
 
-    const plyTokens = receivedToken.get(`${steamId}-${src}`) || new Map<string, string>();
+    plyTokens = receivedToken.get(`${steamId}-${src}`) || new Map<string, string>();
     plyTokens.set(resName, token);
     receivedToken.set(`${steamId}-${src}`, plyTokens);
     setTimeout(() => {
