@@ -4,7 +4,7 @@
   "type": "gang",
   "shared": true,
   "location": {
-    "vectors": [
+    "vector": [
       {
         "x": -217.65,
         "y": -1694.54
