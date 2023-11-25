@@ -130,38 +130,6 @@ TS prod build:
   script:
     - pnpm build
 
-# rebase UPD:
-#   variables:
-#     # For fetch thing shit
-#     GIT_DEPTH: 50
-#   stage: housekeeping
-#   image: ubuntu:jammy
-#   before_script:
-#     - apt-get update -yq
-#     - apt-get install -y git
-#   script:
-#     # setting up git
-#     - url_host=`git remote get-url origin | sed -e "s/https:\/\/gitlab-ci-token:.*@//g"`
-#     - git remote set-url origin "https://gitlab-ci-token:${ACCESS_TOKEN_PARAM}@${url_host}"
-#     - git config http.sslverify false
-#     - git config --global user.email "ci@gitlab.pieter557.dscloud.me"
-#     - git config --global user.name "CI"
-#     - git fetch --all # Just in case branch is not fetch
-#     - git rebase --abort || true # Cancel active rebases
-#     - git switch main
-#     - git pull --rebase
-#     - git switch UPD
-#     - git pull --rebase
-#     # Rebase
-#     - git rebase main UPD
-#     - git status
-#     # Push
-#     - git push -u origin UPD
-#     - git reset --hard $(git log -n 1 origin/UPD  --pretty=format:"%H")
-
-#   only:
-#     - main
-
 Unschedule deploy:
   stage: housekeeping
   image: alpine:latest

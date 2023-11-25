@@ -25,7 +25,7 @@ const genOptions = () => ({
     finalize: true,
     vcsRemote: 'origin',
   },
-  authToken: '5e2d7e8c0d6a42348a0c50dbf655896524c8414752804c8ea1ca04e357be9cd8',
+  authToken: '',
   url: 'https://sentry.nuttyshrimp.me/',
   org: 'nutty',
   project: 'degrens-cfx',
