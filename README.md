@@ -1,7 +1,7 @@
 # DeGrens RP 2.0
 
 > [!IMPORTANT]
-> This repo is for archival reasons only hence why their is no issues tab
+> This repo is for archival reasons only hence why there is no issues tab
 
 ## Dependencies
 
