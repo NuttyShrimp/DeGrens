@@ -1,11 +1,7 @@
 {
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs";
   inputs.devshell.url = "github:numtide/devshell";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-
-  inputs.flake-compat = {
-    url = "github:edolstra/flake-compat";
-    flake = false;
-  };
 
   outputs = { self, flake-utils, devshell, nixpkgs, ... }:
     flake-utils.lib.eachDefaultSystem (system: 
@@ -21,14 +17,16 @@
           overlays = [ devshell.overlays.default ];
         };
       in
-      with pkgs; {
-        devShell = mkShell {
-          buildInputs = [
+      {
+        devShell = pkgs.mkShell {
+          buildInputs = with pkgs; [
             nodejs_16
             nodePackages.pnpm
             nodePackages.prisma
             libmysqlclient
             zlib
+            python311
+            python311Packages.gitpython
           ];
           shellHook = ''
             export PRISMA_QUERY_ENGINE_LIBRARY=${pkgs.prisma-engines}/lib/libquery_engine.node
