@@ -35,10 +35,10 @@ export default defineConfig(({ mode }) => ({
       },
     }),
     viteSentry({
-      url: 'https://sentry.nuttyshrimp.me',
+      url: '',
       authToken: '',
-      org: 'nutty',
-      project: 'degrens-ui',
+      org: '',
+      project: '',
       debug: true,
       deploy: {
         env: mode === 'production' || process.env.SENTRY_UPLOAD_SOURCEMAPS ? 'production' : 'development',

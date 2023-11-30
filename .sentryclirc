@@ -2,6 +2,6 @@
 token=
 dsn=
 [defaults]
-url=https://sentry.nuttyshrimp.me/
-org=nutty
-project=degrens-cfx
+url=
+org=
+project=

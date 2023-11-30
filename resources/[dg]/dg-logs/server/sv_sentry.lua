@@ -1,6 +1,6 @@
 function sendSentryRequest(data)
   local p = promise:new()
-  PerformHttpRequest(string.format('https://sentry.nuttyshrimp.me/api/%s/store/', config.sentry.projectId),
+  PerformHttpRequest(string.format('https://sentry.io/api/%s/store/', config.sentry.projectId),
     function(statusCode, data, headers)
       if statusCode ~= 200 then
         print("An error occured while sending an exception to Sentry, Status Code: " .. statusCode)

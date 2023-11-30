@@ -1,7 +1,7 @@
 {
   "name": "dg-shared",
   "version": "1.5.2",
-  "sentry_dsn": "https://47836ea9173b4e52b8820a05996cf549@sentry.nuttyshrimp.me/2",
+  "sentry_dsn": "",
   "scripts": {
     "build": "tsup --env.NODE_ENV=production",
     "build:dev": "tsup --env.NODE_ENV=development",

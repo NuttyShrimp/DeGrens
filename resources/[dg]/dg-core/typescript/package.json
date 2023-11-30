@@ -4,7 +4,7 @@
   "main": "index.js",
   "author": "NuttyShrimp",
   "license": "MIT",
-  "sentry_dsn": "https://ca666003b9db4baeb7bf5b1aab7bc6d1@sentry.nuttyshrimp.me/9",
+  "sentry_dsn": "",
   "scripts": {
     "build": "tsup --env.NODE_ENV=production",
     "build:dev": "tsup --env.NODE_ENV=development",

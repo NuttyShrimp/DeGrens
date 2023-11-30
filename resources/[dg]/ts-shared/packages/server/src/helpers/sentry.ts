@@ -2,7 +2,7 @@ import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
 import packageInfo from './../../package.json';
 
-const SENTRY_DSN = 'https://47836ea9173b4e52b8820a05996cf549@sentry.nuttyshrimp.me/2';
+const SENTRY_DSN = '';
 
 Sentry.init({
   dsn: SENTRY_DSN,

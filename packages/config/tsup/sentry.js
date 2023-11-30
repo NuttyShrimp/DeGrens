@@ -26,9 +26,9 @@ const genOptions = () => ({
     vcsRemote: 'origin',
   },
   authToken: '',
-  url: 'https://sentry.nuttyshrimp.me/',
-  org: 'nutty',
-  project: 'degrens-cfx',
+  url: '',
+  org: '',
+  project: '',
   sourcemaps: {
     assets: '../server/*',
     rewriteSources: defaultRewriteSourcesHook,

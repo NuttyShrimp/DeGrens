@@ -11,7 +11,7 @@ import 'animate.css';
 
 if (!isDevel() && !isGameDevel()) {
   Sentry.init({
-    dsn: 'https://0bc1faba50b14e49a85259c0b3b05dc8@sentry.nuttyshrimp.me/3',
+    dsn: '',
     integrations: [
       // @ts-ignore
       new BrowserTracing({
