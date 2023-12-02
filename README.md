@@ -2,6 +2,7 @@
 
 > [!IMPORTANT]
 > This repo is for archival reasons only hence why there is no issues tab
+> 
 > We also do not give support in any way, sliding in our dm's will result in a block
 
 ## Dependencies
